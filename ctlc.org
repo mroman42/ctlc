@@ -186,14 +186,15 @@ such a way that a typing judgment for the type is derivable.
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
 ** Homotopy Type Theory
-aaaaa
 
-* Mikrokosmos
+* Mikrokosmos (abstract)                                             :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
 *Mikrokosmos* is a lambda calculus interpreter written in the purely
 functional programming language [[https://www.haskell.org/][Haskell]] cite:hudak07_haskell. It aims
 to provide students with a tool to learn and understand lambda
 calculus.
-
+#+LATEX: \end{center}}
+* Mikrokosmos
 ** Parsec
 https://web.archive.org/web/20120401040711/http://legacy.cs.uu.nl/daan/download/parsec/parsec.pdf
 
