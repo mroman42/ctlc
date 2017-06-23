@@ -193,5 +193,5 @@ on this web application.
 
 *** CodeMirror lexer
 * Conclusions
-bibliographystyle:unsrt
-bibliography:math.bib
+bibliographystyle:alpha
+bibliography:ctlc.bib
