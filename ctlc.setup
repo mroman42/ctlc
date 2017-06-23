@@ -1,7 +1,7 @@
 #+OPTIONS: broken-links:mark toc:t tasks:nil
 
-#+latex_class: scrbook
-#+latex_class_options: [12pt,paper=a4,footinclude=true,headinclude=true]
+#+latex_class: scrreprt
+#+latex_class_options: [twoside,openright,titlepage,numbers=noenddot,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
 #+latex_header: \usepackage[T1]{fontenc}
 #+latex_header: \usepackage[linedheaders,parts,a5paper]{classicthesis}
 
