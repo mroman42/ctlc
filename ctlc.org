@@ -1,8 +1,29 @@
 #+TITLE: Category Theory and Lambda Calculus
 #+AUTHOR: Mario Román
 #+SETUPFILE: ctlc.setup
+#+LATEX_HEADER: %\input{titlepage}
+
+** Abstract
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+This is the abstract
 
 * Category theory
+Those are pre-code comments
+
+#+BEGIN_SRC haskell :export code
+main :: IO ()
+main = putStrLn "Hello world!"
+
+\newcommand{cosas}
+\textit{3^4}
+
+def funcion():
+  pass
+#+END_SRC
+
 * Lambda calculus
 ** Untyped lambda calculus
 *** TODO Church encoding
