@@ -164,7 +164,9 @@ such a way that a typing judgment for the type is derivable.
 # [[https://www.youtube.com/watch?v=21qPOReu4FI][Five stages of accepting constructive mathematics]]
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
-** TODO Homotopy Type Theory
+** Homotopy Type Theory
+aaaaa
+
 * Mikrokosmos
 *Mikrokosmos* is a lambda calculus interpreter written in the purely
 functional programming language [[https://www.haskell.org/][Haskell]] cite:hudak07_haskell. It aims

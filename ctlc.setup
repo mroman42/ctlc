@@ -29,4 +29,5 @@
 #+latex_header: \newtheorem*{remark}{Remark}
 #+latex_header: \setlength{\parindent}{0pt}
 
+#+LATEX_HEADER: \input{classicthesis-config}
 #+LATEX_HEADER: % \input{titlepage}
