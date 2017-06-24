@@ -1,5 +1,6 @@
 #+TITLE: Category Theory and Lambda Calculus
 #+AUTHOR: Mario Román
+#+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER: %\input{titlepage}
 
@@ -8,24 +9,50 @@
 :UNNUMBERED: t
 :END:
 
-This is the abstract
+This is the abstract. It should not be written until the end.
 
-* Category theory :noexport:
-Those are pre-code comments
+** Acknowlegments                                                 :noexport:
+This document has been written with Emacs26 and org-mode 8, using the
+=org= file format and LaTeX as intermediate format. The document follows
+the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
+has been used for code listings.
 
-#+BEGIN_SRC haskell :export code
-main :: IO ()
-main = putStrLn "Hello world!"
+* Category theory
+** Categories
+*** Definition of category
+#+begin_definition
+A *category* ${\cal C}$, as defined in cite:maclane78, is given by
 
-\newcommand{cosas}
-\textit{3^4}
+ * ${\cal C}_0$, a collection[fn:collection] whose elements are called *objets*, and
+ * ${\cal C}_1$, a collection whose elements are called *morphisms*.
 
-def funcion():
-  pass
-#+END_SRC
+Every morphism $f \in {\cal C}_1$ has two objects assigned: a
+*domain*, written as $\mathrm{dom}(f) \in {\cal C}_0$, and a
+*codominio*, written as $\mathrm{cod}(f) \in {\cal C}_0$; a common
+notation for such morphism is
+
+\[
+f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
+\]
+
+Given two morphisms $f \colon A \to B$ and $g \colon B \to C$ there
+exists a *composition morphism*, written as $g \circ f \colon A \to C$. 
+Morphism composition is a binary associative operation with
+identity elements $\mathrm{id}_{A}\colon A \to A$, that is
+
+\[
+h \circ (g \circ f) = (h \circ g) \circ f
+\quad\text{ and }\quad
+f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f.
+\]
+#+end_definition
+
+[fn:collection]: We are going to use the term /collection/ to denote some
+unspecified formal notion of collection that could be given by sets or proper
+classes.
 
 * Lambda calculus
-** Untyped lambda calculus
+** Untyped lambda calculus                                        :noexport:
 *** TODO Church encoding
 *** TODO SKI combinators
 ** Typed lambda calculus
