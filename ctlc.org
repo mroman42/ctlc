@@ -221,15 +221,78 @@ It aims to provide students with a tool to learn and understand lambda calculus.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
-** Parsec
-https://web.archive.org/web/20120401040711/http://legacy.cs.uu.nl/daan/download/parsec/parsec.pdf
+** Haskell                                                        :noexport:
+** Parsing
+*** Monadic parser combinators
+A common approach to building parsers in functional programming is to
+model parsers as functions. Higher-order functions on parsers act as
+/combinators/, which are used to implement complex parsers in a
+modular way from a set of primitive ones. In this setting, parsers
+exhibit a monad algebraic structure, which can be used to simplify
+the combination of parsers. A technical report on *monadic parser combinators*
+can be found on cite:hutton96.
 
-*** Monadic parsers
-http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
-https://ncatlab.org/nlab/files/WadlerMonads.pdf
+The use of monads for parsing is discussed firstly in cite:Wadler85,
+and later in cite:Wadler90 and cite:hutton98. The parser type is
+defined as a function taking a =String= and returning a list of pairs,
+representing a successful parse each. The first component of the pair
+is the parsed value and the second component is the remaining
+input. The Haskell code for this definition is
 
-** Syntax 
-** Jupyter kernel
+#+BEGIN_SRC haskell
+newtype Parser a = Parser (String -> [(a,String)])
+
+parse :: Parser a -> String -> [(a,String)]
+parse (Parser p) = p
+
+instance Monad Parser where
+  return x = Parser (\s -> [(x,s)])
+  p >>= q  = Parser (\s -> 
+               concat [parse (q x) s' | (x,s') <- parse p s ])
+#+END_SRC
+
+where the monadic structure is defined by =bind= and =return=. Given a
+value, the =return= function creates a monad that consumes no input
+and simply returns the given value. The =>>== function acts as a sequencing
+operator for parsers. It takes two parsers and applies the second one
+over the remaining inputs of the first one, using the parsed values on
+the first parsing as arguments.
+
+An example of primitive *parser* is the =item= parser, which consumes a
+character from a non-empty string. It is written in Haskell code as
+
+#+BEGIN_SRC haskell
+item :: Parser Char
+item = Parser (\s -> case s of 
+                       "" -> []
+                       (c:s') -> [(c,s')])
+#+END_SRC
+
+and an example of *parser combinator* is the =many= function, which
+allows one or more applications of the parser given as an argument
+
+#+BEGIN_SRC haskell
+many :: Paser a -> Parser [a]
+many p = do
+  a  <- p
+  as <- many p
+  return (a:as)
+#+END_SRC
+
+in this example =many item= would be a parser consuming all characters
+from the input string.
+
+*** Parsec
+*Parsec* is a monadic parser combinator Haskell library described in
+cite:leijen2001. We have chosen to use it due to its simplicity and
+extensive documentation. As we expect to use it to parse user live
+input, which will tend to be short, performance is not a critical
+concern. A high-performace library supporting incremental parsing,
+such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
+ 
+** Usage
+*** Mikrokosmos interpreter :noexport:
+*** Jupyter kernel
 The *Jupyter Project* cite:jupyter is an open source project providing
 support for interactive scientific computing. Specifically, the
 Jupyter Notebook provides a web application for creating interactive
