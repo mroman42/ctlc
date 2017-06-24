@@ -2,7 +2,7 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER: %\input{titlepage}
+#+LATEX_HEADER: \input{titlepage}
 
 ** Abstract
 :PROPERTIES:
@@ -56,8 +56,8 @@ classes.
 *** TODO Church encoding
 *** TODO SKI combinators
 ** Typed lambda calculus
-We will write a presentation of *simply-typed lambda calculus* based
-on cite:selinger13.
+We will give now a presentation of the *simply-typed lambda calculus*
+based on cite:selinger13.
 
 *** TODO Types and sets
 # From the Hott book
