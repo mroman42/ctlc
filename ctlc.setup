@@ -1,7 +1,7 @@
 #+latex_class: scrreprt
 #+latex_class_options: [twoside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+latex_header: \usepackage[T1]{fontenc}
-#+latex_header: \usepackage[linedheaders,parts,a5paper]{classicthesis}
+#+latex_header_extra: \usepackage[T1]{fontenc}
+#+latex_header_extra: \usepackage[linedheaders,parts,a4paper]{classicthesis}
 
 #+latex_header: \usepackage{enumitem}
 #+latex_header: \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
@@ -26,11 +26,10 @@
 #+latex_header: \theoremstyle{remark}
 #+latex_header: \newtheorem*{remark}{Remark}
 #+latex_header: \setlength{\parindent}{0pt}
-#+LATEX_HEADER: \usepackage{parskip}
+#+latex_header: \usepackage{parskip}
 
 #+latex_header: \usepackage{minted}
 #+latex_header: \setminted[haskell]{linenos=true,fontsize=\normalsize}
 #+latex_header: \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,1.0}{\oldstylenums{\arabic{FancyVerbLine}}}}
 
-#+LATEX_HEADER: \input{classicthesis-config}
 
