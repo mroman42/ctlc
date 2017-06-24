@@ -10,7 +10,7 @@
 
 This is the abstract
 
-* Category theory
+* Category theory :noexport:
 Those are pre-code comments
 
 #+BEGIN_SRC haskell :export code
@@ -174,7 +174,7 @@ such a way that a typing judgment for the type is derivable.
 # Every derivation in natural deduction is exactly a lambda term.
 
 ** TODO System F
-* Type theory
+* Type theory                                                      :noexport:
 ** TODO Propositions as types
 ** TODO Martin-Löf Type Theory
 ** TODO Type theory as a foundation of mathematics
@@ -185,15 +185,14 @@ such a way that a typing judgment for the type is derivable.
 # [[https://www.youtube.com/watch?v=21qPOReu4FI][Five stages of accepting constructive mathematics]]
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
-** Homotopy Type Theory
-
+** TODO Homotopy Type Theory
 * Mikrokosmos (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
-*Mikrokosmos* is a lambda calculus interpreter written in the purely
-functional programming language [[https://www.haskell.org/][Haskell]] cite:hudak07_haskell. It aims
-to provide students with a tool to learn and understand lambda
-calculus.
+We have developed *Mikrokosmos*, a lambda calculus interpreter
+written in the purely functional programming language Haskell cite:hudak07_haskell.
+It aims to provide students with a tool to learn and understand lambda calculus.
 #+LATEX: \end{center}}
+
 * Mikrokosmos
 ** Parsec
 https://web.archive.org/web/20120401040711/http://legacy.cs.uu.nl/daan/download/parsec/parsec.pdf
