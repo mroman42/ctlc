@@ -47,9 +47,11 @@ f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f.
 \]
 #+end_definition
 
-[fn:collection]: We are going to use the term /collection/ to denote some
-unspecified formal notion of collection that could be given by sets or proper
-classes.
+[fn:collection]: We use the term /collection/ to denote
+some unspecified formal notion of compilation of "things" that could
+be given by sets or proper classes. We will want to define categories
+whose objects are all the possible sets and we will need the objects
+to form a proper class.
 
 * Lambda calculus
 ** Untyped lambda calculus                                        :noexport:
