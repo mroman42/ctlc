@@ -28,8 +28,8 @@
 #+latex_header: \setlength{\parindent}{0pt}
 #+latex_header: \usepackage{parskip}
 
-#+latex_header: \usepackage{minted}
-#+latex_header: \setminted[haskell]{linenos=true,fontsize=\normalsize}
-#+latex_header: \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,1.0}{\oldstylenums{\arabic{FancyVerbLine}}}}
+#+latex_header_extra: \usepackage{minted}
+#+latex_header_extra: \setminted[haskell]{linenos=true,fontsize=\normalsize}
+#+latex_header_extra: \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,1.0}{\oldstylenums{\arabic{FancyVerbLine}}}}
 
 
