@@ -2,7 +2,9 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: %\input{titlepage}
+#+LATEX_HEADER_EXTRA: \usepackage{agda}
+#+LATEX_HEADER_EXTRA: \usepackage{catchfilebetweentags} % \input{titlepage}
+
 
 ** Abstract
 :PROPERTIES:
@@ -57,7 +59,7 @@ to form a proper class.
 ** Untyped lambda calculus                                        :noexport:
 *** TODO Church encoding
 *** TODO SKI combinators
-** Typed lambda calculus
+** Simply typed lambda calculus
 We will give now a presentation of the *simply-typed lambda calculus*
 based on cite:selinger13.
 
