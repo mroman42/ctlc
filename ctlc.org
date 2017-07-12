@@ -227,7 +227,7 @@ $A \vee \neg A$ and we arrive to a contradiction with the assumption. We should 
 that $\neg \neg (A \vee \neg A)$.
 
 **** Machine proof
-#+latex: \input{Ctlc.tex}
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{nnlem}
 
 ** TODO Propositions as types
 ** TODO Martin-Löf Type Theory
