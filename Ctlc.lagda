@@ -2,18 +2,18 @@
 module Ctlc where
 \end{code}
 
-%<*nat>
+%<*false>
 \begin{code}
-  data ℕ : Set where
-    zero  : ℕ
-    suc   : (n : ℕ) → ℕ
-\end{code}
-%</nat>
+data ⊥ : Set where
 
-%<*plus>
-\begin{code}
-  _+_ : ℕ → ℕ → ℕ
-  zero   + n = n
-  suc m  + n = suc (m + n)
+¬ : (A : Set) → Set
+¬ A = (A → ⊥)
 \end{code}
-%</plus>
+%</false>
+
+%<*nnlem>
+\begin{code}
+notnotlem : {A : Set} -> ¬ A -> ¬ A
+notnotlem = (λ f x → f x)
+\end{code}
+%</nnlem>
