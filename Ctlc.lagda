@@ -2,18 +2,25 @@
 module Ctlc where
 \end{code}
 
-%<*false>
+%<*id>
+\begin{code}
+id : {A : Set} → A → A
+id a = a
+\end{code}
+%</id>
+
+%<*nnlem>
 \begin{code}
 data ⊥ : Set where
 
 ¬ : (A : Set) → Set
 ¬ A = (A → ⊥)
-\end{code}
-%</false>
 
-%<*nnlem>
-\begin{code}
-notnotlem : {A : Set} -> ¬ A -> ¬ A
-notnotlem = (λ f x → f x)
+data _+_(A B : Set) : Set where
+  inl : A -> A + B
+  inr : B -> A + B
+
+notnotlem : {A : Set} → ¬ (¬ (A + ¬ A))
+notnotlem f = f (inr (\ a → f (inl a)))
 \end{code}
 %</nnlem>

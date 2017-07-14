@@ -207,10 +207,9 @@ such a way that a typing judgment for the type is derivable.
 
 ** TODO Hindley-Milner
 ** TODO System F
-* Type theory                                                      :noexport:
-** TODO Intuitionistic logic
+* Type theory                                                     
+** Intuitionistic logic
 *** Constructive mathematics
-*** Difference between proof by contradiction or proof of a negation
 *** The double negation of LEM is provable
 In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
@@ -227,7 +226,7 @@ $A \vee \neg A$ and we arrive to a contradiction with the assumption. We should 
 that $\neg \neg (A \vee \neg A)$.
 
 **** Machine proof
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{nnlem}
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
 
 ** TODO Propositions as types
 ** TODO Martin-Löf Type Theory
