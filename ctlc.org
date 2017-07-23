@@ -96,7 +96,6 @@ the set of free variables as follows.
 
 #+begin_definition
 The *set of free variables* of a term $M$ is defined inductively as
-
 \[\begin{aligned}
 FV(x) &= \{x\}, \\
 FV(MN) &= FV(M) \cup FV(N), \\
@@ -118,7 +117,6 @@ To avoid this, the $x$ should be renamed before the substitution.
 #+begin_definition
 The *substitution* of a variable $x$ by a term $N$ on $M$ is defined
 inductively as
-
 \[\begin{aligned}
 x[N/x] &\equiv N,\\
 y[N/x] &\equiv y,\\
@@ -169,24 +167,152 @@ The core idea of evaluation in \lambda-calculus is captured by the notion
 of \beta-reduction.
 
 #+begin_definition
-The *single-step \beta-reduction* is the smallest relation on terms
+The *single-step \beta-reduction* is the smallest relation on \lambda-terms
 capturing the notion of evaluation 
-\[(\lambda x.M)N \to_{\beta}M[N/x]\]
+\[(\lambda x.M)N \to_{\beta}M[N/x],\]
 
 and some congruence rules that preserve the structure of
 \lambda-terms, such as
 
-  * $M \to_{\beta} M'$ implies $MN \to M'N$ and $MN \to MN'$;
+  * $M \to_{\beta} M'$ implies $MN \to_{\beta} M'N$ and $MN \to_{\beta} MN'$;
   * $M \to_{\beta}M'$ implies $\lambda x.M \to_{\beta} \lambda x.M'$.
 
 The reflexive transitive closure of $\to_{\beta}$ is written as $\twoheadrightarrow_{\beta}$. The symmetric
-closure of $\twoheadrightarrow_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$.
+closure of $\twoheadrightarrow_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$ or simply $=$.
 #+end_definition
+
+*** TODO \eta-reduction                                          :noexport:
+*** Confluence
+#+begin_definition
+A relation $\tto$ is *confluent* if $M \tto N$ and $M \tto P$ imply the
+existence of some $Z$ such that $N \tto Z$ and $P \tto Z$.
+#+end_definition
+
+Given any binary relation $\to$ of which $\tto$ is its reflexive transitive
+closure, we can consider three seemingly related properties
+
+  * the *confluence* or Church-Rosser property we have just defined.
+  * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$.
+  * the *diamond property*, which is defined substituting $\tto$ by $\to$ on
+    the definition on confluence.
+
+Diagrammatically, the three properties can be represented as
+
+\[\begin{tikzcd}[column sep=small]
+& 
+M \drar[two heads]\dlar[two heads] &&& 
+M \drar\dlar &&& 
+M \drar\dlar &\\
+N \drar[dashed,two heads] && 
+P \dlar[dashed,two heads] & 
+N \drar[dashed,two heads] &&
+P \dlar[dashed,two heads] &
+N \drar[dashed] && 
+P \dlar[dashed] \\& 
+Z &&&
+Z &&&
+Z &\\
+\end{tikzcd}\]
+
+and the implication relation between them is that the diamond relation
+implies confluence; while the quasidiamond does not. Both claims are
+easy to prove, and they show us that, in order to prove confluence for
+a given relation, we need to prove the diamond property instead of try
+to prove it from the quasidiamond property, as a naive attempt of proof
+would try.
+
+The statement of $\tto_{\beta}$ and $\tto_{\beta\eta}$ being confluent is what we are going to
+call the Church-Rosser theorem. The definition of a relation satisfying
+the diamond property and whose reflexive transitive closure is $\tto_{\beta\eta}$ will
+be the core of our proof.
+
+*** The Church-Rosser theorem
+The proof presented here is due to Tait and Per Martin-Löf; an earlier
+but more convoluted proof was discovered by Alonzo Church and Barkley 
+Rosser in 1935. It is based on the idea of parallel one-step reduction.
+
+#+begin_definition
+We define the *parallel one-step reduction* relation, $\rhd$ as the smallest
+relation satisfying that, assuming $P \rhd P'$ and $N \rhd N'$, the following
+properties of
+
+  * reflexivity, $x \rhd x$;
+  * parallel application, $PN \rhd P'N'$;
+  * congruence to \lambda-abstraction, $\lambda x.N \rhd \lambda x.N'$;
+  * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$;
+  * and extensionality, $\lambda x.P x \rhd P'$, if $x \not\in \mathrm{FV}(P)$,
+
+hold.
+#+end_definition
+
+Using the first three rules, it is trivial to show that this relation
+is in fact reflexive.
+
+#+begin_lemma
+The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$.
+In particular, given any $M,M'$,
+
+  1) if $M \to_{\beta\eta} M'$, then $M \rhd M'$.
+  2) if $M \rhd M'$, then $M \tto_{\beta\eta} M'$;
+#+end_lemma
+#+begin_proof
+  1) We can prove this by exhaustion and structural induction on
+     \lambda-terms, the possible ways in which we arrive at $M \to M'$
+     are
+
+     * $(\lambda x.M)N \to M[N/x]$; where we know that, by parallel substitution
+       and reflexivity $(\lambda x.M)N \rhd M[N/x]$.
+
+     * $MN \to M'N$ and $NM \to NM'$; where we know that, by
+       induction $M \rhd M'$, and by parallel application and reflexivity, $MN \rhd M'N$
+       and $NM \rhd NM'$.
+
+     * congruence to \lambda-abstraction, which is a shared property between
+       the two relations where we can apply structural induction again.
+
+     * $\lambda x. Px \to P$, where $x \not\in \mathrm{FV}(P)$ and we can apply extensionality for $\rhd$
+       and reflexivity.
+
+  2) We can prove this by induction on any derivation of $M \rhd M'$. The
+     possible ways in which we arrive at this are
+     
+     * the trivial one, reflexivity.
+
+     * parallel application $NP \rhd N'P'$, where, by induction, we have $P \tto P'$ 
+       and $N \tto N'$. Using two steps, $NP \tto N'P \tto N'P'$ we prove $NP \tto N'P'$.
+
+     * congruence to \lambda-abstraction $\lambda x.N \rhd \lambda x.N'$, where, by induction,
+       we know that $N \tto N'$, so $\lambda x.N \tto \lambda x.N'$.
+
+     * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$, where, by induction,
+       we know that $P \tto P'$ and $N\tto N'$. Using multiple steps,
+       $(\lambda x.P)N \tto (\lambda x.P')N \tto (\lambda x.P')N' \to P'[N'/x]$.
+
+     * extensionality, $\lambda x.P x \rhd P'$, where by induction $P \tto P'$, and trivially,
+       $\lambda x.Px \tto \lambda x.P'x$.
+
+Because of this, the reflexive transitive closure of $\rhd$ should be a subset and a
+superset of $\tto$ at the same time.
+#+end_proof
+
+#+attr_latex: :options [Substitution Lemma]
+#+begin_lemma
+Assuming $M \rhd M'$ and $U \rhd U'$, $M[U/y] \rhd M'[U'/y]$.
+#+end_lemma
+
+#+attr_latex: :options [Church-Rosser Theorem]
+#+begin_theorem
+Both $\tto_{\beta}$ and $\tto_{\beta\eta}$ are confluent.
+#+end_theorem
+#+begin_proof
+
+#+end_proof
+
 
 
 *** TODO DeBruijn notation                                       :noexport:
-*** TODO Church encoding                                         :noexport:
 *** TODO SKI combinators                                         :noexport:
+*** TODO Fixed points                                            :noexport:
 ** Simply typed lambda calculus
 We will give now a presentation of the *simply-typed lambda calculus*
 based on cite:selinger13.
@@ -426,6 +552,9 @@ on this web application.
 # Image of the mikrokosmos jupyter notebook
 
 *** CodeMirror lexer
+** TODO Programming on the untyped \lambda-calculus               :noexport:
+# Lecture notes on lambda calculus chapter 3
+*** TODO Church encoding                                         :noexport:
 * Type theory                                                     
 ** Intuitionistic logic
 *** Constructive mathematics
