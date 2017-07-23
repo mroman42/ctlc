@@ -34,5 +34,4 @@
 #+latex_header: \theoremstyle{remark}
 #+latex_header: \newtheorem*{remark}{Remark}
 
-
-
+#+latex_header: \newcommand{\tto}{\twoheadrightarrow}
