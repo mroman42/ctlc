@@ -55,11 +55,138 @@ some unspecified formal notion of compilation of "things" that could
 be given by sets or proper classes. We will want to define categories
 whose objects are all the possible sets and we will need the objects
 to form a proper class.
-
 * Lambda calculus
-** Untyped lambda calculus                                        :noexport:
-*** TODO Church encoding
-*** TODO SKI combinators
+** Untyped \lambda-calculus
+The *\lambda-calculus* is a collection of formal systems, all of them based
+on the lambda notation discovered by Alonzo Church in the 1930s while trying
+to develop a foundational notion of function on mathematics.
+
+The *untyped* or *pure lambda calculus* is, syntactically, the simplest of those
+formal systems. This presentation of the untyped lambda calculus will follow
+cite:Hindley08 and cite:selinger13.
+
+*** Definition
+#+begin_definition
+The *\lambda-terms* are defined inductively as
+
+  * every /variable/, taken from an infinite and numerable set ${\cal V}$ of
+    variables, and usually written as lowercase single letters
+    (x,y,z,...), is a \lambda-term.
+
+  * given two \lambda-terms $M,N$; its /application/, $MN$ is a \lambda-term.
+
+  * given a \lambda-term $M$ and a variable $x$, its /abstraction/, $\lambda x.M$
+    is a lambda term.
+
+They can be also defined by the following BNF
+\[ \mathtt{Exp} ::= x \mid (\mathtt{Exp}\ \mathtt{Exp}) \mid (\lambda x.\mathtt{Exp})
+\]
+where $x \in {\cal V}$ is any variable.
+#+end_definition
+
+By convention, we omit outermost parentheses and assume
+left-associativity, i.e., $MNP$ will mean $(MN)P$. Multiple
+\lambda-abstractions can be also contracted to a single multivariate
+abstraction; thus $\lambda x.\lambda y.M$ can become $\lambda x,y.M$.
+
+*** Free and bound variables, substitution
+Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said to be
+bound; and any not bound variable is said to be free. We can define formally
+the set of free variables as follows.
+
+#+begin_definition
+The *set of free variables* of a term $M$ is defined inductively as
+
+\[\begin{aligned}
+FV(x) &= \{x\}, \\
+FV(MN) &= FV(M) \cup FV(N), \\
+FV(\lambda x.M) &= FV(M) \setminus \{x\}.
+\end{aligned}\]
+#+end_definition
+
+A free ocurrence of a variable can be substituted by a term. This should
+be done avoiding the unintended bounding of free variables which happens
+when a variable is substituted inside of the scope of a binder with the
+same name, as in the following example, where we substitute $y$ by $(\lambda z.xz)$
+on $(\lambda x.yx)$ and the second free variable $x$ gets bounded by the first binder
+
+\[ (\lambda x.yx) \overset{y \mapsto (\lambda z.xz)}\longrightarrow (\lambda x.(\lambda z.xz)x).
+\]
+
+To avoid this, the $x$ should be renamed before the substitution.
+
+#+begin_definition
+The *substitution* of a variable $x$ by a term $N$ on $M$ is defined
+inductively as
+
+\[\begin{aligned}
+x[N/x] &\equiv N,\\
+y[N/x] &\equiv y,\\
+(MP)[N/x] &\equiv (M[N/x])(P[N/x]),\\
+(\lambda x.P)[N/x] &\equiv \lambda x.P,\\
+(\lambda y.P)[N/x] &\equiv \lambda y.P[N/x] & \text{ if } y \notin FV(N), \\
+(\lambda y.P)[N/x] &\equiv \lambda z.P[z/y][N/x] & \text{ if } y \in FV(N);
+\end{aligned}\]
+
+where, in the last clause, $z$ is a fresh unused variable.
+#+end_definition
+
+We could define a criterion for choosing exactly what this new
+variable should be, or simply accept that our definition will not be
+well-defined, but well-defined up to a change on the name of the
+variables. This equivalence relation will be defined formally on the
+next section. In practice, it is common to follow the 
+/Barendregt's variable convention/ which simply assumes that bound 
+variables have been renamed to be distinct.
+
+*** \alpha-equivalence
+#+begin_definition
+*\alpha-equivalence* is the smallest relation $=_{\alpha}$ on
+\lambda-terms which is an equivalence relation, i.e.,
+
+  * it is /reflexive/, $M =_{\alpha} M$;
+  * it is /symmetric/, if $M =_{\alpha} N$, then $N =_{\alpha} M$;
+  * and it is /transitive/, if $M=_{\alpha}N$ and $N=_{\alpha}P$, then $M=_{\alpha}P$;
+
+and it is compatible with the structure of lambda terms,
+
+  * if $M =_{\alpha} M'$ and $N =_{\alpha} N'$, then $MN =_{\alpha}M'N'$;
+  * if $M=_{\alpha}M'$, then $\lambda x.M =_{\alpha} \lambda x.M'$;
+  * if $y$ does not appear on $M$, $\lambda x.M =_{\alpha} \lambda y.M[y/x]$.
+#+end_definition
+
+\alpha-equivalence formally captures the fact that the name of a bound
+variable can be changed without changing the properties of the term. This
+idea appears recurrently on mathematics; the renaming of the variable of
+integration is an example of \alpha-equivalence.
+
+\[
+\int_0^1 x^2\ dx = \int_0^1 y^2\ dy
+\]
+
+*** \beta-reduction
+The core idea of evaluation in \lambda-calculus is captured by the notion
+of \beta-reduction.
+
+#+begin_definition
+The *single-step \beta-reduction* is the smallest relation on terms
+capturing the notion of evaluation 
+\[(\lambda x.M)N \to_{\beta}M[N/x]\]
+
+and some congruence rules that preserve the structure of
+\lambda-terms, such as
+
+  * $M \to_{\beta} M'$ implies $MN \to M'N$ and $MN \to MN'$;
+  * $M \to_{\beta}M'$ implies $\lambda x.M \to_{\beta} \lambda x.M'$.
+
+The reflexive transitive closure of $\to_{\beta}$ is written as $\twoheadrightarrow_{\beta}$. The symmetric
+closure of $\twoheadrightarrow_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$.
+#+end_definition
+
+
+*** TODO DeBruijn notation                                       :noexport:
+*** TODO Church encoding                                         :noexport:
+*** TODO SKI combinators                                         :noexport:
 ** Simply typed lambda calculus
 We will give now a presentation of the *simply-typed lambda calculus*
 based on cite:selinger13.
