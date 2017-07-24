@@ -181,7 +181,24 @@ The reflexive transitive closure of $\to_{\beta}$ is written as $\twoheadrightar
 closure of $\twoheadrightarrow_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$ or simply $=$.
 #+end_definition
 
-*** TODO \eta-reduction                                          :noexport:
+*** \eta-reduction
+The idea of function extensionality in \lambda-calculus is captured by the
+notion of \eta-reduction. Function extensionality implies the equality of
+any two terms that define the same function over any argument.
+
+#+begin_definition
+The \eta-reduction is the smallest relation on \lambda-terms satisfiying the
+same congruence rules as \beta-reduction and the following axiom
+
+\[
+\lambda x.Mx \to_{\eta} M,\text{ for any } x \notin \mathrm{FV}(M).
+\]
+#+end_definition
+
+We define single-step \beta\eta-reduction as the union of \beta-reduction
+and \eta-reduction. This will be written as $\to_{\beta\eta}$, and its reflexive transitive
+closure will be $\tto_{\beta\eta}$.
+
 *** Confluence
 #+begin_definition
 A relation $\to$ is *confluent* if, given its reflexive transitive closure
