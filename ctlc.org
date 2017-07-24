@@ -1145,5 +1145,9 @@ that $\neg \neg (A \vee \neg A)$.
 # In Agda or Coq!?
 ** TODO Homotopy Type Theory
 * Conclusions
+* Appendices
 bibliographystyle:alpha
 bibliography:Bibliography.bib
+
+** TODO Mikrokosmos complete code
+** TODO Mikrokosmos user's guide
