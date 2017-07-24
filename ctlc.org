@@ -167,6 +167,7 @@ The core idea of evaluation in \lambda-calculus is captured by the notion
 of \beta-reduction.
 
 #+begin_definition
+<<def-betared>>
 The *single-step \beta-reduction* is the smallest relation on \lambda-terms
 capturing the notion of evaluation 
 \[(\lambda x.M)N \to_{\beta}M[N/x],\]
@@ -268,6 +269,7 @@ Using the first three rules, it is trivial to show that this relation
 is in fact reflexive.
 
 #+begin_lemma
+<<lemma-transclosureparallel>>
 The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$.
 In particular, given any $M,M'$,
 
@@ -316,6 +318,7 @@ superset of $\tto$ at the same time.
 
 #+attr_latex: :options [Substitution Lemma]
 #+begin_lemma
+<<lemma-subsl>>
 Assuming $M \rhd M'$ and $U \rhd U'$, $M[U/y] \rhd M'[U'/y]$.
 #+end_lemma
 #+begin_proof
@@ -354,6 +357,7 @@ inductively as
 
 #+attr_latex: :options [Diamond property of parallel reduction]
 #+begin_lemma
+<<lemma-paralleldiamond>>
 Given any $M'$ such that $M \rhd M'$, $M' \rhd M^{\ast}$. Parallel one-step reduction 
 has the diamond property.
 #+end_lemma
@@ -386,7 +390,7 @@ We apply again structural induction on the derivation of $M \rhd M'$.
       induction hypothesis, $\lambda y.Q' \rhd P^{\ast}$.
 
   * Parallel substitution, with $N \rhd N'$ and $Q \rhd Q'$; we know that $M^{\ast} = Q^{\ast}[N^{\ast}/x]$
-    and we can apply the substitution lemma to get $M' \rhd M^{\ast}$.
+    and we can apply the substitution lemma (lemma [[lemma-subsl]]) to get $M' \rhd M^{\ast}$.
 
   * Extensionality. We know that $P \rhd P'$ and $x \notin \mathrm{FV}(P)$, so by induction hypothesis
     we know that $P' \rhd P^{\ast} = M^{\ast}$.
@@ -397,14 +401,15 @@ We apply again structural induction on the derivation of $M \rhd M'$.
 The relation $\tto_{\beta\eta}$ is confluent.
 #+end_theorem
 #+begin_proof
-Parallel reduction, $\rhd$, satisfies the diamond property, which implies
-the Church-Rosser property. Its reflexive transitive closure is $\tto_{\beta\eta}$,
+Parallel reduction, $\rhd$, satisfies the diamond property (lemma [[lemma-paralleldiamond]]), 
+which implies the Church-Rosser property. Its reflexive transitive closure is $\tto_{\beta\eta}$
+(lemma [[lemma-transclosureparallel]]),
 whose diamond property implies confluence for $\to_{\beta\eta}$.
 #+end_proof
 
-*** TODO DeBruijn notation                                       :noexport:
+*** TODO Normalization                                           :noexport:
+*** TODO Evaluation, call by name and call by value              :noexport:
 *** TODO SKI combinators                                         :noexport:
-*** TODO Fixed points                                            :noexport:
 ** Simply typed lambda calculus
 We will give now a presentation of the *simply-typed lambda calculus*
 based on cite:selinger13.
