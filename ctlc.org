@@ -184,8 +184,9 @@ closure of $\twoheadrightarrow_{\beta}$ is called *\beta-equivalence* and writte
 *** TODO \eta-reduction                                          :noexport:
 *** Confluence
 #+begin_definition
-A relation $\tto$ is *confluent* if $M \tto N$ and $M \tto P$ imply the
-existence of some $Z$ such that $N \tto Z$ and $P \tto Z$.
+A relation $\to$ is *confluent* if, given its reflexive transitive closure
+$\tto$, $M \tto N$ and $M \tto P$ imply the existence of some $Z$ such that
+$N \tto Z$ and $P \tto Z$.
 #+end_definition
 
 Given any binary relation $\to$ of which $\tto$ is its reflexive transitive
@@ -231,6 +232,7 @@ The proof presented here is due to Tait and Per Martin-Löf; an earlier
 but more convoluted proof was discovered by Alonzo Church and Barkley 
 Rosser in 1935. It is based on the idea of parallel one-step reduction.
 
+#+attr_latex: :options [Parallel one-step reduction]
 #+begin_definition
 We define the *parallel one-step reduction* relation, $\rhd$ as the smallest
 relation satisfying that, assuming $P \rhd P'$ and $N \rhd N'$, the following
@@ -299,16 +301,89 @@ superset of $\tto$ at the same time.
 #+begin_lemma
 Assuming $M \rhd M'$ and $U \rhd U'$, $M[U/y] \rhd M'[U'/y]$.
 #+end_lemma
+#+begin_proof
+We apply structural induction on derivations of $M \rhd M'$, depending
+on what the last rule we used to derive it was.
+
+  * Reflexivity, $M = x$. If $x=y$, we simply use $U \rhd U'$; if $x \neq y$,
+    we use reflexivity on $x$ to get $x \rhd x$.
+
+  * Parallel application. By induction hypothesis, $P[U/y] \rhd P'[U'/y]$ and
+    $N[U/y]\rhd N'[U'/y]$, hence $(PN)[U/y] \rhd (P'N')[U'/y]$.
+
+  * Congruence. By induction, $N[U/y] \rhd N'[U'/y]$ and $\lambda x.N[U/y] \rhd \lambda x.N'[U'/y]$.
+
+  * Parallel substitution. By induction, $P[U/y] \rhd P'[U'/y]$ and $N[U/y] \rhd N[U'/y]$,
+    hence $((\lambda x.P)N)[U/y] \rhd P'[U'/y][N'[U'/y]/x] = P'[N'/x][U'/y]$.
+
+  * Extensionality, given $x \notin \mathrm{FV}(P)$. By induction, $P \rhd P'$, hence
+    $\lambda x.P[U/y]x \rhd P'[U'/y]$.
+
+Note that we are implicitely assuming the Barendregt's variable convention; all
+variables have been renamed to avoid clashes.
+#+end_proof
+
+#+attr_latex: :options [Maximal parallel one-step reduct]
+#+begin_definition 
+The *maximal parallel one-step reduct* $M^{\ast}$ of a \lambda-term $M$ is defined
+inductively as
+
+  * $x^{\ast} = x$;
+  * $(PN)^{\ast} = P^{\ast}N^{\ast}$;
+  * $((\lambda x.P)N)^{\ast} = P^{\ast}[N^{\ast}/x]$;
+  * $(\lambda x.N)^{\ast} = \lambda x.N^{\ast}$;
+  * $(\lambda x.Px)^{\ast} = P^{\ast}$, given $x \notin \mathrm{FV}(P)$.
+#+end_definition
+
+#+attr_latex: :options [Diamond property of parallel reduction]
+#+begin_lemma
+Given any $M'$ such that $M \rhd M'$, $M' \rhd M^{\ast}$. Parallel one-step reduction 
+has the diamond property.
+#+end_lemma
+#+begin_proof
+We apply again structural induction on the derivation of $M \rhd M'$.
+
+  * Reflexivity gives us $M' = x = M^{\ast}$.
+
+  * Parallel application. By induction, we have $P \rhd P^\ast$ and $N \rhd N^{\ast}$; depending
+    on the form of $P$, we have
+
+    - $P$ is not a \lambda-abstraction and $P'N' \rhd P^{\ast}N^{\ast} = (PN)^{\ast}$.
+
+    - $P = \lambda x.Q$ and $P \rhd P'$ could be derived using congruence to \lambda-abstraction
+      or extensionality. On the first case we know by induction hypothesis that $Q'\rhd Q^{\ast}$
+      and $(\lambda x.Q')N' \rhd Q^{\ast}[N^{\ast}/x]$. On the second case, we can take $P = \lambda x.Rx$, where,
+      $R \rhd R'$. By induction, $(R'x) \rhd (Rx)^{\ast}$ and now we apply the substitution lemma
+      to have $R'N' = (R'x)[N'/x] \rhd (Rx)^{\ast}[N^{\ast}/x]$.
+
+  * Congruence. Given $N \rhd N'$; by induction $N' \rhd N^{\ast}$, and depending on the form of
+    $N$ we have two cases
+
+    - $N$ is not of the form $Px$ where $x \not\in \mathrm{FV}(P)$; we can apply congruence to 
+      \lambda-abstraction.
+
+    - $N = Px$ where $x \notin \mathrm{FV}(P)$; and $N \rhd N'$ could be derived by parallel application
+      or parallel substitution. On the first case, given $P \rhd P'$, we know that $P' \rhd P^{\ast}$
+      by induction hypothesis and $\lambda x.P'x \rhd P^{\ast}$ by extensionality. On the second case,
+      $N = (\lambda y.Q)x$ and $N' = Q'[x/y]$, where $Q \rhd Q'$. Hence $P \rhd \lambda y.Q'$, and by
+      induction hypothesis, $\lambda y.Q' \rhd P^{\ast}$.
+
+  * Parallel substitution, with $N \rhd N'$ and $Q \rhd Q'$; we know that $M^{\ast} = Q^{\ast}[N^{\ast}/x]$
+    and we can apply the substitution lemma to get $M' \rhd M^{\ast}$.
+
+  * Extensionality. We know that $P \rhd P'$ and $x \notin \mathrm{FV}(P)$, so by induction hypothesis
+    we know that $P' \rhd P^{\ast} = M^{\ast}$.
+#+end_proof
 
 #+attr_latex: :options [Church-Rosser Theorem]
 #+begin_theorem
-Both $\tto_{\beta}$ and $\tto_{\beta\eta}$ are confluent.
+The relation $\tto_{\beta\eta}$ is confluent.
 #+end_theorem
 #+begin_proof
-
+Parallel reduction, $\rhd$, satisfies the diamond property, which implies
+the Church-Rosser property. Its reflexive transitive closure is $\tto_{\beta\eta}$,
+whose diamond property implies confluence for $\to_{\beta\eta}$.
 #+end_proof
-
-
 
 *** TODO DeBruijn notation                                       :noexport:
 *** TODO SKI combinators                                         :noexport:
@@ -459,7 +534,8 @@ such a way that a typing judgment for the type is derivable.
 # Every derivation in natural deduction is exactly a lambda term.
 
 ** TODO Hindley-Milner
-** TODO System F
+** TODO System F                                                  :noexport:
+*** TODO System F is strongly normalizing
 * Mikrokosmos (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 We have developed *Mikrokosmos*, a lambda calculus interpreter
