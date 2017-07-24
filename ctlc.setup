@@ -34,4 +34,6 @@
 #+latex_header: \theoremstyle{remark}
 #+latex_header: \newtheorem*{remark}{Remark}
 
+#+latex_header: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
+
 #+latex_header: \newcommand{\tto}{\twoheadrightarrow}
