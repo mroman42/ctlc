@@ -566,6 +566,159 @@ It aims to provide students with a tool to learn and understand lambda calculus.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
+** Lambda expressions
+*** De Bruijn indexes
+Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
+\alpha-conversion based on indices.  The main idea of De Bruijn
+indices is to remove all variables from binders and replace every
+variable on the body of an expression with a number, called /index/,
+representing the number of \lambda-abstractions in scope between the
+ocurrence and its binder.
+
+Consider the following example, the \lambda-term
+\[ \lambda x.(\lambda y.\ y (\lambda z.\ y z)) (\lambda t.\lambda z.\ t x)
+\]
+can be written with de Bruijn indices as
+\[
+\lambda\ (\lambda(1 \lambda(2 1))\ \lambda\lambda(2 3)\ ).
+\]
+
+De Bruijn also proposed a notation for the \lambda-calculus
+changing the order of binders and \lambda-applications.  A review on
+the syntax of this notation, its advantages and De Bruijn indexes, can be found in
+cite:kamareddine01. In this section, we are going to describe De Bruijn
+indexes but preserve the usual notation of \lambda-terms; that is, /De Bruijn/
+/indexes/ and /De Bruijn notation/ are different concepts and we are going to
+use only the former.
+
+#+attr_latex: :options [De Bruijn indexed terms]
+#+begin_definition
+We define recursively the set of \lambda-terms using de Bruijn notation
+following this BNF
+\[ \mathtt{Exp} ::= \mathbb{N}
+ \mid (\lambda\ \mathtt{Exp})
+ \mid (\mathtt{Exp}\ \mathtt{Exp})
+\]
+#+end_definition
+
+Our internal definition closely matches the formal one. The names of
+the constructors here are =Var=, =Lambda= and =App=:
+
+#+BEGIN_SRC haskell
+-- | A lambda expression using DeBruijn indexes.
+data Exp = Var Integer -- ^ integer indexing the variable.
+         | Lambda Exp  -- ^ lambda abstraction
+         | App Exp Exp -- ^ function application
+         deriving (Eq, Ord)
+#+END_SRC
+
+This notation avoids the need for the Barendregt's variable convention and
+the \alpha-reductions. It will be useful to implement \lambda-calculus without
+having to worry about the specific names of variables.
+
+*** Substitution
+We define the [[*Free and bound variables, substitution][substitution]] operation needed for the [[*\beta-reduction][\beta-reduction]] on
+de Bruijn indices. In order to define the substitution of the n-th
+variable by a \lambda-term $P$ on a given term, we must
+
+ * find all the ocurrences of the variable. At each level of scope
+   we are looking for the successor of the number we were looking
+   for before.
+
+ * decrease the higher variables to reflect the disappearance of
+   a lambda.
+
+ * replace the ocurrences of the variables by the new term, taking
+   into account that free variables must be increased to avoid them
+   getting captured by the outermost lambda terms. 
+
+In our code, we apply =subs= to any expression. When it is applied to
+a \lambda-abstraction, the index and the free variables of the
+replaced term are increased with =incrementFreeVars=; whenever it is
+applied to a variable, the previous cases are taken into consideration.
+
+#+BEGIN_SRC haskell
+-- | Substitutes an index for a lambda expression
+subs :: Integer -> Exp -> Exp -> Exp
+subs n p (Lambda e) = Lambda (subs (n+1) (incrementFreeVars 0 p) e)
+subs n p (App f g)  = App (subs n p f) (subs n p g)
+subs n p (Var m)
+  | n == m    = p         -- The lambda is replaced directly  
+  | n <  m    = Var (m-1) -- A more exterior lambda decreases a number
+  | otherwise = Var m     -- An unrelated variable remains untouched
+#+END_SRC
+
+Then \beta-reduction can be then defined using this =subs= function.
+
+#+BEGIN_SRC haskell
+betared :: Exp -> Exp
+betared (App (Lambda e) x) = substitute 1 x e
+betared e = e
+#+END_SRC
+
+*** De Bruijn-terms and \lambda-terms
+The internal language of the interpreter uses de Bruijn expressions,
+while the user interacts with it using lambda expressions with alphanumeric
+variables. Our definition of a \lambda-expression with variables will be
+used in parsing and output formatting.
+
+#+BEGIN_SRC haskell
+data NamedLambda = LambdaVariable String                    
+                 | LambdaAbstraction String NamedLambda     
+                 | LambdaApplication NamedLambda NamedLambda
+#+END_SRC
+
+The translation from a natural \lambda-expression to de Bruijn notation
+is done using a dictionary which keeps track of the bounded variables
+
+#+BEGIN_SRC haskell
+tobruijn :: Map.Map String Integer -- ^ names of the variables used
+         -> Context                -- ^ names already binded on the scope
+         -> NamedLambda            -- ^ initial expression
+         -> Exp
+-- Every lambda abstraction is inserted in the variable dictionary,
+-- and every number in the dictionary increases to reflect we are entering
+-- into a deeper context.
+tobruijn d context (LambdaAbstraction c e) = 
+     Lambda $ tobruijn newdict context e
+        where newdict = Map.insert c 1 (Map.map succ d)
+
+-- Translation of applications is trivial.
+tobruijn d context (LambdaApplication f g) = 
+     App (tobruijn d context f) (tobruijn d context g)
+
+-- We look for every variable on the local dictionary and the current scope.
+tobruijn d context (LambdaVariable c) =
+  case Map.lookup c d of
+    Just n  -> Var n
+    Nothing -> fromMaybe (Var 0) (MultiBimap.lookupR c context)
+#+END_SRC
+
+while the translation from a de Bruijn expression to a natural one is done
+considering an infinite list of possible variable names and keeping a list
+of currently-on-scope variables to name the indices.
+
+#+BEGIN_SRC haskell
+-- | An infinite list of all possible variable names 
+-- in lexicographical order.
+variableNames :: [String]
+variableNames = concatMap (`replicateM` ['a'..'z']) [1..]
+
+-- | A function translating a deBruijn expression into a 
+-- natural lambda expression.
+nameIndexes :: [String] -> [String] -> Exp -> NamedLambda
+nameIndexes _    _   (Var 0) = LambdaVariable "undefined"
+nameIndexes used _   (Var n) = LambdaVariable (used !! pred (fromInteger n))
+nameIndexes used new (Lambda e) = 
+  LambdaAbstraction (head new) (nameIndexes (head new:used) (tail new) e)
+nameIndexes used new (App f g) = 
+  LambdaApplication (nameIndexes used new f) (nameIndexes used new g)
+#+END_SRC
+
+*** TODO Evaluation
+** Output formatting :noexport:
+*** Verbose mode
+*** SKI mode
 ** Haskell                                                        :noexport:
 ** Parsing
 *** Monadic parser combinators
