@@ -406,59 +406,50 @@ whose diamond property implies confluence for $\to_{\beta\eta}$.
 *** TODO Normalization                                           :noexport:
 *** TODO Evaluation, call by name and call by value              :noexport:
 *** TODO SKI combinators                                         :noexport:
-** Simply typed lambda calculus
-We will give now a presentation of the *simply-typed lambda calculus*
-based on cite:selinger13.
+** Simply typed \lambda-calculus
+We will give now a presentation of the *simply-typed \lambda-calculus*
+(STLC) based on cite:Hindley08. Our presentation will rely only on the
+/arrow type/ $\to$; while other presentations of simply typed
+\lambda-calculus extend this definition with type constructors such as
+pairs or union types, as it is done in cite:selinger13.
+
+It seems clearer to present a first minimal version of the
+\lambda-calculus. Such extensions will be explained later, profiting
+from the logical interpretation of propositions as types.
 
 *** TODO Types and sets
 # From the Hott book
 
 *** Simple types
-# Are basic types necessary?
-
 We start assuming that a set of *basic types* exists. Those basic
 types would correspond, in a programming language interpretation, with
-things like the type of strings or the type of integers. We will also
-assume that a *unit* type, $1$ exists; the unit type will have only
-one inhabitant.
+things like the type of strings or the type of integers.
 
 #+begin_definition
 The set of *simple types* is given by the following Backus-Naur form
 \[\mathtt{Type} ::= 
-1 \mid
 \iota \mid 
-\mathtt{Type} \to \mathtt{Type} \mid
-\mathtt{Type} \times \mathtt{Type} \]
-
-where $1$ is a one-element type and $\iota$ is any /basic type/.
+\mathtt{Type} \to \mathtt{Type} \]
+where $1$ is a one-element type and $\iota$ would be any /basic type/.
 #+end_definition
 
-That is to say that, for every two types $A,B$, there exist a *function type*
-$A \to B$ and a *pair type* $A \times B$.
+That is to say that, for every two types $A,B$, there exists a *function type*
+$A \to B$ between them.
 
-*** Raw typed lambda terms
-We will now define the terms of the typed lambda calculus. 
+*** Typing rules for the simply typed \lambda-calculus
+We will now define the terms of the simply typed \lambda-calculus (STLC) using the
+same constructors we used on the untyped version. Those are the *raw typed \lambda-terms*.
 
 #+begin_definition
 The set of *typed lambda terms* is given by the BNF
 \[ \mathtt{Term} ::=
-\ast \mid
 x \mid
 \mathtt{Term}\mathtt{Term} \mid
 \lambda x^{\mathtt{Type}}. \mathtt{Term} \mid
-\left\langle \mathtt{Term},\mathtt{Term} \right\rangle \mid
-\pi_1 \mathtt{Term} \mid
-\pi_2\mathtt{Term}
 \]
 #+end_definition
 
-Besides the previously considered term application and a special
-element $\ast$ which will be the unique inhabitant of the type $1$; we
-now introduce a typed lambda abstraction and an explicit construction
-of the pair element with its projections.
-
-*** Typing rules for the simply-typed lambda calculus
-The set of raw typed lambda terms contains some meaningless terms
+The set of raw typed \lambda-terms contains some meaningless terms
 under our type interpretation, such as $\pi_1(\lambda x^A.M)$. *Typing rules*
 will give them the desired semantics; only a subset of these raw
 lambda terms will be typeable.
@@ -489,41 +480,7 @@ a consequence from that context, separated by the $\vdash$ symbol.
     \UnaryInfC{$\Gamma, x:A \vdash x:A$}
     \end{prooftree}
 
- 3) The $(pair)$ rule allow us to build pairs by their components. It acts
-   as a constructor of pairs.
-
-   \begin{prooftree}
-   \LeftLabel{$(pair)$}
-   \AxiomC{$\Gamma \vdash a : A$}
-   \AxiomC{$\Gamma \vdash b : B$}
-   \BinaryInfC{$\Gamma \vdash \left\langle a,b \right\rangle : A \times B$}
-   \end{prooftree}
-
- 4) The $(\pi_1)$ and $(\pi_2)$ rules give the semantics of a product
-    with two projections to the pair terms. If we have a pair $m : A \times B$, then
-    $\pi_1m : A$ and $\pi_2m : B$. They act as two different destructors of pairs.
-
-    \begin{prooftree}
-    \LeftLabel{($\pi_1$)}
-    \AxiomC{$\Gamma \vdash m : A \times B$}
-    \UnaryInfC{$\Gamma \vdash \pi_1m : A$}
-    \LeftLabel{($\pi_2$)}
-    \AxiomC{$\Gamma \vdash m : A \times B$}
-    \UnaryInfC{$\Gamma \vdash \pi_2m : B$}
-    \noLine\BinaryInfC{}
-    \end{prooftree}
-
- 5) The $(abs)$ introduces a well-typed lambda abstraction. If we have a
-    $h : B$ term depending on $x : A$, we can create a lambda abstraction
-    from this term. It acts as a constructor of function terms.
-
-    \begin{prooftree}
-    \LeftLabel{($abs$)}
-    \AxiomC{$\Gamma, x : A \vdash h : B$}
-    \UnaryInfC{$\Gamma \vdash \lambda x^A.h : A \to B$}
-    \end{prooftree}
-
- 6) The $(app)$ rule gives the type of a well-typed application of a
+ 3) The $(app)$ rule gives the type of a well-typed application of a
     lambda term. A term $f : A \to B$ applied to a term $a : A$ is a term
     of type $B$. It acts as a destructor of function terms.
 
