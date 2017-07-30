@@ -496,6 +496,10 @@ A term is *typable* if we can assign types to all its variables in
 such a way that a typing judgment for the type is derivable.
 #+end_definition
 
+From now on, we only consider typable terms on the STLC to be used as
+real terms. As a consequence, the set of \lambda-terms of the STLC is
+only a subset of the terms of the untyped \lambda-calculus.
+
 # Examples of typable and non-typable terms.
 
 # It is easy to check if a term is typable because there is only
@@ -505,8 +509,128 @@ such a way that a typing judgment for the type is derivable.
 # choice at each step. Has this to do with the natural deduction
 # properties?
 
+*** Curry-style types
+Two different approaches to typing \lambda-terms are commonly used.
+
+ * *Church-style* typing, also known as /explicit typing/ originated from
+   the work of Alonzo Church in cite:church40, where he described a STLC
+   with two basic types. The term's type is defined as an intrinsic property
+   of the term; and the same term has to be interpreted always with the same
+   type.
+
+ * *Curry-style* typing, also known as /implicit typing/; which creates a
+   formalism where every single term can be given an infinite number of types.
+   This technique is called *polymorphism* in general; and here it is only used
+   to tell the kinds of combinations that are allowed with any given term.
+
+As an example, we can consider the identity term $I = \lambda x.x$. It would have to be 
+defined for each possible type. That is, we should consider a family of different 
+identity terms $I_A = \lambda x.x : A \to A$. Curry-style typing allow us to consider 
+parametric types with type variables, and to type the identity as 
+$I = \lambda x.x : \sigma \to \sigma$ where $\sigma$ is a type variable.
+
+#+attr_latex: :options [Type variables]
+#+begin_definition
+Given a infinite numerable set of /type variables/, we define *parametric types*
+or /type-schemes/ inductively as
+\[\mathtt{PType} ::= 
+\iota \mid
+\mathtt{Tvar} \mid 
+\mathtt{PType} \to \mathtt{PType}, \]
+that is, all basic types and type variables are atomic parametric types; and we also
+consider the arrow type between two parametric types.
+#+end_definition
+
+The difference between the two typing styles is then not a mere notational
+convention, but a difference on the expressive power that we assign to each
+term. The interesting property of type variables is that they can act as
+placeholders for other type templates. This is formalized with the notion
+of type substitution.
+
+#+attr_latex: :options [Type substitution]
+#+begin_definition
+A *substitution* $\psi$ is any function from type variables to type templates. It can
+be applied to a type template as $\overline{\psi}$ by recursion and knowing that
+
+   * $\overline{\psi} \iota = \iota$,
+   * $\overline{\psi} \sigma = \psi \sigma$,
+   * $\overline{\psi} (A \to B) = \overline{\psi} A \to \overline{\psi} B$.
+
+That is, the type template $\overline{\psi} A$ is the same as $A$ but with every type variable
+replaced according to the substitution $\sigma$.
+#+end_definition
+
+We consider a type to be /more general/ than other if the latter can be obtained by
+applying a substitution to the former. In this case, the latter is called an /instance/
+of the former. For instance, $A \to B$ is more general than its instance
+$(C \to D) \to B$, where $A$ is a type variable affected by the substitution. An
+interesting property of STLC is that every type has a most general type, called
+its /principal type/.
+
+#+attr_latex: :options [Principal type]
+#+begin_definition
+A closed \lambda-term $M$ has a *principal type* $\pi$ if $M : \pi$ and given any
+$M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\sigma} \pi = \tau$.
+#+end_definition
+
+*** Unification and type inference
+The unification of two type templates is the construction of two substitutions
+making them equal as type templates; i.e., the construction of a type that
+is a particular instance of both at the same time. We will not only aim for
+an unifier but for the most general one between them.
+
+#+attr_latex: :options [Most general unifier]
+#+begin_definition
+A substitution $\psi$ is called an *unifier* of two sequences of type templates
+$\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ if $\overline{\psi} A_i = \overline{\psi} B_i$ for any $i$. We say that it
+is the *most general unifier* if given any other unifier $\phi$ exists a substitution
+$\varphi$ such that $\phi = \overline{\varphi} \circ \psi$.
+#+end_definition
+
+#+begin_lemma
+If an unifier of $\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ exists, the most general unifier
+can be found using the following recursive definition of $\mathtt{unify}(A_1,\dots,A_n;B_1,\dots,B_n)$.
+
+  1) $\mathtt{unify}(\sigma;\sigma) = \mathrm{id}$ and $\mathtt{unify}(\iota,\iota) = \mathrm{id}$;
+  2) $\mathtt{unify}(\sigma;B) = (\sigma \mapsto B)$, the substitution that only changes $\sigma$ by $B$;
+     if $\sigma$ does not occur in $B$. The algorithm fails if $\sigma$ occurs in $B$;
+  3) $\mathtt{unify}(A;\sigma)$ is defined symmetrically;
+  4) $\mathtt{unify}(A_1 \to A_2, B_1\to B_2) = \mathtt{unify}(A_1,A_2;B_1,B_2)$;
+  5) $\mathtt{unify}(A,A_1,\dots; B,B_1,\dots) = \overline{\psi} \circ \varphi$ where $\varphi = \mathtt{unify}(A_1,\dots;B_1,\dots)$ 
+     and $\psi = \mathtt{unify}(\overline{\varphi}A; \overline{\varphi}B)$;
+  6) $\mathtt{unify}$ fails in any other case.
+
+Where $\sigma$ is any type variable. The two types have no unifier if and only if $\mathtt{unify}(A,B)$ fails.
+#+end_lemma
+#+begin_proof
+# TODO
+It is easy to notice that, by induction, if $\mathtt{unify}(A;B)$ exists, it is in fact an unifier.
+
+We now prove that, if $A$ and $B$ can be unified, $\mathtt{unify}(A,B)$ is the most general unifier.
+
+We also need to prove that the unification algorithm terminates.
+#+end_proof
+
+Using unification, we can define type inference.
+
+#+attr_latex: :options [Type inference]
+#+begin_theorem
+The algorithm $\mathtt{typeinfer}(M,B)$, defined as follows, finds the most general substitution
+such that $x_1 : \sigma A_1, \dots, x_n : \sigma A_n \vdash M : \overline{\sigma} B$ is a valid typing judgment.
+#+end_theorem
+#+begin_proof
+
+#+end_proof
+
+#+attr_latex: :options [Principal type property]
+#+begin_corollary
+Every typable pure \lambda-term has a principal type.
+#+end_corollary
+
 *** TODO Natural deduction
 # Every derivation in natural deduction is exactly a lambda term.
+*** TODO Propositions as types
+*** TODO Extending the simply typed \lambda-calculus
 
 ** TODO Hindley-Milner
 ** TODO System F                                                  :noexport:
