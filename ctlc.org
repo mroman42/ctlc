@@ -31,9 +31,8 @@ A *category* ${\cal C}$, as defined in cite:maclane78, is given by
 
 Every morphism $f \in {\cal C}_1$ has two objects assigned: a
 *domain*, written as $\mathrm{dom}(f) \in {\cal C}_0$, and a
-*codominio*, written as $\mathrm{cod}(f) \in {\cal C}_0$; a common
+*codomain*, written as $\mathrm{cod}(f) \in {\cal C}_0$; a common
 notation for such morphism is
-
 \[
 f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
 \]
@@ -42,7 +41,6 @@ Given two morphisms $f \colon A \to B$ and $g \colon B \to C$ there
 exists a *composition morphism*, written as $g \circ f \colon A \to C$. 
 Morphism composition is a binary associative operation with
 identity elements $\mathrm{id}_{A}\colon A \to A$, that is
-
 \[
 h \circ (g \circ f) = (h \circ g) \circ f
 \quad\text{ and }\quad
@@ -108,8 +106,8 @@ be done avoiding the unintended bounding of free variables which happens
 when a variable is substituted inside of the scope of a binder with the
 same name, as in the following example, where we substitute $y$ by $(\lambda z.xz)$
 on $(\lambda x.yx)$ and the second free variable $x$ gets bounded by the first binder
-
-\[ (\lambda x.yx) \overset{y \mapsto (\lambda z.xz)}\longrightarrow (\lambda x.(\lambda z.xz)x).
+\[
+(\lambda x.yx) \overset{y \mapsto (\lambda z.xz)}\longrightarrow (\lambda x.(\lambda z.xz)x).
 \]
 
 To avoid this, the $x$ should be renamed before the substitution.
@@ -155,9 +153,8 @@ and it is compatible with the structure of lambda terms,
 
 \alpha-equivalence formally captures the fact that the name of a bound
 variable can be changed without changing the properties of the term. This
-idea appears recurrently on mathematics; the renaming of the variable of
+idea appears recurrently on mathematics; e.g., the renaming of the variable of
 integration is an example of \alpha-equivalence.
-
 \[
 \int_0^1 x^2\ dx = \int_0^1 y^2\ dy
 \]
@@ -190,7 +187,6 @@ any two terms that define the same function over any argument.
 #+begin_definition
 The \eta-reduction is the smallest relation on \lambda-terms satisfiying the
 same congruence rules as \beta-reduction and the following axiom
-
 \[
 \lambda x.Mx \to_{\eta} M,\text{ for any } x \notin \mathrm{FV}(M).
 \]
