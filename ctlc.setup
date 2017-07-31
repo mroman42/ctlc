@@ -22,6 +22,7 @@
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{tikz-cd}
 #+latex_header: \usepackage{bussproofs}
+#+latex_header: \usepackage{mathtools}
 
 #+latex_header: \theoremstyle{plain}
 #+latex_header: \newtheorem{theorem}{Theorem}
@@ -37,3 +38,4 @@
 #+latex_header: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
 
 #+latex_header: \newcommand{\tto}{\twoheadrightarrow}
+#+latex_header: \DeclarePairedDelimiter\pair{\langle}{\rangle}
