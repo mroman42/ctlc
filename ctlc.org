@@ -463,15 +463,7 @@ Every typing rule assumes a typing context, usually denoted by $\Gamma$
 or by a concatenation of typing contexts written as $\Gamma,\Gamma'$; and 
 a consequence from that context, separated by the $\vdash$ symbol.
 
- 1) The type of $\ast$ is $1$, the rule $(\ast)$ builds this element.
-
-   \begin{prooftree}
-   \LeftLabel{($\ast$)}
-   \AxiomC{}
-   \UnaryInfC{$\Gamma \vdash \ast : 1$}
-   \end{prooftree}
-
- 2) The $(var)$ rule simply makes explicit the type of a variable from
+ 1) The $(var)$ rule simply makes explicit the type of a variable from
     the context.
 
     \begin{prooftree}
@@ -479,6 +471,16 @@ a consequence from that context, separated by the $\vdash$ symbol.
     \AxiomC{}
     \UnaryInfC{$\Gamma, x:A \vdash x:A$}
     \end{prooftree}
+
+ 2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
+    functions from the variable type to the result type. It acts as
+    a constructor of function terms.
+
+   \begin{prooftree}
+   \LeftLabel{$(abs)$}
+   \AxiomC{$\Gamma, x:A \vdash M : B$}
+   \UnaryInfC{$\Gamma \vdash \lambda x.M : A \to B$}
+   \end{prooftree}
 
  3) The $(app)$ rule gives the type of a well-typed application of a
     lambda term. A term $f : A \to B$ applied to a term $a : A$ is a term
