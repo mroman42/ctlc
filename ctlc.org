@@ -680,12 +680,166 @@ where $x_1,\dots,x_n$ are the free variables on $M$ and $A_1,\dots,A_n,B$ are fr
 variables. By virtue of Theorem [[thm-typeinfer]], the result is the most general type of $M$
 if we assume the variables to have the given types.
 #+end_proof
+*** TODO Normalization
+#+begin_theorem
+In the STLC, all terms are strongly normalizing.
+#+end_theorem
+# Proof in Girard, Lafont, Taylor
+
+** Curry-Howard correspondence
+*** Extending the simply typed \lambda-calculus
+We will add now special syntax for some terms and types, such as
+pairs, unions and unit types. This syntax will make our \lambda-calculus
+more expressive, but the unification and type inference algorithms
+will continue to work. The previous proofs can be extended to cover
+all the new cases.
+
+#+attr_latex: :options [Simple types II]
+#+begin_definition
+The new set of *simple types* is given by the following BNF
+\[\mathtt{Type} ::= \iota \mid 
+\mathtt{Type} \to \mathtt{Type} \mid
+\mathtt{Type} \times \mathtt{Type} \mid
+\mathtt{Type} + \mathtt{Type} \mid
+1 \mid
+0,\]
+where $\iota$ would be any /basic type/.
+#+end_definition
+
+That is to say that, for any given types $A,B$, there exists a product
+type $A \times B$, consisting of the pairs of elements where the first
+one is of type $A$ and the second one of type $B$; there exists the
+union type $A + B$, consisting of a disjoint union of tagged terms
+from $A$ or $B$; an unit type $1$ with only an element, and an empty
+or void type $0$ without inhabitants. The raw typed \lambda-terms are
+extended to use these new types.
+
+#+attr_latex: :options [Raw typed lambda terms II]
+#+begin_definition
+The new set of raw *typed lambda terms* is given by the BNF
+\[\begin{aligned} 
+\mathtt{Term} ::=\ &
+x \mid
+\mathtt{Term}\mathtt{Term} \mid
+\lambda x. \mathtt{Term} \mid \\&
+\left\langle \mathtt{Term},\mathtt{Term} \right\rangle \mid
+\pi_1 \mathtt{Term} \mid
+\pi_2 \mathtt{Term} \mid \\&
+\textrm{inl}\ \mathtt{Term} \mid
+\textrm{inr}\ \mathtt{Term} \mid
+\textrm{case}\ \mathtt{Term}\ \textrm{of}\ \mathtt{Term}; \mathtt{Term} \mid \\&
+\textrm{abort}\ \mathtt{Term} \mid \ast
+\end{aligned}\]
+#+end_definition
+
+The use of these new terms is formalized by the following extended set
+of typing rules.
+
+ 1) The $(var)$ rule simply makes explicit the type of a variable from
+    the context.
+
+    \begin{prooftree}
+    \LeftLabel{($var$)}
+    \AxiomC{}
+    \UnaryInfC{$\Gamma, x:A \vdash x:A$}
+    \end{prooftree}
+
+ 2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
+    functions from the variable type to the result type. It acts as
+    a constructor of function terms.
+
+   \begin{prooftree}
+   \LeftLabel{$(abs)$}
+   \AxiomC{$\Gamma, x:A \vdash M : B$}
+   \UnaryInfC{$\Gamma \vdash \lambda x.M : A \to B$}
+   \end{prooftree}
+
+ 3) The $(app)$ rule gives the type of a well-typed application of a
+    lambda term. A term $f : A \to B$ applied to a term $a : A$ is a term
+    of type $B$. It acts as a destructor of function terms.
+
+    \begin{prooftree}
+    \LeftLabel{$(app)$}
+    \AxiomC{$\Gamma \vdash f : A \to B$}
+    \AxiomC{$\Gamma \vdash a : A$}
+    \BinaryInfC{$\Gamma \vdash f a : B$}
+    \end{prooftree}
+
+ 4) The $(pair)$ rule gives the type of a pair of elements. It acts as
+    a constructor of pair terms.
+
+    \begin{prooftree}
+    \LeftLabel{$(pair)$}
+    \AxiomC{$\Gamma \vdash a : A$}
+    \AxiomC{$\Gamma \vdash b :  B$}
+    \BinaryInfC{$\Gamma \vdash \pair{a,b} : A \times B$}
+    \end{prooftree}
+
+ 5) The $(\pi_1)$ rule extracts the first element from a pair. It acts as
+    a destructor of pair terms.
+
+    \begin{prooftree}
+    \LeftLabel{$(\pi_1)$}
+    \AxiomC{$\Gamma \vdash m : A \times B$}
+    \UnaryInfC{$\Gamma \vdash \pi_1\ m : A$}
+    \end{prooftree}
+
+ 6) The $(\pi_1)$ rule extracts the second element from a pair. It acts as
+    a destructor of pair terms.
+
+    \begin{prooftree}
+    \LeftLabel{$(\pi_2)$}
+    \AxiomC{$\Gamma \vdash m : A \times B$}
+    \UnaryInfC{$\Gamma \vdash \pi_2\ m : B$}
+    \end{prooftree}
+
+ 7) The $(inl)$ rule creates a union type from the left side type of
+    the sum. It acts as a constructor of union terms.
+
+    \begin{prooftree}
+    \LeftLabel{$(inl)$}
+    \AxiomC{$\Gamma \vdash a : A$}
+    \UnaryInfC{$\Gamma \vdash \mathrm{inl}\ a : A + B$}
+    \end{prooftree}
+
+ 8) The $(inr)$ rule creates a union type from the right side type of
+    the sum. It acts as a constructor of union terms.
+
+    \begin{prooftree}
+    \LeftLabel{$(inr)$}
+    \AxiomC{$\Gamma \vdash b : B$}
+    \UnaryInfC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
+    \end{prooftree}
+
+ 9) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
+    of the unit type.
+
+    \begin{prooftree}
+    \LeftLabel{$(\ast)$}
+    \AxiomC{$$}
+    \UnaryInfC{$\Gamma \vdash \ast : 1$}
+    \end{prooftree}
+
+ 10) The $(abort)$ rule extracts a term of any type from the void type.
+
+     \begin{prooftree}
+     \LeftLabel{$(abort)$}
+     \AxiomC{$\Gamma \vdash M : 0$}
+     \UnaryInfC{$\Gamma \vdash \mathrm{abort}_A\ M : A$}
+     \end{prooftree} 
+
+The abort function must be understood as the unique function going
+from the empty set to any given set.
 
 *** TODO Natural deduction
 # Every derivation in natural deduction is exactly a lambda term.
 *** TODO Propositions as types
-*** TODO Extending the simply typed \lambda-calculus
-
+*** TODO Type algebra
+** TODO Models of \lambda-calculus
+*** TODO Types and sets
+# From the Hott book
+*** TODO Models
+# From Selinger
 ** TODO Hindley-Milner
 ** TODO System F                                                  :noexport:
 *** TODO System F is strongly normalizing
