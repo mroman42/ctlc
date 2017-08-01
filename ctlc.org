@@ -828,12 +828,119 @@ of typing rules.
      \UnaryInfC{$\Gamma \vdash \mathrm{abort}_A\ M : A$}
      \end{prooftree} 
 
-The abort function must be understood as the unique function going
-from the empty set to any given set.
+    The abort function must be understood as the unique function going
+    from the empty set to any given set.
 
-*** TODO Natural deduction
-# Every derivation in natural deduction is exactly a lambda term.
-*** TODO Propositions as types
+*** Natural deduction
+The natural deduction is a logical system due to Gentzen. We introduce
+it here following cite:selinger13 and cite:wadler15. It relationship
+with the STLC will be made explicit on the [[*Propositions as types][next section]].
+
+We will use the logical binary connectives $\to,\wedge,\vee$, and two
+given propositions, $\top,\bot$ representing thruth and falsity. The
+rules defining natural deduction come in pairs; there are introductors
+and eliminators for every connective. Every introductor uses a set of
+assumptions to generate a formula and every eliminator gives a way to
+extract precisely that set of assumptions.
+
+ 1) Every axiom on the context can be used.
+
+    \begin{prooftree}
+    \RightLabel{(Ax)}
+    \AxiomC{}
+    \UnaryInfC{$\Gamma,A \vdash A$}
+    \end{prooftree}
+
+ 2) Introduction and elimination of the $\to$ connective. Note that the
+    elimination rule corresponds to /modus ponens/.
+
+    \begin{prooftree}
+    \RightLabel{($I_{\to}$)}
+    \AxiomC{$\Gamma, A \vdash B$}
+    \UnaryInfC{$\Gamma \vdash A \to B$}
+    \RightLabel{($E_{\to}$)}
+    \AxiomC{$\Gamma \vdash A \to B$}
+    \AxiomC{$\Gamma \vdash A$}
+    \BinaryInfC{$\Gamma \vdash B$}
+    \noLine
+    \BinaryInfC{}
+    \end{prooftree}
+
+ 3) Introduction and elimination of the $\wedge$ connective. Note that the
+    introduction in this case takes two assumptions, and there are
+    two different elimination rules.
+
+    \begin{prooftree}
+    \RightLabel{($I_{\wedge}$)}
+    \AxiomC{$\Gamma \vdash A$}
+    \AxiomC{$\Gamma \vdash B$}
+    \BinaryInfC{$\Gamma \vdash A \wedge B$}
+    \RightLabel{($E_{\wedge}^1$)}
+    \AxiomC{$\Gamma \vdash A \wedge B$}
+    \UnaryInfC{$\Gamma \vdash A$}
+    \RightLabel{($E_{\wedge}^2$)}
+    \AxiomC{$\Gamma \vdash A \wedge B$}
+    \UnaryInfC{$\Gamma \vdash B$}
+    \noLine
+    \TrinaryInfC{}
+    \end{prooftree}
+
+ 4) Introduction and elimination of the $\vee$ connective. Here, we need
+    two introduction rules to match the two assumptions we use on the
+    eliminator.
+
+    \begin{prooftree}
+    \RightLabel{($I_{\vee}^1$)}
+    \AxiomC{$\Gamma \vdash A$}
+    \UnaryInfC{$\Gamma \vdash A \vee B$}
+    \RightLabel{($I_{\vee}^2$)}
+    \AxiomC{$\Gamma \vdash B$}
+    \UnaryInfC{$\Gamma \vdash A \vee B$}
+    \RightLabel{($E_{\vee}$)}
+    \AxiomC{$\Gamma \vdash A \vee B$}
+    \AxiomC{$\Gamma,A \vdash C$}
+    \AxiomC{$\Gamma,B \vdash C$}
+    \TrinaryInfC{$\Gamma \vdash C$}
+    \noLine
+    \TrinaryInfC{}
+    \end{prooftree}
+
+ 5) Introduction for $\top$. It needs no assumptions and, consequently,
+    there is no elimination rule for it.
+
+    \begin{prooftree}
+    \RightLabel{($I_{\top}$)}
+    \AxiomC{}
+    \UnaryInfC{$\Gamma \vdash \top$}
+    \end{prooftree}
+
+ 6) Elimination for $\bot$. It can be eliminated in all generality, and,
+    consequently, there are no introduction rules for it. This elimination
+    rule represents the /"ex falsum quodlibet"/ principle that says that
+    falsity implies anything.
+
+    \begin{prooftree}
+    \RightLabel{($E_{\bot}$)}
+    \AxiomC{$\Gamma \vdash \bot$}
+    \UnaryInfC{$\Gamma \vdash C$}
+    \end{prooftree}
+
+
+*** Propositions as types
+In 1934, Curry observed in cite:Curry34 that the type of a function
+$(A \to B)$ could be read as an implication and that the existence of a
+function of that type was equivalent to the provability of the proposition.
+Previously, the *Brouwer-Heyting-Kolmogorov interpretation* of intuitionistic
+logic had given a definition of what it meant to be a proof of an intuinistic
+formula, where a proof of the implication $(A \to B)$ was a function converting
+a proof of $A$ into a proof of $B$. It was not until 1969 that Howard pointed
+a deep correspondence between the simply-typed \lambda-calculus and the
+natural deduction at three levels
+
+  1) propositions are types.
+  2) proofs are programs.
+  3) simplification of proofs is the evaluation of programs.
+
 *** TODO Type algebra
 ** TODO Models of \lambda-calculus
 *** TODO Types and sets
