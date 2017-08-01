@@ -812,16 +812,28 @@ of typing rules.
     \UnaryInfC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
     \end{prooftree}
 
- 9) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
-    of the unit type.
+ 9) The $(case)$ rule extracts a term from an union and uses on any of the
+    two cases
 
     \begin{prooftree}
-    \LeftLabel{$(\ast)$}
-    \AxiomC{$$}
-    \UnaryInfC{$\Gamma \vdash \ast : 1$}
+    \LeftLabel{$(case)$}
+    \AxiomC{$\Gamma \vdash m : A + B$}
+    \AxiomC{$\Gamma, a:A \vdash n : C$}
+    \AxiomC{$\Gamma, b:B \vdash p : C$}
+    \TrinaryInfC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) : C$}
     \end{prooftree}
 
- 10) The $(abort)$ rule extracts a term of any type from the void type.
+ 10) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
+     of the unit type.
+
+     \begin{prooftree}
+     \LeftLabel{$(\ast)$}
+     \AxiomC{$$}
+     \UnaryInfC{$\Gamma \vdash \ast : 1$}
+     \end{prooftree}
+
+
+ 11) The $(abort)$ rule extracts a term of any type from the void type.
 
      \begin{prooftree}
      \LeftLabel{$(abort)$}
