@@ -686,13 +686,14 @@ In the STLC, all terms are strongly normalizing.
 #+end_theorem
 # Proof in Girard, Lafont, Taylor
 
-** Curry-Howard correspondence
+** The Curry-Howard correspondence
 *** Extending the simply typed \lambda-calculus
 We will add now special syntax for some terms and types, such as
 pairs, unions and unit types. This syntax will make our \lambda-calculus
 more expressive, but the unification and type inference algorithms
-will continue to work. The previous proofs can be extended to cover
+will continue to work. The previous proofs and algorithms can be extended to cover
 all the new cases.
+# And this is done on the mikrokosmos implementation
 
 #+attr_latex: :options [Simple types II]
 #+begin_definition
