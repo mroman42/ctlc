@@ -2,8 +2,6 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: \usepackage[conor]{agda}
-#+LATEX_HEADER_EXTRA: \usepackage{catchfilebetweentags}
 #+LATEX_HEADER_EXTRA: % \input{titlepage}
 
 

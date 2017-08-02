@@ -39,3 +39,6 @@
 
 #+latex_header: \newcommand{\tto}{\twoheadrightarrow}
 #+latex_header: \DeclarePairedDelimiter\pair{\langle}{\rangle}
+
+#+LATEX_HEADER_EXTRA: \usepackage{agda}
+#+LATEX_HEADER_EXTRA: \usepackage{catchfilebetweentags}
