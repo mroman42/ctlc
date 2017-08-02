@@ -19,6 +19,7 @@
 #+latex_header_extra: \input{classicthesis-config}
 
 #+latex_header: \usepackage{amsthm}
+#+latex_header: \usepackage{amssymb}
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{tikz-cd}
 #+latex_header: \usepackage{bussproofs}
