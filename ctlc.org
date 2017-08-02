@@ -1715,16 +1715,15 @@ that $\neg \neg (A \vee \neg A)$.
 #+end_proof
 
 This can be translated to the Mikrokosmos implementation of simply typed \lambda-calculus
-as
+as the term
 
 #+BEGIN_SRC haskell
 \f.absurd (f (inr (\a.f (inl a))))
--- => λ
+-- outputs: 
+-- λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
 #+END_SRC
 
-Unicode λ ?
-
-whose type is $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
+whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
 
 * Type theory                                                     
 ** Intuitionistic logic
