@@ -1696,6 +1696,38 @@ length (filter (leq 2) mylist)
 **** TODO The universal properties of fold, map and filter
 *** TODO Binary trees
 *** TODO Fixed points                                            :noexport:
+** Programming in the simply typed \lambda-calculus
+This section explains how to use the simply typed \lambda-calculus to
+encode compound data structures and proofs on intuitionistic logic.
+
+*** A proof on intuitionistic logic
+In intuitionistic logic, the double negation of the LEM holds for every
+proposition, that is,
+
+\[
+\forall A\colon \neg \neg (A \vee \neg A)
+\]
+
+#+begin_proof
+Suppose $\neg (A \vee \neg A)$. We firstly are going to prove that, under this
+specific assumption, $\neg A$ holds. If $A$ were true, $A \vee \neg A$ would be true and we
+would arrive to a contradition, so $\neg A$. But then, if we have $\neg A$ we also have
+$A \vee \neg A$ and we arrive to a contradiction with the assumption. We should conclude
+that $\neg \neg (A \vee \neg A)$.
+#+end_proof
+
+This can be translated to the Mikrokosmos implementation of simply typed \lambda-calculus
+as
+
+#+BEGIN_SRC haskell
+\f.absurd (f (inr (\a.f (inl a))))
+-- => λ
+#+END_SRC
+
+Unicode λ ?
+
+whose type is $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
+
 * Type theory                                                     
 ** Intuitionistic logic
 *** Constructive mathematics
