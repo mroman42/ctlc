@@ -15,11 +15,10 @@
 This is the abstract. It should not be written until the end.
 
 ** Acknowlegments                                                 :noexport:
-This document has been written with Emacs26 and org-mode 8, using the
+This document has been written with Emacs26 and org-mode 9, using the
 =org= file format and LaTeX as intermediate format. The document follows
 the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
 has been used for code listings.
-
 * Category theory
 ** Categories
 *** Definition of category
@@ -680,6 +679,10 @@ where $x_1,\dots,x_n$ are the free variables on $M$ and $A_1,\dots,A_n,B$ are fr
 variables. By virtue of Theorem [[thm-typeinfer]], the result is the most general type of $M$
 if we assume the variables to have the given types.
 #+end_proof
+*** TODO Subject reduction
+# 6.1 on Selinger
+# Maybe it's better to write the proof after adding all the
+# constructors.
 *** TODO Normalization
 #+begin_theorem
 In the STLC, all terms are strongly normalizing.
@@ -687,6 +690,9 @@ In the STLC, all terms are strongly normalizing.
 # Proof in Girard, Lafont, Taylor
 
 ** The Curry-Howard correspondence
+# Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
+# Local soundness and completeness http://www.cs.cmu.edu/~fp/courses/15816-s10/lectures/01-judgments.pdf
+
 *** Extending the simply typed \lambda-calculus
 We will add now special syntax for some terms and types, such as
 pairs, unions and unit types. This syntax will make our \lambda-calculus
@@ -841,8 +847,25 @@ of typing rules.
      \UnaryInfC{$\Gamma \vdash \mathrm{abort}_A\ M : A$}
      \end{prooftree} 
 
-    The abort function must be understood as the unique function going
-    from the empty set to any given set.
+     The abort function must be understood as the unique function going
+     from the empty set to any given set.
+
+The \beta-reduction of terms is defined the same way as for the untyped
+\lambda-calculus; except for the inclusion of \beta-rules governing the
+new terms, one for every destruction rule.
+
+  1) Function application, $(\lambda x.M)N \to_{\beta} M[N/x]$.
+  2) First projection, $\pi_1 \left\langle M,N \right\rangle \to_{\beta} M$.
+  3) Second projection, $\pi_2 \left\langle M,N \right\rangle \to_{\beta} N$.
+  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) \to_{\beta} N a$ if $m$ is of the form $m = \mathrm{inl}\ a$; and
+     $(\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) \to_{\beta} P b$ if $m$ is of the form $m = \mathrm{inr}\ b$.
+
+On the other side, \eta-rules are defined one for every construction rule.
+
+  1) Function extensionality, $\lambda x.M x \to_{\eta} M$.
+  2) Definition of product, $\langle \pi_1 M, \pi_{2} M \rangle \to_{\eta} M$.
+  3) Uniqueness of unit, $M \to_{\eta} \ast$.
+  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].P[ \mathrm{inl}\ a/c ];\ [b].P[ \mathrm{inr}\ b/c ]) \to_{\eta} P[m/c]$.
 
 *** Natural deduction
 The natural deduction is a logical system due to Gentzen. We introduce
@@ -850,7 +873,7 @@ it here following cite:selinger13 and cite:wadler15. It relationship
 with the STLC will be made explicit on the [[*Propositions as types][next section]].
 
 We will use the logical binary connectives $\to,\wedge,\vee$, and two
-given propositions, $\top,\bot$ representing thruth and falsity. The
+given propositions, $\top,\bot$ representing truth and falsity. The
 rules defining natural deduction come in pairs; there are introductors
 and eliminators for every connective. Every introductor uses a set of
 assumptions to generate a formula and every eliminator gives a way to
