@@ -17,6 +17,7 @@ This document has been written with Emacs26 and org-mode 9, using the
 =org= file format and LaTeX as intermediate format. The document follows
 the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
 has been used for code listings.
+
 * Category theory
 ** Categories
 *** Definition of category
@@ -1544,7 +1545,7 @@ xor true true
 Our definition of natural numbers is inspired by the Peano natural numbers.
 We use two constructors
 
- * the zero is a natural number, written as Z;
+ * zero is a natural number, written as Z;
  * the successor of a natural number is a natural number, written as S;
 
 and the BNF we defined when discussing how to [[*A technique on inductive data encoding][encode inductive data]].
@@ -1555,7 +1556,7 @@ succ = \n.\s.\z.s (n s z)
 #+END_SRC
 
 This definition of =0= is trivial: given a successor function and a
-zero, return the zero. The successor function seems more complex, but
+zero, return zero. The successor function seems more complex, but
 it uses the same underlying idea: given a number, a successor and a
 zero, apply the successor to the interpretation of that number using
 the same successor and zero.
