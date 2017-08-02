@@ -961,6 +961,129 @@ extract precisely that set of assumptions.
     \UnaryInfC{$\Gamma \vdash C$}
     \end{prooftree}
 
+Proofs on natural deduction are written as deduction trees, and they
+can be simplified according to some simplification rules, which can
+be applied anywhere on the deduction tree. On these rules, a chain
+of dots represents any given part of the deduction tree.
+
+  1) An implication and its antecedent can be simplified using the
+     antecedent directly on the implication.
+
+    \begin{prooftree}\EnableBpAbbreviations
+    \AXC{$[A]$}\noLine
+    \UIC{$\vdots^{1}$}\noLine
+    \UIC{$B$}
+    \UIC{$A \to B$}
+    \AXC{$\vdots^2$}\noLine
+    \UIC{$A$}
+    \BIC{$B$}
+
+    \UIC{$\vdots$}\noLine
+    \AXC{$\Longrightarrow$}
+    \UIC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+
+    \AXC{$\vdots^{2}$}\noLine
+    \UIC{$A$}\noLine
+    \UIC{$\vdots^{1}$}\noLine
+    \UIC{$B$}
+    \UIC{$\vdots$}\noLine
+    \noLine
+    \TIC{}
+    \end{prooftree}
+
+  2) The introduction of an unused conjunction can be simplified
+     as
+
+    \begin{prooftree}
+    \AxiomC{$\vdots^{1}$}\noLine
+    \UnaryInfC{$A$}
+    \AxiomC{$\vdots^{2}$}\noLine
+    \UnaryInfC{$B$}
+    \BinaryInfC{$A \wedge B$}
+    \UnaryInfC{$A$}
+    \UnaryInfC{$\vdots$}\noLine
+    \AxiomC{$\Longrightarrow$}
+    \UnaryInfC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+    \AxiomC{$\vdots^{1}$}\noLine
+    \UnaryInfC{$A$}
+    \UnaryInfC{$\vdots$}\noLine
+    \noLine
+    \TrinaryInfC{}
+    \end{prooftree}
+
+    and, similarly, on the other side as
+
+    \begin{prooftree}
+    \AxiomC{$\vdots^{1}$}\noLine
+    \UnaryInfC{$A$}
+    \AxiomC{$\vdots^{2}$}\noLine
+    \UnaryInfC{$B$}
+    \BinaryInfC{$A \wedge B$}
+    \UnaryInfC{$B$}
+    \UnaryInfC{$\vdots$}\noLine
+    \AxiomC{$\Longrightarrow$}
+    \UnaryInfC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+    \AxiomC{$\vdots^{2}$}\noLine
+    \UnaryInfC{$B$}
+    \UnaryInfC{$\vdots$}\noLine
+    \noLine
+    \TrinaryInfC{}
+    \end{prooftree}
+
+  3) The introduction of a disjunction followed by its elimination can
+     be also simplified
+
+    \begin{prooftree}\EnableBpAbbreviations
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$A$}
+    \UIC{$A+B$}
+    \AXC{$[A]$}\noLine
+    \UIC{$\vdots^2$}\noLine
+    \UIC{$C$}
+    \AXC{$[B]$}\noLine
+    \UIC{$\vdots^3$}\noLine
+    \UIC{$C$}
+    \TIC{$C$}
+
+    \UIC{$\vdots$}\noLine
+    \AXC{$\Longrightarrow$}
+    \UIC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$A$}\noLine
+    \UIC{$\vdots^{2}$}\noLine
+    \UIC{$C$}
+    \UIC{$\vdots$}\noLine
+    \noLine
+    \TIC{}
+    \end{prooftree}
+
+    and a similar pattern is used on the other side of the disjunction
+
+    \begin{prooftree}\EnableBpAbbreviations
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$B$}
+    \UIC{$A+B$}
+    \AXC{$[A]$}\noLine
+    \UIC{$\vdots^2$}\noLine
+    \UIC{$C$}
+    \AXC{$[B]$}\noLine
+    \UIC{$\vdots^3$}\noLine
+    \UIC{$C$}
+    \TIC{$C$}
+
+    \UIC{$\vdots$}\noLine
+    \AXC{$\Longrightarrow$}
+    \UIC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$B$}\noLine
+    \UIC{$\vdots^{3}$}\noLine
+    \UIC{$C$}
+    \UIC{$\vdots$}\noLine
+    \noLine
+    \TIC{}
+    \end{prooftree}
 
 *** Propositions as types
 In 1934, Curry observed in cite:Curry34 that the type of a function
@@ -977,6 +1100,38 @@ natural deduction at three levels
   2) proofs are programs.
   3) simplification of proofs is the evaluation of programs.
 
+In the case of STLC and natural deduction, the correspondence starts when
+we describe the following isomorphism between types and propositions.
+
+\begin{center}\begin{tabular}{c|c}
+Types & Propositions \\
+\hline
+Unit type ($1$) & Truth ($\top$) \\
+Product type ($\times$) & Conjunction ($\wedge$) \\
+Union type ($+$) & Disjunction ($\vee$) \\
+Function type ($\to$) & Implication ($\to$) \\
+Empty type ($0$) & False ($\bot$)
+\end{tabular}\end{center}
+
+Now it is easy to notice that every [[*Natural deduction][deduction rule]] for a proposition has a
+correspondence with a [[*Extending the simply typed \lambda-calculus][typing rule]]. The only distinction between them is the
+appearance of \lambda-terms on the first set of rules. As every typing rule
+results on the construction of a particular kind of \lambda-term, they can
+be interpreted as encodings of proof in the form of derivation trees. That is,
+terms are proofs of the propositions represented by their types.
+
+# TODO: Example of the correspondence. Terma-Proofs
+
+Under this interpretation, simplification rules are precisely the
+\beta-reduction rules. This makes execution of \lambda-calculus
+programs correspond to proof simplification on natural deduction.
+The Curry-Howard correspondence is then not only a simple bijection
+between types and propositions, but a deeper isomorphism regarding the
+way they are constructed, used in derivations, and simplified.
+
+# TODO: Example of the correspondence. Simplification-Execution
+
+# Extending the Curry-Howard correspondence
 *** TODO Type algebra
 ** TODO Models of \lambda-calculus
 *** TODO Types and sets
