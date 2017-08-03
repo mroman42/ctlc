@@ -406,7 +406,43 @@ which implies the Church-Rosser property. Its reflexive transitive closure is $\
 whose diamond property implies confluence for $\to_{\beta\eta}$.
 #+end_proof
 
-*** TODO Normalization                                           :noexport:
+*** Normalization                                                
+#+attr_latex: :options [Normal forms]
+#+begin_definition
+A \lambda-term is said to be in *\beta-normal form* if \beta-reduction
+cannot be applied to it or any of its subformulas. We define *\eta-reduction*
+and *\beta\eta-reduction* analogously.
+#+end_definition
+
+Computing with \lambda-terms means to apply reductions to them until
+a normal form is reached. We know, by virtue of Theorem [[theorem-churchrosser]], 
+that, if a normal form exists, it is unique; but we do not know if a
+normal form actually exists. We say that a term *has* a normal form
+if it can be reduced to a normal form. 
+
+#+begin_definition
+A term is *weakly normalizing* if there exists a sequence of reductions
+from it to a normal form. It is *strongly* normalizing if every sequence
+of reductions is finite.
+#+end_definition
+
+A consequence of Theorem [[theorem-churchrosser]] is that a term is weakly
+normalizing if and only if it has a normal form. Strong normalization
+implies also weak normalization, but the converse is not true; as an
+example, the term
+\[
+\Omega = (\lambda x.(x x))(\lambda x.(x x))
+\]
+is neither weakly nor strongly normalizing; and the term
+\[
+(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x)
+\]
+is weakly normalizing but not strongly normalizing. Its normal form
+is
+\[
+(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x).
+\]
+
 *** TODO Evaluation, call by name and call by value              :noexport:
 *** TODO SKI combinators                                         :noexport:
 ** Simply typed \lambda-calculus
