@@ -1,7 +1,7 @@
 #+latex_class: scrreprt
 #+latex_class_options: [twoside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
 #+latex_header_extra: \usepackage[T1]{fontenc}
-#+latex_header_extra: \usepackage[linedheaders,parts,a5paper]{classicthesis}
+#+latex_header_extra: \usepackage[beramono,eulerchapternumbers,linedheaders,parts,a5paper,dottedtoc]{classicthesis}
 
 #+latex_header_extra: \setcounter{secnumdepth}{0}
 #+latex_header_extra: \usepackage{enumitem}
@@ -30,6 +30,7 @@
 #+latex_header: \usepackage[greek,english]{babel}
 #+latex_header: \DeclareUnicodeCharacter{22A5}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\bot}}}}
 #+latex_header: \DeclareUnicodeCharacter{22A4}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\top}}}}
+#+latex_header: \DeclareUnicodeCharacter{2192}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\to}}}}
 #+latex_header: \DeclareUnicodeCharacter{21D2}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\Rightarrow}}}}
 #+latex_header: % \DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
 
