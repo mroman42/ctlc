@@ -2,7 +2,7 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: % \input{titlepage}
+#+LATEX_HEADER_EXTRA: %\input{titlepage}
 
 
 ** Abstract
@@ -21,6 +21,7 @@ has been used for code listings.
 * Category theory
 ** Categories
 *** Definition of category
+#+attr_latex: :options [Category]
 #+begin_definition
 A *category* ${\cal C}$, as defined in cite:maclane78, is given by
 
@@ -62,6 +63,7 @@ formal systems. This presentation of the untyped lambda calculus will follow
 cite:Hindley08 and cite:selinger13.
 
 *** Definition
+#+attr_latex: :options [Lambda terms]
 #+begin_definition
 The *\lambda-terms* are defined inductively as
 
@@ -90,6 +92,7 @@ Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said to be
 bound; and any not bound variable is said to be free. We can define formally
 the set of free variables as follows.
 
+#+attr_latex: :options [Free variables]
 #+begin_definition
 The *set of free variables* of a term $M$ is defined inductively as
 \[\begin{aligned}
@@ -110,6 +113,7 @@ on $(\lambda x.yx)$ and the second free variable $x$ gets bounded by the first b
 
 To avoid this, the $x$ should be renamed before the substitution.
 
+#+attr_latex: :options [Substitution on lambda terms]
 #+begin_definition
 The *substitution* of a variable $x$ by a term $N$ on $M$ is defined
 inductively as
@@ -392,6 +396,7 @@ We apply again structural induction on the derivation of $M \rhd M'$.
 
 #+attr_latex: :options [Church-Rosser Theorem]
 #+begin_theorem
+<<theorem-churchrosser>>
 The relation $\tto_{\beta\eta}$ is confluent.
 #+end_theorem
 #+begin_proof
