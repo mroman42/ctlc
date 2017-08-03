@@ -29,6 +29,8 @@
 #+latex_header: \usepackage{bbm}
 #+latex_header: \usepackage[greek,english]{babel}
 #+latex_header: \DeclareUnicodeCharacter{22A5}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\bot}}}}
+#+latex_header: \DeclareUnicodeCharacter{22A4}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\top}}}}
+#+latex_header: \DeclareUnicodeCharacter{21D2}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\Rightarrow}}}}
 #+latex_header: % \DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
 
 #+latex_header: \theoremstyle{plain}
