@@ -1375,7 +1375,18 @@ concern. A high-performace library supporting incremental parsing,
 such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
  
 ** Usage
-*** Mikrokosmos interpreter :noexport:
+*** Mikrokosmos interpreter
+Once installed, the Mikrokosmos \lambda interpreter can be opened from
+the terminal with the =mikrokosmos= command. It will enter a /read-eval-print loop/
+where \lambda-expressions and interpreter commands can be evaluated.
+
+#+BEGIN_SRC bash
+$> mikrokosmos
+Welcome to the Mikrokosmos Lambda Interpreter!
+Version 0.5.0. GNU General Public License Version 3.
+mikro>
+#+END_SRC
+
 *** Jupyter kernel
 The *Jupyter Project* cite:jupyter is an open source project providing
 support for interactive scientific computing. Specifically, the
@@ -1423,7 +1434,7 @@ Evaluation of terms will be denoted with the ==>= symbol, as in
 
 #+BEGIN_SRC haskell
 compose id id
---- => id
+---> λa.a ⇒ id
 #+END_SRC
 
 It is important to notice that multiple argument functions are defined as
