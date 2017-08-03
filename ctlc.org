@@ -2027,7 +2027,7 @@ whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
 * Type theory                                                     
 ** Intuitionistic logic
 *** Constructive mathematics
-*** The double negation of LEM is provable
+*** Agda example
 In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
 
@@ -2035,24 +2035,12 @@ proposition, that is,
 \forall A\colon \neg \neg (A \vee \neg A)
 \]
 
-**** Proof
-Suppose $\neg (A \vee \neg A)$. We firstly are going to prove that, under this
-specific assumption, $\neg A$ holds. If $A$ were true, $A \vee \neg A$ would be true and we
-would arrive to a contradition, so $\neg A$. But then, if we have $\neg A$ we also have
-$A \vee \neg A$ and we arrive to a contradiction with the assumption. We should conclude
-that $\neg \neg (A \vee \neg A)$.
-
 **** Machine proof
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
 
-** TODO Propositions as types
-** TODO Martin-Löf Type Theory
+** TODO Martin-Löf Type Theory, dependent types
 ** TODO Type theory as a foundation of mathematics
 ** TODO Constructive mathematics
-*** TODO Proof by contradiction and proof of a negation
-# They are fundamentally different
-#
-# [[https://www.youtube.com/watch?v=21qPOReu4FI][Five stages of accepting constructive mathematics]]
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
 ** TODO Homotopy Type Theory
