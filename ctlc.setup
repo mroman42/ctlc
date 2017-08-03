@@ -13,7 +13,7 @@
 #+latex_header_extra: \usepackage{parskip}
 
 #+latex_header_extra: \usepackage{minted} \usemintedstyle{colorful}
-#+latex_header_extra: \setminted[haskell]{linenos=true,fontsize=\normalsize}
+#+latex_header_extra: \setminted[haskell]{linenos=false,fontsize=\normalsize}
 #+latex_header_extra: \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,1.0}{\oldstylenums{\arabic{FancyVerbLine}}}}
 
 #+latex_header_extra: \input{classicthesis-config}
@@ -40,7 +40,12 @@
 #+latex_header: \newtheorem{definition}{Definition}
 #+latex_header: \newtheorem{proofs}{Proof}
 #+latex_header: \theoremstyle{remark}
-#+latex_header: \newtheorem*{remark}{Remark}
+#+latex_header: \newtheorem{remark}{Remark}
+#+latex_header: \newtheorem{exampleth}{Example}
+
+#+latex_header_extra: \usepackage{tcolorbox}
+#+latex_header_extra: \tcbuselibrary{theorems}
+#+latex_header_extra: \newtcbtheorem[number within=section]{examplebox}{Example}{colback=cyan!2,colframe=cyan!10!black!40,fonttitle=\bfseries}{th}
 
 #+latex_header: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
 
