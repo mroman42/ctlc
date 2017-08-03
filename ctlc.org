@@ -1267,11 +1267,13 @@ This example could be checked and simplified by this interpreter as
 ** TODO Hindley-Milner
 ** TODO System F                                                  :noexport:
 *** TODO System F is strongly normalizing
+** TODO Lambda cube
 * Mikrokosmos (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
-We have developed *Mikrokosmos*, a lambda calculus interpreter
+We have developed *Mikrokosmos*, an untyped and simply typed \lambda-calculus interpreter
 written in the purely functional programming language Haskell cite:hudak07_haskell.
-It aims to provide students with a tool to learn and understand lambda calculus.
+It aims to provide students with a tool to learn and understand \lambda-calculus
+and the relation between logic and types.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
