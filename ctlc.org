@@ -1713,21 +1713,134 @@ length (filter (leq 2) mylist)
 This section explains how to use the simply typed \lambda-calculus to
 encode compound data structures and proofs on intuitionistic logic.
 
+This presentation of simply typed structures follows the Mikrokosmos tutorial
+and the previous sections on [[*Simply typed \lambda-calculus][simply typed \lambda-calculus]].
+
+All the code on this section is valid Mikrokosmos code.
+
+*** Function types and typeable terms
+Types can be activated with the commmand =:types on=. If types are activated,
+the interpreter will [[*Principal type inference][infer]] the principal type every term before its evaluation.
+The type will then be displayed after the result of the computation.
+
+#+attr_latex: :options [Typed terms on Mikrokosmos]
+#+begin_exampleth
+The following are examples of already defined terms on lambda calculus and
+their corresponding types. It is important to notice how our previously
+defined booleans have two different types; while our natural numbers will
+have all the same type except from zero, whose type is a generalization on
+the type of the natural numbers.
+
+#+begin_src haskell
+id
+---> λa.a ⇒ id, I, ifelse :: A → A
+
+true
+false
+---> λa.λb.a ⇒ K, true :: A → B → A
+---> λa.λb.b ⇒ nil, 0, false :: A → B → B
+
+0
+1
+2
+---> λa.λb.b ⇒ nil, 0, false :: A → B → B
+---> λa.λb.(a b) ⇒ 1 :: (A → B) → A → B
+---> λa.λb.(a (a b)) ⇒ 2 :: (A → A) → A → A
+
+S
+K
+---> λa.λb.λc.((a c) (b c)) ⇒ S :: (A → B → C) → (A → B) → A → C
+---> λa.λb.a ⇒ K, true :: A → B → A
+#+end_src
+#+end_exampleth
+
+If a term is found to be non-typeable, Mikrokosmos will output an error
+message signaling the fact. In this way, the evaluation of \lambda-terms
+which could potentially not terminate is prevented. Only typed \lambda-terms
+will be evaluated while the option =:types= is on; this ensures the termination
+of every computation on typed terms.
+
+#+attr_latex: :options [Non-typeable terms on Mikrokosmos]
+#+begin_exampleth
+Fixed point operators are a common example of non typeable terms. Its evaluation
+on untyped \lambda-calculus would not terminate; and the type inference algorithm
+fails on them.
+
+#+BEGIN_SRC haskell
+fix
+---> Error: non typeable expression
+fix (\f.\n.iszero n 1 (plus (f (pred n)) (f (pred (pred n))))) 3
+---> Error: non typeable expression
+#+END_SRC
+
+Note that the evaluation of compound \lambda-expressions where the fixpoint
+operators appear applied to other terms can terminate, but the terms are
+still non typeable.
+#+end_exampleth
+
+*** Product, union, unit and void types
+Until this point, we have only used the function type. We are working on the
+implicational fragment of the STLC we described on the first [[*Typing rules for the simply typed \lambda-calculus][typing rules]].
+We are now going to extend the type system in the same sense we [[*Extending the simply typed \lambda-calculus][extended]] the
+STLC. The following types are added to the type system
+
+| Type | Name          | Description                       |
+|------+---------------+-----------------------------------|
+| =→=  | Function type | Functions from a type to another. |
+| =×=  | Product type  | Cartesian product of types.       |
+| =+=  | Union type    | Disjoint union of types.          |
+| =⊤=  | Unit type     | A type with exactly one element.  |
+| =⊥=  | Void type     | A type with no elements.          |
+
+And the following typed constructors are added to the language,
+
+| Constructor | Type                              | Description               |
+|-------------+-----------------------------------+---------------------------|
+| =(-,-)=     | =A → B → A × B=                   | Pair of elements          |
+| =fst=       | =(A × B) → A=                     | First projection          |
+| =snd=       | =(A × B) → B=                     | Second projection         |
+| =inl=       | =A → A + B=                       | First inclusion           |
+| =inr=       | =B → A + B=                       | Second inclusion          |
+| =caseof=    | =(A + B) → (A → C) → (B → C) → C= | Case analysis of an union |
+| =unit=      | =⊤=                               | Unital element            |
+| =abort=     | =⊥ → A=                           | Empty function            |
+| =absurd=    | =⊥ → ⊥=                           | Particular empty function |
+
+which correspond to the constructors we described on previous
+sections. The only new addition is the =absurd= function, which is
+only a particular case of =abort= useful when we want to make explicit
+that we are deriving an instance of the empty type. This addition will
+only make the logical interpretation on the following sections
+clearer.
+
+#+attr_latex: :options [Extended STLC on Mikrokosmos]
+#+begin_exampleth
+The following
+#+end_exampleth
+
+With these types, and by virtue of the Curry-Howard correspondence, Mikrokosmos
+can be used as a proof checker on first-order intuitionistic logic.
+
 *** A proof on intuitionistic logic
+Under the logical interpretation of Mikrokosmos, we can transcribe proofs in
+intuitionistic logic to \lambda-terms and check them on the interpreter.
+
+#+begin_theorem
 In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
-
 \[
 \forall A\colon \neg \neg (A \vee \neg A)
 \]
-
+#+end_theorem
 #+begin_proof
-Suppose $\neg (A \vee \neg A)$. We firstly are going to prove that, under this
+Suppose $\neg (A \vee \neg A)$. We are going to prove first that, under this
 specific assumption, $\neg A$ holds. If $A$ were true, $A \vee \neg A$ would be true and we
 would arrive to a contradition, so $\neg A$. But then, if we have $\neg A$ we also have
 $A \vee \neg A$ and we arrive to a contradiction with the assumption. We should conclude
 that $\neg \neg (A \vee \neg A)$.
 #+end_proof
+
+Note that this is, in fact, an intuitionistic proof. Althoug
 
 This can be translated to the Mikrokosmos implementation of simply typed \lambda-calculus
 as the term
