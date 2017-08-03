@@ -1260,13 +1260,13 @@ apply the =case= simplification/reduction rule to get
 
 \begin{prooftree}\EnableBpAbbreviations
 \AXC{$[A]$}
-\RightLabel{$(inl)$}
+\RightLabel{$(inr)$}
 \UIC{$B+A$}
 \RightLabel{$(abs)$}
 \UIC{$A \to B +A$}
 \end{prooftree}
 
-which is encoded by =λa.(INR a)=.
+which is encoded by =λa.(inr a)=.
 
 On the chapter on [[*Mikrokosmos][Mikrokosmos]], we develop a \lambda-calculus interpreter
 which is able to check and simplify proofs on intuitionistic logic.
@@ -1530,12 +1530,12 @@ Once installed, the Mikrokosmos \lambda interpreter can be opened from
 the terminal with the =mikrokosmos= command. It will enter a /read-eval-print loop/
 where \lambda-expressions and interpreter commands can be evaluated.
 
-#+BEGIN_SRC bash
+#+BEGIN_EXAMPLE
 $> mikrokosmos
 Welcome to the Mikrokosmos Lambda Interpreter!
 Version 0.5.0. GNU General Public License Version 3.
-mikro>
-#+END_SRC
+mikro> _
+#+END_EXAMPLE
 
 *** Jupyter kernel
 The *Jupyter Project* cite:jupyter is an open source project providing
