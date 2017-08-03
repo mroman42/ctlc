@@ -23,11 +23,12 @@
 #+latex_header: \usepackage{tikz-cd}
 #+latex_header: \usepackage{bussproofs}
 #+latex_header: \usepackage{mathtools}
+#+latex_header: \usepackage{scalerel}
 
 #+latex_header: \usepackage{amssymb}
 #+latex_header: \usepackage{bbm}
 #+latex_header: \usepackage[greek,english]{babel}
-#+latex_header: \DeclareUnicodeCharacter{22A5}{\ensuremath{\bot}}
+#+latex_header: \DeclareUnicodeCharacter{22A5}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\bot}}}}
 #+latex_header: % \DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
 
 #+latex_header: \theoremstyle{plain}
