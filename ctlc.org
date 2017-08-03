@@ -13,6 +13,11 @@
 This is the abstract. It should not be written until the end.
 
 ** Acknowlegments                                                 :noexport:
+# David Charte and Ignacio Cordón, testing the first versions of
+# Mikrokosmos.
+
+# Alejandro García, Adrián Ranea and David Charte, template usage.
+
 This document has been written with Emacs26 and org-mode 9, using the
 =org= file format and LaTeX as intermediate format. The document follows
 the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
@@ -443,8 +448,24 @@ is
 (\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x).
 \]
 
-*** TODO Evaluation, call by name and call by value              :noexport:
+*** TODO Evaluation strategies                                   :noexport:
+# Barendregt, 1985, section 13.2
+# Leftmost vs Rightmost evaluation
+# Leftmost does always normalize if it is possible
+# Rightmost only normalizes if it is necessary
+
+# https://cs.stackexchange.com/questions/7702/applicative-order-and-normal-order-in-lambda-calculus
+# This case illustrates a more general phenomenon: applicative order
+# reduction only ever finds a normal form if the term is strongly
+# normalizing, whereas normal order reduction always finds the normal
+# form if there is one. This happens because applicative order always
+# evaluates fully arguments first, and so misses the opportunity for
+# an argument to turn out to be unused; whereas normal order evaluates
+# arguments as late as possible, and so always wins if the argument
+# turns out to be unused.
+
 *** TODO SKI combinators                                         :noexport:
+# Selinger Combinatorial algebras
 ** Simply typed \lambda-calculus
 We will give now a presentation of the *simply-typed \lambda-calculus*
 (STLC) based on cite:Hindley08. Our presentation will rely only on the
