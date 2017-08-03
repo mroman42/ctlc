@@ -533,17 +533,17 @@ a consequence from that context, separated by the $\vdash$ symbol.
     \end{prooftree}
 
 #+begin_definition
-A term is *typable* if we can assign types to all its variables in
+A term is *typeable* if we can assign types to all its variables in
 such a way that a typing judgment for the type is derivable.
 #+end_definition
 
-From now on, we only consider typable terms on the STLC to be used as
+From now on, we only consider typeable terms on the STLC to be used as
 real terms. As a consequence, the set of \lambda-terms of the STLC is
 only a subset of the terms of the untyped \lambda-calculus.
 
-# Examples of typable and non-typable terms.
+# Examples of typeable and non-typeable terms.
 
-# It is easy to check if a term is typable because there is only
+# It is easy to check if a term is typeable because there is only
 # one way to type it.
 
 # If we want to derive term bottom-up, there is only one possible
@@ -711,23 +711,39 @@ We have proved that the inferred type is in general the most general one.
 
 #+attr_latex: :options [Principal type property]
 #+begin_corollary
-Every typable pure \lambda-term has a principal type.
+Every typeable pure \lambda-term has a principal type.
 #+end_corollary
 #+begin_proof
-Given a typable term $M$, we can compute $\mathtt{typeinfer}(x_1:A_1,\dots,x_n:A_n \vdash M : B)$,
+Given a typeable term $M$, we can compute $\mathtt{typeinfer}(x_1:A_1,\dots,x_n:A_n \vdash M : B)$,
 where $x_1,\dots,x_n$ are the free variables on $M$ and $A_1,\dots,A_n,B$ are fresh type
 variables. By virtue of Theorem [[thm-typeinfer]], the result is the most general type of $M$
 if we assume the variables to have the given types.
 #+end_proof
+
 *** TODO Subject reduction
+
 # 6.1 on Selinger
-# Maybe it's better to write the proof after adding all the
-# constructors.
+#+attr_latex: :options [Subject reduction]
+#+begin_theorem
+The type is preserved on \beta-reductions; that is, if $\Gamma \vdash M : A$ and
+and $M \longrightarrow_{\beta} M'$, then $\Gamma \vdash M' : A$.
+#+end_theorem
+#+begin_proof
+
+#+end_proof
+
 *** TODO Normalization
+We have seen previously that the term $\Omega = (\lambda x.xx)(\lambda x.xx)$ is
+not weakly normalizing; but it is also non-typeable. In this section
+we will prove that, in fact, every typeable term is strongly
+normalizing.
+
+# Proof in Girard, Lafont, Taylor; chapters 4 and 6
+# http://www.paultaylor.eu/stable/prot.pdf
+#+attr_latex: :options [Strong normalization in STLC]
 #+begin_theorem
 In the STLC, all terms are strongly normalizing.
 #+end_theorem
-# Proof in Girard, Lafont, Taylor
 
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
@@ -1126,7 +1142,7 @@ of dots represents any given part of the deduction tree.
     \end{prooftree}
 
 *** Propositions as types
-In 1934, Curry observed in cite:Curry34 that the type of a function
+In 1934, Curry observed in cite:curry34 that the type of a function
 $(A \to B)$ could be read as an implication and that the existence of a
 function of that type was equivalent to the provability of the proposition.
 Previously, the *Brouwer-Heyting-Kolmogorov interpretation* of intuitionistic
@@ -1160,7 +1176,7 @@ results on the construction of a particular kind of \lambda-term, they can
 be interpreted as encodings of proof in the form of derivation trees. That is,
 terms are proofs of the propositions represented by their types.
 
-# TODO: Example of the correspondence. Terma-Proofs
+# TODO: Example of the correspondence. Terms-Proofs
 
 Under this interpretation, simplification rules are precisely the
 \beta-reduction rules. This makes execution of \lambda-calculus
