@@ -1298,11 +1298,14 @@ nameIndexes used new (App f g) =
 #+END_SRC
 
 *** TODO Evaluation
-*** TODO Principal type inference
-** Output formatting :noexport:
+*** Principal type inference
+** Output formatting                                              :noexport:
 *** Verbose mode
 *** SKI mode
 ** Haskell                                                        :noexport:
+*** Testing: unit tests, HUnit
+*** Testing: properties, quickCheck
+*** Testing: golden tests
 ** Parsing
 *** Monadic parser combinators
 A common approach to building parsers in functional programming is to
