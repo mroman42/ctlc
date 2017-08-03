@@ -1944,11 +1944,49 @@ clearer.
 
 #+attr_latex: :options [Extended STLC on Mikrokosmos]
 #+begin_exampleth
-The following
+The following are examples of typed terms and functions on Mikrokosmos
+using the extended typed constructors. The following terms are presented
+
+  * a function swapping pairs, as an example of pair types.
+  * two-case analysis of a number, deciding whether to multiply it by two
+    or to compute its predecessor.
+  * difference between =abort= and =absurd=.
+  * example term containing the unit type.
+
+#+BEGIN_SRC haskell
+:load types
+
+swap = \m.(snd m,fst m)
+swap
+---> λa.((SND a),(FST a)) ⇒ swap :: (A × B) → B × A
+
+caseof (inl 1) pred (mult 2)
+caseof (inr 1) pred (mult 2)
+---> λa.λb.b ⇒ nil, 0, false :: A → B → B
+---> λa.λb.(a (a b)) ⇒ 2 :: (A → A) → A → A
+
+\x.((abort x),(absurd x))
+---> λa.((ABORT a),(ABSURD a)) :: ⊥ → A × ⊥
+#+END_SRC
+
+Now it is possible to define a new encoding of the booleans with an
+uniform type. The type =⊤ + ⊤= has two inhabitants, =inl ⊤= and =inr
+⊤=; and they can be used by case analysis.
+
+#+BEGIN_SRC haskell
+btrue = inl unit
+bfalse = inr unit
+bnot = \a.caseof a (\a.bfalse) (\a.btrue)
+bnot btrue
+---> (INR UNIT) ⇒ bfalse :: A + ⊤
+bnot bfalse
+---> (INL UNIT) ⇒ btrue :: ⊤ + A
+#+END_SRC
 #+end_exampleth
 
-With these types, and by virtue of the Curry-Howard correspondence, Mikrokosmos
-can be used as a proof checker on first-order intuitionistic logic.
+With these extended types, Mikrokosmos can be used as a proof checker on
+first-order intuitionistic logic by virtue of the Curry-Howard
+correspondence.
 
 *** A proof on intuitionistic logic
 Under the logical interpretation of Mikrokosmos, we can transcribe proofs in
@@ -1969,15 +2007,19 @@ $A \vee \neg A$ and we arrive to a contradiction with the assumption. We should 
 that $\neg \neg (A \vee \neg A)$.
 #+end_proof
 
-Note that this is, in fact, an intuitionistic proof. Althoug
+Note that this is, in fact, an intuitionistic proof. Although it seems
+to use the intuitionistically forbidden technique of prooving by
+contradiction, it is actually only proving a negation.  There is a
+difference between assuming $A$ to prove $\neg A$ and assuming $\neg
+A$ to prove $A$: the first one is simply a proof of a negation, the
+second one uses implicitly the law of excluded middle.
 
 This can be translated to the Mikrokosmos implementation of simply typed \lambda-calculus
 as the term
 
 #+BEGIN_SRC haskell
 \f.absurd (f (inr (\a.f (inl a))))
--- outputs: 
--- λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
+---> λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
 #+END_SRC
 
 whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
