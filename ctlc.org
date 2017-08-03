@@ -1185,7 +1185,77 @@ The Curry-Howard correspondence is then not only a simple bijection
 between types and propositions, but a deeper isomorphism regarding the
 way they are constructed, used in derivations, and simplified.
 
-# TODO: Example of the correspondence. Simplification-Execution
+#+attr_latex: :options [Curry-Howard example]
+#+begin_exampleth
+As an example, we will write a proof/term of the proposition/type =A → B + A=
+and we are going to simplify/compute it using proof simplification rules/\beta-rules.
+
+We start with the following derivation tree
+
+\begin{prooftree}\EnableBpAbbreviations
+\AXC{$[A+B]$}
+\AXC{$[A]$}
+\RightLabel{$(inr)$}
+\UIC{$B+A$}
+\AXC{$[B]$}
+\RightLabel{$(inl)$}
+\UIC{$B+A$}
+\RightLabel{$(case)$}
+\TIC{$B+A$}
+\RightLabel{$(abs)$}
+\UIC{$A+B \to B +A$}
+
+\AXC{$[A]$}
+\RightLabel{$(inl)$}
+\UIC{$A+B$}
+\RightLabel{$(app)$}
+\BIC{$B+A$}
+\RightLabel{$(abs)$}
+\UIC{$A \to B + A$}
+\end{prooftree}
+
+which is encoded by the term =λa.(λc.case c of (λx.inr) (λy.inl y)) (inl a)=.
+We apply the simplification rule/\beta-rule of the implication/function application
+to get
+
+\begin{prooftree}\EnableBpAbbreviations
+\AXC{$[A]$}
+\RightLabel{$(inl)$}
+\UIC{$A+B$}
+\AXC{$[A]$}
+\RightLabel{$(inr)$}
+\UIC{$B+A$}
+\AXC{$[B]$}
+\RightLabel{$(inl)$}
+\UIC{$B+A$}
+\RightLabel{$(case)$}
+\TIC{$B+A$}
+\RightLabel{$(abs)$}
+\UIC{$A \to B +A$}
+\end{prooftree}
+
+which is encoded by the term =λa.case (inl a) of (λx.inr) (λy.inl y)=. We finally
+apply the =case= simplification/reduction rule to get
+
+\begin{prooftree}\EnableBpAbbreviations
+\AXC{$[A]$}
+\RightLabel{$(inl)$}
+\UIC{$B+A$}
+\RightLabel{$(abs)$}
+\UIC{$A \to B +A$}
+\end{prooftree}
+
+which is encoded by =λa.(INR a)=.
+
+On the chapter on [[*Mikrokosmos][Mikrokosmos]], we develop a \lambda-calculus interpreter
+which is able to check and simplify proofs on intuitionistic logic.
+This example could be checked and simplified by this interpreter as
+
+#+BEGIN_SRC haskell
+\a.((\c.caseof c (\x.inr x) (\y.inl y))(inl a))
+---> output: λa.(INR a) ⇒ inr :: A → B + A
+#+END_SRC
+#+end_exampleth
 
 # Extending the Curry-Howard correspondence
 *** TODO Type algebra
