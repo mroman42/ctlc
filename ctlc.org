@@ -816,7 +816,121 @@ x''
 
 commutes.
 #+end_proof
-* Topos theory
+* Categorical logic
+** Heyting algebras
+In this section, we develop the notion of a Heyting algebra and show
+its differences with a Boolean algebra.
+
+There is a correlation between classical propositional calculus and
+the Boolean algebra of the subsets of a given set. If we interpret
+a proposition $p$ as a subset of a given universal set $P \subset U$ and
+fix an element $u \in U$, propositions can be translated to $u \in P$, 
+logical connectives can be translated as
+
+\[\begin{tabular}{cc|cc}
+logic &  & &  subsets \\
+\hline
+$P \wedge Q$ & and & intersection & $P \cap Q$  \\
+$P \vee Q$ & or & union  & $P \cup Q$ \\
+$\neg P$ & not & complement & $\overline{P}$ \\
+$P \to Q$ & implication & complement intersection & $\overline{P} \cap Q$
+\end{tabular}\]
+
+using crucially that $\neg P \wedge Q \equiv P \to Q$.
+
+In the same way that Boolean algebras correspond to classical
+propositional logic, Heyting algebras correspond to intuitionistic
+propositional calculus. Its model on a set-like theory is not the subsets
+of a given set, but instead, only the /open/ sets of a given
+topological space
+
+\[\begin{tabular}{cc|cc}
+logic &  & & open sets \\
+\hline
+$P \wedge Q$ & and & intersection & $P \cap Q$  \\
+$P \vee Q$ & or & union  & $P \cup Q$ \\
+$\neg P$ & not & interior of the complement & $\mathrm{int}\left(\overline{P}\right)$ \\
+$P \to Q$ & implication & largest & $\mathrm{int}(\overline{P} \cup Q)$
+\end{tabular}\]
+
+where $\mathrm{int}$ is the topological interior of a set.
+
+*** Lattices
+#+attr_latex: :options [Lattice]
+#+begin_definition
+A *lattice* is a partially ordered set with all binary products and
+coproducts. It is a *bounded lattice* if it has all binary products
+and coproducts.
+#+end_definition
+
+We will usually work with bounded lattices.
+A bounded lattice can also be defined as a set with $0,1$ and two binary
+operations $\wedge,\vee$ satisfying
+
+  * $1 \wedge x = x$, and $0 \vee x = x$;
+  * $x \wedge x = x$, and $x \vee x = x$;
+  * $x \wedge (y \vee x) = x = (x \wedge y) \vee x$.
+
+This perspective allows us also to define a lattice object in any
+category as an object $L$ with morphisms
+
+\[
+\wedge \colon L \times L \to L,
+\quad
+\vee \colon L \times L \to L,
+\quad
+0,1 \colon \mathrm{I} \to L,
+\]
+
+where $\mathrm{I}$ is the terminal object of the category; and commutative
+diagrams encoding the previous equations.
+
+#+attr_latex: :options [Distributive lattice]
+#+begin_definition
+A *distributive lattice* is a lattice where
+\[
+x \wedge (y \vee z) = (x \wedge y) \vee (x \wedge z),
+\]
+
+holds for all $x,y,z$.
+#+end_definition
+# TODO: This implies the dual distributive law
+
+#+attr_latex: :options [Complement]
+#+begin_definition
+A *complement* of $a$ in a bounded lattice is an element $\overline{a}$ such that
+\[
+a \wedge \overline{a} = 0, \qquad
+a \vee \overline{a} = 1.
+\]
+#+end_definition
+#+attr_latex: :options [The complement in distributive lattices is unique]
+#+begin_proposition
+If a complement of an element exists in a distributive lattice, it is unique.
+#+end_proposition
+# TODO: Commutativity is needed on this proof, but it is not stated elsewhere
+#+begin_proof
+Given $a$ with two complements $x,y$, we have that
+\[
+x = x \wedge (a \vee y) = (x \wedge a) \vee (x \wedge y) =
+(y \wedge a) \vee (x \wedge y) = y \vee (x \wedge a) = y.
+\]
+#+end_proof
+
+#+attr_latex: :options [Boolean algebra]
+#+begin_definition
+A *Boolean algebra* is a distributive bounded lattice in which every element
+has a complement.
+#+end_definition
+
+Boolean algebras satisfy certain known properties such as the DeMorgan laws
+and the double negation elimination rule.
+
+# TODO: Every Boolean algebra is the algebra of subsets of some set.
+# This is a result by M.H.Stone, cited in pag 50 Moerdijk.
+
+*** Heyting algebras
+*** Quantifiers as adjoints
 ** TODO Lawvere algebraic theories
 ** TODO Topoi
 * Lambda calculus
@@ -1629,6 +1743,7 @@ In the STLC, all terms are strongly normalizing.
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
 # Local soundness and completeness http://www.cs.cmu.edu/~fp/courses/15816-s10/lectures/01-judgments.pdf
+# https://www.elsevier.com/books/lectures-on-the-curry-howard-isomorphism/sorensen/978-0-444-52077-7
 
 *** Extending the simply typed \lambda-calculus
 We will add now special syntax for some terms and types, such as
