@@ -905,6 +905,7 @@ next section. In practice, it is common to follow the
 variables have been renamed to be distinct.
 
 *** \alpha-equivalence
+#+attr_latex: :options [\alpha-equivalence]
 #+begin_definition
 *\alpha-equivalence* is the smallest relation $=_{\alpha}$ on
 \lambda-terms which is an equivalence relation, i.e.,
@@ -941,7 +942,7 @@ capturing the notion of evaluation
 and some congruence rules that preserve the structure of
 \lambda-terms, such as
 
-  * $M \to_{\beta} M'$ implies $MN \to_{\beta} M'N$ and $MN \to_{\beta} MN'$;
+  * $M \to_{\beta} M'$ implies $MN \to_{\beta} M'N$ and $NM \to_{\beta} NM'$;
   * $M \to_{\beta}M'$ implies $\lambda x.M \to_{\beta} \lambda x.M'$.
 
 The reflexive transitive closure of $\to_{\beta}$ is written as $\twoheadrightarrow_{\beta}$. The symmetric
@@ -1173,7 +1174,7 @@ which implies the Church-Rosser property. Its reflexive transitive closure is $\
 whose diamond property implies confluence for $\to_{\beta\eta}$.
 #+end_proof
 
-*** Normalization                                                
+*** Normalization
 #+attr_latex: :options [Normal forms]
 #+begin_definition
 A \lambda-term is said to be in *\beta-normal form* if \beta-reduction
@@ -1210,7 +1211,7 @@ is
 (\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x).
 \]
 
-*** TODO Evaluation strategies                                   :noexport:
+*** Standarization and evaluation strategies
 # Barendregt, 1985, section 13.2
 # Leftmost vs Rightmost evaluation
 # Leftmost does always normalize if it is possible
