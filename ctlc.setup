@@ -54,7 +54,9 @@
 
 #+latex_header: \newcommand{\tto}{\twoheadrightarrow}
 #+latex_header: \newcommand{\todot}{\xrightarrow{.}}
+#+latex_header: \newcommand{\impl}{\Rightarrow}
 #+latex_header: \DeclarePairedDelimiter\pair{\langle}{\rangle}
+
 
 #+LATEX_HEADER_EXTRA: \usepackage[conor]{agda}
 #+LATEX_HEADER_EXTRA: \usepackage{catchfilebetweentags}
