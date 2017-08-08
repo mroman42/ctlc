@@ -816,6 +816,11 @@ x''
 
 commutes.
 #+end_proof
+* Categorical logic (abstract)                                       :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
+This section is based on cite:maclane94.
+#+LATEX: \end{center}}
+
 * Categorical logic
 ** Heyting algebras
 In this section, we develop the notion of a Heyting algebra and show
@@ -833,7 +838,7 @@ logic &  & &  subsets \\
 $P \wedge Q$ & and & intersection & $P \cap Q$  \\
 $P \vee Q$ & or & union  & $P \cup Q$ \\
 $\neg P$ & not & complement & $\overline{P}$ \\
-$P \to Q$ & implication & complement intersection & $\overline{P} \cap Q$
+$P \to Q$ & implication & complement union & $\overline{P} \cup Q$
 \end{tabular}\]
 
 using crucially that $\neg P \wedge Q \equiv P \to Q$.
@@ -850,12 +855,14 @@ logic &  & & open sets \\
 $P \wedge Q$ & and & intersection & $P \cap Q$  \\
 $P \vee Q$ & or & union  & $P \cup Q$ \\
 $\neg P$ & not & interior of the complement & $\mathrm{int}\left(\overline{P}\right)$ \\
-$P \to Q$ & implication & largest & $\mathrm{int}(\overline{P} \cup Q)$
+$P \to Q$ & implication & interior of complement and consequent & $\mathrm{int}(\overline{P} \cup Q)$
 \end{tabular}\]
 
 where $\mathrm{int}$ is the topological interior of a set.
+# TODO: This definition of the implication does not match with the used
+# on Moerdijk. It is equivalent but different.
 
-*** Lattices
+*** Boolean algebras
 #+attr_latex: :options [Lattice]
 #+begin_definition
 A *lattice* is a partially ordered set with all binary products and
@@ -930,6 +937,97 @@ and the double negation elimination rule.
 # This is a result by M.H.Stone, cited in pag 50 Moerdijk.
 
 *** Heyting algebras
+#+attr_latex: :options [Heyting algebra]
+#+begin_definition
+A *Heyting algebra*, also called *Brouwerian lattice*, is a bounded lattice
+which is cartesian closed as a category; i.e., for every pair of elements
+$x,y$, the exponential $y^x$ exists.
+#+end_definition
+
+The exponential in Heyting algebras is usually written as $x \Rightarrow y$ and is 
+characterized by its adjunction with the product
+\[
+z \leq (x \Rightarrow y) \text{ if and only if } z \wedge x \leq y.
+\]
+
+# TODO: Any complete distributive lattice is a Heyting algebra
+
+#+attr_latex: :options [Boolean algebras are Heyting algebras]
+#+begin_proposition
+Every Boolean algebra is a Heyting algebra with exponentials given by
+\[
+(x \Rightarrow y) = \overline{x} \wedge y.
+\]
+#+end_proposition
+#+begin_proof
+We will prove that
+\[
+z \leq (\overline{x} \vee y) \text{ if and only if } z \wedge x \leq y.
+\]
+If $z \leq (\overline{x} \vee y)$,
+\[
+z \wedge x \leq
+(\overline{x} \vee y) \wedge x \leq
+(\overline{x} \wedge x) \vee (y \wedge x) \leq
+y \wedge x \leq
+y;
+\]
+and if $z \wedge x \leq y$,
+\[
+z = 
+z \wedge 1 =
+z \wedge (\overline{x} \vee x) =
+(z \wedge \overline{x}) \vee (z \wedge x) \leq 
+(z \wedge \overline{x}) \vee y \leq
+z \vee y.
+\]
+#+end_proof
+
+
+#+attr_latex: :options [Negation]
+#+begin_definition
+The *negation* of $x$ in a Heyting algebra is defined as
+\[
+\neg x = (x \Rightarrow 0).
+\]
+#+end_definition
+
+#+begin_proposition
+In any Heyting algebra,
+
+  1) $x \leq \neg \neg x$,
+  2) $x \leq y$ implies $\neg y \leq \neg x$,
+  3) $\neg x \leq \neg\neg\neg x$,
+  4) $\neg\neg (x \wedge y) = \neg \neg x \wedge \neg \neg y$,
+  5) $(x \impl x) = 1$,
+  6) $x \wedge (x \impl y) = x \wedge y$,
+  7) $y \wedge (x \impl y) = y$,
+  8) $x \impl (y \wedge z) = (x \impl y) \wedge (x \impl z)$.
+
+Any bounded lattice $L$ with an operation satisfying the last four properties
+is a Heyting algebra with this operation as implication.
+#+end_proposition
+#+begin_proof
+# TODO
+#+end_proof
+
+#+attr_latex: :options [Complements are negations in Heyting algebras]
+#+begin_proposition
+If an element has a complement on a Heyting algebra, it must be $\neg x$.
+#+end_proposition
+#+begin_proof
+# TODO
+#+end_proof
+
+#+attr_latex: :options [Characterization of Boolean algebras]
+#+begin_proposition
+A Heyting algebra is Boolean if and only if $\neg\neg x = x$ for every $x$; 
+and if and only if $x \vee \neg x = 1$ for every $x$.
+#+end_proposition
+#+begin_proof
+
+#+end_proof
+
 *** Quantifiers as adjoints
 ** TODO Lawvere algebraic theories
 ** TODO Topoi
