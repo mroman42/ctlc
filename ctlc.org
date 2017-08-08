@@ -206,14 +206,14 @@ object.
 #+begin_definition
 An object $C$ is the *product* of two objects $A,B$ on a category if there
 are two morphisms
-\[\begin{tikzcd}[rowsep=tiny]
+\[\begin{tikzcd}[row sep=tiny]
 & C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
 A && B
 \end{tikzcd}\]
 such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
 $f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = \pi_A \circ h$
 and $f_2 = \pi_B \circ h$. Diagramatically,
-\[\begin{tikzcd}[rowsep=tiny]
+\[\begin{tikzcd}[row sep=tiny]
 & D \dar[dashed]{\exists! h} \ar[bend left]{ddr}{f_2}\ar[bend right,swap]{ddl}{f_1} & \\
 & C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
 A && B &.
@@ -231,14 +231,14 @@ write /the/ product object of $A,B$ as $A \times B$.
 #+begin_definition
 An object $C$ is the *coproduct* of two objects $A,B$ on a category if there
 are two morphisms
-\[\begin{tikzcd}[rowsep=tiny] 
+\[\begin{tikzcd}[row sep=tiny] 
 & C  & \\
 A \urar{i_A} && B \ular[swap]{i_B}
 \end{tikzcd}\]
 such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
 $f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = i_A \circ h$
 and $f_2 = i_B \circ h$. Diagramatically,
-\[\begin{tikzcd}[rowsep=tiny]
+\[\begin{tikzcd}[row sep=tiny]
 & D & \\
 & C \uar[dashed]{\exists! h}  & \\
 A \ar[bend left]{uur}{f_1}\urar{i_A} && B \ular[swap]{i_B} \ar[bend right,swap]{uul}{f_2} &.
@@ -744,8 +744,8 @@ FG\rar{\varepsilon} & I
 \end{tikzcd}
 \qquad
 \begin{tikzcd}
-GFGFGF\rar{GFG\varepsilonF} \dar[swap]{G\varepsilon FGF} & GFGF \dar{G\varepsilonF} \\
-GFGF\rar{G\varepsilonF} & GF &,
+GFGFGF\rar{GFG\varepsilon F} \dar[swap]{G\varepsilon FGF} & GFGF \dar{G\varepsilon F} \\
+GFGF\rar{G\varepsilon F} & GF &,
 \end{tikzcd}\]
 
 where the first is commutative by the [[*Interchange law][interchange law]] and the second
