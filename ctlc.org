@@ -2139,11 +2139,12 @@ This example could be checked and simplified by this interpreter as
 #+end_exampleth
 
 # Extending the Curry-Howard correspondence
-*** TODO Type algebra
 ** TODO Models of \lambda-calculus
 *** TODO Types and sets
 # From the Hott book
 *** TODO Models
+# From Selinger
+*** TODO Continuous partial orderings
 # From Selinger
 ** TODO Hindley-Milner
 ** TODO System F                                                  :noexport:
@@ -2307,7 +2308,7 @@ nameIndexes used new (App f g) =
   LambdaApplication (nameIndexes used new f) (nameIndexes used new g)
 #+END_SRC
 
-*** TODO Evaluation
+*** Evaluation
 *** Principal type inference
 ** Output formatting                                              :noexport:
 *** Verbose mode
@@ -2346,7 +2347,7 @@ instance Monad Parser where
 #+END_SRC
 
 where the monadic structure is defined by =bind= and =return=. Given a
-value, the =return= function creates a monad that consumes no input
+value, the =return= function creates a parser that consumes no input
 and simply returns the given value. The =>>== function acts as a sequencing
 operator for parsers. It takes two parsers and applies the second one
 over the remaining inputs of the first one, using the parsed values on
@@ -2363,7 +2364,8 @@ item = Parser (\s -> case s of
 #+END_SRC
 
 and an example of *parser combinator* is the =many= function, which
-allows one or more applications of the parser given as an argument
+creates a parser that allows one or more applications of the given
+parser
 
 #+BEGIN_SRC haskell
 many :: Paser a -> Parser [a]
@@ -2385,6 +2387,7 @@ concern. A high-performace library supporting incremental parsing,
 such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
  
 ** Usage
+*** Installation
 *** Mikrokosmos interpreter
 Once installed, the Mikrokosmos \lambda interpreter can be opened from
 the terminal with the =mikrokosmos= command. It will enter a /read-eval-print loop/
@@ -2889,7 +2892,7 @@ that $\neg \neg (A \vee \neg A)$.
 #+end_proof
 
 Note that this is, in fact, an intuitionistic proof. Although it seems
-to use the intuitionistically forbidden technique of prooving by
+to use the intuitionistically forbidden technique of proving by
 contradiction, it is actually only proving a negation.  There is a
 difference between assuming $A$ to prove $\neg A$ and assuming $\neg
 A$ to prove $A$: the first one is simply a proof of a negation, the
