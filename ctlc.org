@@ -1227,6 +1227,103 @@ is
 # arguments as late as possible, and so always wins if the argument
 # turns out to be unused.
 
+# Statement: http://www.nyu.edu/projects/barker/Lambda/barendregt.94.pdf
+# Barendregt (1984) Theorem 13.2.2
+We would like to find a \beta-reduction strategy such that, if a term
+has a normal form, it can be found by following this strategy. Our
+basic result will be the *standarization theorem*, which shows that,
+if a \beta-reduction to a normal form exists, a sequence of
+\beta-reductions from left to right on the \lambda-expression will be
+able to find it. From this result, we will be able to prove that the
+reduction strategy that always reduces the leftmost \beta-abstraction
+will always find a normal form if it exists.
+
+This section follows cite:kashima00, cite:barendsen94 and cite:barendregt84.
+
+#+attr_latex: :options [Leftmost one-step reduction]
+#+begin_definition
+We define the relation $M \to_{n} N$ when $N$ can be obtained by \beta-reducing
+the $n\text{-th}$ leftmost \beta-reducible application of the expression.
+We call $\to_{1}$ the *leftmost one-step reduction* and we write it as $\to_{l}$;
+$\tto_{l}$ is its reflexive transitive closure.
+#+end_definition
+
+#+attr_latex: :options [Standard sequence]
+#+begin_definition
+A sequence of \beta-reductions $M_0 \to_{n_1} M_1 \to_{n_2} M_2 \to_{n_3} \dots \to_{n_k} M_{k}$ 
+is *standard* if $\{n_i\}$ is a non-decreasing sequence.
+#+end_definition
+
+We will prove that every term that can be reduced to a normal form can
+be reduced to it using a standard sequence, from this theorem, the existence
+of an optimal beta reduction strategy, in the sense that it will always find
+the normal form if it exists, will follow as a corollary.
+
+#+attr_latex: :options [Standarization theorem]
+#+begin_theorem
+If $M \tto_{\beta} N$, there exists a standard sequence from $M$ to $N$.
+#+end_theorem
+#+begin_proof
+We start by defining the following two binary relations. The first one
+is the relation given by the head reduction of the application and it
+is defined by
+
+  * $A \tto_h A$, reflexivity.
+  * $(\lambda x.A_0)A_1 \dots \tto_{h} A_0[A_1/x]\dots$, head \beta-reduction.
+  * $A \tto_{h} B \tto_{h} C$ implies $A \tto_{h} C$, transitivity.
+
+The second one is the standard reduction and it is defined by
+
+  * $M \tto_h x$ implies $M \tto_s x$, where $x$ is a variable.
+  * if $M \tto_h AB$, $A \tto_s C$ and $B \tto_s D$, then $M \tto_s CD$.
+  * if $M \tto_h \lambda x.A$ and $A \tto_s B$, then $M \to_s \lambda x.B$.
+
+We can check the following trivial properties by structural induction
+
+  1) $\tto_h$ implies $\tto_{l}$.
+  2) $\tto_{s}$ implies the existence of a standard \beta-reduction.
+  3) $\tto_{s}$ is reflexive, by induction on the structure of a term.
+  4) if $M \tto_{h} N$, then $MP \tto_{h} NP$.
+  5) if $M \tto_h N \tto_s P$, then $M \tto_{s} P$.
+  6) if $M \tto_h N$, then $M[P/x] \tto_h N[P/x]$.
+  7) if $M \tto_s N$ and $P \tto_s Q$, then $M[P/z] \tto_{s} N[Q/z]$.
+
+Now we can prove that $K \tto_{s} (\lambda x.M)N$ implies $K \tto_s M[N/x]$.
+From the fact that $K \tto_s (\lambda x.M)$, we know that there must exist $P$ and $Q$ such
+that $K \tto_h \lambda PQ$, $P \tto_s \lambda x.M$ and $Q \tto_s N$; and from $P \tto_s \lambda x.M$, we know
+that there exists $W$ such that $P \tto_h \lambda x.W$ and $W \tto_s M$. From all this information,
+we can conclude that
+\[
+K \tto_h PQ \tto_{h} (\lambda x.W)Q \tto W[Q/x] \tto_s M[N/x];
+\]
+which, by (3.), implies $K \tto_s M[N/x]$.
+
+We finally prove that, if $K \tto_s M \to_{\beta} N$, then $K \tto_s N$. This proves the theorem,
+as every \beta-reduction $M \tto_s M \tto_\beta N$ implies $M \tto_s N$. We analize the possible
+ways in which $M \to_{\beta} N$ can be derived.
+
+  1) If $K \tto_{s} (\lambda x.M)N \to_{\beta} M[N/x]$, it has been
+     already that $K \tto_s M[N/x]$.
+  2) If $K \tto_s MN \to_{\beta} M'N$ with $M \to_{\beta} M'$, we know that there exist $K \tto_h WQ$ 
+     such that $W \tto_s M$ and $Q \tto_s N$; by induction $W \tto_s M'$, and then $WQ \tto_s M'N$.
+     The case $K \tto_s MN \to_{\beta} MN'$ is entirely analogous.
+  3) If $K \tto_s \lambda x.M \to_{\beta} \lambda x.M'$, with $M \to_{\beta} M'$, we know that there exists $W$ such
+     that $K \tto_h \lambda x.W$ and $W \tto_s M$. By induction $W \tto_s M'$, and $K \tto_s \lambda x.M'$.
+#+end_proof
+
+#+attr_latex: :options [Leftmost reduction theorem]
+#+begin_corollary
+We define the *leftmost reduction strategy* as the strategy that
+reduces the leftmost \beta-reducible application at each step. If $M$ has a
+normal form, the leftmost reduction strategy will lead to it.
+#+end_corollary
+#+begin_proof
+Note that, if $M \to_n N$, where $N$ is in \beta-normal form; $n$ must be exactly
+$1$. If $M$ has a normal form and $M \tto_{\beta} N$, there must exist a standard sequence
+from $M$ to $N$ whose last step is of the form $\to_{l}$; as the sequence is non-decreasing,
+every step has to be of the form $\to_{l}$.
+#+end_proof
+
 *** TODO SKI combinators                                         :noexport:
 # Selinger Combinatorial algebras
 ** Simply typed \lambda-calculus
