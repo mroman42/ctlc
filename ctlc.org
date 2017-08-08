@@ -2902,13 +2902,24 @@ This can be translated to the Mikrokosmos implementation of simply typed \lambda
 as the term
 
 #+BEGIN_SRC haskell
-\f.absurd (f (inr (\a.f (inl a))))
+notnotlem = \f.absurd (f (inr (\a.f (inl a))))
+notnotlem
 ---> λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
 #+END_SRC
 
 whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
 
-* Type theory                                                     
+*** TODO Type algebra
+**** Lists, trees and generating functions
+**** Derivatives and one-hole contexts
+**** Seven trees in one
+* Type theory
+# to conduct my thoughts in an orderly fashion, by commencing with those
+# objects that are simplest and easiest to know, in order to ascend
+# little by little, as by degrees, to the knowledge of the most
+# composite things, and by supposing an order even among those things
+# that do not naturally precede one another.
+
 ** Intuitionistic logic
 *** Constructive mathematics
 *** Agda example
