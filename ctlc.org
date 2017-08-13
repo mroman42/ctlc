@@ -1049,12 +1049,58 @@ A Heyting algebra is Boolean if and only if $\neg\neg x = x$ for every $x$;
 and if and only if $x \vee \neg x = 1$ for every $x$.
 #+end_proposition
 #+begin_proof
-
+In a Boolean algebra the complement is unique and $\neg\neg x = x$. Now, 
+if $\neg\neg y = y$ for every $y$,
+\[
+x \vee \neg x = \neg\neg (x \vee \neg x) = \neg (\neg x \wedge \neg\neg x) = \top;
+\]
+and then, as $x \vee \neg x = \bot$, $\neg x$ must be the complement of $x$. We have
+used the fact that $\neg (x \vee y) = (\neg x) \wedge (\neg y)$ in any Heyting algebra.
 #+end_proof
 
 *** Quantifiers as adjoints
+#+begin_definition
+Given a relation between sets $S \subseteq X \times Y$, the functors $\forall_p, \exists_p \colon {\cal P}(X \times Y) \to {\cal P}(Y)$
+are defined as
+
+  * $\forall_p S = \left\{ y \mid \forall x: \pair{x,y} \in S \right\}$, and
+  * $\exists_p S = \left\{ y \mid \exists x: \pair{x,y} \in S \right\}$.
+#+end_definition
+
+#+begin_theorem
+The functors $\exists_p,\forall_p$ are the left and right adjoints to the inverse image of the
+projection functor, $p^{\ast} \colon {\cal P}(Y) \to {\cal P}(X \times Y)$.
+#+end_theorem
+#+begin_proof
+# TODO: Proof
+#+end_proof
+
+#+begin_theorem
+Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\ast} \colon {\cal P}Y \to {\cal P}Z$
+has left and right adjoints, called $\exists_f$ and $\forall_f$.
+#+end_theorem
+
 ** TODO Lawvere algebraic theories
-** TODO Topoi
+** Topoi
+*** Subobject classifier
+#+attr_latex: :options [Subobject classifier]
+#+begin_definition
+A *subobject classifier* is an object $\Omega$ with a monomorphism $\mathrm{true} \colon 1 \to \Omega$
+such that, for every monomorphism $S \to X$, there exists a unique $\phi$ such that
+\[\begin{tikzcd}
+S\rar{} \dar[swap]{} & 1 \dar{\mathrm{true}} \\
+X\rar[dashed]{\phi} & \Omega
+\end{tikzcd}\]
+forms a pullback square.
+#+end_definition
+
+*** Definition of a topos
+#+attr_latex: :options [Topos]
+#+begin_definition
+An *elementary topos* (plural /topoi/) is a cartesian closed category
+with all finite limits and a subobject classifier.
+#+end_definition
+
 * Lambda calculus
 ** Untyped \lambda-calculus
 The *\lambda-calculus* is a collection of formal systems, all of them based
@@ -3183,3 +3229,12 @@ bibliography:Bibliography.bib
 
 ** TODO Mikrokosmos complete code
 ** TODO Mikrokosmos user's guide
+** TODO Quotes
+# This quotes can be placed on the partial abstracts or in the general one.
+
+#+begin_quote
+"category" has been defined in order to define "functor" and "functor"
+has been defined in order to define "natural transformation".
+
+  -- Saunders MacLane, Categories for the working mathematician.
+#+end_quote
