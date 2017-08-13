@@ -202,6 +202,8 @@ As a consequence, $A \cong B$. A similar proof can be written for the terminal
 object.
 #+end_proof
 
+# The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
+
 #+attr_latex: :options [Product object]
 #+begin_definition
 An object $C$ is the *product* of two objects $A,B$ on a category if there
@@ -816,9 +818,14 @@ x''
 
 commutes.
 #+end_proof
+
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
+
+Topos theory arises independently with Grothendieck and sheaf theory,
+Lawvere and the axiomatization of set theory and Paul Cohen with the
+forcing techniques with allowed to construct new models of ZFC.
 #+LATEX: \end{center}}
 
 * Categorical logic
@@ -997,7 +1004,7 @@ In any Heyting algebra,
 
   1) $x \leq \neg \neg x$,
   2) $x \leq y$ implies $\neg y \leq \neg x$,
-  3) $\neg x \leq \neg\neg\neg x$,
+  3) $\neg x = \neg\neg\neg x$,
   4) $\neg\neg (x \wedge y) = \neg \neg x \wedge \neg \neg y$,
   5) $(x \impl x) = 1$,
   6) $x \wedge (x \impl y) = x \wedge y$,
