@@ -1015,7 +1015,20 @@ Any bounded lattice $L$ with an operation satisfying the last four properties
 is a Heyting algebra with this operation as implication.
 #+end_proposition
 #+begin_proof
-# TODO
+We can prove the inequalities using the definition of implication.
+
+  1) By definition, $x \wedge (x \Rightarrow \bot) \leq \bot$.
+  2) Again, by definition, $\neg y \wedge x \leq \neg y \wedge y \leq \bot$.
+  3) Is a consequence of the first two inequalities.
+  4) We know that $x \wedge y \leq x,y$, and therefore $\neg\neg (x\wedge y) \leq \neg \neg x \wedge \neg \neg y$.
+     We can prove $\neg\neg x \wedge \neg\neg y \leq \neg\neg (x \wedge y)$ using the definition of
+     negation to get $\neg\neg x \wedge \neg\neg y \wedge \neg (x \wedge y) \leq \bot$, and then by reversing
+     the definition of implication $\neg\neg y \wedge \neg (x \wedge y) \leq \neg\neg\neg x = x$. Applying
+     the same reasoning to $y$, we finally get $x \wedge y \wedge \neg (x \wedge y) \leq \bot$.
+  5) Follows from $x \wedge 1 \leq x$.
+  6) Using the evaluation morphism, we know that $x \wedge (x \impl y) \leq y \leq x \wedge y$.
+  7) Using the definition of implication $y = y \wedge y \leq y \wedge (x \Rightarrow y)$.
+  8) The exponential $x \Rightarrow -$ is a right adjoint and it preserves products.
 #+end_proof
 
 #+attr_latex: :options [Complements are negations in Heyting algebras]
@@ -1023,7 +1036,11 @@ is a Heyting algebra with this operation as implication.
 If an element has a complement on a Heyting algebra, it must be $\neg x$.
 #+end_proposition
 #+begin_proof
-# TODO
+Let $a$ a complement of $x$. By definition, $x \wedge a = \bot$ and therefore $a \leq \neg x$.
+The reverse inequality can be proven using the lattice properties as
+\[
+\neg x = \neg x \wedge (x \vee a) = \neg x \wedge a.
+\]
 #+end_proof
 
 #+attr_latex: :options [Characterization of Boolean algebras]
