@@ -1,0 +1,21 @@
+\setcounter{secnumdepth}{0}
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+\setlist[enumerate]{topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex}
+\usepackage[top=1in, bottom=1.5in, left=1in, right=1in]{geometry}
+\setlength\itemsep{0em}
+\setlength{\parindent}{0pt}
+\usepackage{parskip}
+
+\usepackage{minted} \usemintedstyle{colorful}
+\setminted[haskell]{linenos=false,fontsize=\normalsize}
+\renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,1.0}{\oldstylenums{\arabic{FancyVerbLine}}}}
+
+
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems}
+\newtcbtheorem[number within=section]{examplebox}{Example}{colback=cyan!2,colframe=cyan!10!black!40,fonttitle=\bfseries}{th}
+
+
+\usepackage[conor]{agda}
+\usepackage{catchfilebetweentags}

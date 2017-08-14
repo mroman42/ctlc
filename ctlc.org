@@ -569,7 +569,7 @@ $\mathrm{hom}(r,d) \cong \mathrm{hom}(c,Sd)$ natural in $d$. Any natural bijecti
 kind is determined by a unique universal arrow.
 #+end_proposition
 #+begin_proof
-Bijection follows from the definition of [[*Universal arrow][universal arrow]], and
+Bijection follows from the definition of universal arrow, and
 naturality follows from $S(gf)\circ u = Sg \circ Sf \circ u$.
 
 Given a bijection $\varphi$, we define $u = \varphi(\mathrm{id}_r)$.

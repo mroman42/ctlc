@@ -1,0 +1,47 @@
+%------------------------
+% Math libraries
+%------------------------
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{tikz-cd}
+\usepackage{bussproofs}
+\usepackage{mathtools}
+\usepackage{scalerel}
+
+%------------------------
+% Math symbols and unicode support
+%------------------------
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage[greek,english]{babel}
+\DeclareUnicodeCharacter{22A5}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\bot}}}}
+\DeclareUnicodeCharacter{22A4}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\top}}}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\to}}}}
+\DeclareUnicodeCharacter{21D2}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\Rightarrow}}}}
+% \DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+
+%------------------------
+% Theorem styles
+%------------------------
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{proofs}{Proof}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{exampleth}{Example}
+
+\begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
+
+%------------------------
+% Macros
+% ------------------------
+\newcommand{\tto}{\twoheadrightarrow}
+\newcommand{\todot}{\xrightarrow{.}}
+\newcommand{\impl}{\Rightarrow}
+
+\DeclarePairedDelimiter\pair{\langle}{\rangle}
