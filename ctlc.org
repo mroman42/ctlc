@@ -50,23 +50,23 @@ f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
 Given two morphisms $f \colon A \to B$ and $g \colon B \to C$ there
 exists a *composition morphism*, written as $g \circ f \colon A \to C$.
 Morphism composition is a binary associative operation with
-identity elements $\mathrm{id}_{A}\colon A \to A$, that is
+identity elements $\id_{A}\colon A \to A$, that is
 \[
 h \circ (g \circ f) = (h \circ g) \circ f
 \quad\text{ and }\quad
-f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f.
+f \circ \id_A = f = \id_B \circ f.
 \]
 #+end_definition
 
 #+attr_latex: :options [Hom-sets]
 #+begin_definition
 The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
-between them. It is written as $\mathrm{hom}(A,B)$. The set of *endomorphisms*
-of an object $A$ is the hom-set $\mathrm{end}(A) = \mathrm{hom}(A,A)$.
+between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
+of an object $A$ is the hom-set $\mathrm{end}(A) = \hom(A,A)$.
 #+end_definition
 
 Sometimes, when considering a hom-set, it will be useful to explicitly specify
-the category on which we are working as $\mathrm{hom}_{{\cal C}}(A,B)$.
+the category on which we are working as $\hom_{{\cal C}}(A,B)$.
 
 #+attr_latex: :options [Small and locally small categories]
 #+begin_definition
@@ -92,8 +92,8 @@ the Russell's paradox.
 A morphism $f : A \to B$ is an *isomorphism* if an inverse morphism $f^{-1} : B \to A$
 such that
 
-  * $f^{-1} \circ f = \mathrm{id}_{A}$,
-  * $f \circ f^{-1} = \mathrm{id}_{B}$;
+  * $f^{-1} \circ f = \id_{A}$,
+  * $f \circ f^{-1} = \id_{B}$;
 
 exists.
 #+end_definition
@@ -110,9 +110,9 @@ inverse, and they are equal.
 #+begin_proof
 Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
 \[
-g_1 = g_1 \circ \mathrm{id}_A = g_1 \circ (f \circ g_2) = 
+g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) = 
 (g_1 \circ f) \circ g_2 =
-\mathrm{id} \circ g_2 = g_2.
+\id \circ g_2 = g_2.
 \]
 We have used associativity of composition, neutrality of the identity 
 and the fact that $g_1$ is a left-side inverse and $g_2$ is a 
@@ -129,7 +129,7 @@ We write $A \cong B$ when $A$ and $B$ are isomorphic.
 The relation of being isomorphic is an equivalence relation. In
 particular,
 
- * the identity, $\mathrm{id} = \mathrm{id}^{-1}$;
+ * the identity, $\id = \id^{-1}$;
  * the inverse of an isomorphism, $(f^{-1})^{-1} = f$;
  * and the composition of isomorphisms, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$;
 
@@ -195,8 +195,8 @@ morphism $f : A \to B$ and only one morphism $g : B \to A$. Moreover, there
 would be only an endomorphism in $\mathrm{End}(A)$ and $\mathrm{End}(B)$ which should be
 the identity. That implies,
 
-  * $f \circ g = \mathrm{id}$,
-  * $g \circ f = \mathrm{id}$.
+  * $f \circ g = \id$,
+  * $g \circ f = \id$.
 
 As a consequence, $A \cong B$. A similar proof can be written for the terminal
 object.
@@ -321,7 +321,7 @@ a functor between them $F : {\cal C} \to {\cal D}$ is given by
 
 such that
 
-  * $F(\mathrm{id}_A) = \mathrm{id}_{FA}$, identities are preserved;
+  * $F(\id_A) = \id_{FA}$, identities are preserved;
   * $F(f \circ g) = Ff \circ Fg$, the functor respects composition.
 #+end_definition
 
@@ -507,7 +507,7 @@ category having
   * and pairs $\pair{f,g} : \pair{c,d} \to \pair{c',d'}$ as morphisms, where $f \colon c \to c'$ and
     $g \colon d \to d'$ are morphisms in their respective categories.
 
-The identity morphism of any object $\pair{c,d}$ is $\pair{\mathrm{id}_c, \mathrm{id}_d}$, and composition is
+The identity morphism of any object $\pair{c,d}$ is $\pair{\id_c, \id_d}$, and composition is
 defined componentwise as
 \[
 (f',g') \circ (f,g) = (f' \circ f,g' \circ g).
@@ -565,14 +565,14 @@ c \rar[swap]{u}\urar{g} & Sr \uar[swap,dashed]{Sf} & r \uar[dashed]{\exists! f} 
 #+attr_latex: :options [Universality in terms of hom-sets]
 #+begin_proposition
 The arrow $u \colon c \to Sr$ is universal iff $f \mapsto Sf \circ u$ is a bijection
-$\mathrm{hom}(r,d) \cong \mathrm{hom}(c,Sd)$ natural in $d$. Any natural bijection of this
+$\hom(r,d) \cong \hom(c,Sd)$ natural in $d$. Any natural bijection of this
 kind is determined by a unique universal arrow.
 #+end_proposition
 #+begin_proof
 Bijection follows from the definition of universal arrow, and
 naturality follows from $S(gf)\circ u = Sg \circ Sf \circ u$.
 
-Given a bijection $\varphi$, we define $u = \varphi(\mathrm{id}_r)$.
+Given a bijection $\varphi$, we define $u = \varphi(\id_r)$.
 By naturality we have the bijection $\varphi(f) = Sf \circ u$, every arrow
 is written in this way.
 #+end_proof
@@ -582,7 +582,7 @@ is written in this way.
 #+begin_definition
 A *representation* of $K \colon D \to \mathtt{Set}$ is a natural isomorphism
 \[
-\psi\colon \mathrm{hom}_{D}(r,-) \cong K.
+\psi\colon \hom_{D}(r,-) \cong K.
 \]
 
 A functor is /representable/ if it has a representation. An object $r$ is
@@ -596,10 +596,10 @@ $f \mapsto K(f)(u\ast)$ is a representation. Every representation is obtained
 in this way.
 #+end_proposition
 #+begin_proof
-We know that $\mathrm{hom}(\ast, X) \xrightarrow{.} X$ is a natural isomorphism in $X$; in particular
-$\mathrm{hom}(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
+We know that $\hom(\ast, X) \xrightarrow{.} X$ is a natural isomorphism in $X$; in particular
+$\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
 
-\[ \mathrm{hom}_{D}(r,-) \cong \mathrm{hom}(\ast,K-) \cong K, \]
+\[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
 
 for every natural isomorphism $D(r,-) \cong \mathtt{Set}(\ast,K-)$. But every natural
 isomorphism of this kind is an [[*Universal arrows as natural bijections][universal arrow]].
@@ -610,10 +610,10 @@ isomorphism of this kind is an [[*Universal arrows as natural bijections][univer
 #+begin_lemma
 For any $K\colon D \to \mathtt{Set}$ and $r \in D$, there is a bijection
 \[
-y \colon \mathrm{Nat}(\mathrm{hom}_{D}(r,-), K) \cong Kr
+y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
 \]
 
-sending the natural transformation $\alpha \colon \mathrm{hom}_{D}(r,-) \xrightarrow{.} K$
+sending the natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
 to the image of the identity, $\alpha_r1_r$.
 #+end_lemma
 #+begin_proof
@@ -622,13 +622,13 @@ to the image of the identity, $\alpha_r1_r$.
 
 #+attr_latex: :options [Characterization of natural transformations between representable functors]
 #+begin_corollary
-Given $r,s \in D$, any natural transformation $\mathrm{hom}(r,-) \xrightarrow{.} \mathrm{hom}(s,-)$ has
+Given $r,s \in D$, any natural transformation $\hom(r,-) \xrightarrow{.} \hom(s,-)$ has
 the form $h_{\ast}$ for a unique $h\colon s \to r$.
 #+end_corollary
 #+begin_proof
 Using Yoneda Lemma, we know that
 \[
-\mathrm{Nat}(\mathrm{hom}_D(r,-), \mathrm{hom}_D(s,-)) \cong \mathrm{hom}_D(s,r),
+\mathrm{Nat}(\hom_D(r,-), \hom_D(s,-)) \cong \hom_D(s,r),
 \]
 
 sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to r$. The
@@ -675,7 +675,7 @@ The Yoneda functor is full and faithful.
 An *adjunction* from categories $X$ to $A$ is a pair of functors
 $F\colon X \to A$, $G\colon A \to X$ with a natural bijection
 \[
-\varphi \colon \mathrm{hom}(Fx,a) \cong \mathrm{hom}(x,Ga),
+\varphi \colon \hom(Fx,a) \cong \hom(x,Ga),
 \]
 
 natural in both $x\in X$ and $a \in A$. We write it as $F \dashv G$.
@@ -697,7 +697,7 @@ An adjunction determines a *unit* and a *counit*;
 
     \[\varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.\]
 
-that follow the /triangle identities/ $\eta G \circ G \varepsilon = \mathrm{id}$ and $F\eta \circ \varepsilon F = \mathrm{id}$.
+that follow the /triangle identities/ $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
 #+end_definition
 
 #+attr_latex: :options [Characterization of adjunctions]
@@ -709,7 +709,7 @@ Each adjunction is completely determined by any of
  3) functors $F,G$ and $\varepsilon\colon FG \xrightarrow{.} 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
  4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$, creating a functor $G$.
  5) functors $F,G$, with units and counits satisfiying the triangle
-    identities $\eta G \circ G \varepsilon = \mathrm{id}$ and $F\eta \circ \varepsilon F = \mathrm{id}$.
+    identities $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
 #+end_proposition
 ** TODO Cartesian closed categories
 ** Monads and algebras
@@ -1796,7 +1796,7 @@ $\varphi$ such that $\phi = \overline{\varphi} \circ \psi$.
 If an unifier of $\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ exists, the most general unifier
 can be found using the following recursive definition of $\mathtt{unify}(A_1,\dots,A_n;B_1,\dots,B_n)$.
 
-  1) $\mathtt{unify}(x;x) = \mathrm{id}$ and $\mathtt{unify}(\iota,\iota) = \mathrm{id}$;
+  1) $\mathtt{unify}(x;x) = \id$ and $\mathtt{unify}(\iota,\iota) = \id$;
   2) $\mathtt{unify}(x;B) = (x \mapsto B)$, the substitution that only changes $x$ by $B$;
      if $x$ does not occur in $B$. The algorithm *fails* if $x$ occurs in $B$;
   3) $\mathtt{unify}(A;x)$ is defined symmetrically;
@@ -2746,7 +2746,7 @@ This way of defining multiple argument functions is called the *currying*
 of a function in honor to the american logician Haskell Curry in cite:haskell58.
 It is a particular instance of a deeper fact, the *hom-tensor adjunction*
 \[
-\mathrm{Hom}(A \times B, C) \cong \mathrm{Hom}(A, \mathrm{Hom}(B,C))
+\hom(A \times B, C) \cong \hom(A, \hom(B,C))
 \]
 or the definition of exponentials.
 
