@@ -1,5 +1,5 @@
 \begin{code}
--- This proof is based on Thorstel Altenkirch notes
+-- This proof is based on Thorsten Altenkirch notes on
 -- Computer Aided Formal Reasoning (G53CFR, G54CFR),
 -- Nottingham University.
 
