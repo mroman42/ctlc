@@ -10,7 +10,7 @@
 :UNNUMBERED: t
 :END:
 
-This is the abstract. It should not be written until the end.
+This is the abstract.
 
 ** Acknowlegments                                                 :noexport:
 # David Charte and Ignacio Cordón, testing the first versions of
@@ -842,13 +842,13 @@ logical connectives can be translated as
 \[\begin{tabular}{cc|cc}
 logic &  & &  subsets \\
 \hline
-$P \wedge Q$ & and & intersection & $P \cap Q$  \\
-$P \vee Q$ & or & union  & $P \cup Q$ \\
+$P \land Q$ & and & intersection & $P \cap Q$  \\
+$P \lor Q$ & or & union  & $P \cup Q$ \\
 $\neg P$ & not & complement & $\overline{P}$ \\
 $P \to Q$ & implication & complement union & $\overline{P} \cup Q$
 \end{tabular}\]
 
-using crucially that $\neg P \wedge Q \equiv P \to Q$.
+using crucially that $\neg P \land Q \equiv P \to Q$.
 
 In the same way that Boolean algebras correspond to classical
 propositional logic, Heyting algebras correspond to intuitionistic
@@ -859,8 +859,8 @@ topological space
 \[\begin{tabular}{cc|cc}
 logic &  & & open sets \\
 \hline
-$P \wedge Q$ & and & intersection & $P \cap Q$  \\
-$P \vee Q$ & or & union  & $P \cup Q$ \\
+$P \land Q$ & and & intersection & $P \cap Q$  \\
+$P \lor Q$ & or & union  & $P \cup Q$ \\
 $\neg P$ & not & interior of the complement & $\mathrm{int}\left(\overline{P}\right)$ \\
 $P \to Q$ & implication & interior of complement and consequent & $\mathrm{int}(\overline{P} \cup Q)$
 \end{tabular}\]
@@ -879,19 +879,19 @@ and coproducts.
 
 We will usually work with bounded lattices.
 A bounded lattice can also be defined as a set with $0,1$ and two binary
-operations $\wedge,\vee$ satisfying
+operations $\land,\lor$ satisfying
 
-  * $1 \wedge x = x$, and $0 \vee x = x$;
-  * $x \wedge x = x$, and $x \vee x = x$;
-  * $x \wedge (y \vee x) = x = (x \wedge y) \vee x$.
+  * $1 \land x = x$, and $0 \lor x = x$;
+  * $x \land x = x$, and $x \lor x = x$;
+  * $x \land (y \lor x) = x = (x \land y) \lor x$.
 
 This perspective allows us also to define a lattice object in any
 category as an object $L$ with morphisms
 
 \[
-\wedge \colon L \times L \to L,
+\land \colon L \times L \to L,
 \quad
-\vee \colon L \times L \to L,
+\lor \colon L \times L \to L,
 \quad
 0,1 \colon \mathrm{I} \to L,
 \]
@@ -903,7 +903,7 @@ diagrams encoding the previous equations.
 #+begin_definition
 A *distributive lattice* is a lattice where
 \[
-x \wedge (y \vee z) = (x \wedge y) \vee (x \wedge z),
+x \land (y \lor z) = (x \land y) \lor (x \land z),
 \]
 
 holds for all $x,y,z$.
@@ -914,8 +914,8 @@ holds for all $x,y,z$.
 #+begin_definition
 A *complement* of $a$ in a bounded lattice is an element $\overline{a}$ such that
 \[
-a \wedge \overline{a} = 0, \qquad
-a \vee \overline{a} = 1.
+a \land \overline{a} = 0, \qquad
+a \lor \overline{a} = 1.
 \]
 #+end_definition
 #+attr_latex: :options [The complement in distributive lattices is unique]
@@ -926,8 +926,8 @@ If a complement of an element exists in a distributive lattice, it is unique.
 #+begin_proof
 Given $a$ with two complements $x,y$, we have that
 \[
-x = x \wedge (a \vee y) = (x \wedge a) \vee (x \wedge y) =
-(y \wedge a) \vee (x \wedge y) = y \vee (x \wedge a) = y.
+x = x \land (a \lor y) = (x \land a) \lor (x \land y) =
+(y \land a) \lor (x \land y) = y \lor (x \land a) = y.
 \]
 #+end_proof
 
@@ -954,7 +954,7 @@ $x,y$, the exponential $y^x$ exists.
 The exponential in Heyting algebras is usually written as $x \Rightarrow y$ and is 
 characterized by its adjunction with the product
 \[
-z \leq (x \Rightarrow y) \text{ if and only if } z \wedge x \leq y.
+z \leq (x \Rightarrow y) \text{ if and only if } z \land x \leq y.
 \]
 
 # TODO: Any complete distributive lattice is a Heyting algebra
@@ -963,30 +963,30 @@ z \leq (x \Rightarrow y) \text{ if and only if } z \wedge x \leq y.
 #+begin_proposition
 Every Boolean algebra is a Heyting algebra with exponentials given by
 \[
-(x \Rightarrow y) = \overline{x} \wedge y.
+(x \Rightarrow y) = \overline{x} \land y.
 \]
 #+end_proposition
 #+begin_proof
 We will prove that
 \[
-z \leq (\overline{x} \vee y) \text{ if and only if } z \wedge x \leq y.
+z \leq (\overline{x} \lor y) \text{ if and only if } z \land x \leq y.
 \]
-If $z \leq (\overline{x} \vee y)$,
+If $z \leq (\overline{x} \lor y)$,
 \[
-z \wedge x \leq
-(\overline{x} \vee y) \wedge x \leq
-(\overline{x} \wedge x) \vee (y \wedge x) \leq
-y \wedge x \leq
+z \land x \leq
+(\overline{x} \lor y) \land x \leq
+(\overline{x} \land x) \lor (y \land x) \leq
+y \land x \leq
 y;
 \]
-and if $z \wedge x \leq y$,
+and if $z \land x \leq y$,
 \[
 z = 
-z \wedge 1 =
-z \wedge (\overline{x} \vee x) =
-(z \wedge \overline{x}) \vee (z \wedge x) \leq 
-(z \wedge \overline{x}) \vee y \leq
-z \vee y.
+z \land 1 =
+z \land (\overline{x} \lor x) =
+(z \land \overline{x}) \lor (z \land x) \leq 
+(z \land \overline{x}) \lor y \leq
+z \lor y.
 \]
 #+end_proof
 
@@ -1005,11 +1005,11 @@ In any Heyting algebra,
   1) $x \leq \neg \neg x$,
   2) $x \leq y$ implies $\neg y \leq \neg x$,
   3) $\neg x = \neg\neg\neg x$,
-  4) $\neg\neg (x \wedge y) = \neg \neg x \wedge \neg \neg y$,
+  4) $\neg\neg (x \land y) = \neg \neg x \land \neg \neg y$,
   5) $(x \impl x) = 1$,
-  6) $x \wedge (x \impl y) = x \wedge y$,
-  7) $y \wedge (x \impl y) = y$,
-  8) $x \impl (y \wedge z) = (x \impl y) \wedge (x \impl z)$.
+  6) $x \land (x \impl y) = x \land y$,
+  7) $y \land (x \impl y) = y$,
+  8) $x \impl (y \land z) = (x \impl y) \land (x \impl z)$.
 
 Any bounded lattice $L$ with an operation satisfying the last four properties
 is a Heyting algebra with this operation as implication.
@@ -1017,17 +1017,17 @@ is a Heyting algebra with this operation as implication.
 #+begin_proof
 We can prove the inequalities using the definition of implication.
 
-  1) By definition, $x \wedge (x \Rightarrow \bot) \leq \bot$.
-  2) Again, by definition, $\neg y \wedge x \leq \neg y \wedge y \leq \bot$.
+  1) By definition, $x \land (x \Rightarrow \bot) \leq \bot$.
+  2) Again, by definition, $\neg y \land x \leq \neg y \land y \leq \bot$.
   3) Is a consequence of the first two inequalities.
-  4) We know that $x \wedge y \leq x,y$, and therefore $\neg\neg (x\wedge y) \leq \neg \neg x \wedge \neg \neg y$.
-     We can prove $\neg\neg x \wedge \neg\neg y \leq \neg\neg (x \wedge y)$ using the definition of
-     negation to get $\neg\neg x \wedge \neg\neg y \wedge \neg (x \wedge y) \leq \bot$, and then by reversing
-     the definition of implication $\neg\neg y \wedge \neg (x \wedge y) \leq \neg\neg\neg x = x$. Applying
-     the same reasoning to $y$, we finally get $x \wedge y \wedge \neg (x \wedge y) \leq \bot$.
-  5) Follows from $x \wedge 1 \leq x$.
-  6) Using the evaluation morphism, we know that $x \wedge (x \impl y) \leq y \leq x \wedge y$.
-  7) Using the definition of implication $y = y \wedge y \leq y \wedge (x \Rightarrow y)$.
+  4) We know that $x \land y \leq x,y$, and therefore $\neg\neg (x\land y) \leq \neg \neg x \land \neg \neg y$.
+     We can prove $\neg\neg x \land \neg\neg y \leq \neg\neg (x \land y)$ using the definition of
+     negation to get $\neg\neg x \land \neg\neg y \land \neg (x \land y) \leq \bot$, and then by reversing
+     the definition of implication $\neg\neg y \land \neg (x \land y) \leq \neg\neg\neg x = x$. Applying
+     the same reasoning to $y$, we finally get $x \land y \land \neg (x \land y) \leq \bot$.
+  5) Follows from $x \land 1 \leq x$.
+  6) Using the evaluation morphism, we know that $x \land (x \impl y) \leq y \leq x \land y$.
+  7) Using the definition of implication $y = y \land y \leq y \land (x \Rightarrow y)$.
   8) The exponential $x \Rightarrow -$ is a right adjoint and it preserves products.
 #+end_proof
 
@@ -1036,26 +1036,26 @@ We can prove the inequalities using the definition of implication.
 If an element has a complement on a Heyting algebra, it must be $\neg x$.
 #+end_proposition
 #+begin_proof
-Let $a$ a complement of $x$. By definition, $x \wedge a = \bot$ and therefore $a \leq \neg x$.
+Let $a$ a complement of $x$. By definition, $x \land a = \bot$ and therefore $a \leq \neg x$.
 The reverse inequality can be proven using the lattice properties as
 \[
-\neg x = \neg x \wedge (x \vee a) = \neg x \wedge a.
+\neg x = \neg x \land (x \lor a) = \neg x \land a.
 \]
 #+end_proof
 
 #+attr_latex: :options [Characterization of Boolean algebras]
 #+begin_proposition
 A Heyting algebra is Boolean if and only if $\neg\neg x = x$ for every $x$; 
-and if and only if $x \vee \neg x = 1$ for every $x$.
+and if and only if $x \lor \neg x = 1$ for every $x$.
 #+end_proposition
 #+begin_proof
 In a Boolean algebra the complement is unique and $\neg\neg x = x$. Now, 
 if $\neg\neg y = y$ for every $y$,
 \[
-x \vee \neg x = \neg\neg (x \vee \neg x) = \neg (\neg x \wedge \neg\neg x) = \top;
+x \lor \neg x = \neg\neg (x \lor \neg x) = \neg (\neg x \land \neg\neg x) = \top;
 \]
-and then, as $x \vee \neg x = \bot$, $\neg x$ must be the complement of $x$. We have
-used the fact that $\neg (x \vee y) = (\neg x) \wedge (\neg y)$ in any Heyting algebra.
+and then, as $x \lor \neg x = \bot$, $\neg x$ must be the complement of $x$. We have
+used the fact that $\neg (x \lor y) = (\neg x) \land (\neg y)$ in any Heyting algebra.
 #+end_proof
 
 *** Quantifiers as adjoints
@@ -1670,8 +1670,8 @@ a consequence from that context, separated by the $\vdash$ symbol.
 
     \begin{prooftree}
     \LeftLabel{($var$)}
-    \AxiomC{}
-    \UnaryInfC{$\Gamma, x:A \vdash x:A$}
+    \AXC{}
+    \UIC{$\Gamma, x:A \vdash x:A$}
     \end{prooftree}
 
  2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
@@ -1680,8 +1680,8 @@ a consequence from that context, separated by the $\vdash$ symbol.
 
    \begin{prooftree}
    \LeftLabel{$(abs)$}
-   \AxiomC{$\Gamma, x:A \vdash M : B$}
-   \UnaryInfC{$\Gamma \vdash \lambda x.M : A \to B$}
+   \AXC{$\Gamma, x:A \vdash M : B$}
+   \UIC{$\Gamma \vdash \lambda x.M : A \to B$}
    \end{prooftree}
 
  3) The $(app)$ rule gives the type of a well-typed application of a
@@ -1690,9 +1690,9 @@ a consequence from that context, separated by the $\vdash$ symbol.
 
     \begin{prooftree}
     \LeftLabel{$(app)$}
-    \AxiomC{$\Gamma \vdash f : A \to B$}
-    \AxiomC{$\Gamma \vdash a : A$}
-    \BinaryInfC{$\Gamma \vdash f a : B$}
+    \AXC{$\Gamma \vdash f : A \to B$}
+    \AXC{$\Gamma \vdash a : A$}
+    \BIC{$\Gamma \vdash f a : B$}
     \end{prooftree}
 
 #+begin_definition
@@ -1967,8 +1967,8 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{($var$)}
-    \AxiomC{}
-    \UnaryInfC{$\Gamma, x:A \vdash x:A$}
+    \AXC{}
+    \UIC{$\Gamma, x:A \vdash x:A$}
     \end{prooftree}
 
  2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
@@ -1977,8 +1977,8 @@ of typing rules.
 
    \begin{prooftree}
    \LeftLabel{$(abs)$}
-   \AxiomC{$\Gamma, x:A \vdash M : B$}
-   \UnaryInfC{$\Gamma \vdash \lambda x.M : A \to B$}
+   \AXC{$\Gamma, x:A \vdash M : B$}
+   \UIC{$\Gamma \vdash \lambda x.M : A \to B$}
    \end{prooftree}
 
  3) The $(app)$ rule gives the type of a well-typed application of a
@@ -1987,9 +1987,9 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(app)$}
-    \AxiomC{$\Gamma \vdash f : A \to B$}
-    \AxiomC{$\Gamma \vdash a : A$}
-    \BinaryInfC{$\Gamma \vdash f a : B$}
+    \AXC{$\Gamma \vdash f : A \to B$}
+    \AXC{$\Gamma \vdash a : A$}
+    \BIC{$\Gamma \vdash f a : B$}
     \end{prooftree}
 
  4) The $(pair)$ rule gives the type of a pair of elements. It acts as
@@ -1997,9 +1997,9 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(pair)$}
-    \AxiomC{$\Gamma \vdash a : A$}
-    \AxiomC{$\Gamma \vdash b :  B$}
-    \BinaryInfC{$\Gamma \vdash \pair{a,b} : A \times B$}
+    \AXC{$\Gamma \vdash a : A$}
+    \AXC{$\Gamma \vdash b :  B$}
+    \BIC{$\Gamma \vdash \pair{a,b} : A \times B$}
     \end{prooftree}
 
  5) The $(\pi_1)$ rule extracts the first element from a pair. It acts as
@@ -2007,8 +2007,8 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(\pi_1)$}
-    \AxiomC{$\Gamma \vdash m : A \times B$}
-    \UnaryInfC{$\Gamma \vdash \pi_1\ m : A$}
+    \AXC{$\Gamma \vdash m : A \times B$}
+    \UIC{$\Gamma \vdash \pi_1\ m : A$}
     \end{prooftree}
 
  6) The $(\pi_1)$ rule extracts the second element from a pair. It acts as
@@ -2016,8 +2016,8 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(\pi_2)$}
-    \AxiomC{$\Gamma \vdash m : A \times B$}
-    \UnaryInfC{$\Gamma \vdash \pi_2\ m : B$}
+    \AXC{$\Gamma \vdash m : A \times B$}
+    \UIC{$\Gamma \vdash \pi_2\ m : B$}
     \end{prooftree}
 
  7) The $(inl)$ rule creates a union type from the left side type of
@@ -2025,8 +2025,8 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(inl)$}
-    \AxiomC{$\Gamma \vdash a : A$}
-    \UnaryInfC{$\Gamma \vdash \mathrm{inl}\ a : A + B$}
+    \AXC{$\Gamma \vdash a : A$}
+    \UIC{$\Gamma \vdash \mathrm{inl}\ a : A + B$}
     \end{prooftree}
 
  8) The $(inr)$ rule creates a union type from the right side type of
@@ -2034,8 +2034,8 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(inr)$}
-    \AxiomC{$\Gamma \vdash b : B$}
-    \UnaryInfC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
+    \AXC{$\Gamma \vdash b : B$}
+    \UIC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
     \end{prooftree}
 
  9) The $(case)$ rule extracts a term from an union and uses on any of the
@@ -2043,10 +2043,10 @@ of typing rules.
 
     \begin{prooftree}
     \LeftLabel{$(case)$}
-    \AxiomC{$\Gamma \vdash m : A + B$}
-    \AxiomC{$\Gamma, a:A \vdash n : C$}
-    \AxiomC{$\Gamma, b:B \vdash p : C$}
-    \TrinaryInfC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) : C$}
+    \AXC{$\Gamma \vdash m : A + B$}
+    \AXC{$\Gamma, a:A \vdash n : C$}
+    \AXC{$\Gamma, b:B \vdash p : C$}
+    \TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) : C$}
     \end{prooftree}
 
  10) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
@@ -2054,8 +2054,8 @@ of typing rules.
 
      \begin{prooftree}
      \LeftLabel{$(\ast)$}
-     \AxiomC{$$}
-     \UnaryInfC{$\Gamma \vdash \ast : 1$}
+     \AXC{$$}
+     \UIC{$\Gamma \vdash \ast : 1$}
      \end{prooftree}
 
 
@@ -2063,8 +2063,8 @@ of typing rules.
 
      \begin{prooftree}
      \LeftLabel{$(abort)$}
-     \AxiomC{$\Gamma \vdash M : 0$}
-     \UnaryInfC{$\Gamma \vdash \mathrm{abort}_A\ M : A$}
+     \AXC{$\Gamma \vdash M : 0$}
+     \UIC{$\Gamma \vdash \mathrm{abort}_A\ M : A$}
      \end{prooftree} 
 
      The abort function must be understood as the unique function going
@@ -2092,7 +2092,7 @@ The natural deduction is a logical system due to Gentzen. We introduce
 it here following cite:selinger13 and cite:wadler15. It relationship
 with the STLC will be made explicit on the [[*Propositions as types][next section]].
 
-We will use the logical binary connectives $\to,\wedge,\vee$, and two
+We will use the logical binary connectives $\to,\land,\lor$, and two
 given propositions, $\top,\bot$ representing truth and falsity. The
 rules defining natural deduction come in pairs; there are introductors
 and eliminators for every connective. Every introductor uses a set of
@@ -2103,8 +2103,8 @@ extract precisely that set of assumptions.
 
     \begin{prooftree}
     \RightLabel{(Ax)}
-    \AxiomC{}
-    \UnaryInfC{$\Gamma,A \vdash A$}
+    \AXC{}
+    \UIC{$\Gamma,A \vdash A$}
     \end{prooftree}
 
  2) Introduction and elimination of the $\to$ connective. Note that the
@@ -2112,53 +2112,53 @@ extract precisely that set of assumptions.
 
     \begin{prooftree}
     \RightLabel{($I_{\to}$)}
-    \AxiomC{$\Gamma, A \vdash B$}
-    \UnaryInfC{$\Gamma \vdash A \to B$}
+    \AXC{$\Gamma, A \vdash B$}
+    \UIC{$\Gamma \vdash A \to B$}
     \RightLabel{($E_{\to}$)}
-    \AxiomC{$\Gamma \vdash A \to B$}
-    \AxiomC{$\Gamma \vdash A$}
-    \BinaryInfC{$\Gamma \vdash B$}
+    \AXC{$\Gamma \vdash A \to B$}
+    \AXC{$\Gamma \vdash A$}
+    \BIC{$\Gamma \vdash B$}
     \noLine
-    \BinaryInfC{}
+    \BIC{}
     \end{prooftree}
 
- 3) Introduction and elimination of the $\wedge$ connective. Note that the
+ 3) Introduction and elimination of the $\land$ connective. Note that the
     introduction in this case takes two assumptions, and there are
     two different elimination rules.
 
     \begin{prooftree}
-    \RightLabel{($I_{\wedge}$)}
-    \AxiomC{$\Gamma \vdash A$}
-    \AxiomC{$\Gamma \vdash B$}
-    \BinaryInfC{$\Gamma \vdash A \wedge B$}
-    \RightLabel{($E_{\wedge}^1$)}
-    \AxiomC{$\Gamma \vdash A \wedge B$}
-    \UnaryInfC{$\Gamma \vdash A$}
-    \RightLabel{($E_{\wedge}^2$)}
-    \AxiomC{$\Gamma \vdash A \wedge B$}
-    \UnaryInfC{$\Gamma \vdash B$}
+    \RightLabel{($I_{\land}$)}
+    \AXC{$\Gamma \vdash A$}
+    \AXC{$\Gamma \vdash B$}
+    \BIC{$\Gamma \vdash A \land B$}
+    \RightLabel{($E_{\land}^1$)}
+    \AXC{$\Gamma \vdash A \land B$}
+    \UIC{$\Gamma \vdash A$}
+    \RightLabel{($E_{\land}^2$)}
+    \AXC{$\Gamma \vdash A \land B$}
+    \UIC{$\Gamma \vdash B$}
     \noLine
-    \TrinaryInfC{}
+    \TIC{}
     \end{prooftree}
 
- 4) Introduction and elimination of the $\vee$ connective. Here, we need
+ 4) Introduction and elimination of the $\lor$ connective. Here, we need
     two introduction rules to match the two assumptions we use on the
     eliminator.
 
     \begin{prooftree}
-    \RightLabel{($I_{\vee}^1$)}
-    \AxiomC{$\Gamma \vdash A$}
-    \UnaryInfC{$\Gamma \vdash A \vee B$}
-    \RightLabel{($I_{\vee}^2$)}
-    \AxiomC{$\Gamma \vdash B$}
-    \UnaryInfC{$\Gamma \vdash A \vee B$}
-    \RightLabel{($E_{\vee}$)}
-    \AxiomC{$\Gamma \vdash A \vee B$}
-    \AxiomC{$\Gamma,A \vdash C$}
-    \AxiomC{$\Gamma,B \vdash C$}
-    \TrinaryInfC{$\Gamma \vdash C$}
+    \RightLabel{($I_{\lor}^1$)}
+    \AXC{$\Gamma \vdash A$}
+    \UIC{$\Gamma \vdash A \lor B$}
+    \RightLabel{($I_{\lor}^2$)}
+    \AXC{$\Gamma \vdash B$}
+    \UIC{$\Gamma \vdash A \lor B$}
+    \RightLabel{($E_{\lor}$)}
+    \AXC{$\Gamma \vdash A \lor B$}
+    \AXC{$\Gamma,A \vdash C$}
+    \AXC{$\Gamma,B \vdash C$}
+    \TIC{$\Gamma \vdash C$}
     \noLine
-    \TrinaryInfC{}
+    \TIC{}
     \end{prooftree}
 
  5) Introduction for $\top$. It needs no assumptions and, consequently,
@@ -2166,8 +2166,8 @@ extract precisely that set of assumptions.
 
     \begin{prooftree}
     \RightLabel{($I_{\top}$)}
-    \AxiomC{}
-    \UnaryInfC{$\Gamma \vdash \top$}
+    \AXC{}
+    \UIC{$\Gamma \vdash \top$}
     \end{prooftree}
 
  6) Elimination for $\bot$. It can be eliminated in all generality, and,
@@ -2177,8 +2177,8 @@ extract precisely that set of assumptions.
 
     \begin{prooftree}
     \RightLabel{($E_{\bot}$)}
-    \AxiomC{$\Gamma \vdash \bot$}
-    \UnaryInfC{$\Gamma \vdash C$}
+    \AXC{$\Gamma \vdash \bot$}
+    \UIC{$\Gamma \vdash C$}
     \end{prooftree}
 
 Proofs on natural deduction are written as deduction trees, and they
@@ -2189,7 +2189,7 @@ of dots represents any given part of the deduction tree.
   1) An implication and its antecedent can be simplified using the
      antecedent directly on the implication.
 
-    \begin{prooftree}\EnableBpAbbreviations
+    \begin{prooftree}
     \AXC{$[A]$}\noLine
     \UIC{$\vdots^{1}$}\noLine
     \UIC{$B$}
@@ -2200,7 +2200,7 @@ of dots represents any given part of the deduction tree.
 
     \UIC{$\vdots$}\noLine
     \AXC{$\Longrightarrow$}
-    \UIC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
 
     \AXC{$\vdots^{2}$}\noLine
     \UIC{$A$}\noLine
@@ -2215,45 +2215,45 @@ of dots represents any given part of the deduction tree.
      as
 
     \begin{prooftree}
-    \AxiomC{$\vdots^{1}$}\noLine
-    \UnaryInfC{$A$}
-    \AxiomC{$\vdots^{2}$}\noLine
-    \UnaryInfC{$B$}
-    \BinaryInfC{$A \wedge B$}
-    \UnaryInfC{$A$}
-    \UnaryInfC{$\vdots$}\noLine
-    \AxiomC{$\Longrightarrow$}
-    \UnaryInfC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
-    \AxiomC{$\vdots^{1}$}\noLine
-    \UnaryInfC{$A$}
-    \UnaryInfC{$\vdots$}\noLine
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$A$}
+    \AXC{$\vdots^{2}$}\noLine
+    \UIC{$B$}
+    \BIC{$A \land B$}
+    \UIC{$A$}
+    \UIC{$\vdots$}\noLine
+    \AXC{$\Longrightarrow$}
+    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$A$}
+    \UIC{$\vdots$}\noLine
     \noLine
-    \TrinaryInfC{}
+    \TIC{}
     \end{prooftree}
 
     and, similarly, on the other side as
 
     \begin{prooftree}
-    \AxiomC{$\vdots^{1}$}\noLine
-    \UnaryInfC{$A$}
-    \AxiomC{$\vdots^{2}$}\noLine
-    \UnaryInfC{$B$}
-    \BinaryInfC{$A \wedge B$}
-    \UnaryInfC{$B$}
-    \UnaryInfC{$\vdots$}\noLine
-    \AxiomC{$\Longrightarrow$}
-    \UnaryInfC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
-    \AxiomC{$\vdots^{2}$}\noLine
-    \UnaryInfC{$B$}
-    \UnaryInfC{$\vdots$}\noLine
+    \AXC{$\vdots^{1}$}\noLine
+    \UIC{$A$}
+    \AXC{$\vdots^{2}$}\noLine
+    \UIC{$B$}
+    \BIC{$A \land B$}
+    \UIC{$B$}
+    \UIC{$\vdots$}\noLine
+    \AXC{$\Longrightarrow$}
+    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
+    \AXC{$\vdots^{2}$}\noLine
+    \UIC{$B$}
+    \UIC{$\vdots$}\noLine
     \noLine
-    \TrinaryInfC{}
+    \TIC{}
     \end{prooftree}
 
   3) The introduction of a disjunction followed by its elimination can
      be also simplified
 
-    \begin{prooftree}\EnableBpAbbreviations
+    \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$A$}
     \UIC{$A+B$}
@@ -2267,7 +2267,7 @@ of dots represents any given part of the deduction tree.
 
     \UIC{$\vdots$}\noLine
     \AXC{$\Longrightarrow$}
-    \UIC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
 
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$A$}\noLine
@@ -2280,7 +2280,7 @@ of dots represents any given part of the deduction tree.
 
     and a similar pattern is used on the other side of the disjunction
 
-    \begin{prooftree}\EnableBpAbbreviations
+    \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$B$}
     \UIC{$A+B$}
@@ -2294,7 +2294,7 @@ of dots represents any given part of the deduction tree.
 
     \UIC{$\vdots$}\noLine
     \AXC{$\Longrightarrow$}
-    \UIC{}\noLine\UnaryInfC{}\noLine\UnaryInfC{}\noLine
+    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
 
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$B$}\noLine
@@ -2327,8 +2327,8 @@ we describe the following isomorphism between types and propositions.
 Types & Propositions \\
 \hline
 Unit type ($1$) & Truth ($\top$) \\
-Product type ($\times$) & Conjunction ($\wedge$) \\
-Union type ($+$) & Disjunction ($\vee$) \\
+Product type ($\times$) & Conjunction ($\land$) \\
+Union type ($+$) & Disjunction ($\lor$) \\
 Function type ($\to$) & Implication ($\to$) \\
 Empty type ($0$) & False ($\bot$)
 \end{tabular}\end{center}
@@ -3163,15 +3163,15 @@ intuitionistic logic to \lambda-terms and check them on the interpreter.
 In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
 \[
-\forall A\colon \neg \neg (A \vee \neg A)
+\forall A\colon \neg \neg (A \lor \neg A)
 \]
 #+end_theorem
 #+begin_proof
-Suppose $\neg (A \vee \neg A)$. We are going to prove first that, under this
-specific assumption, $\neg A$ holds. If $A$ were true, $A \vee \neg A$ would be true and we
+Suppose $\neg (A \lor \neg A)$. We are going to prove first that, under this
+specific assumption, $\neg A$ holds. If $A$ were true, $A \lor \neg A$ would be true and we
 would arrive to a contradition, so $\neg A$. But then, if we have $\neg A$ we also have
-$A \vee \neg A$ and we arrive to a contradiction with the assumption. We should conclude
-that $\neg \neg (A \vee \neg A)$.
+$A \lor \neg A$ and we arrive to a contradiction with the assumption. We should conclude
+that $\neg \neg (A \lor \neg A)$.
 #+end_proof
 
 Note that this is, in fact, an intuitionistic proof. Although it seems
@@ -3210,7 +3210,7 @@ In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
 
 \[
-\forall A\colon \neg \neg (A \vee \neg A)
+\forall A\colon \neg \neg (A \lor \neg A)
 \]
 
 **** Machine proof
