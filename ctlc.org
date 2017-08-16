@@ -208,14 +208,13 @@ object.
 #+begin_definition
 An object $C$ is the *product* of two objects $A,B$ on a category if there
 are two morphisms
-\[\begin{tikzcd}[row sep=tiny]
-& C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
-A && B
+\[\begin{tikzcd}
+A & C \rar{\pi_B}\lar[swap]{\pi_A} & B
 \end{tikzcd}\]
 such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
 $f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = \pi_A \circ h$
 and $f_2 = \pi_B \circ h$. Diagramatically,
-\[\begin{tikzcd}[row sep=tiny]
+\[\begin{tikzcd}[column sep=tiny]
 & D \dar[dashed]{\exists! h} \ar[bend left]{ddr}{f_2}\ar[bend right,swap]{ddl}{f_1} & \\
 & C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
 A && B &.
@@ -233,14 +232,13 @@ write /the/ product object of $A,B$ as $A \times B$.
 #+begin_definition
 An object $C$ is the *coproduct* of two objects $A,B$ on a category if there
 are two morphisms
-\[\begin{tikzcd}[row sep=tiny] 
-& C  & \\
-A \urar{i_A} && B \ular[swap]{i_B}
+\[\begin{tikzcd}
+A \rar{i_A} & C & B \lar[swap]{i_B}
 \end{tikzcd}\]
 such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
 $f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = i_A \circ h$
 and $f_2 = i_B \circ h$. Diagramatically,
-\[\begin{tikzcd}[row sep=tiny]
+\[\begin{tikzcd}[column sep=tiny]
 & D & \\
 & C \uar[dashed]{\exists! h}  & \\
 A \ar[bend left]{uur}{f_1}\urar{i_A} && B \ular[swap]{i_B} \ar[bend right,swap]{uul}{f_2} &.
@@ -302,13 +300,30 @@ also module homomorphisms.
 In particular, abelian groups form a category as $\mathbb{Z}\text{-modules}$.
 #+end_exampleth
 
-# topological spaces
+#+attr_latex: :options [The category of topological spaces]
+#+begin_exampleth
+The category $\mathtt{Top}$ is defined as the category with topologicaal spaces as
+objects and continuous functions between them as morphisms.
+#+end_exampleth
 
 [fn:monoid]: This definition is equivalent to the usual definition of monoid
 if we take the morphisms as elements of the monoid and composition of morphisms
 as the monoid operation.
 
 ** Functors and natural transformations
+#+begin_quote
+"Category" has been defined in order to define "functor" and "functor"
+has been defined in order to define "natural transformation".
+
+      -- *Saunders MacLane*, /Categories for the working mathematician/.
+#+end_quote
+
+Functors and natural transformations were defined for the first time
+by Eilenberg and MacLane in cite:maclane42 while studying Čech
+cohomology. While initially they were devised mainly as a language for
+studying homology, they have proven its foundational value with the
+passage of time.
+
 *** Functors
 #+attr_latex: :options [Functor]
 #+begin_definition
@@ -353,12 +368,18 @@ if, for every two arrows $f_1,f_2 : A \to B$, $Ff_1 = Ff_2$ implies
 $f_1 = f_2$.
 #+end_definition
 
-It is trivial to notice that the composition of faithful (respectively,
+It is easy to notice that the composition of faithful (respectively,
 full) functors is again a faithful functor (respectively, full).
+
+#+attr_latex: :options [Isomorphism of categories]
+#+begin_definition
+An *isomorphism of categories* is a functor $T$ whose object and arrow functions
+are bijections. Equivalently, it is a functor $T$ such that there exists an /inverse/
+functor $S$ such that $T \circ S$ and $S \circ T$ are identity functors.
+#+end_definition
 
 # Subcategories
 # Category of categories
-**** TODO Isomorphism of categories
 *** Natural transformations
 #+attr_latex: :options [Natural transformation]
 #+begin_definition
@@ -397,6 +418,7 @@ original transformation.
 
 **** TODO Equivalence of categories
 *** Composition of natural transformations
+**** Vertical composition                                         :ignore:
 #+attr_latex: :options [Vertical composition of natural transformations]
 #+begin_definition
 The *vertical composition* of two natural transformations $\tau : S\to T$
@@ -411,6 +433,7 @@ Sc' \dar{\tau_{c'}} \\
 Tc \rar{Tf}  &  Tc' 
 \end{tikzcd}\]
 #+end_definition
+
 #+attr_latex: :options [Vertical composition is a natural transformation]
 #+begin_proposition
 The vertical composition of two natural transformations is in fact
@@ -423,6 +446,7 @@ the above diagram follows from the commutativity of the two internal
 squares.
 #+end_proof
 
+**** Horizontal composition                                       :ignore:
 #+attr_latex: :options [Horizontal composition of natural transformations]
 #+begin_definition
 The *horizontal composition* of two natural transformations $\tau \colon S \to T$ and
@@ -447,6 +471,7 @@ S'Sc\rar{\tau'_{Sc}} \drar{\scriptsize{(\tau' \circ \tau)_c}} \dar[swap]{S'\tau_
 S'Tc\rar{\tau'_{Tc}} & T'Tc
 \end{tikzcd}\]
 #+end_definition
+
 #+attr_latex: :options [Horizontal composition is a natural transformation]
 #+begin_proposition
 The horizontal composition of two natural transformations is in fact
@@ -577,6 +602,8 @@ By naturality we have the bijection $\varphi(f) = Sf \circ u$, every arrow
 is written in this way.
 #+end_proof
 
+# TODO Universal from a functor to another
+
 *** Representability
 #+attr_latex: :options [Representation of a functor]
 #+begin_definition
@@ -641,7 +668,7 @@ The bijection on the [[*Yoneda Lemma][Yoneda Lemma]] is a natural isomorphism be
 two $\mathtt{Set}^D \times D \to \mathtt{Set}$ functors.
 #+end_proposition
 #+begin_proof
-
+# TODO
 #+end_proof
 
 #+begin_definition
@@ -658,7 +685,7 @@ $Y \colon D^{op} \to \mathtt{Set}^{D}$, is defined with the arrow function
 The Yoneda functor is full and faithful.
 #+end_proposition
 #+begin_proof
-
+# TODO
 #+end_proof
 
 # The Yoneda functor is a currying of the hom functor.
@@ -667,9 +694,18 @@ The Yoneda functor is full and faithful.
 **** TODO Pullbacks
 **** Example: p-adic numbers
 *** TODO Coproducts and colimits
+**** TODO Coproducts as universal arrows
 **** TODO Pushouts
+**** Colimits
+#+attr_latex: :options [Colimits]
+#+begin_definition
+A *colimit* of a functor from a given /index category/ $F \colon J \to {\cal C}$ is an object
+$r \in {\cal C}$ such that there exists an universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
+It is usually written as $r = \varinjlim F$.
+#+end_definition
+
 ** Adjoints
-*** Adjunction
+*** Adjunctions
 #+attr_latex: :options [Adjunction]
 #+begin_definition
 An *adjunction* from categories $X$ to $A$ is a pair of functors
@@ -685,14 +721,14 @@ natural in both $x\in X$ and $a \in A$. We write it as $F \dashv G$.
 #+begin_definition
 An adjunction determines a *unit* and a *counit*;
 
- 1) the *unit* is natural transformation made with universal arrows $\eta\colon I \xrightarrow{.} GF$, where
+ 1) the *unit* is natural transformation made with universal arrows $\eta\colon I \todot GF$, where
     the right adjoint of each $f \colon Fx \to a$ is
 
     \[
     \varphi f = Gf \circ \eta_x \colon x \to Ga.
     \]
 
- 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \xrightarrow{.} I$, where
+ 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot I$, where
     the left adjoint of each $g \colon x \to Ga$ is
 
     \[\varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.\]
@@ -704,9 +740,9 @@ that follow the /triangle identities/ $\eta G \circ G \varepsilon = \id$ and $F\
 #+begin_proposition
 Each adjunction is completely determined by any of
 
- 1) functors $F,G$ and $\eta\colon 1 \xrightarrow{.} GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
+ 1) functors $F,G$ and $\eta\colon 1 \todot GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
  2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, creating a functor $F$.
- 3) functors $F,G$ and $\varepsilon\colon FG \xrightarrow{.} 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
+ 3) functors $F,G$ and $\varepsilon\colon FG \todot 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
  4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$, creating a functor $G$.
  5) functors $F,G$, with units and counits satisfiying the triangle
     identities $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
@@ -718,8 +754,8 @@ Each adjunction is completely determined by any of
 #+begin_definition
 A *monad* is a functor $T\colon X \to X$ with natural transformations
 
- * $\eta\colon I \xrightarrow{.} T$, called /unit/
- * $\mu \colon T^2 \xrightarrow{.} T$, called /multiplication/
+ * $\eta\colon I \todot T$, called /unit/
+ * $\mu \colon T^2 \todot T$, called /multiplication/
 
 such that
 \[\begin{tikzcd}
