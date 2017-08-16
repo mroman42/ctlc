@@ -1871,6 +1871,7 @@ $M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\s
 #+end_definition
 
 *** Unification and type inference
+**** Unification :ignore:
 The unification of two type templates is the construction of two substitutions
 making them equal as type templates; i.e., the construction of a type that
 is a particular instance of both at the same time. We will not only aim for
@@ -1928,6 +1929,7 @@ Therefore, we need to apply induction on the number of type variables and only t
 induction on the size of the arguments.
 #+end_proof
 
+**** Type Inference :ignore:
 Using unification, we can define type inference.
 
 #+attr_latex: :options [Type inference]
@@ -2000,6 +2002,9 @@ normalizing.
 #+begin_theorem
 In the STLC, all terms are strongly normalizing.
 #+end_theorem
+
+# [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
+
 
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
@@ -2535,7 +2540,11 @@ and the relation between logic and types.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
-** Lambda expressions
+** Haskell                                                        :noexport:
+*** Testing: unit tests, HUnit
+*** Testing: properties, quickCheck
+*** Testing: golden tests
+** Implementation of \lambda-expressions
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
 \alpha-conversion based on indices.  The main idea of De Bruijn
@@ -2556,8 +2565,8 @@ De Bruijn also proposed a notation for the \lambda-calculus
 changing the order of binders and \lambda-applications.  A review on
 the syntax of this notation, its advantages and De Bruijn indexes, can be found in
 cite:kamareddine01. In this section, we are going to describe De Bruijn
-indexes but preserve the usual notation of \lambda-terms; that is, /De Bruijn/
-/indexes/ and /De Bruijn notation/ are different concepts and we are going to
+indexes but preserve the usual notation of \lambda-terms; that is, the /De Bruijn/
+/indexes/ and the /De Bruijn notation/ are different concepts and we are going to
 use only the former.
 
 #+attr_latex: :options [De Bruijn indexed terms]
