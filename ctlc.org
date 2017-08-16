@@ -3203,6 +3203,7 @@ true  = \t.\f.t
 false = \t.\f.f
 #+END_SRC
 
+**** If-else interpretation                                       :ignore:
 Note that =true= and =const= are exactly the same term up to
 \alpha-conversion. The same thing happens with =false= and =alwaysid=.
 The absence of types prevents us to make any effort to discriminate
@@ -3233,6 +3234,7 @@ ifelse = \b.b
 --- => false
 #+END_SRC
 
+**** Logic gates                                                  :ignore:
 The usual logic gates can be defined profiting from this interpretation
 of booleans
 
@@ -3248,6 +3250,7 @@ xor true true
 #+END_SRC
 
 *** Natural numbers
+**** Peano natural numbers :ignore:
 Our definition of natural numbers is inspired by the Peano natural numbers.
 We use two constructors
 
@@ -3281,6 +3284,7 @@ We can then name some natural numbers as
 
 even if we can not define an infinite number of terms as we might wish.
 
+**** Interpretation as higher-order functions :ignore:
 The interpretation the natural number $n$ as a higher order function
 is a function taking an argument =f= and applying them $n$ times over
 the second argument.
@@ -3296,6 +3300,7 @@ double 3
 --- => 6
 #+END_SRC
 
+**** Addition and multiplication :ignore:
 Addition $n+m$ applies the successor $m$ times to $n$; and multiplication
 $nm$ applies the $n\text{-fold}$ application of the successor $m$ times to $0$.
 
@@ -3309,8 +3314,10 @@ mult 2 4
 --- => 8
 #+END_SRC
 
-*** TODO The predecessor function and predicates on numbers
-From the definition of =pred=, some predicates on number can be
+*** The predecessor function and predicates on numbers
+**** TODO Predecessor                                             :ignore:
+**** Predicates                                                   :ignore:
+From the definition of =pred=, some predicates on numbers can be
 defined. The first predicate will be a function distinguishing a
 successor from a zero. It will be user later to build more complex
 ones. It is built by appliying a =const false= function =n= times to a
@@ -3350,10 +3357,10 @@ the list.
 
 \[\mathtt{cons}\ 1\ (\mathtt{cons}\ 2\ (\mathtt{cons}\ 3\ \mathtt{nil}))
 \overset{fold\ plus\ 0}\longrightarrow 
-\mathtt{plus}\ 1\ (\mathtt{plus}\ 2\ (\mathtt{plus}\ 3\ 0))\]
+\mathtt{plus}\ 1\ (\mathtt{plus}\ 2\ (\mathtt{plus}\ 3\ 0)) = 6\]
 
 The =fold= operation and some operations on lists can be defined
-explicitely as
+explicitly as
 
 #+BEGIN_SRC haskell
 fold = \c.\n.\l.(l c n)
@@ -3369,6 +3376,7 @@ all (cons true (cons true (cons true nil)))
 --- => true
 #+END_SRC
 
+**** Map and filter                                               :ignore:
 The two most commonly used particular cases of fold and frequent examples
 of the functional programming paradigm are =map= and =filter=.
 
@@ -3626,11 +3634,4 @@ bibliography:Bibliography.bib
 ** TODO Mikrokosmos complete code
 ** TODO Mikrokosmos user's guide
 ** TODO Quotes
-# This quotes can be placed on the partial abstracts or in the general one.
-
-#+begin_quote
-"category" has been defined in order to define "functor" and "functor"
-has been defined in order to define "natural transformation".
-
-  -- Saunders MacLane, Categories for the working mathematician.
-#+end_quote
+# These quotes can be placed on the partial abstracts or in the general one.
