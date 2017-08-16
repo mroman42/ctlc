@@ -2646,6 +2646,7 @@ data NamedLambda = LambdaVariable String
                  | LambdaApplication NamedLambda NamedLambda
 #+END_SRC
 
+**** Lambda to deBruijn                                           :ignore:
 The translation from a natural \lambda-expression to de Bruijn notation
 is done using a dictionary which keeps track of the bounded variables
 
@@ -2672,6 +2673,7 @@ tobruijn d context (LambdaVariable c) =
     Nothing -> fromMaybe (Var 0) (MultiBimap.lookupR c context)
 #+END_SRC
 
+**** deBruijn to Lambda                                           :ignore:
 while the translation from a de Bruijn expression to a natural one is done
 considering an infinite list of possible variable names and keeping a list
 of currently-on-scope variables to name the indices.
@@ -2694,15 +2696,167 @@ nameIndexes used new (App f g) =
 #+END_SRC
 
 *** Evaluation
+As we proved on Corollary [[cor-leftmosttheorem]], the leftmost reduction
+strategy will find the leftmost reduction strategy if it
+exists. Consequently, we will implement it using a function that
+simply applies the leftmost possible reductions at each step. This
+will allow us to show how the interpreter performs step-by-step
+evaluations to the final user, as discussed in the [[*Verbose mode][verbose mode]] section.
+
+#+BEGIN_SRC haskell
+-- | Simplifies the expression recursively.
+-- Applies only one parallel beta reduction at each step.
+simplify :: Exp -> Exp
+simplify (Lambda e)           = Lambda (simplify e)
+simplify (App (Lambda f) x)   = betared (App (Lambda f) x)
+simplify (App (Var e) x)      = App (Var e) (simplify x)
+simplify (App a b)            = App (simplify a) (simplify b)
+simplify (Var e)              = Var e
+
+-- | Applies repeated simplification to the expression until it stabilizes and
+-- returns all the intermediate results.
+simplifySteps :: Exp -> [Exp]
+simplifySteps e
+  | e == s    = [e]
+  | otherwise = e : simplifySteps s
+  where s = simplify e
+#+END_SRC
+
+From the code we can see that the evaluation finishes whenever the
+expression stabilizes. This can happen in two different cases
+
+  * there are no more possible \beta-reductions, and the algorithm
+    stops.
+  * \beta-reductions do not change the expression. The computation
+    would lead to an infinite loop, so it is immediately stopped.
+    An common example of this is the \lambda-term $(\lambda x.x x)(\lambda x.x x)$.
+
 *** Principal type inference
-** Output formatting                                              :noexport:
-*** Verbose mode
-*** SKI mode
-** Haskell                                                        :noexport:
-*** Testing: unit tests, HUnit
-*** Testing: properties, quickCheck
-*** Testing: golden tests
-** Parsing
+The interpreter implements the [[*Unification and type inference][unification and type inference]] algorithms
+described in Lemma [[lemma-unification]] and Theorem [[thm-typeinfer]]. Their
+recursive nature makes them very easy to implement directly on Haskell.
+
+**** Type templates and substitutions                             :ignore:
+We implement a simply-typed lambda calculus with [[*Curry-style types][Curry-style typing]]
+and type templates. Our type system has
+
+  * an unit type;
+  * a bottom type;
+  * product types;
+  * union types;
+  * and function types.
+
+#+BEGIN_SRC haskell
+-- | A type template is a free type variable or an arrow between two
+-- types; that is, the function type.
+data Type = Tvar Variable
+          | Arrow Type Type
+          | Times Type Type
+          | Union Type Type
+          | Unitty
+          | Bottom
+          deriving (Eq)
+#+END_SRC
+
+We will work with substitutions on type templates. They can be directly
+defined as functions from types to types. A basic substitution that
+inserts a given type on the place of a variable will be our building
+block for more complex ones.
+
+#+BEGIN_SRC haskell
+type Substitution = Type -> Type
+
+-- | A basic substution. It changes a variable for a type
+subs :: Variable -> Type -> Substitution
+subs x typ (Tvar y)
+  | x == y    = typ
+  | otherwise = Tvar y
+subs x typ (Arrow a b) = Arrow (subs x typ a) (subs x typ b)
+subs x typ (Times a b) = Times (subs x typ a) (subs x typ b)
+subs x typ (Union a b) = Union (subs x typ a) (subs x typ b)
+subs _ _ Unitty = Unitty
+subs _ _ Bottom = Bottom
+#+END_SRC
+
+**** Unification                                                  :ignore:
+Unification will be implemented making extensive use of the =Maybe=
+monad. If the unification fails, it will return an error value, and
+the error will be propagated to all the computation. The algorithm
+is exactly the same that was defined in Lemma [[lemma-unification]].
+
+#+BEGIN_SRC haskell
+-- | Unifies two types with their most general unifier. Returns the substitution
+-- that transforms any of the types into the unifier.
+unify :: Type -> Type -> Maybe Substitution
+unify (Tvar x) (Tvar y)
+  | x == y    = Just id
+  | otherwise = Just (subs x (Tvar y))
+unify (Tvar x) b
+  | occurs x b = Nothing
+  | otherwise  = Just (subs x b)
+unify a (Tvar y)
+  | occurs y a = Nothing
+  | otherwise  = Just (subs y a)
+unify (Arrow a b) (Arrow c d) = unifypair (a,b) (c,d)
+unify (Times a b) (Times c d) = unifypair (a,b) (c,d)
+unify (Union a b) (Union c d) = unifypair (a,b) (c,d)
+unify Unitty Unitty = Just id
+unify Bottom Bottom = Just id
+unify _ _ = Nothing
+
+-- | Unifies a pair of types
+unifypair :: (Type,Type) -> (Type,Type) -> Maybe Substitution
+unifypair (a,b) (c,d) = do
+  p <- unify b d
+  q <- unify (p a) (p c)
+  return (q . p)
+#+END_SRC
+
+**** Type inference                                               :ignore:
+The type inference algorithm is more involved. It takes a list
+of fresh variables, a type context, a lambda expression and a
+constraint on the type, expressed as a type template. It outputs
+a substitution. As an example, the following code shows the type
+inference algorithm for function types.
+
+#+BEGIN_SRC haskell
+-- | Type inference algorithm. Infers a type from a given context and expression
+-- with a set of constraints represented by a unifier type. The result type must
+-- be unifiable with this given type.
+typeinfer :: [Variable] -- ^ List of fresh variables
+          -> Context    -- ^ Type context
+          -> Exp        -- ^ Lambda expression whose type has to be inferred
+          -> Type       -- ^ Constraint
+          -> Maybe Substitution
+
+typeinfer (x:vars) ctx (App p q) b = do -- Writing inside the Maybe monad.
+  sigma <- typeinfer (evens vars) ctx                  p (Arrow (Tvar x) b)
+  tau   <- typeinfer (odds  vars) (applyctx sigma ctx) q (sigma (Tvar x))
+  return (tau . sigma)
+  where
+    -- The list of fresh variables has to be split into two
+    odds [] = []
+    odds [_] = []
+    odds (_:e:xs) = e : odds xs
+    evens [] = []
+    evens [e] = [e]
+    evens (e:_:xs) = e : evens xs
+#+END_SRC
+
+The final form of the type inference algorithm will use a
+normalization algorithm shortening the type names and will apply the
+type inference to the empty type context.
+
+#+BEGIN_SRC haskell
+-- | Type inference of a lambda expression.
+typeinference :: Exp -> Maybe Type
+typeinference e = normalize <$> 
+  (typeinfer variables emptyctx e (Tvar 0) <*> pure (Tvar 0))
+#+END_SRC
+
+The complete code can be found on the [[*Mikrokosmos complete code][Appendix]].
+
+** User interaction
 *** Monadic parser combinators
 A common approach to building parsers in functional programming is to
 model parsers as functions. Higher-order functions on parsers act as
