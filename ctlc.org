@@ -1139,12 +1139,14 @@ with all finite limits and a subobject classifier.
 
 * Lambda calculus
 ** Untyped \lambda-calculus
-The *\lambda-calculus* is a collection of formal systems, all of them based
-on the lambda notation discovered by Alonzo Church in the 1930s while trying
-to develop a foundational notion of function on mathematics.
+The *\lambda-calculus* is a collection of formal systems, 
+all of them based on the lambda notation discovered by Alonzo 
+Church in the 1930s while trying to develop a foundational notion 
+of function on mathematics.
 
-The *untyped* or *pure lambda calculus* is, syntactically, the simplest of those
-formal systems. This presentation of the untyped lambda calculus will follow
+The *untyped* or *pure lambda calculus* is, syntactically, the
+simplest of those formal systems.
+This presentation of the untyped lambda calculus will follow
 cite:Hindley08 and cite:selinger13.
 
 *** Definition
@@ -1168,9 +1170,10 @@ where $x \in {\cal V}$ is any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
-left-associativity, i.e., $MNP$ will mean $(MN)P$. Multiple
-\lambda-abstractions can be also contracted to a single multivariate
-abstraction; thus $\lambda x.\lambda y.M$ can become $\lambda x,y.M$.
+left-associativity, i.e., $MNP$ will mean $(MN)P$.
+Multiple \lambda-abstractions can be also contracted to a single 
+multivariate abstraction; thus $\lambda x.\lambda y.M$ can 
+become $\lambda x,y.M$.
 
 *** Free and bound variables, substitution
 Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said to be
@@ -1179,11 +1182,12 @@ the set of free variables as follows.
 
 #+attr_latex: :options [Free variables]
 #+begin_definition
+<<def-freevariables>>
 The *set of free variables* of a term $M$ is defined inductively as
 \[\begin{aligned}
-FV(x) &= \{x\}, \\
-FV(MN) &= FV(M) \cup FV(N), \\
-FV(\lambda x.M) &= FV(M) \setminus \{x\}.
+\freevars(x) &= \{x\}, \\
+\freevars(MN) &= \freevars(M) \cup \freevars(N), \\
+\freevars(\lambda x.M) &= \freevars(M) \setminus \{x\}.
 \end{aligned}\]
 #+end_definition
 
@@ -1207,8 +1211,8 @@ x[N/x] &\equiv N,\\
 y[N/x] &\equiv y,\\
 (MP)[N/x] &\equiv (M[N/x])(P[N/x]),\\
 (\lambda x.P)[N/x] &\equiv \lambda x.P,\\
-(\lambda y.P)[N/x] &\equiv \lambda y.P[N/x] & \text{ if } y \notin FV(N), \\
-(\lambda y.P)[N/x] &\equiv \lambda z.P[z/y][N/x] & \text{ if } y \in FV(N);
+(\lambda y.P)[N/x] &\equiv \lambda y.P[N/x] & \text{ if } y \notin \freevars(N), \\
+(\lambda y.P)[N/x] &\equiv \lambda z.P[z/y][N/x] & \text{ if } y \in \freevars(N);
 \end{aligned}\]
 
 where, in the last clause, $z$ is a fresh unused variable.
@@ -1251,6 +1255,7 @@ integration is an example of \alpha-equivalence.
 The core idea of evaluation in \lambda-calculus is captured by the notion
 of \beta-reduction.
 
+#+attr_latex: :options [Beta-reduction]
 #+begin_definition
 <<def-betared>>
 The *single-step \beta-reduction* is the smallest relation on \lambda-terms
@@ -1272,6 +1277,7 @@ The idea of function extensionality in \lambda-calculus is captured by the
 notion of \eta-reduction. Function extensionality implies the equality of
 any two terms that define the same function over any argument.
 
+#+attr_latex: :options [Eta reduction]
 #+begin_definition
 The \eta-reduction is the smallest relation on \lambda-terms satisfiying the
 same congruence rules as \beta-reduction and the following axiom
@@ -1631,6 +1637,7 @@ ways in which $M \to_{\beta} N$ can be derived.
 
 #+attr_latex: :options [Leftmost reduction theorem]
 #+begin_corollary
+<<cor-leftmosttheorem>>
 We define the *leftmost reduction strategy* as the strategy that
 reduces the leftmost \beta-reducible application at each step. If $M$ has a
 normal form, the leftmost reduction strategy will lead to it.
@@ -1642,8 +1649,58 @@ from $M$ to $N$ whose last step is of the form $\to_{l}$; as the sequence is non
 every step has to be of the form $\to_{l}$.
 #+end_proof
 
-*** TODO SKI combinators                                         :noexport:
-# Selinger Combinatorial algebras
+*** TODO SKI combinators
+
+#+attr_latex: :options [Lambda transform]
+#+begin_definition
+The *\Lambda-transform* of a Ski-term is a \lambda-term defined
+recursively as
+
+  * $\Lambda(x) = x$, for any variable $x$;
+  * $\Lambda(I) = (\lambda x.x)$;
+  * $\Lambda(K) = (\lambda x.\lambda y.x)$;
+  * $\Lambda(S) = (\lambda x.\lambda y.\lambda z.xz(yz))$;
+  * $\Lambda(XY) = \Lambda(X)\Lambda(Y)$.
+#+end_definition
+
+#+attr_latex: :options [Bracket abstraction]
+#+begin_definition
+The *bracket abstraction* of the Ski-term $U$ on the variable $x$ is
+written as $[x].U$ and defined recursively as
+
+  * $[x].x = I$;
+  * $[x].M = KM$, if $x \notin \freevars(M)$;
+
+where $\freevars$ is the set of free variables; as defined on Definition
+[[def-freevariables]].
+#+end_definition
+
+#+attr_latex: :options [Ski abstraction]
+#+begin_definition
+The *SKI abstraction* of a \lambda-term $M$, written as $\skiabs(M)$ is
+defined recursively as
+
+  * $\skiabs(x) = x$, for any variable $x$;
+  * $\skiabs(MN) = \skiabs(M)\skiabs(N)$;
+  * $\skiabs(\lambda x.M) = [x].\skiabs(M)$;
+
+where $[x].U$ is the bracket abstraction of the Ski-term $U$.
+#+end_definition
+
+#+attr_latex: :options [Ski combinators and lambda terms]
+#+begin_theorem
+The Ski-abstraction is a retraction of the \Lambda-transform of the term,
+that is, for any Ski-term $U$,
+
+\[
+\skiabs(\Lambda(U)) = U.
+\]
+#+end_theorem
+#+begin_proof
+# TODO
+#+end_proof
+
+*** TODO Turing completeness
 ** Simply typed \lambda-calculus
 We will give now a presentation of the *simply-typed \lambda-calculus*
 (STLC) based on cite:Hindley08. Our presentation will rely only on the
