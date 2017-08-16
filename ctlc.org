@@ -2924,9 +2924,125 @@ extensive documentation. As we expect to use it to parse user live
 input, which will tend to be short, performance is not a critical
 concern. A high-performace library supporting incremental parsing,
 such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
+*** Verbose mode
+As we explained previously on the Evaluation section, the simplification
+can be analyzed step-by-step. The interpreter allows us to see the
+complete evaluation when the =verbose= mode is activated. To activate
+it, we can execute =:verbose on= in the interpreter.
+
+The difference can be seen on the following example.
+
+#+BEGIN_EXAMPLE
+mikro> plus 1 2
+λa.λb.(a (a (a b))) ⇒ 3
+
+mikro> :verbose on
+verbose: on
+mikro> plus 1 2
+((plus 1) 2)
+((λλλλ((4 2) ((3 2) 1)) λλ(2 1)) λλ(2 (2 1)))
+(λλλ((λλ(2 1) 2) ((3 2) 1)) λλ(2 (2 1)))
+λλ((λλ(2 1) 2) ((λλ(2 (2 1)) 2) 1))
+λλ(λ(3 1) (λ(3 (3 1)) 1))
+λλ(2 (λ(3 (3 1)) 1))
+λλ(2 (2 (2 1)))
+
+λa.λb.(a (a (a b))) ⇒ 3
+#+END_EXAMPLE
+
+The interpreter output can be colored to show specifically where it
+is performing reductions. It is activated by default, but can be deactivated
+by executing =:color off=. The following code implements /verbose mode/ in both
+cases.
+
+#+BEGIN_SRC haskell
+-- | Shows an expression, coloring the next reduction if necessary
+showReduction :: Exp -> String
+showReduction (Lambda e)         = "λ" ++ showReduction e
+showReduction (App (Lambda f) x) = betaColor (App (Lambda f) x)
+showReduction (Var e)            = show e
+showReduction (App rs x)         = 
+  "(" ++ showReduction rs ++ " " ++ showReduction x ++ ")"
+showReduction e                  = show e
+#+END_SRC
+
+*** SKI mode
+Every \lambda-term can be written in terms of SKI combinators.
+SKI combinator expressions can be defined as a binary tree having
+S, K, and I as possible leafs.
+
+#+BEGIN_SRC haskell
+data Ski = S | K | I | Comb Ski Ski
+#+END_SRC
+
+The SKI-abstraction and bracket abstraction algorithms are implemented
+on Mikrokosmos, and they can be used by activating the /ski mode/ with
+=:ski on=. When this mode is activated, every result is written in terms
+of SKI combinators.
+
+#+begin_example
+mikro> 2
+λa.λb.(a (a b)) ⇒ S(S(KS)K)I ⇒ 2
+
+mikro> and
+λa.λb.((a b) a) ⇒ SSK ⇒ and
+#+end_example
+
+The code implementing these algorithms follows directly from the
+theoretical version.
+
+#+BEGIN_SRC haskell
+-- | Bracket abstraction of a SKI term, as defined in Hindley-Seldin
+-- (2.18).
+bracketabs :: String -> Ski -> Ski
+bracketabs x (Cte y) = if x == y then I else Comb K (Cte y)
+bracketabs x (Comb u (Cte y))
+  | freein x u && x == y = u
+  | freein x u           = Comb K (Comb u (Cte y))
+  | otherwise            = Comb (Comb S (bracketabs x u)) (bracketabs x (Cte y))
+bracketabs x (Comb u v)
+  | freein x (Comb u v)  = Comb K (Comb u v)
+  | otherwise            = Comb (Comb S (bracketabs x u)) (bracketabs x v)
+bracketabs _ a           = Comb K a
+
+
+-- | SKI abstraction of a named lambda term. From a lambda expression
+-- creates a SKI equivalent expression. The following algorithm is a
+-- version of the algorithm (9.10) on the Hindley-Seldin book.
+skiabs :: NamedLambda -> Ski
+skiabs (LambdaVariable x)      = Cte x
+skiabs (LambdaApplication m n) = Comb (skiabs m) (skiabs n)
+skiabs (LambdaAbstraction x m) = bracketabs x (skiabs m)
+#+END_SRC
  
 ** Usage
 *** Installation
+The following script installs the complete Mikrokosmos interpreter, Jupyter kernel
+and libraries on a fresh system. It has been tested under =Ubuntu 16.04.3 LTS (Xenial Xerus)=.
+
+#+BEGIN_SRC sh
+# 1. Installs Stack, the Haskell package manager
+wget -qO- https://get.haskellstack.org | sh
+STACK=$(which stack)
+
+# 2. Installs the ncurses library, used by the console interface
+sudo apt install libncurses5-dev libncursesw5-dev
+
+# 3. Installs the Mikrokosmos interpreter using Stack
+$STACK setup
+$STACK install mikrokosmos
+
+# 4. Installs the Mikrokosmos standard libraries
+sudo apt install git
+git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
+
+# 5. Installs the IMikrokosmos kernel for Jupyter
+sudo apt install python3-pip
+sudo -H pip install --upgrade pip
+sudo -H pip install jupyter
+sudo -H pip install imikrokosmos
+#+END_SRC
+
 *** Mikrokosmos interpreter
 Once installed, the Mikrokosmos \lambda interpreter can be opened from
 the terminal with the =mikrokosmos= command. It will enter a /read-eval-print loop/
