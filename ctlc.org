@@ -3141,6 +3141,9 @@ sudo -H pip install jupyter
 sudo -H pip install imikrokosmos
 #+END_SRC
 
+[fn:hackage]: Hackage can be accesed in: http://hackage.haskell.org/
+[fn:mikrokosmoslibgit]: The repository can be accessed in: https://github.com/M42/mikrokosmos-lib.git
+
 *** Mikrokosmos interpreter
 Once installed, the Mikrokosmos \lambda interpreter can be opened from
 the terminal with the =mikrokosmos= command. It will enter a /read-eval-print loop/
@@ -3153,6 +3156,24 @@ Version 0.5.0. GNU General Public License Version 3.
 mikro> _
 #+END_EXAMPLE
 
+The interpreter evaluates every line as a lambda expression. Examples
+on the use of the interpreter can be read on the following
+sections. Apart from the evaluation of expressions, the interpreter
+accepts the following commands
+
+  * =:quit= and =:restart=, stop the interpreter;
+  * =:verbose= activates /verbose mode/;
+  * =:ski= activates /SKI mode/;
+  * =:types= changes between untyped and simply typed \lambda-calculus;
+  * =:color= deactivates colored output;
+  * =:load= loads a library.
+
+The Figure [[mikrosession]] is an example session on the mikrokosmos interpreter.
+
+#+caption: Mikrokosmos interpreter session.
+#+name: mikrosession
+[[./images/mikrosession.png]]
+
 *** Jupyter kernel
 The *Jupyter Project* cite:jupyter is an open source project providing
 support for interactive scientific computing. Specifically, the
@@ -3161,13 +3182,58 @@ documents with live code and visualizations.
 
 We have developed a Mikrokosmos kernel for the Jupyter Notebook,
 allowing the user to write and execute arbitrary Mikrokosmos code
-on this web application.
+on this web application. An example session can be seen on Figure
+[[jupytersession]].
 
-# Image of the mikrokosmos jupyter notebook
+#+caption: Jupyter notebook Mikrokosmos session.
+#+name: jupytersession
+[[./images/jupytersession.png]]
+
+The implementation is based on the =pexpect= library for Python.  It
+allows direct interaction with any REPL and collects its results.
+Specifically, the following Python lines represent the central idea of
+this implementation
+
+#+BEGIN_SRC python
+# Initialization
+mikro = pexpect.spawn('mikrokosmos')
+mikro.expect('mikro>')
+
+# Interpreter interaction
+# Multiple-line support
+output = ""
+for line in code.split('\n'):
+    # Send code to mikrokosmos
+    self.mikro.sendline(line)
+    self.mikro.expect('mikro> ')
+
+    # Receive and filter output from mikrokosmos
+    partialoutput = self.mikro.before
+    partialoutput = partialoutput.decode('utf8')
+    output = output + partialoutput
+#+END_SRC
+
+A =pip= installable package has been created following the
+Python Packaging Authority guidelines. [fn:pypaguide] This allows
+the kernel to be installed directly using the =pip= python package manager.
+
+#+BEGIN_SRC bash
+sudo -H pip install imikrokosmos
+#+END_SRC
+
+[fn:pypaguide]: The PyPA packaging user guide can be found in its official
+page: https://packaging.python.org/
 
 *** CodeMirror lexer
-A simple CodeMirror lexer has been written. It uses Javascript regular expressions
-and signals the ocurrence of certain kind operators to CodeMirror.
+*CodeMirror* [fn:codemirror] is a text editor for the browser
+implemented in Javascript. It is used internally by the Jupyter
+Notebook.
+
+A CodeMirror lexer for Mikrokosmos has been written. It uses
+Javascript regular expressions and signals the ocurrence of any kind
+of operator to CodeMirror. It enables syntax highlighting for Mikrokosmos
+code on Jupyter Notebooks. It comes bundled with the kernel specification
+and no additional installation is required.
 
 #+BEGIN_SRC javascript
 	CodeMirror.defineSimpleMode("mikrokosmos", {
