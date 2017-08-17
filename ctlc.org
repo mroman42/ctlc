@@ -32,11 +32,13 @@ the notion of composition. A category will be built from some sort
 of objects linked by composable arrows; to which some associativity and
 identity laws will apply.
 
+**** Categories, objects and morphisms                            :ignore:
 #+attr_latex: :options [Category]
 #+begin_definition
 A *category* ${\cal C}$, as defined in cite:maclane78, is given by
 
- * ${\cal C}_0$, a collection[fn:collection] whose elements are called *objects*[fn:objectnotation], and
+ * ${\cal C}_0$, a collection[fn:collection] whose elements are called
+   *objects*[fn:objectnotation], and
  * ${\cal C}_1$, a collection whose elements are called *morphisms*.
 
 Every morphism $f \in {\cal C}_1$ has two objects assigned: a
@@ -58,26 +60,8 @@ f \circ \id_A = f = \id_B \circ f.
 \]
 #+end_definition
 
-#+attr_latex: :options [Hom-sets]
-#+begin_definition
-The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
-between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
-of an object $A$ is the hom-set $\mathrm{end}(A) = \hom(A,A)$.
-#+end_definition
-
-Sometimes, when considering a hom-set, it will be useful to explicitly specify
-the category on which we are working as $\hom_{{\cal C}}(A,B)$.
-
-#+attr_latex: :options [Small and locally small categories]
-#+begin_definition
-A category is said to be *small* if the collections ${\cal C}_0,{\cal C}_1$ of objects and morphisms
-are both sets (instead of proper classes). It is said to be *locally small* if every
-hom-set is actually a set.
-#+end_definition
-
-[fn:objectnotation]: We will sometimes write this class of objects
-of a category ${\cal C}$ as $\mathrm{obj}({\cal C})$, but it is common to use
-simply ${\cal C}$ to denote it.
+[fn:objectnotation]: We will sometimes write this class of objects of
+a category ${\cal C}$ as $\mathrm{obj}({\cal C})$, but it is common to simply use ${\cal C}$ to denote it.
 
 [fn:collection]: We use the term /collection/ to denote
 some unspecified formal notion of compilation of "things" that could
@@ -86,7 +70,26 @@ whose objects are all the possible sets and we will need the objects
 to form a proper class in order to avoid inconsistent results such as
 the Russell's paradox.
 
+**** Definition of hom-sets and small categories                  :ignore:
+#+attr_latex: :options [Hom-sets]
+#+begin_definition
+The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
+between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
+of an object $A$ is the hom-set $\mathrm{end}(A) = \hom(A,A)$.
+#+end_definition
+
+Sometimes, when considering a hom-set, it will be useful to explicitly
+specify the category on which we are working as $\hom_{{\cal C}}(A,B)$.
+
+#+attr_latex: :options [Small and locally small categories]
+#+begin_definition
+A category is said to be *small* if the collections ${\cal C}_0,{\cal C}_1$ of objects and morphisms
+are both sets (instead of proper classes). It is said to be *locally small* if every
+hom-set is actually a set.
+#+end_definition
+
 *** Morphisms
+**** Isomorphisms                                                 :ignore:
 #+attr_latex: :options [Isomorphisms]
 #+begin_definition
 A morphism $f : A \to B$ is an *isomorphism* if an inverse morphism $f^{-1} : B \to A$
