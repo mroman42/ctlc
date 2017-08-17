@@ -708,7 +708,7 @@ The Yoneda functor is full and faithful.
 
 *** TODO Products and limits
 **** TODO Pullbacks
-**** Example: p-adic numbers
+**** TODO Example: p-adic numbers
 *** TODO Coproducts and colimits
 **** TODO Coproducts as universal arrows
 **** TODO Pushouts
@@ -763,9 +763,14 @@ Each adjunction is completely determined by any of
  5) functors $F,G$, with units and counits satisfiying the triangle
     identities $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
 #+end_proposition
+#+begin_proof
+# TODO
+#+end_proof
+
 ** TODO Cartesian closed categories
 ** Monads and algebras
 *** Monads
+**** Definition of Monads                                         :ignore:
 #+attr_latex: :options [Monad]
 #+begin_definition
 A *monad* is a functor $T\colon X \to X$ with natural transformations
@@ -785,6 +790,7 @@ IT \rar{\eta T}\drar[swap]{\cong} & T^2\dar{\mu} & \lar[swap]{T\eta}\dlar{\cong}
 \end{tikzcd}\]
 #+end_definition
 
+**** Each adjunction gives rise to a monad                        :ignore:
 #+attr_latex: :options [Each adjunction gives rise to a monad]
 #+begin_proposition
 Given $F \dashv G$, $GF$ is a monad.
@@ -807,6 +813,7 @@ is obtained by applying functors $G$ and $F$. Unit laws follow from
 the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
 
+**** Comonads                                                     :ignore:
 #+attr_latex: :options [Comonad]
 #+begin_definition
 A *comonad* is a functor $L\colon X \to X$ with natural transformations
@@ -1643,7 +1650,7 @@ as every \beta-reduction $M \tto_s M \tto_\beta N$ implies $M \tto_s N$. We anal
 ways in which $M \to_{\beta} N$ can be derived.
 
   1) If $K \tto_{s} (\lambda x.M)N \to_{\beta} M[N/x]$, it has been
-     already that $K \tto_s M[N/x]$.
+     already showed that $K \tto_s M[N/x]$.
   2) If $K \tto_s MN \to_{\beta} M'N$ with $M \to_{\beta} M'$, we know that there exist $K \tto_h WQ$ 
      such that $W \tto_s M$ and $Q \tto_s N$; by induction $W \tto_s M'$, and then $WQ \tto_s M'N$.
      The case $K \tto_s MN \to_{\beta} MN'$ is entirely analogous.
@@ -1665,8 +1672,9 @@ from $M$ to $N$ whose last step is of the form $\to_{l}$; as the sequence is non
 every step has to be of the form $\to_{l}$.
 #+end_proof
 
-*** TODO SKI combinators
-
+*** SKI combinators
+**** TODO Combinatorial algebras
+**** Transformation of SKI combinators :ignore:
 #+attr_latex: :options [Lambda transform]
 #+begin_definition
 The *\Lambda-transform* of a Ski-term is a \lambda-term defined
@@ -1686,6 +1694,8 @@ written as $[x].U$ and defined recursively as
 
   * $[x].x = I$;
   * $[x].M = KM$, if $x \notin \freevars(M)$;
+  * $[x].Ux = U$, if $x \notin \freevars(U)$;
+  * $[x].UV = S([x].U)([x].V)$, otherwise.
 
 where $\freevars$ is the set of free variables; as defined on Definition
 [[def-freevariables]].
@@ -1713,7 +1723,13 @@ that is, for any Ski-term $U$,
 \]
 #+end_theorem
 #+begin_proof
-# TODO
+By induction on $U$,
+
+  * $\skiabs\Lambda(x) = x$, for any variable $x$;
+  * $\skiabs\Lambda(I) = [x].x = I$;
+  * $\skiabs\Lambda(K) = [x].[y].x = [x].Kx = K$;
+  * $\skiabs\Lambda(S) = [x].[y].[z].xz(yz) = [x].[y].Sxy = S$; and
+  * $\skiabs\Lambda(MN) = MN$.
 #+end_proof
 
 *** TODO Turing completeness
@@ -2020,7 +2036,6 @@ In the STLC, all terms are strongly normalizing.
 #+end_theorem
 
 # [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
-
 
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
@@ -2556,10 +2571,13 @@ and the relation between logic and types.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
-** Haskell                                                        :noexport:
-*** Testing: unit tests, HUnit
-*** Testing: properties, quickCheck
-*** Testing: golden tests
+** TODO Programming environment                                   :noexport:
+*** TODO The Haskell programming language
+*** TODO Cabal, Stack and Haddock
+*** TODO Testing and Continuous integration
+**** Testing: unit tests, HUnit
+**** Testing: properties, quickCheck
+**** Testing: golden tests
 ** Implementation of \lambda-expressions
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
