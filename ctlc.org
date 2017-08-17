@@ -3256,6 +3256,15 @@ and no additional installation is required.
 	}
 #+END_SRC
 
+[fn:codemirror]: Documentation for CodeMirror can be found in its
+official page: https://codemirror.net/
+
+*** TODO JupyterHub
+# DigitalOcean
+# NameCheap
+# SSL
+# JupyterHub setup
+# OAuth
 ** Programming in the untyped \lambda-calculus
 This section explains how to use the untyped \lambda-calculus to
 encode data structures and useful data, such as booleans, linked lists,
