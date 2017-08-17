@@ -139,6 +139,7 @@ particular,
 are all isomorphisms.
 #+end_proposition
 
+**** Monomorphisms and epimorphisms                               :ignore:
 #+attr_latex: :options [Monomorphisms and epimorphisms]
 #+begin_definition
 A *monomorphism* is a left-cancellable morphism, that is, $f : A \to B$ is
@@ -157,6 +158,7 @@ called a *bimorphism*.
 A morphism can be a bimorphism without being an isomorphism.
 #+end_remark
 
+**** Retractions and sections                                     :ignore:
 #+attr_latex: :options [Retractions and sections]
 #+begin_definition
 A *retraction* is a left inverse, that is, a morphism which has a right inverse;
@@ -255,6 +257,7 @@ is dual to the notion of product; and the same proofs can be applied on
 both cases, only by reversing the arrows.
 
 *** Examples of categories
+**** Discrete categories                                          :ignore:
 #+attr_latex: :options [Discrete categories]
 #+begin_exampleth
 A category is *discrete* if it has no other morphisms than the identities.
@@ -262,6 +265,7 @@ A discrete category is uniquely defined by its class of objects and
 every class of objects defines a category.
 #+end_exampleth
 
+**** Monoids, groups                                              :ignore:
 #+attr_latex: :options [Monoids, groups]
 #+begin_exampleth
 A single-object category is a *monoid*. [fn:monoid] A monoid in which
@@ -270,6 +274,11 @@ category (of any number of objects) where all the morphisms are
 isomorphisms.
 #+end_exampleth
 
+[fn:monoid]: This definition is equivalent to the usual definition of monoid
+if we take the morphisms as elements of the monoid and composition of morphisms
+as the monoid operation.
+
+**** Posets                                                       :ignore:
 #+attr_latex: :options [Partially ordered sets]
 #+begin_exampleth
 Every partial ordering defines a category in which the elements are the
@@ -279,20 +288,23 @@ In particular, every ordinal can be seen as a partially ordered set
 and defines a category.
 #+end_exampleth
 
+**** Category of Sets                                             :ignore:
 #+attr_latex: :options [The category of sets]
 #+begin_exampleth
-The category $\mathtt{Set}$ is defined as the category with all the
+The category $\Sets$ is defined as the category with all the
 possible sets as objects and functions between them as morphisms. It
 is trivial to check associativity of composition and the existence of
 the identity function for any set.
 #+end_exampleth
 
+**** Category of Groups                                           :ignore:
 #+attr_latex: :options [The category of groups]
 #+begin_exampleth
 The category $\mathtt{Grp}$ is defined as the category with groups as objects
 and group homomorphisms between them as morphisms.
 #+end_exampleth
 
+**** Category of R-modules                                        :ignore:
 #+attr_latex: :options [The category of R-modules]
 #+begin_exampleth
 The category $R\text{-Mod}$ is defined as the category with $R\text{-modules}$ as
@@ -303,15 +315,12 @@ also module homomorphisms.
 In particular, abelian groups form a category as $\mathbb{Z}\text{-modules}$.
 #+end_exampleth
 
+**** Category of Topological spaces                               :ignore:
 #+attr_latex: :options [The category of topological spaces]
 #+begin_exampleth
 The category $\mathtt{Top}$ is defined as the category with topologicaal spaces as
 objects and continuous functions between them as morphisms.
 #+end_exampleth
-
-[fn:monoid]: This definition is equivalent to the usual definition of monoid
-if we take the morphisms as elements of the monoid and composition of morphisms
-as the monoid operation.
 
 ** Functors and natural transformations
 #+begin_quote
@@ -328,10 +337,11 @@ studying homology, they have proven its foundational value with the
 passage of time.
 
 *** Functors
+**** Definition of functor                                        :ignore:
 #+attr_latex: :options [Functor]
 #+begin_definition
-A *functor* is a morphism of categories. Given two categories ${\cal C}$ and ${\cal D}$,
-a functor between them $F : {\cal C} \to {\cal D}$ is given by
+A *functor* will be interpreted as a morphism of categories.
+Given two categories ${\cal C}$ and ${\cal D}$, a functor between them $F : {\cal C} \to {\cal D}$ is given by
 
   * an *object function*, $F : \mathrm{obj}({\cal C}) \to \mathrm{obj}({\cal D})$;
   * and an *arrow function*, $F : (A \to B) \to (FA \to FB)$ for any two
@@ -343,6 +353,7 @@ such that
   * $F(f \circ g) = Ff \circ Fg$, the functor respects composition.
 #+end_definition
 
+**** Composition of functors                                      :ignore:
 Functors can be composed as we did with morphisms. In fact, a category of
 categories can be defined; having functors as morphisms.
 
@@ -359,6 +370,7 @@ The identity functor on a category $I_{{\cal C}}\colon {\cal C} \to {\cal C}$ is
 and arrow functions. It is trivially neutral with respect to composition.
 #+end_definition
 
+**** Full and faithfull functors                                  :ignore:
 #+attr_latex: :options [Full functor]
 #+begin_definition
 A functor $F$ is *full* if the arrow map is surjective. That is, if every
@@ -374,6 +386,7 @@ $f_1 = f_2$.
 It is easy to notice that the composition of faithful (respectively,
 full) functors is again a faithful functor (respectively, full).
 
+**** Isomorphisms of categories                                   :ignore:
 #+attr_latex: :options [Isomorphism of categories]
 #+begin_definition
 An *isomorphism of categories* is a functor $T$ whose object and arrow functions
@@ -610,7 +623,7 @@ is written in this way.
 *** Representability
 #+attr_latex: :options [Representation of a functor]
 #+begin_definition
-A *representation* of $K \colon D \to \mathtt{Set}$ is a natural isomorphism
+A *representation* of $K \colon D \to \Sets$ is a natural isomorphism
 \[
 \psi\colon \hom_{D}(r,-) \cong K.
 \]
@@ -621,7 +634,7 @@ called a /representing object/. $D$ must have small hom-sets.
 
 #+attr_latex: :options [Representations in terms of universal arrows]
 #+begin_proposition
-If $u \colon \ast \to Kr$ is a universal arrow for a functor $K\colon D \to \mathtt{Set}$, then
+If $u \colon \ast \to Kr$ is a universal arrow for a functor $K\colon D \to \Sets$, then
 $f \mapsto K(f)(u\ast)$ is a representation. Every representation is obtained
 in this way.
 #+end_proposition
@@ -631,14 +644,14 @@ $\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
 
 \[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
 
-for every natural isomorphism $D(r,-) \cong \mathtt{Set}(\ast,K-)$. But every natural
+for every natural isomorphism $D(r,-) \cong \Sets(\ast,K-)$. But every natural
 isomorphism of this kind is an [[*Universal arrows as natural bijections][universal arrow]].
 #+end_proof
 
 *** Yoneda Lemma
 #+attr_latex: :options [Yoneda Lemma]
 #+begin_lemma
-For any $K\colon D \to \mathtt{Set}$ and $r \in D$, there is a bijection
+For any $K\colon D \to \Sets$ and $r \in D$, there is a bijection
 \[
 y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
 \]
@@ -668,7 +681,7 @@ rest of the natural transformation is determined as $h_{\ast}$ by naturality.
 #+attr_latex: :options [Addendum to the Yoneda Lemma]
 #+begin_proposition
 The bijection on the [[*Yoneda Lemma][Yoneda Lemma]] is a natural isomorphism between
-two $\mathtt{Set}^D \times D \to \mathtt{Set}$ functors.
+two $\Sets^D \times D \to \Sets$ functors.
 #+end_proposition
 #+begin_proof
 # TODO
@@ -676,7 +689,7 @@ two $\mathtt{Set}^D \times D \to \mathtt{Set}$ functors.
 
 #+begin_definition
 In the conditions of [[*Yoneda Lemma][Yoneda Lemma]], the *Yoneda functor*,
-$Y \colon D^{op} \to \mathtt{Set}^{D}$, is defined with the arrow function
+$Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
 
 \[
 \left(f \colon s \to r\right) \mapsto 
