@@ -3051,8 +3051,72 @@ skiabs (LambdaAbstraction x m) = bracketabs x (skiabs m)
  
 ** Usage
 *** Installation
-The following script installs the complete Mikrokosmos interpreter, Jupyter kernel
-and libraries on a fresh system. It has been tested under =Ubuntu 16.04.3 LTS (Xenial Xerus)=.
+The complete Mikrokosmos suite is divided in multiple parts:
+
+ 1) the *Mikrokosmos interpreter*, written in Haskell;
+ 2) the *Jupyter kernel*, written in Python;
+ 3) the *CodeMirror Lexer*, written in Javascript; and
+ 4) the *Mikrokosmos libraries*, written in the Mikrokosmos language.
+
+These parts will be detailed on the following sections. A system that
+already satisfies all dependencies (Stack, Pip and Jupyter), can install
+Mikrokosmos using the following script, which is detailed on this section
+
+#+BEGIN_SRC sh
+# Mikrokosmos interpreter
+stack install mikrokosmos
+# Jupyter kernel for Mikrokosmos
+sudo pip install imikrokosmos
+# Libraries
+git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
+#+END_SRC
+
+**** Mikrokosmos interpreter :ignore:
+The *Mikrokosmos interpreter* is listed in the central Haskell
+package archive, /Hackage/ [fn:hackage]. The packaging of Mikrokosmos
+has been done using the *cabal* tool; and the configuration of the
+package can be read on the file =mikrokosmos.cabal= on the Mikrokosmos
+code. As a result, Mikrokosmos can be installed using the *cabal* and
+*stack* Haskell package managers. That is,
+
+#+BEGIN_SRC sh
+# With cabal
+cabal install mikrokosmos
+# With stack
+stack install mikrokosmos
+#+END_SRC
+
+**** Mikrokosmos Jupyter kernel :ignore:
+The *Mikrokosmos Jupyter kernel* is listed in the central Python
+package archive. Jupyter is a dependency of this kernel, which only
+can be used in conjunction with it. It can be installed with the
+=pip= package manager as
+
+#+BEGIN_SRC sh
+sudo pip install imikrokosmos
+#+END_SRC
+
+and the installation can be checked by listing the available Jupyter
+kernels with
+
+#+BEGIN_SRC sh
+jupyter kernelspec list
+#+END_SRC
+
+**** Mikrokosmos libraries :ignore:
+The *Mikrokosmos libraries* can be downloaded directly from its GitHub
+repository. [fn:mikrokosmoslibgit] They have to be placed under
+=~/.mikrokosmos= if we want them to be locally available or under
+=/usr/lib/mikrokosmos= if we want them to be globally available.
+
+#+BEGIN_SRC sh
+git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
+#+END_SRC
+
+**** Complete script :ignore:
+The following script installs the complete Mikrokosmos suite on a
+fresh system. It has been tested under =Ubuntu 16.04.3 LTS (Xenial
+Xerus)=.
 
 #+BEGIN_SRC sh
 # 1. Installs Stack, the Haskell package manager
