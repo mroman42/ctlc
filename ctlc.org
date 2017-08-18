@@ -2648,6 +2648,52 @@ and the relation between logic and types.
 * Mikrokosmos
 ** TODO Programming environment                                   :noexport:
 *** TODO The Haskell programming language
+The *Haskell* programming language 
+
+
+
+It is
+
+  * *strongly and statically typed*, meaning that it only compiles
+    well-typed programs and it does not allow implicit type
+    casting. The compiler will generate an error if a term is
+    non-typeable.
+
+  * *lazy*, with /non-strict semantics/, meaning that 
+    
+    This /call-by-need/ approach is usually less efficient than the
+    /call-by-value/ one.
+    
+    In [ Hughes Why functional programming matters ], Hughes argued
+    for the benefits of a lazy functional language.
+
+  * *purely functional*. As the evaluation order is demand-driven and
+    not explicitly known, it is not possible in practice to perform
+    ordered input/output actions or any other side-effects by relying
+    on the evaluation order. This helps modularity of the code,
+    testing and verfication.
+
+  * based on the *System F\omega* with some restrictions. Crucially,
+    it implements *System F* adding quantification over type operators
+    even if it does not allow abstraction on type operators. The GHC
+    Haskell compiler, however, adds extensions with dependent types.
+    # https://stackoverflow.com/a/21220357/2552681
+
+# Motivation, comitee
+In the 1980s, many lazy programming languages were independently being
+written by researchers such as Miranda, Lazy ML, Orwell, Clean or
+Daisy. All of them were similar in expressive power, but their differences
+were holding back the efforts to communicate ideas on functional programming.
+A comitee was created in 1987 with the mission of designing a common lazy
+functional language.
+
+The complete history of Haskell is detailed on cite:hudak07_haskell.
+
+# GHC
+
+
+# [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
+
 *** TODO Cabal, Stack and Haddock
 *** TODO Testing and Continuous integration
 **** Testing: unit tests, HUnit
