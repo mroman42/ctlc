@@ -3915,6 +3915,13 @@ proposition, that is,
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
 
 ** TODO Martin-Löf Type Theory, dependent types
+*** Type in type
+# Russell's paradox code
+# Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
+# Hurkens' paradox: https://github.com/agda/agda/blob/master/test/Succeed/Hurkens.agda
+# Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
+# Burali-Forti paradox
+
 ** TODO Type theory as a foundation of mathematics
 ** TODO Constructive mathematics
 *** TODO Axiom of choice implies excluded middle
