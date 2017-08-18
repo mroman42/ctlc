@@ -2559,9 +2559,84 @@ This example could be checked and simplified by this interpreter as
 *** TODO Continuous partial orderings
 # From Selinger
 ** TODO Hindley-Milner
-** TODO System F                                                  :noexport:
-*** TODO System F is strongly normalizing
-** TODO Lambda cube
+** Other type systems
+*** TODO System F                                                :noexport:
+**** TODO System F is strongly normalizing
+*** \lambda-cube
+The *\lambda-cube* is a taxonomy for Church-style type systems given
+by Barendregt in cite:barendregt92. It describes eight type systems
+based on the \lambda-calculus along three axes, representing three
+properties of the systems. These properties are
+
+  1) *parametric polymorphism*, terms that depend on types. This is
+     achieved via universal quantification over types. It allows type
+     variables and binders for them as in the following parametric
+     identity function
+     \[
+     \mathrm{id} \equiv \Lambda \tau . \lambda x . x : \forall \tau . \tau \to \tau, 
+     \]
+     that can be applied to any particular type $\sigma$ to obtain the 
+     specific identity function for that type as
+     \[
+     \mathrm{id}_{\sigma} \equiv \lambda x.x : \sigma \to \sigma.
+     \]
+
+     *System F* is the simplest type system on the cube implementing
+     polymorphism.
+
+  2) *type operators*, types that depend on types.
+
+  3) *dependent types*, types that depend on terms.
+
+# Pierce
+# Lectures on the Curry-Howard isomorphism
+# Introduction to generalized type systems - Barendregt
+
+# https://en.wikipedia.org/wiki/System_F#System_F.CF.89
+
+\[\begin{tikzcd}[column sep=small]
+&&& |[label={above:\lcubett{System F$\omega$}}]| \systemfo \ar{rr}
+&&  |[label=above:\lcubett{CoC},label=above:\phantom{System Fo}]| \systemcoc 
+& \\
+\phantom{.}  
+&&  |[label={left:\lcubett{System F}}]| \systemf \ar{ur}\ar{rr} 
+&&  \systemfp \ar{ur}
+&& \\ 
+&&& \systemo \ar{rr}\ar{uu} 
+&&  |[label=right:\lcubett{wCoC}]| \systemlpo \ar{uu}
+&&  \phantom{\lambda}\phantom{PQW}  \\
+\ar[\lcred]{uu}[\lcred]{\text{\parbox{2cm}{\centering terms depend on types}}}
+&&  |[label=below:\lcubett{STLC}]| \stlc \ar{uu}\ar{rr}\ar{ur} 
+&&  |[label=below:\lcubett{DTLC}]| \systemlp \ar{uu}\ar{ur} 
+&& \phantom{.} \\ 
+&&  \ar[\lcred]{rr}[swap,\lcred]{\text{\parbox{2cm}{\centering types depend on terms}}} 
+&& \phantom{.} 
+& \ar[\lcred]{ur}[swap,\lcred]{\text{\parbox{2cm}{\centering types depend on types}}} 
+&
+\end{tikzcd}\]
+
+The following type systems
+
+ * *Simply typed \lambda-calculus* ($\stlc$);
+ * *System F* ($\systemf$);
+ * typed \lambda-calculus with *dependent types* ($\systemlp$);
+ * typed \lambda-calculus with *type operators* ($\systemo$);
+ * *System F-omega* ($\systemfo$);
+   
+The \lambda-cube is generalized by the theory of pure type systems.
+
+All systems on the \lambda-cube are strongly normalizing.
+
+# https://cstheory.stackexchange.com/questions/7561/whats-the-relation-and-difference-between-calculus-of-inductive-constructions-a
+A different approach to higher-order type systems will be presented on the
+chapter on Type Theory.
+
+*** TODO Pure type systems
+In particular *System F* is equivalent to the single-sorted pure system $\lambda 2$.
+
+*** TODO Subtyping (?)
+
+*** TODO Inductive and coinductive definitions
 * Mikrokosmos (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 We have developed *Mikrokosmos*, an untyped and simply typed \lambda-calculus interpreter
