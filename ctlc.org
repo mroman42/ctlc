@@ -2509,10 +2509,47 @@ program with monads in Agda.
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
 
 *** TODO Cabal, Stack and Haddock
-*** TODO Testing
-**** Testing: unit tests, HUnit
-**** Testing: properties, quickCheck
-**** Testing: golden tests
+*** Testing
+*Tasty* is the Haskell testing framework of our choice for this
+project. It allows the user to create a comprehensive test suite
+combining multiple types of tests. The Mikrokosmos code is testing
+using the following techniques
+
+  * *unit tests*, in which individual core functions are tested
+    independently of the rest of the application;
+
+  * *property-based testing*, in which multiple test cases are
+    created automatically in order to verfiy that a specified
+    property always holds.
+
+  * *golden tests*, a special case of unit tests in which the expected
+    results of an IO action, as described on a file, are checked to
+    match the actual ones.
+    
+We are using the *HUnit* library for unit tests. It tests particular
+cases of type inference, unification and parsing. The following is an
+example of unit test, as found in =tests.hs=. It checks that the type
+inference of the identity term is correct.
+
+#+BEGIN_SRC haskell
+testCase "Identity type inference" $
+typeinference (Lambda (Var 1))
+@?=
+Just (Arrow (Tvar 0) (Tvar 0))
+#+END_SRC
+
+We are using the *QuickCheck* library for property-based tests. It
+tests transformation properties of lambda expressions. In the following
+example, it tests that any deBruijn expression keeps is meaning when
+is translated into a \lambda-term.
+
+#+BEGIN_SRC haskell
+QC.testProperty "Expression -> named -> expression" $
+  \expr -> toBruijn emptyContext (nameExp expr) == expr
+#+END_SRC
+
+# We are using the *tasty-golden* package for golden tests.
+# TODO
 
 *** Version control and continuous integration
 Mikrokosmos uses *git* as its version control system and the code,
