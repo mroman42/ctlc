@@ -21,8 +21,8 @@ This is the abstract.
 This document has been written with Emacs26 and org-mode 9, using the
 =org= file format and LaTeX as intermediate format. The document follows
 the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
-has been used for code listings.
-
+has been used for code listings and the =tikzcd= package has been used
+for commutative diagrams.
 * Category theory (abstract)                                         :ignore:
 * Category theory
 ** Categories
@@ -645,7 +645,7 @@ $\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
 \[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
 
 for every natural isomorphism $D(r,-) \cong \Sets(\ast,K-)$. But every natural
-isomorphism of this kind is an [[*Universal arrows as natural bijections][universal arrow]].
+isomorphism of this kind is a [[*Universal arrows as natural bijections][universal arrow]].
 #+end_proof
 
 *** Yoneda Lemma
@@ -716,7 +716,7 @@ The Yoneda functor is full and faithful.
 #+attr_latex: :options [Colimits]
 #+begin_definition
 A *colimit* of a functor from a given /index category/ $F \colon J \to {\cal C}$ is an object
-$r \in {\cal C}$ such that there exists an universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
+$r \in {\cal C}$ such that there exists a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
 It is usually written as $r = \varinjlim F$.
 #+end_definition
 
@@ -767,7 +767,6 @@ Each adjunction is completely determined by any of
 # TODO
 #+end_proof
 
-** TODO Cartesian closed categories
 ** Monads and algebras
 *** Monads
 **** Definition of Monads                                         :ignore:
