@@ -107,8 +107,8 @@ We call *automorphisms* to the endomorphisms which are also isomorphisms.
 #+begin_proposition
 <<prop-unicityinverse>>
 If the inverse of a morphism exists, it is unique. In fact, if a
-morphism has a left-side inverse and a right-side inverse, they are an
-inverse, and they are equal.
+morphism has a left-side inverse and a right-side inverse, they are
+both-side inverses and they are equal.
 #+end_proposition
 #+begin_proof
 Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
@@ -2567,6 +2567,7 @@ The code uses the *Travis CI* continuous integration system to run
 tests and check that the software builds correctly after each change
 and in a reproducible way on a fresh Linux installation provided by
 the service.
+
 ** Implementation of \lambda-expressions
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
