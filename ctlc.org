@@ -2359,13 +2359,38 @@ and the relation between logic and types.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
-** TODO Programming environment                                   :noexport:
-*** TODO The Haskell programming language
-The *Haskell* programming language 
+** Programming environment
+*** The Haskell programming language
+**** Haskell as a programming choice                              :ignore:
+*Haskell* is the purely functional programming language of our choice
+to implement Mikrokosmos. Its design is heavily influenced by the
+\lambda-calculus and is a general-purpose language with a rich
+ecosystem and plenty of consolidated libraries [fn:hackagelibs] in
+areas such as parsing, testing or system interaction, satisfying the
+requisites of our project. In the following sections, we describe this
+ecosystem in more detail.
 
+[fn:hackagelibs]: In the central package archive of the Haskell community,
+Hackage, a categorized list of libraries can be found: https://hackage.haskell.org/packages/
 
+**** History of Haskell                                           :ignore:
+In the 1980s, many lazy programming languages were independently being
+written by researchers such as /Miranda/, /Lazy ML/, /Orwell/, /Clean/
+or /Daisy/. All of them were similar in expressive power, but their
+differences were holding back the efforts to communicate ideas on
+functional programming.  A comitee was created in 1987 with the
+mission of designing a common lazy functional language. Several
+versions of the language were developed, and the first standarized
+reference of the language was published in the *Haskell 98 Report*,
+whose revised version can be read on cite:haskell98. Its more popular
+implementation is the *Glasgow Haskell Compiler (GHC)*; an open source
+compiler written in Haskell and C.
 
-It is
+The complete history of Haskell and its design decisions is detailed
+on cite:hudak07_haskell.
+
+**** Haskell's properties                                         :ignore:
+Haskell is
 
   * *strongly and statically typed*, meaning that it only compiles
     well-typed programs and it does not allow implicit type
@@ -2386,32 +2411,125 @@ It is
     on the evaluation order. This helps modularity of the code,
     testing and verfication.
 
-  * based on the *System F\omega* with some restrictions. Crucially,
-    it implements *System F* adding quantification over type operators
+  * *referentially transparent*. As a consequence of its purity, every
+    term on the code could be replaced by its definition without
+    changing the global meaning of the program. This allows equational
+    reasoning with rules that derive directly from \lambda-calculus.
+
+  * based on *System F\omega* with some restrictions. Crucially, it
+    implements *System F* adding quantification over type operators
     even if it does not allow abstraction on type operators. The GHC
-    Haskell compiler, however, adds extensions with dependent types.
+    Haskell compiler, however, allows the user the ability to activate
+    extensions that implement dependent types.
     # https://stackoverflow.com/a/21220357/2552681
 
-# Motivation, comitee
-In the 1980s, many lazy programming languages were independently being
-written by researchers such as Miranda, Lazy ML, Orwell, Clean or
-Daisy. All of them were similar in expressive power, but their differences
-were holding back the efforts to communicate ideas on functional programming.
-A comitee was created in 1987 with the mission of designing a common lazy
-functional language.
+**** Haskell's syntax                                             :ignore:
+Where most imperative languages use semicolons to separate sequential
+commands, Haskell has no notion of sequencing, and programs are
+written in a purely declarative way. A Haskell program essentially
+consist on a series of definitions (of both types and terms) and type
+declarations. The following example shows the definition of a binary
+tree and its preorder as
 
-The complete history of Haskell is detailed on cite:hudak07_haskell.
+#+BEGIN_SRC haskell
+-- A tree is either empty or a node with two subtrees.
+data Tree a = Empty | Node a (Tree a) (Tree a)
 
-# GHC
+-- The preorder function takes a tree and returns a list
+preorder :: Tree a -> [a]
+preorder Empty            = []
+preorder (Node x lft rgt) = preorder lft ++ [x] ++ preorder rgt
+#+END_SRC
 
+We can see on the previous example that function definitions allow
+/pattern matching/, that is, data constructors can be used in
+definitions to decompose values of the type. This increases readability
+when working with algebraic data types.
+
+While infix operators are allowed, function application is
+left-associative in general. Definitions using partial application are
+allowed, meaning that functions on multiple arguments can use currying
+and can be passed only one of its arguments to define a new
+function. For example, a function that squares every number on a list
+could be written in two ways as
+
+#+BEGIN_SRC haskell
+squareList :: [Int] -> [Int]
+squareList list = map square list
+
+squareList' :: [Int] -> [Int]
+squareList' = map square
+#+END_SRC
+
+where the second one, because of its simplicity, is usually
+preferred. 
+
+**** Type classes, monads                                         :ignore:
+A characteristic piece of Haskell are *type classes*, which allow to
+define common interfaces for different types. In the following
+example, we define a =Monad= as a type with a suitably typed =return=
+and =bind= operators.
+
+#+BEGIN_SRC haskell
+class Monad m where
+  return :: a -> m a
+  (>>=)  :: m a -> (a -> m b) -> m b
+#+END_SRC
+
+And lists, for example, are monads in this sense.
+
+#+BEGIN_SRC haskell
+instance Monad [] where
+  return x = [x]
+  xs >>= f = concat (map f xs)
+#+END_SRC
+
+Haskell uses monads in varied forms. They are used in I/O, error
+propagation and stateful computations. Another characteristical syntax
+bit of Haskell is the =do= notation, which provides a nicer, cleaner
+way to work with types that happen to be monads. The following example
+uses the list monad to compute the list of Pythagorean triples.
+
+#+BEGIN_SRC haskell
+pythagorean = do
+  a <- [1..]
+  b <- [1..a]
+  c <- [1..b]
+  guard (a^2 == b^2 + c^2)
+  return (a,b,c)
+#+END_SRC
+
+Note that this list is infinite. As the language is lazy, this does not
+represent a problem: the list will be evaluated only on demand.
+
+For a more detailed treatment of monads, and their relation to
+categorical monads, see the chapter on Type Theory, where we will
+program with monads in Agda.
 
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
 
 *** TODO Cabal, Stack and Haddock
-*** TODO Testing and Continuous integration
+*** TODO Testing
 **** Testing: unit tests, HUnit
 **** Testing: properties, quickCheck
 **** Testing: golden tests
+
+*** Version control and continuous integration
+Mikrokosmos uses *git* as its version control system and the code,
+which is licensed under GPLv3, can be publicly accessed on the
+following GitHub repository:
+
+#+begin_center
+https://github.com/M42/mikrokosmos
+#+end_center
+
+Development takes place on the =development= git branch and permanent
+changes are released into the =master= branch.
+
+The code uses the *Travis CI* continuous integration system to run
+tests and check that the software builds correctly after each change
+and in a reproducible way on a fresh Linux installation provided by
+the service.
 ** Implementation of \lambda-expressions
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
