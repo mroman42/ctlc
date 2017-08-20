@@ -3725,6 +3725,473 @@ whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
 **** Lists, trees and generating functions
 **** Derivatives and one-hole contexts
 **** Seven trees in one
+* Categorical logic (abstract)                                       :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
+This section is based on cite:maclane94.
+
+Topos theory arises independently with Grothendieck and sheaf theory,
+Lawvere and the axiomatization of set theory and Paul Cohen with the
+forcing techniques with allowed to construct new models of ZFC.
+#+LATEX: \end{center}}
+
+* Categorical logic
+** Lawvere algebraic theories
+# I should join the two first sections and exaplain the first definition
+# only as an introduction.
+
+*** Algebraic theories
+**** First definition of algebraic theory                         :ignore:
+#+ATTR_LATEX: :options [Algebraic theory]
+#+BEGIN_definition
+An *algebraic theory* is given by
+
+  * a /signature/, a family of sets $\left\{ \Sigma_k \right\}_{k \in \mathbb{N}}$ whose elements are called
+    *k-ary operations*. The *terms* of a signature are defined inductively
+    as variables or k-ary operations applied to k-tuples of terms.
+
+  * a set of *axioms*, which are equations between terms.
+#+END_definition
+
+# Example: groups
+**** Interpretations of algebraic theories                        :ignore:
+#+ATTR_LATEX: :options [Interpretation of an algebraic theory]
+#+BEGIN_definition
+An *interpretation* $I$ of a theory $\mathbb{A}$ on a category ${\cal C}$ is given by
+
+  * an object on the category, $I\mathbb{A} \in {\cal C}$;
+  * a morphism $If \colon (I\mathbb{A})^k \to I\mathbb{A}$ for every k-ary operation.
+#+END_definition
+
+Given an interpretation of the theory we can given an interpretation
+to every term of the signature on a given variable context. A term $t$
+can be given in the variable context $x_1,\dots,x_n$ if all variables that
+appear on $t$ are among the variables of the context; we write that as
+\[
+x_1,x_2,\dots,x_n \mid t.
+\]
+
+Given $I$, the *interpretation of a term* $x_1,\dots,x_n \mid t$ is a morphism
+$It \colon (I\mathbb{A})^n \to I\mathbb{A}$ defined inductively as
+
+  * $I(x_i) = \pi_i : (I\mathbb{A})^n \to I\mathbb{A}$, the i-th projection.
+
+  * $I(f\pair{t_1,\dots,t_k}) = If \circ \pair{It_1,\dots,It_k} \colon (I\mathbb{A})^n \to \mathbb{A}$, 
+    where $\pair{It_1,\dots,It_k} \colon (I\mathbb{A})^n \to (I\mathbb{A})^n$ is the componentwise 
+    interpretation of subterms.
+
+Note that the interpretation of variables depends on the context.
+An interpretation *satisfies* an equation $u=v$ in a context if
+$Iu = Iv$.
+
+**** Models of algebraic theories                                 :ignore:
+#+ATTR_LATEX: :options [Model of an algebraic theory]
+#+BEGIN_definition
+A *model of an algebraic theory* is an interpretation that satisfies
+all the axioms of the theory.
+#+END_definition
+
+*** Algebraic theories as categories
+**** TODO Notion of representation-free theories                  :ignore:
+# This notion is not representation free
+# Example
+# Category of an algebraic theory
+
+**** Second definition of algebraic theory                        :ignore:
+#+ATTR_LATEX: :options [Lawvere algebraic theory]
+#+BEGIN_definition
+An *algebraic theory* is a category with finite products and objects
+forming a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$ for
+any $m,n$.
+#+END_definition
+
+From this definition, it follows that $A^0$ must be the terminal object.
+
+# This notion corresponds with the previous one.
+
+**** Models as functors                                           :ignore:
+Every model $M$ in the sense of Definition [TODO] can be seen as a functor
+from the category of $\mathbb{A}$ to a given category ${\cal C}$; defined on 
+objects as 
+\[ 
+M[x_1,\dots,x_n] = (M\mathbb{A})^{k}
+\]
+and inductively defined on morphisms as
+
+  * $M\pair{x_i} = \pi_i \colon (M\mathbb{A})^k \to M\mathbb{{A}}$, for any morphism $\pair{x_i}$;
+  * $M\pair{t_1,\dots,t_m} = \pair{Mt_1,\dots,Mt_m} \colon (M\mathbb{A})^m \to M\mathbb{A}$, the 
+    componentwise interpretation of subterms;
+  * $M\pair{f\pair{t_1,\dots,t_m}} = Mf \circ \pair{Mt_1,\dots,Mt_{m}} \colon (M\mathbb{A})^m\to M\mathbb{A}$.
+
+The fact that $M$ is a well-defined functor follows from the assumption
+that it is a model.
+
+#+ATTR_LATEX: :options [Model]
+#+BEGIN_definition
+A *model* of an algebraic theory $\mathbb{A}$ in a category ${\cal C}$ is a functor
+$M \colon \mathbb{A} \to {\cal C}$ preserving all finite products.
+#+END_definition
+
+#+ATTR_LATEX: :options [Category of models of a theory]
+#+BEGIN_definition
+The *category of models* $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$ is is the full subcategory of functor category
+${\cal C}^{\mathbb{A}}$ given by the functors preserving all finite products.
+#+END_definition
+
+*** Completeness for algebraic theories
+#+ATTR_LATEX: :options [Completeness for algebraic theories]
+#+BEGIN_theorem
+Given $\mathbb{A}$ an algebraic theory, there exists a category ${\cal A}$ 
+with a model $U \in \mathtt{Mod}_{{\cal A}}(\mathbb{A})$ such that, for every terms $u,v$,
+\[
+U \text{ satisfies } u = v 
+\iff
+\mathbb{A} \text{ proves } u = v 
+\] 
+this is called the *universal model* for $\mathbb{A}$. That is,
+categorical semantics of algebraic theories are complete.
+#+END_theorem
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+The universal model needs not to be set-theoretic, but we can
+always find a universal model in a presheaf category via the
+Yoneda embedding.
+
+#+ATTR_LATEX: :options [Yoneda embedding as a universal model]
+#+BEGIN_proposition
+The Yoneda embedding $y \colon \mathbb{A} \to \widehat{\mathbb{A}}$ is a universal model for $\mathbb{A}$.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+** Heyting algebras
+In this section, we develop the notion of a *Heyting algebra* and show
+its differences with a Boolean algebra.
+
+There is a correlation between classical propositional calculus and
+the Boolean algebra of the subsets of a given set. If we interpret
+a proposition $p$ as a subset of a given universal set $P \subset U$ and
+fix an element $u \in U$, propositions can be translated to $u \in P$, 
+logical connectives can be translated as
+
+\[\begin{tabular}{cc|cc}
+logic &  & &  subsets \\
+\hline
+$P \land Q$ & and & intersection & $P \cap Q$  \\
+$P \lor Q$ & or & union  & $P \cup Q$ \\
+$\neg P$ & not & complement & $\overline{P}$ \\
+$P \to Q$ & implication & complement union & $\overline{P} \cup Q$
+\end{tabular}\]
+
+using crucially that $\neg P \land Q \equiv P \to Q$.
+
+In the same way that Boolean algebras correspond to classical
+propositional logic, Heyting algebras correspond to intuitionistic
+propositional calculus. Its model on a set-like theory is not the subsets
+of a given set, but instead, only the /open/ sets of a given
+topological space
+
+\[\begin{tabular}{cc|cc}
+logic &  & & open sets \\
+\hline
+$P \land Q$ & and & intersection & $P \cap Q$  \\
+$P \lor Q$ & or & union  & $P \cup Q$ \\
+$\neg P$ & not & interior of the complement & $\mathrm{int}\left(\overline{P}\right)$ \\
+$P \to Q$ & implication & interior of complement and consequent & $\mathrm{int}(\overline{P} \cup Q)$
+\end{tabular}\]
+
+where $\mathrm{int}$ is the topological interior of a set.
+# TODO: This definition of the implication does not match with the used
+# on Moerdijk. It is equivalent but different.
+
+*** Boolean algebras
+**** Lattices, definition                                         :ignore:
+#+attr_latex: :options [Lattice]
+#+begin_definition
+A *lattice* is a partially ordered set with all binary products and
+coproducts. It is a *bounded lattice* if it has all binary products
+and coproducts.
+#+end_definition
+
+We will usually work with bounded lattices.
+A bounded lattice can also be defined as a set with $0,1$ and two binary
+operations $\land,\lor$ satisfying
+
+  * $1 \land x = x$, and $0 \lor x = x$;
+  * $x \land x = x$, and $x \lor x = x$;
+  * $x \land (y \lor x) = x = (x \land y) \lor x$.
+
+This perspective allows us also to define a lattice object in any
+category as an object $L$ with morphisms
+
+\[
+\land \colon L \times L \to L,
+\quad
+\lor \colon L \times L \to L,
+\quad
+0,1 \colon \mathrm{I} \to L,
+\]
+
+where $\mathrm{I}$ is the terminal object of the category; and commutative
+diagrams encoding the previous equations.
+
+**** Distributive lattices                                        :ignore:
+#+attr_latex: :options [Distributive lattice]
+#+begin_definition
+A *distributive lattice* is a lattice where
+\[
+x \land (y \lor z) = (x \land y) \lor (x \land z),
+\]
+
+holds for all $x,y,z$.
+#+end_definition
+# TODO: This implies the dual distributive law
+
+**** Complements                                                  :ignore:
+#+attr_latex: :options [Complement]
+#+begin_definition
+A *complement* of $a$ in a bounded lattice is an element $\overline{a}$ such that
+\[
+a \land \overline{a} = 0, \qquad
+a \lor \overline{a} = 1.
+\]
+#+end_definition
+
+#+attr_latex: :options [The complement in distributive lattices is unique]
+#+begin_proposition
+If a complement of an element exists in a distributive lattice, it is unique.
+#+end_proposition
+# TODO: Commutativity is needed on this proof, but it is not stated elsewhere
+#+begin_proof
+Given $a$ with two complements $x,y$, we have that
+\[
+x = x \land (a \lor y) = (x \land a) \lor (x \land y) =
+(y \land a) \lor (x \land y) = y \lor (x \land a) = y.
+\]
+#+end_proof
+
+**** Boolean algebras                                             :ignore:
+#+attr_latex: :options [Boolean algebra]
+#+begin_definition
+A *Boolean algebra* is a distributive bounded lattice in which every element
+has a complement.
+#+end_definition
+
+Boolean algebras satisfy certain known properties such as the DeMorgan laws
+and the double negation elimination rule.
+
+# TODO: Every Boolean algebra is the algebra of subsets of some set.
+# This is a result by M.H.Stone, cited in pag 50 Moerdijk.
+
+*** Heyting algebras
+**** Definition of Heyting algebras                               :ignore:
+#+attr_latex: :options [Heyting algebra]
+#+begin_definition
+A *Heyting algebra*, also called *Brouwerian lattice*, is a bounded lattice
+which is cartesian closed as a category; i.e., for every pair of elements
+$x,y$, the exponential $y^x$ exists.
+#+end_definition
+
+The exponential in Heyting algebras is usually written as $x \Rightarrow y$ and is 
+characterized by its adjunction with the product
+\[
+z \leq (x \Rightarrow y) \text{ if and only if } z \land x \leq y.
+\]
+
+# TODO: Any complete distributive lattice is a Heyting algebra
+
+**** Boolean algebras are Heyting algebras                        :ignore:
+#+attr_latex: :options [Boolean algebras are Heyting algebras]
+#+begin_proposition
+Every Boolean algebra is a Heyting algebra with exponentials given by
+\[
+(x \Rightarrow y) = \overline{x} \land y.
+\]
+#+end_proposition
+#+begin_proof
+We will prove that
+\[
+z \leq (\overline{x} \lor y) \text{ if and only if } z \land x \leq y.
+\]
+If $z \leq (\overline{x} \lor y)$,
+\[
+z \land x \leq
+(\overline{x} \lor y) \land x \leq
+(\overline{x} \land x) \lor (y \land x) \leq
+y \land x \leq
+y;
+\]
+and if $z \land x \leq y$,
+\[
+z = 
+z \land 1 =
+z \land (\overline{x} \lor x) =
+(z \land \overline{x}) \lor (z \land x) \leq 
+(z \land \overline{x}) \lor y \leq
+z \lor y.
+\]
+#+end_proof
+
+**** Negation on Heyting algebras                                 :ignore:
+#+attr_latex: :options [Negation]
+#+begin_definition
+The *negation* of $x$ in a Heyting algebra is defined as
+\[
+\neg x = (x \Rightarrow 0).
+\]
+#+end_definition
+
+**** Properties of a Heyting algebra                              :ignore:
+#+begin_proposition
+In any Heyting algebra,
+
+  1) $x \leq \neg \neg x$,
+  2) $x \leq y$ implies $\neg y \leq \neg x$,
+  3) $\neg x = \neg\neg\neg x$,
+  4) $\neg\neg (x \land y) = \neg \neg x \land \neg \neg y$,
+  5) $(x \impl x) = 1$,
+  6) $x \land (x \impl y) = x \land y$,
+  7) $y \land (x \impl y) = y$,
+  8) $x \impl (y \land z) = (x \impl y) \land (x \impl z)$.
+
+Any bounded lattice $L$ with an operation satisfying the last four properties
+is a Heyting algebra with this operation as implication.
+#+end_proposition
+#+begin_proof
+We can prove the inequalities using the definition of implication.
+
+  1) By definition, $x \land (x \Rightarrow \bot) \leq \bot$.
+  2) Again, by definition, $\neg y \land x \leq \neg y \land y \leq \bot$.
+  3) Is a consequence of the first two inequalities.
+  4) We know that $x \land y \leq x,y$, and therefore $\neg\neg (x\land y) \leq \neg \neg x \land \neg \neg y$.
+     We can prove $\neg\neg x \land \neg\neg y \leq \neg\neg (x \land y)$ using the definition of
+     negation to get $\neg\neg x \land \neg\neg y \land \neg (x \land y) \leq \bot$, and then by reversing
+     the definition of implication $\neg\neg y \land \neg (x \land y) \leq \neg\neg\neg x = x$. Applying
+     the same reasoning to $y$, we finally get $x \land y \land \neg (x \land y) \leq \bot$.
+  5) Follows from $x \land 1 \leq x$.
+  6) Using the evaluation morphism, we know that $x \land (x \impl y) \leq y \leq x \land y$.
+  7) Using the definition of implication $y = y \land y \leq y \land (x \Rightarrow y)$.
+  8) The exponential $x \Rightarrow -$ is a right adjoint and it preserves products.
+#+end_proof
+
+**** Characterization of Boolean algebras                         :ignore:
+#+attr_latex: :options [Complements are negations in Heyting algebras]
+#+begin_proposition
+If an element has a complement on a Heyting algebra, it must be $\neg x$.
+#+end_proposition
+#+begin_proof
+Let $a$ a complement of $x$. By definition, $x \land a = \bot$ and therefore $a \leq \neg x$.
+The reverse inequality can be proven using the lattice properties as
+\[
+\neg x = \neg x \land (x \lor a) = \neg x \land a.
+\]
+#+end_proof
+
+#+attr_latex: :options [Characterization of Boolean algebras]
+#+begin_proposition
+A Heyting algebra is Boolean if and only if $\neg\neg x = x$ for every $x$; 
+and if and only if $x \lor \neg x = 1$ for every $x$.
+#+end_proposition
+#+begin_proof
+In a Boolean algebra the complement is unique and $\neg\neg x = x$. Now, 
+if $\neg\neg y = y$ for every $y$,
+\[
+x \lor \neg x = \neg\neg (x \lor \neg x) = \neg (\neg x \land \neg\neg x) = \top;
+\]
+and then, as $x \lor \neg x = \bot$, $\neg x$ must be the complement of $x$. We have
+used the fact that $\neg (x \lor y) = (\neg x) \land (\neg y)$ in any Heyting algebra.
+#+end_proof
+
+*** Quantifiers as adjoints
+#+begin_definition
+Given a relation between sets $S \subseteq X \times Y$, the functors $\forall_p, \exists_p \colon {\cal P}(X \times Y) \to {\cal P}(Y)$
+are defined as
+
+  * $\forall_p S = \left\{ y \mid \forall x: \pair{x,y} \in S \right\}$, and
+  * $\exists_p S = \left\{ y \mid \exists x: \pair{x,y} \in S \right\}$.
+#+end_definition
+
+#+begin_theorem
+The functors $\exists_p,\forall_p$ are the left and right adjoints to the inverse image of the
+projection functor, $p^{\ast} \colon {\cal P}(Y) \to {\cal P}(X \times Y)$.
+#+end_theorem
+#+begin_proof
+# TODO: Proof
+#+end_proof
+
+#+begin_theorem
+Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\ast} \colon {\cal P}Y \to {\cal P}Z$
+has left and right adjoints, called $\exists_f$ and $\forall_f$.
+#+end_theorem
+** Cartesian closed categories
+*** Cartesian category
+#+ATTR_LATEX: :options [Cartesian category]
+#+BEGIN_definition
+A *cartesian category* is a category with all finite products.
+#+END_definition
+#+ATTR_LATEX: :options [Cartesian closed category]
+#+BEGIN_definition
+A *cartesian closed category* is a category with all finite products
+and exponentials.
+#+END_definition
+
+The definition of cartesian closed category can be written in terms of
+existence of adjoints.
+
+#+ATTR_LATEX: :options [Cartesian closed categories and adjoints]
+#+BEGIN_proposition
+Any category ${\cal C}$ is cartesian closed if and only if there exist
+right adjoints for the following functors
+
+  * $! \colon {\cal C} \to 1$, the unique functor to the terminal category;
+  * $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, the diagonal functor;
+  * $(- \times A) \colon {\cal C} \to {\cal C}$, the product functor, for each $A \in {\cal C}$.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+*** Frames
+#+ATTR_LATEX: :options [Completeness for posets]
+#+BEGIN_proposition
+Complete posets are cocomplete. Cocomplete posets are complete.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+#+ATTR_LATEX: :options [Frames]
+#+BEGIN_definition
+*Frames* are complete cartesian closed posets.
+#+END_definition
+
+** TODO Models of \lambda-calculus
+*** TODO Types and sets
+# From the Hott book
+*** TODO Models
+# From Selinger
+*** TODO Continuous partial orderings
+# From Selinger
+** Topoi
+*** Subobject classifier
+#+attr_latex: :options [Subobject classifier]
+#+begin_definition
+A *subobject classifier* is an object $\Omega$ with a monomorphism $\mathrm{true} \colon 1 \to \Omega$
+such that, for every monomorphism $S \to X$, there exists a unique $\phi$ such that
+\[\begin{tikzcd}
+S\rar{} \dar[swap]{} & 1 \dar{\mathrm{true}} \\
+X\rar[dashed]{\phi} & \Omega
+\end{tikzcd}\]
+forms a pullback square.
+#+end_definition
+
+*** Definition of a topos
+#+attr_latex: :options [Topos]
+#+begin_definition
+An *elementary topos* (plural /topoi/) is a cartesian closed category
+with all finite limits and a subobject classifier.
+#+end_definition
 * Type theory
 # to conduct my thoughts in an orderly fashion, by commencing with those
 # objects that are simplest and easiest to know, in order to ascend
