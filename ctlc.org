@@ -3140,8 +3140,9 @@ The complete Mikrokosmos suite is divided in multiple parts:
 
  1) the *Mikrokosmos interpreter*, written in Haskell;
  2) the *Jupyter kernel*, written in Python;
- 3) the *CodeMirror Lexer*, written in Javascript; and
- 4) the *Mikrokosmos libraries*, written in the Mikrokosmos language.
+ 3) the *CodeMirror Lexer*, written in Javascript;
+ 4) the *Mikrokosmos libraries*, written in the Mikrokosmos language;
+ 5) the *Mikrokosmos-js* compilation, which can be used in web browsers.
 
 These parts will be detailed on the following sections. A system that
 already satisfies all dependencies (Stack, Pip and Jupyter), can install
@@ -3323,16 +3324,18 @@ and no additional installation is required.
 #+BEGIN_SRC javascript
 	CodeMirror.defineSimpleMode("mikrokosmos", {
 	    start: [
-		// Comments
-		{regex: /\#.*/, token: "comment"},
-		// Interpreter
-		{regex: /\:load|\:verbose|\:ski|\:restart|\:types|\:color/, 
-           token: "atom"},
-		// Binding
-		{regex: /(.*?)(\s*)(=)(\s*)(.*?)$/,
-		 token: ["def",null,"operator",null,"variable"]},
-		// Operators
-		{regex: /[=!]+/, token: "operator"},
+	    // Comments
+	    {regex: /\#.*/,
+            token: "comment"},
+	    // Interpreter
+            {regex: /\:load|\:verbose|\:ski|\:restart|\:types|\:color/,
+            token: "atom"},
+	    // Binding
+	    {regex: /(.*?)(\s*)(=)(\s*)(.*?)$/,
+	    token: ["def",null,"operator",null,"variable"]},
+	    // Operators
+	    {regex: /[=!]+/,
+            token: "operator"},
 	    ],
 	    meta: {
 		dontIndentStates: ["comment"],
