@@ -2621,13 +2621,30 @@ tests transformation properties of lambda expressions. In the following
 example, it tests that any deBruijn expression keeps is meaning when
 is translated into a \lambda-term.
 
-#+BEGIN_SRC haskell
+#+BEGIN_example
 QC.testProperty "Expression -> named -> expression" $
   \expr -> toBruijn emptyContext (nameExp expr) == expr
+#+END_example
+
+We are using the *tasty-golden* package for golden tests.  Mikrokosmos
+can be passed a file as an argument to interpret it and show only the
+results. This feature is used to create a golden test in which the
+correct interpretation of a file.  This file is called =testing.mkr=,
+and contains library definitions and multiple tests. Its expected
+output is =testing.golden=. For example, the following Mikrokosmos
+code can be found on the file
+
+#+BEGIN_SRC haskell
+:types on
+caseof (inr 3) (plus 2) (mult 2)
 #+END_SRC
 
-# We are using the *tasty-golden* package for golden tests.
-# TODO
+and the expected output is
+
+#+BEGIN_SRC haskell
+-- types: on
+-- λa.λb.(a (a (a (a (a (a b)))))) ⇒ 6 :: (A → A) → A → A
+#+END_SRC
 
 *** Version control and continuous integration
 Mikrokosmos uses *git* as its version control system and the code,
