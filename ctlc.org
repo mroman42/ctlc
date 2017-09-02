@@ -739,15 +739,14 @@ An adjunction determines a *unit* and a *counit*;
 
  1) the *unit* is natural transformation made with universal arrows $\eta\colon I \todot GF$, where
     the right adjoint of each $f \colon Fx \to a$ is
-
     \[
     \varphi f = Gf \circ \eta_x \colon x \to Ga.
     \]
-
  2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot I$, where
     the left adjoint of each $g \colon x \to Ga$ is
-
-    \[\varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.\]
+    \[
+    \varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.
+    \]
 
 that follow the /triangle identities/ $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
 #+end_definition
@@ -812,7 +811,7 @@ is obtained by applying functors $G$ and $F$. Unit laws follow from
 the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
 
-**** Comonads                                                     :ignore:
+*** Comonads
 #+attr_latex: :options [Comonad]
 #+begin_definition
 A *comonad* is a functor $L\colon X \to X$ with natural transformations
