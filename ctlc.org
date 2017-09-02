@@ -2337,6 +2337,13 @@ This example could be checked and simplified by this interpreter as
 *** TODO Hindley-Milner
 *** TODO System F                                                :noexport:
 **** TODO System F is strongly normalizing
+*** TODO Type algebra
+# Type algebra should be studied, at least, on System F.
+# Properties of type algebra can be proved on Agda.
+
+**** Lists, trees and generating functions
+**** Derivatives and one-hole contexts
+**** Seven trees in one
 *** \lambda-cube
 The *\lambda-cube* is a taxonomy for Church-style type systems given
 by Barendregt in cite:barendregt92. It describes eight type systems
@@ -2429,7 +2436,7 @@ and the relation between logic and types.
 to implement Mikrokosmos. Its design is heavily influenced by the
 \lambda-calculus and is a general-purpose language with a rich
 ecosystem and plenty of consolidated libraries [fn:hackagelibs] in
-areas such as parsing, testing or system interaction, satisfying the
+areas such as parsing, testing or system interaction; matching the
 requisites of our project. In the following sections, we describe this
 ecosystem in more detail.
 
@@ -2447,10 +2454,8 @@ versions of the language were developed, and the first standarized
 reference of the language was published in the *Haskell 98 Report*,
 whose revised version can be read on cite:haskell98. Its more popular
 implementation is the *Glasgow Haskell Compiler (GHC)*; an open source
-compiler written in Haskell and C.
-
-The complete history of Haskell and its design decisions is detailed
-on cite:hudak07_haskell.
+compiler written in Haskell and C. The complete history of Haskell and
+its design decisions is detailed on cite:hudak07_haskell.
 
 **** Haskell's properties                                         :ignore:
 Haskell is
