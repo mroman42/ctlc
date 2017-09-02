@@ -875,6 +875,69 @@ x''
 
 commutes.
 #+end_proof
+** Kan extensions
+*** Dinatural transformations
+#+ATTR_LATEX: :options [Dinatural transformation]
+#+BEGIN_definition
+A *dinatural transformation* between functors $F,G \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$
+is a family of morphisms $\alpha_x \colon F(x,x) \to G(x,x)$ for each $x \in {\cal C}$,
+called /components/, such that for every $f \colon x \to y$,
+\[\begin{tikzcd} &
+F(x,x) \rar{\alpha_{x}} &
+G(x,x) \drar{G(\id,f)} & \\
+F(y,x) \urar{F(f,\id)}\drar[swap]{F(\id,f)} & & &
+G(x,y) \\
+&
+F(y,y) \rar{\alpha_{y}} &
+G(y,y) \urar[swap]{G(f,\id)} &
+\end{tikzcd}\]
+
+commutes
+#+END_definition
+
+# TODO: Every natural transformation gives a dinatural transformation.
+
+**** TODO Natural transformation of covariant to contravariant functor :ignore:
+**** Extranatural transformations (wedges)                        :ignore:
+#+ATTR_LATEX: :options [Extranatural transformation]
+#+BEGIN_definition
+An *extranatural transformation* (also called *wedge*) is a dinatural
+transformation to a constant functor.
+#+END_definition
+
+That is, an extranatural transformation from the functor $F$ to the
+object $a$ is a family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
+
+\[\begin{tikzcd}
+F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
+F(x,x)\rar[swap]{\alpha_{x}} & b
+\end{tikzcd}\]
+
+commutes for every $f \colon x \to y$. We write wedges as $\alpha \colon F \toddot b$.
+
+**** TODO Examples of dinatural transformations                   :ignore:
+*** Ends
+# cowedges ?
+
+#+ATTR_LATEX: :options [End]
+#+BEGIN_definition
+An *end* of $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is a universal dinatural transformation
+from a constant $e$ to $F$. That is, a wedge $\sigma \colon e \toddot F$ such that for every
+other $\tau \colon k \toddot F$, there exists a unique $u \colon k \to e$ such that $\sigma_x \circ u = \tau_x$.
+#+END_definition
+
+We usually call /end/ to the object $e$, and we write
+\[
+e = \int_x F(c,c).
+\]
+
+**** TODO Examples of ends
+\[
+\mathrm{Nat}(U,V) = \int_x \hom(Ux,Vx)
+\]
+
+*** Coends
+*** Kan extensions
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 #+LATEX: \end{center}}
