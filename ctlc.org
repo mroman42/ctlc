@@ -3937,10 +3937,15 @@ forcing techniques with allowed to construct new models of ZFC.
 
 * Categorical logic
 ** Lawvere algebraic theories
+# FROM: Introduction to categorical logic, Awodey & Bauer
+
 # I should join the two first sections and exaplain the first definition
 # only as an introduction.
 
-*** Algebraic theories
+*** Motivation of algebraic theories
+We will develop an unified approach to the study of algebraic
+structures based on constants, operations and equations.
+
 **** First definition of algebraic theory                         :ignore:
 #+ATTR_LATEX: :options [Algebraic theory]
 #+BEGIN_definition
@@ -3991,13 +3996,13 @@ A *model of an algebraic theory* is an interpretation that satisfies
 all the axioms of the theory.
 #+END_definition
 
-*** Algebraic theories as categories
 **** TODO Notion of representation-free theories                  :ignore:
 # This notion is not representation free
 # Example
 # Category of an algebraic theory
 
-**** Second definition of algebraic theory                        :ignore:
+*** Algebraic theories as categories
+**** Algebraic theory                                             :ignore:
 #+ATTR_LATEX: :options [Lawvere algebraic theory]
 #+BEGIN_definition
 An *algebraic theory* is a category with finite products and objects
