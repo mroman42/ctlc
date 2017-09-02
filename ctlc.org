@@ -3347,12 +3347,81 @@ and no additional installation is required.
 [fn:codemirror]: Documentation for CodeMirror can be found in its
 official page: https://codemirror.net/
 
-*** TODO JupyterHub
-# DigitalOcean
-# NameCheap
-# SSL
-# JupyterHub setup
-# OAuth
+*** JupyterHub
+*JupyterHub* manages multiple instances of independent single-user Jupyter
+notebooks. We used it to serve Mikrokosmos notebooks and tutorials to
+students studying \lambda-calculus.
+
+In order to install Mikrokosmos on a server and use it as =root= user,
+we need
+
+  * to clone the libraries into =/usr/lib/mikrokosmos=. They should be
+    available system-wide.
+
+  * to install the Mikrokosmos interpreter into =/usr/local/bin=. In
+    this case, we chose not to install Mikrokosmos from source, but simply
+    copy the binaries and check the availability of the =ncurses= library.
+
+  * to install the Mikrokosmos Jupyter kernel as usual.
+
+Our server used a SSL certificate; and OAuth autentication via GitHub.
+Mikrokosmos tutorials were installed for every student.
+
+*** Calling Mikrokosmos from Javascript
+The GHCjs[fn:ghcjs] compiler allows transpiling from Haskell to Javascript.
+Its foreign function interface allows a Haskell function to be passed as
+a continuation to a Javascript function.
+
+A particular version of the =Main.hs= module of Mikrokosmos was written in
+order to provide a =mikrokosmos= function, callable from Javascript. This
+version includes the standard libraries automatically and reads blocks of
+texts as independent Mikrokosmos commands. The relevant use of the foreign
+function interface is showed in the following code
+
+#+BEGIN_SRC haskell
+foreign import javascript unsafe "mikrokosmos = $1"
+    set_mikrokosmos :: Callback a -> IO ()
+#+END_SRC
+
+which provides =mikrokosmos= as a Javascript function once the code is
+transpiled. In particular, the following is an example of how to call
+Mikrokosmos from Javascript
+
+#+BEGIN_SRC javascript
+button.onclick = function () {
+   editor.save();
+   outputcode.getDoc().setValue(mikrokosmos(inputarea.value).mkroutput);
+   textAreaAdjust(outputarea);
+}
+#+END_SRC
+
+A small script has been written in Javascript to help with the task of
+embedding Mikrokosmos into a web page. It and can be included directly
+from
+
+=https://m42.github.io/mikrokosmos-js/mikrobox.js=
+
+using GitHub as a CDN. It will convert any HTML script tag written as
+follows
+
+#+BEGIN_SRC html
+<div class="mikrojs-console">
+<script type="text/mikrokosmos">
+(λx.x)
+... your code
+</script>
+</div>
+#+END_SRC
+
+into a CodeMirror pad where Mikrokosmos can be executed. The Mikrokosmos
+tutorials are an example of this feature and can be seen on Figure [[mikrokosmosjstutorial]].
+
+#+caption: Mikrokosmos embedded into a web page.
+#+name: mikrokosmosjstutorial
+[[./images/mikrokosmosjs.png]]
+
+[fn:ghcjs]: The GHCjs documentation is available on its web page https://github.com/ghcjs/ghcjs
+
 ** Programming in the untyped \lambda-calculus
 This section explains how to use the untyped \lambda-calculus to
 encode data structures and useful data, such as booleans, linked lists,
@@ -3857,10 +3926,6 @@ notnotlem
 
 whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
 
-*** TODO Type algebra
-**** Lists, trees and generating functions
-**** Derivatives and one-hole contexts
-**** Seven trees in one
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
