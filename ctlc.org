@@ -4071,6 +4071,55 @@ The Yoneda embedding $y \colon \mathbb{A} \to \widehat{\mathbb{A}}$ is a univers
 #+BEGIN_proof
 # TODO
 #+END_proof
+
+** Cartesian closed categories
+*** Cartesian category
+#+ATTR_LATEX: :options [Cartesian category]
+#+BEGIN_definition
+A *cartesian category* is a category with all finite products.
+#+END_definition
+#+ATTR_LATEX: :options [Cartesian closed category]
+#+BEGIN_definition
+A *cartesian closed category* is a category with all finite products
+and exponentials.
+#+END_definition
+
+The definition of cartesian closed category can be written in terms of
+existence of adjoints.
+
+#+ATTR_LATEX: :options [Cartesian closed categories and adjoints]
+#+BEGIN_proposition
+Any category ${\cal C}$ is cartesian closed if and only if there exist
+right adjoints for the following functors
+
+  * $! \colon {\cal C} \to 1$, the unique functor to the terminal category;
+  * $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, the diagonal functor;
+  * $(- \times A) \colon {\cal C} \to {\cal C}$, the product functor, for each $A \in {\cal C}$.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+*** Frames
+#+ATTR_LATEX: :options [Completeness for posets]
+#+BEGIN_proposition
+Complete posets are cocomplete. Cocomplete posets are complete.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+#+ATTR_LATEX: :options [Frames]
+#+BEGIN_definition
+*Frames* are complete cartesian closed posets.
+#+END_definition
+
+#+ATTR_LATEX: :options [Frame morphism]
+#+BEGIN_definition
+A *frame morphism* is a function between frames preserving finite
+infima and arbitrary suprema.
+#+END_definition
+
 ** Heyting algebras
 In this section, we develop the notion of a *Heyting algebra* and show
 its differences with a Boolean algebra.
@@ -4330,48 +4379,39 @@ projection functor, $p^{\ast} \colon {\cal P}(Y) \to {\cal P}(X \times Y)$.
 Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\ast} \colon {\cal P}Y \to {\cal P}Z$
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
-** Cartesian closed categories
-*** Cartesian category
-#+ATTR_LATEX: :options [Cartesian category]
+
+** Simply-typed \lambda-theories
+*** Simply-typed \lambda-theories
+#+ATTR_LATEX: :options [Simply typed lambda theory]
 #+BEGIN_definition
-A *cartesian category* is a category with all finite products.
+A simply-typed \lambda-theory is given by
+
+  * a set of /basic types/.
+  * a set of /basic constants/ with their types.
+  * a set of /equations/ on those terms, of the form $\Gamma \mid u = t : A$.
 #+END_definition
-#+ATTR_LATEX: :options [Cartesian closed category]
+
+# TODO Example: Groups
+# TODO Any algebraic theory is a lambda theory
+# TODO Theory of a reflexive type
+
+*** Interpretation of \lambda-theories
+#+ATTR_LATEX: :options [Interpretation of a lambda theory]
 #+BEGIN_definition
-A *cartesian closed category* is a category with all finite products
-and exponentials.
+# TODO interpretation
 #+END_definition
 
-The definition of cartesian closed category can be written in terms of
-existence of adjoints.
-
-#+ATTR_LATEX: :options [Cartesian closed categories and adjoints]
-#+BEGIN_proposition
-Any category ${\cal C}$ is cartesian closed if and only if there exist
-right adjoints for the following functors
-
-  * $! \colon {\cal C} \to 1$, the unique functor to the terminal category;
-  * $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, the diagonal functor;
-  * $(- \times A) \colon {\cal C} \to {\cal C}$, the product functor, for each $A \in {\cal C}$.
-#+END_proposition
-#+BEGIN_proof
+#+ATTR_LATEX: :options [Syntactic category]
+#+BEGIN_definition
 # TODO
-#+END_proof
-
-*** Frames
-#+ATTR_LATEX: :options [Completeness for posets]
-#+BEGIN_proposition
-Complete posets are cocomplete. Cocomplete posets are complete.
-#+END_proposition
-#+BEGIN_proof
-# TODO
-#+END_proof
-
-#+ATTR_LATEX: :options [Frames]
-#+BEGIN_definition
-*Frames* are complete cartesian closed posets.
 #+END_definition
 
+# TODO Models as functors
+
+**** TODO Internal language of a category
+**** TODO Category of CCCs and category of lambdaTheories
+
+*** TODO First-order logic
 ** TODO Models of \lambda-calculus
 *** TODO Types and sets
 # From the Hott book
@@ -4436,6 +4476,8 @@ proposition, that is,
 bibliographystyle:alpha
 bibliography:Bibliography.bib
 
+** TODO A note on structural induction
+http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Mikrokosmos complete code
 ** TODO Mikrokosmos user's guide
 ** TODO Quotes
