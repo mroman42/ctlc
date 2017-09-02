@@ -2259,6 +2259,7 @@ The Curry-Howard correspondence is then not only a simple bijection
 between types and propositions, but a deeper isomorphism regarding the
 way they are constructed, used in derivations, and simplified.
 
+# TODO: Check with mikrokosmos
 #+attr_latex: :options [Curry-Howard example]
 #+begin_exampleth
 As an example, we will write a proof/term of the proposition/type =A → B + A=
@@ -2288,7 +2289,7 @@ We start with the following derivation tree
 \UIC{$A \to B + A$}
 \end{prooftree}
 
-which is encoded by the term =λa.(λc.case c of (λx.inr) (λy.inl y)) (inl a)=.
+which is encoded by the term =λa.(λc.case c of (inr) (inl)) (inl a)=.
 We apply the simplification rule/\beta-rule of the implication/function application
 to get
 
@@ -2308,7 +2309,7 @@ to get
 \UIC{$A \to B +A$}
 \end{prooftree}
 
-which is encoded by the term =λa.case (inl a) of (λx.inr) (λy.inl y)=. We finally
+which is encoded by the term =λa.case (inl a) of (inr) (inl)=. We finally
 apply the =case= simplification/reduction rule to get
 
 \begin{prooftree}\EnableBpAbbreviations
