@@ -2465,13 +2465,12 @@ Haskell is
     casting. The compiler will generate an error if a term is
     non-typeable.
 
-  * *lazy*, with /non-strict semantics/, meaning that 
-    
-    This /call-by-need/ approach is usually less efficient than the
-    /call-by-value/ one.
-    
-    In [ Hughes Why functional programming matters ], Hughes argued
-    for the benefits of a lazy functional language.
+  * *lazy*, with /non-strict semantics/, meaning that it will not
+    evaluate a term or the argument of a function until it is
+    needed.
+
+    In cite:hughes89, Hughes argued for the benefits of a lazy
+    functional language, which could solve the efficiency problem.
 
   * *purely functional*. As the evaluation order is demand-driven and
     not explicitly known, it is not possible in practice to perform
@@ -2576,7 +2575,18 @@ program with monads in Agda.
 
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
 
-*** TODO Cabal, Stack and Haddock
+*** Cabal, Stack and Haddock
+The Mikrokosmos documentation as a Haskell library is included
+in its own code. It uses *Haddock*, a tool that generates documentation
+from annotated Haskell code; it is the de facto standard in for Haskell
+software.
+
+Dependencies and packaging details for Mikrokosmos are specified in
+the file =mikrokosmos.cabal=. It is used by the package managers
+*stack* and *cabal* to provide the necessary libraries even if they
+are not available system-wide. The *stack* tool is also used to package
+the software, which is uploaded to Hackage.
+
 *** Testing
 *Tasty* is the Haskell testing framework of our choice for this
 project. It allows the user to create a comprehensive test suite
