@@ -25,6 +25,8 @@ has been used for code listings and the =tikzcd= package has been used
 for commutative diagrams.
 * Category theory (abstract)                                         :ignore:
 * Category theory
+# TODO: Presheaf categories
+
 ** Categories
 *** Definition of category
 We will think of a category as the algebraic structure that captures
@@ -2975,6 +2977,7 @@ typeinference e = normalize <$>
 
 The complete code can be found on the [[*Mikrokosmos complete code][Appendix]].
 
+*** TODO Gentzen deduction trees
 ** User interaction
 *** Monadic parser combinators
 A common approach to building parsers in functional programming is to
@@ -3108,7 +3111,7 @@ mikro> and
 #+end_example
 
 The code implementing these algorithms follows directly from the
-theoretical version.
+theoretical version in cite:Hindley08.
 
 #+BEGIN_SRC haskell
 -- | Bracket abstraction of a SKI term, as defined in Hindley-Seldin
@@ -3228,6 +3231,7 @@ sudo -H pip install imikrokosmos
 #+END_SRC
 
 [fn:hackage]: Hackage can be accesed in: http://hackage.haskell.org/
+and the Mikrokosmos package can be found in https://hackage.haskell.org/package/mikrokosmos
 [fn:mikrokosmoslibgit]: The repository can be accessed in: https://github.com/M42/mikrokosmos-lib.git
 
 *** Mikrokosmos interpreter
