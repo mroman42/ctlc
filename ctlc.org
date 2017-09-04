@@ -4158,10 +4158,37 @@ Yoneda embedding.
 The Yoneda embedding $y \colon \mathbb{A} \to \widehat{\mathbb{A}}$ is a universal model for $\mathbb{A}$.
 #+END_proposition
 #+BEGIN_proof
-# TODO
+It preserves finite products because it preserves all limits, hence
+it is a model. As it is a faithful functor, we know that any equation
+proved in the model is an eqation proved by the theory.
 #+END_proof
 
 ** Cartesian closed categories
+*** Exponential
+#+ATTR_LATEX: :options [Exponential]
+#+BEGIN_definition
+An *exponential* of $A$ and $B$ in a category with binary products is an
+object $B^A$ with a morphism $e : B^A \times A \to B$ called /evaluation morphism/,
+such that, for any $f : C \times A \to B$ exists a unique $\widetilde{f} : C \to B^A$ such that
+the following diagram commutes
+\[\begin{tikzcd}
+B^A & B^A \times A \drar{e} & \\
+C \uar[dashed]{\widetilde f}  & C \times A \rar[swap]{f}\uar{\widetilde f \times id} & B 
+\end{tikzcd}\]
+#+END_definition
+
+An object $A$ for which the exponentiation $-^A$ is always defined is called
+*exponentiable*.
+
+#+ATTR_LATEX: :options [Exponentials as adjoints]
+#+BEGIN_proposition
+An object $A$ in a category with binary products ${\cal C}$ is exponentiable if and only if
+the functor $(- \times A) : {\cal C} \to {\cal C}$ has a right adjoint.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
 *** Cartesian category
 #+ATTR_LATEX: :options [Cartesian category]
 #+BEGIN_definition
@@ -4189,7 +4216,15 @@ right adjoints for the following functors
 # TODO
 #+END_proof
 
-*** Frames
+#+ATTR_LATEX: :options [Category of small cartesian closed categories]
+#+BEGIN_definition
+We call $\mathtt{Ccc}$ to the category of small cartesian closed
+categories with functors preserving finite products and
+exponentials as morphisms. These functors are called
+*cartesian closed functors*.
+#+END_definition
+
+*** Frames and locales
 #+ATTR_LATEX: :options [Completeness for posets]
 #+BEGIN_proposition
 Complete posets are cocomplete. Cocomplete posets are complete.
