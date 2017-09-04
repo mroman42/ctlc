@@ -8,6 +8,7 @@
 \EnableBpAbbreviations{}
 \usepackage{mathtools}
 \usepackage{scalerel}
+\usepackage{stmaryrd}
 
 %------------------------
 % Math symbols and unicode support
@@ -41,12 +42,26 @@
 %------------------------
 % Macros
 % ------------------------
-\newcommand{\impl}{\Rightarrow}
-\DeclarePairedDelimiter\pair{\langle}{\rangle}
+
+% Corner quotes from:
+% http://www.logicmatters.net/latex-for-logicians/symbols/corner-quotes-for-godel-numbers/
+\newbox\gnBoxA\newdimen\gnCornerHgt\setbox\gnBoxA=\hbox{$\ulcorner$}
+\global\gnCornerHgt=\ht\gnBoxA\newdimen\gnArgHgt\def\intl #1{%
+\setbox\gnBoxA=\hbox{$#1$}%
+\gnArgHgt=\ht\gnBoxA%
+\ifnum \gnArgHgt<\gnCornerHgt \gnArgHgt=0pt%
+\else \advance \gnArgHgt by -\gnCornerHgt\fi \raise\gnArgHgt\hbox{$\ulcorner$} \box\gnBoxA %
+\raise\gnArgHgt\hbox{$\urcorner$}}
+
+\newcommand{\impl}{\Rightarrow} % Implication
+\DeclarePairedDelimiter\pair{\langle}{\rangle} % Pair notation
+\DeclarePairedDelimiter\intr{\llbracket}{\rrbracket} % Interpretation brackets
+\DeclarePairedDelimiter\intl{\llbracket}{\rrbracket} % Internal language brackets
+
 % Lambda calculus
-\newcommand{\skiabs}{\mathfrak{H}}
-\newcommand{\tto}{\twoheadrightarrow}
-\DeclareMathOperator{\freevars}{FV}
+\newcommand{\skiabs}{\mathfrak{H}} % SKI abstraction
+\newcommand{\tto}{\twoheadrightarrow} % Reduction
+\DeclareMathOperator{\freevars}{FV} % Free variables
 
 % Categories
 \newcommand{\hom}{\mathrm{hom}}
