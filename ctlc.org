@@ -4238,11 +4238,18 @@ Complete posets are cocomplete. Cocomplete posets are complete.
 *Frames* are complete cartesian closed posets.
 #+END_definition
 
+# TODO: Equivalently A frame is a poset with distributive law.
+
 #+ATTR_LATEX: :options [Frame morphism]
 #+BEGIN_definition
 A *frame morphism* is a function between frames preserving finite
 infima and arbitrary suprema.
 #+END_definition
+
+# TODO: Locales
+
+# TODO: Locales as non-pointed topological spaces, from An informal
+# introduction to topos theory
 
 ** Heyting algebras
 In this section, we develop the notion of a *Heyting algebra* and show
@@ -4284,22 +4291,58 @@ where $\mathrm{int}$ is the topological interior of a set.
 # TODO: This definition of the implication does not match with the used
 # on Moerdijk. It is equivalent but different.
 
-*** Boolean algebras
+*** Lattices and Boolean algebras
 **** Lattices, definition                                         :ignore:
 #+attr_latex: :options [Lattice]
 #+begin_definition
 A *lattice* is a partially ordered set with all binary products and
-coproducts. It is a *bounded lattice* if it has all binary products
+coproducts. It is a *bounded lattice* if it has all finite products
 and coproducts.
 #+end_definition
 
-We will usually work with bounded lattices.
+We will usually work with bounded lattices and simply call them
+/lattices/. A bounded lattice can be defined then by the following
+inference rules
+
+\begin{prooftree}
+\AXC{$0 \leq x \leq 1$}
+\AXC{$z \leq x$}
+\AXC{$z \leq y$}
+\doubleLine
+\BIC{$z \leq x \land y$}
+\AXC{$x \leq z$}
+\AXC{$y \leq z$}
+\doubleLine
+\BIC{$x \lor y \leq z$}
+\noLine
+\TIC{$$}
+\end{prooftree}
+
+
+meaning that it has a terminal and a final object, in order to have
+all finte products and coproducts, and all binary products and
+coproducts.
+
+#+ATTR_LATEX: :options [Lattice homomorphism]
+#+BEGIN_definition
+A lattice homomorphism is a function between lattices preserving
+finite products and coproducts. That is, a function $f$ such that
+
+  * $f(0) = 0$, $f(1) = 1$,
+  * $f(x \wedge y) = f(x) \wedge f(y)$,
+  * $f(x \vee y) = f(x) \vee f(y)$;
+
+and the category of lattices and lattice homomorphisms is denoted
+by $\mathtt{Lat}$.
+#+END_definition
+
 A bounded lattice can also be defined as a set with $0,1$ and two binary
 operations $\land,\lor$ satisfying
 
   * $1 \land x = x$, and $0 \lor x = x$;
   * $x \land x = x$, and $x \lor x = x$;
-  * $x \land (y \lor x) = x = (x \land y) \lor x$.
+  * $x \land (y \lor x) = x = (x \land y) \lor x$;
+  * $x \land y = y \land x$ and $x\lor y = y \lor x$.
 
 This perspective allows us also to define a lattice object in any
 category as an object $L$ with morphisms
@@ -4375,8 +4418,20 @@ $x,y$, the exponential $y^x$ exists.
 The exponential in Heyting algebras is usually written as $x \Rightarrow y$ and is 
 characterized by its adjunction with the product
 \[
-z \leq (x \Rightarrow y) \text{ if and only if } z \land x \leq y.
+z \leq (x \Rightarrow y) \text{ if and only if } z \land x \leq y,
 \]
+which can be expressed logically as
+\begin{prooftree}
+\AXC{$z \land x \leq y$}
+\UIC{$z \leq x \Rightarrow y$}
+\end{prooftree}
+
+#+ATTR_LATEX: :options [Heyting algebra homomorphism]
+#+BEGIN_definition
+A *Heyting algebra homomorphism* is a lattice homomorphism between
+Heyting algebras which does preserve implication. The category of
+Heyting algebras is written as $\mathtt{Heyt}$.
+#+END_definition
 
 # TODO: Any complete distributive lattice is a Heyting algebra
 
