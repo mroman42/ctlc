@@ -4476,6 +4476,13 @@ The *negation* of $x$ in a Heyting algebra is defined as
 \]
 #+end_definition
 
+In general, we only have that $\neg\neg x \leq x$. An element for which
+$\neg\neg x = x$ is called a *regular* element.
+
+# TODO: Regular elements form a Boolean algebra.
+
+# TODO: Frames and Heyting algebras. What are the regular elements?
+
 **** Properties of a Heyting algebra                              :ignore:
 #+begin_proposition
 In any Heyting algebra,
@@ -4537,6 +4544,28 @@ and then, as $x \lor \neg x = \bot$, $\neg x$ must be the complement of $x$. We 
 used the fact that $\neg (x \lor y) = (\neg x) \land (\neg y)$ in any Heyting algebra.
 #+end_proof
 
+*** Intuitionistic propositional calculus
+#+ATTR_LATEX: :options [Existence of free Heyting algebras]
+#+BEGIN_proposition
+# TODO
+#+END_proposition
+
+#+ATTR_LATEX: :options [Intuitionistic propositional calculus]
+#+BEGIN_definition
+The *Intuitionistic Propositional Calculus* (IPC) is the free Heyting
+algebra over an infinite countable set $\{p_0,p_1,p_2,\dots\}$ of elements 
+which are usually called /atomic propositions/.
+#+END_definition
+
+**** Classical propositional calculus
+#+ATTR_LATEX: :options [Classical propositional calculus]
+#+BEGIN_definition
+The *Classical Propositional Calculus* (CPC) is the free Boolean
+algebra over an infinite countable set $\{p_0,p_1,p_2,\dots\}$.
+#+END_definition
+
+# TODO: Law of excluded middle and reductio ad absurdum.
+
 *** Quantifiers as adjoints
 #+begin_definition
 Given a relation between sets $S \subseteq X \times Y$, the functors $\forall_p, \exists_p \colon {\cal P}(X \times Y) \to {\cal P}(Y)$
@@ -4567,7 +4596,8 @@ A simply-typed \lambda-theory is given by
 
   * a set of /basic types/.
   * a set of /basic constants/ with their types.
-  * a set of /equations/ on those terms, of the form $\Gamma \mid u = t : A$.
+  * a set of /equations/ on those terms, of the form $\Gamma \mid u = t : A$,
+    where $\Gamma$ is the variable context.
 #+END_definition
 
 # TODO Example: Groups
@@ -4577,21 +4607,135 @@ A simply-typed \lambda-theory is given by
 *** Interpretation of \lambda-theories
 #+ATTR_LATEX: :options [Interpretation of a lambda theory]
 #+BEGIN_definition
-# TODO interpretation
+An *interpretation* of a \lambda-calculus $\mathbb{T}$ in a cartesian
+closed category ${\cal C}$ is given by
+
+  1. an object $\intr{A} \in \mathbb{C}$ for every basic type $A$ in $\mathbb{T}$.
+  2. a morphism $\intr{c} \colon 1 \to \intr{A}$ for every constant $c : A$.
+
+The interpretation can be extended to all types using the terminal
+object, binary products and exponentials
+
+ * $\intr{1} = 1$;
+ * $\intr{A \times B} = \intr{A} \times \intr{B}$;
+ * $\intr{A \impl B} = \intr{B}^{\intr{A}}$.
+
+Every context $\Gamma = x_1:A_1, \dots,x_n:A_n$ can be interpreted as the
+object $$
 #+END_definition
 
+*** Syntactic categories
 #+ATTR_LATEX: :options [Syntactic category]
 #+BEGIN_definition
+The *syntactic category* of a \lambda-theory, ${\cal S}(\mathbb{T})$, is given by
+
+ * the types of the theory as objects; and
+ * the terms in context $x : A \mid t :B$
+
+#+END_definition
+
+#+ATTR_LATEX: :options [Syntactic categories are cartesian closed]
+#+BEGIN_proposition
+The syntactic category of a \lambda-theory is cartesian closed.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+
+#+ATTR_LATEX: :options [Model of a \lambda-theory]
+#+BEGIN_definition
+A *model* of a \lambda-theory $\mathbb{T}$ is a functor $M \colon {\cal S}(\mathbb{T}) \to {\cal C}$ preserving
+finite products and exponentials.
+#+END_definition
+
+# TODO: Canonical interpretation
+
+*** Translations, category of lambda-theories
+#+ATTR_LATEX: :options [Translation]
+#+BEGIN_definition
+A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is a model of $\mathbb{T}$
+in the syntactic category ${\cal S}(U)$.
+#+END_definition
+
+#+ATTR_LATEX: :options [Translation]
+#+BEGIN_definition
+A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is given by
+
+  1. a type $\tau A$ in $\mathbb{U}$ for each type $A$ in $\mathbb{T}$; in such a way that
+     \[
+     \tau 1 = 1,\qquad
+     \tau(A \times B) = \tau A \times \tau B,\qquad
+     \tau(A \to B) = \tau A \to \tau B.
+     \]
+
+  2. a term $\tau c : \tau A$ in $\mathbb{T}$ for each term $c : A$ in $\mathbb{T}$; in such a way that
+     \[\begin{aligned}
+     \tau(\texttt{fst}\ t) = \texttt{fst}\ (\tau t), &&
+     \tau(\texttt{snd}\ t) = \texttt{snd}\ (\tau t), &&
+     \tau\pair{u,v} = \pair{\tau u, \tau v}, \\
+     \tau (tu) = (\tau t)(\tau u), &&
+     \tau (\lambda x:A. t) = \lambda x:\tau A. \tau t,
+     \end{aligned}\]
+
+A translation is also required to preserve all equations. That is, if
+$\Gamma \mid t = u : A$ can be proved in $\mathbb{T}$, $\tau \Gamma \mid \tau t = \tau u : \tau A$ should be provable
+in $\mathbb{U}$.
+#+END_definition
+
+
+#+ATTR_LATEX: :options [Category of lambda-theories]
+#+BEGIN_definition
+The category $\mathtt{\lambda Thr}$ has \lambda-theories as objects and translations
+between them as morphisms.
+#+END_definition
+
+# TODO: Notion of isomorphism of types
+# TODO: Equivalence of theories
+
+*** Internal language of a category
+#+ATTR_LATEX: :options [Internal language]
+#+BEGIN_definition
+The *internal language* of a small cartesian closed category ${\cal C}$
+is a \lambda-theory given by
+
+ 1. a /basic type/ $\intl{A }$ for every object $A \in {\cal C}$;
+
+ 2. a /constant/ $\intl{f} \colon \intl{A} \to \intl{B}$ for every morphism $f : A \to B$;
+
+ 3. the /identity/ axiom 
+    \[
+    x : \intl{A} \mid \intl{\id}\ x = x : \intl{A}
+    \] 
+    for every $A$;
+
+ 4. the /composition/ axiom
+    \[
+    x : \intl{A} \mid \intl{g \circ f}\ x = \intl{g}(\intl{f} x) : \intl{C}
+    \]
+    for every pair of composable morphisms $f : A \to B$ 
+    and $g : B \to C$;
+
+ 5. and /constants/
+    \[\begin{aligned}
+    \texttt{T} &: \texttt{1} \to \intl{1} \\
+    \texttt{P}_{A,B} &: \intl{A} \times \intl{B} \to \intl{A \times B} \\
+    \texttt{E}_{A,B} &: (\intl{A} \to \intl{B}) \to \intl{B^{A}}
+    \end{aligned}\]
+    for any $A,B \in {\cal C}$.
+
+Satisfying
 # TODO
 #+END_definition
 
-# TODO Models as functors
-
-**** TODO Internal language of a category
 **** TODO Category of CCCs and category of lambdaTheories
-
-*** TODO First-order logic
+**** TODO Equivalence of CC categories
+*** TODO Bicartesian closed categories
+** TODO First-order logic
 ** TODO Models of \lambda-calculus
+# Parece que esta sección es innecesaria después de todo lo
+# anterior.
+
 *** TODO Types and sets
 # From the Hott book
 *** TODO Models
