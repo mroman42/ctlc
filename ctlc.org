@@ -4,6 +4,7 @@
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
+# TODO: Corregir apuntadores de las páginas
 
 ** Abstract
 :PROPERTIES:
@@ -23,968 +24,130 @@ This document has been written with Emacs26 and org-mode 9, using the
 the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
 has been used for code listings and the =tikzcd= package has been used
 for commutative diagrams.
-* Category theory (abstract)                                         :ignore:
-* Category theory
-# TODO: Presheaf categories
-
-** Categories
-*** Definition of category
-We will think of a category as the algebraic structure that captures
-the notion of composition. A category will be built from some sort
-of objects linked by composable arrows; to which some associativity and
-identity laws will apply.
-
-**** Categories, objects and morphisms                            :ignore:
-#+attr_latex: :options [Category]
-#+begin_definition
-A *category* ${\cal C}$, as defined in cite:maclane78, is given by
-
- * ${\cal C}_0$, a collection[fn:collection] whose elements are called
-   *objects*[fn:objectnotation], and
- * ${\cal C}_1$, a collection whose elements are called *morphisms*.
-
-Every morphism $f \in {\cal C}_1$ has two objects assigned: a
-*domain*, written as $\mathrm{dom}(f) \in {\cal C}_0$, and a
-*codomain*, written as $\mathrm{cod}(f) \in {\cal C}_0$; a common
-notation for such morphism is
-\[
-f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
-\]
-
-Given two morphisms $f \colon A \to B$ and $g \colon B \to C$ there
-exists a *composition morphism*, written as $g \circ f \colon A \to C$.
-Morphism composition is a binary associative operation with
-identity elements $\id_{A}\colon A \to A$, that is
-\[
-h \circ (g \circ f) = (h \circ g) \circ f
-\quad\text{ and }\quad
-f \circ \id_A = f = \id_B \circ f.
-\]
-#+end_definition
-
-[fn:objectnotation]: We will sometimes write this class of objects of
-a category ${\cal C}$ as $\mathrm{obj}({\cal C})$, but it is common to simply use ${\cal C}$ to denote it.
-
-[fn:collection]: We use the term /collection/ to denote
-some unspecified formal notion of compilation of "things" that could
-be given by sets or proper classes. We will want to define categories
-whose objects are all the possible sets and we will need the objects
-to form a proper class in order to avoid inconsistent results such as
-the Russell's paradox.
-
-**** Definition of hom-sets and small categories                  :ignore:
-#+attr_latex: :options [Hom-sets]
-#+begin_definition
-The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
-between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
-of an object $A$ is the hom-set $\mathrm{end}(A) = \hom(A,A)$.
-#+end_definition
-
-Sometimes, when considering a hom-set, it will be useful to explicitly
-specify the category on which we are working as $\hom_{{\cal C}}(A,B)$.
-
-#+attr_latex: :options [Small and locally small categories]
-#+begin_definition
-A category is said to be *small* if the collections ${\cal C}_0,{\cal C}_1$ of objects and morphisms
-are both sets (instead of proper classes). It is said to be *locally small* if every
-hom-set is actually a set.
-#+end_definition
-
-*** Morphisms
-**** Isomorphisms                                                 :ignore:
-#+attr_latex: :options [Isomorphisms]
-#+begin_definition
-A morphism $f : A \to B$ is an *isomorphism* if an inverse morphism $f^{-1} : B \to A$
-such that
-
-  * $f^{-1} \circ f = \id_{A}$,
-  * $f \circ f^{-1} = \id_{B}$;
-
-exists.
-#+end_definition
-
-We call *automorphisms* to the endomorphisms which are also isomorphisms.
-
-#+attr_latex: :options [Unicity of inverses]
-#+begin_proposition
-<<prop-unicityinverse>>
-If the inverse of a morphism exists, it is unique. In fact, if a
-morphism has a left-side inverse and a right-side inverse, they are
-both-side inverses and they are equal.
-#+end_proposition
-#+begin_proof
-Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
-\[
-g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) = 
-(g_1 \circ f) \circ g_2 =
-\id \circ g_2 = g_2.
-\]
-We have used associativity of composition, neutrality of the identity 
-and the fact that $g_1$ is a left-side inverse and $g_2$ is a 
-right-side inverse.
-#+end_proof
-
-#+begin_definition
-Two objects are *isomorphic* if an isomorphism between them exists.
-We write $A \cong B$ when $A$ and $B$ are isomorphic.
-#+end_definition
-
-#+attr_latex: :options [Isomorphy is an equivalence relation]
-#+begin_proposition
-The relation of being isomorphic is an equivalence relation. In
-particular,
-
- * the identity, $\id = \id^{-1}$;
- * the inverse of an isomorphism, $(f^{-1})^{-1} = f$;
- * and the composition of isomorphisms, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$;
-
-are all isomorphisms.
-#+end_proposition
-
-**** Monomorphisms and epimorphisms                               :ignore:
-#+attr_latex: :options [Monomorphisms and epimorphisms]
-#+begin_definition
-A *monomorphism* is a left-cancellable morphism, that is, $f : A \to B$ is
-a monomorphism if, for every $g,h : B \to A$, 
-\[ f \circ g = f \circ h  \implies g = h.
-\]
-An *epimorphism* is a right-cancellable morphism, that is, $f : A \to B$ is
-an epimorphism if, for every $g,h : B \to A$,
-\[ g \circ f = h \circ f \implies g = h.
-\]
-A morphism which is a monomorphism and an epimorphism at the same time is
-called a *bimorphism*.
-#+end_definition
-
-#+begin_remark
-A morphism can be a bimorphism without being an isomorphism.
-#+end_remark
-
-**** Retractions and sections                                     :ignore:
-#+attr_latex: :options [Retractions and sections]
-#+begin_definition
-A *retraction* is a left inverse, that is, a morphism which has a right inverse;
-conversely, a *section* is a right inverse, a morphism which has a left inverse.
-#+end_definition
-
-By virtue of Proposition [[prop-unicityinverse]], a morphism which is both a
-retraction and a section is an isomorphism.
-
-*** Terminal objects, products and coproducts
-#+attr_latex: :options [Initial object]
-#+begin_definition
-An object $I$ is an *initial object* if every object is the domain of exactly
-one morphism to it. That is, for every object $A$ exists an unique morphism $I \to A$.
-#+end_definition
-
-#+attr_latex: :options [Terminal object]
-#+begin_definition
-An object $T$ is a *terminal object* if every object is the codomain of exactly
-one morphism from it. That is, for every object $A$ exists an unique $A \to T$.
-#+end_definition
-
-#+attr_latex: :options [Zero object]
-#+begin_definition
-A *zero object* is an object which is both initial and terminal at the
-same time.
-#+end_definition
-
-#+attr_latex: :options [Initial and final objects are essentially unique]
-#+begin_proposition
-<<prop-initialfinalunique>>
-Initial and final objects in a category are essentially unique; that
-is, any two initial objects are isomorphic and any two final objects
-are isomorphic.
-#+end_proposition
-#+begin_proof
-If $A,B$ were initial objects, by definition, there would be only one
-morphism $f : A \to B$ and only one morphism $g : B \to A$. Moreover, there
-would be only an endomorphism in $\mathrm{End}(A)$ and $\mathrm{End}(B)$ which should be
-the identity. That implies,
-
-  * $f \circ g = \id$,
-  * $g \circ f = \id$.
-
-As a consequence, $A \cong B$. A similar proof can be written for the terminal
-object.
-#+end_proof
-
-# The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
-
-#+attr_latex: :options [Product object]
-#+begin_definition
-An object $C$ is the *product* of two objects $A,B$ on a category if there
-are two morphisms
-\[\begin{tikzcd}
-A & C \rar{\pi_B}\lar[swap]{\pi_A} & B
-\end{tikzcd}\]
-such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
-$f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = \pi_A \circ h$
-and $f_2 = \pi_B \circ h$. Diagramatically,
-\[\begin{tikzcd}[column sep=tiny]
-& D \dar[dashed]{\exists! h} \ar[bend left]{ddr}{f_2}\ar[bend right,swap]{ddl}{f_1} & \\
-& C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
-A && B &.
-\end{tikzcd}\]
-#+end_definition
-
-Note that the product of two objects does not have to exist on a category;
-but when it exists, it is essentially unique. In fact, we will be able later
-to construct a category in which the product object is the final object of
-the category and Proposition [[prop-initialfinalunique]] can be applied. We will
-write /the/ product object of $A,B$ as $A \times B$.
-
-
-#+attr_latex: :options [Coproduct object]
-#+begin_definition
-An object $C$ is the *coproduct* of two objects $A,B$ on a category if there
-are two morphisms
-\[\begin{tikzcd}
-A \rar{i_A} & C & B \lar[swap]{i_B}
-\end{tikzcd}\]
-such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
-$f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = i_A \circ h$
-and $f_2 = i_B \circ h$. Diagramatically,
-\[\begin{tikzcd}[column sep=tiny]
-& D & \\
-& C \uar[dashed]{\exists! h}  & \\
-A \ar[bend left]{uur}{f_1}\urar{i_A} && B \ular[swap]{i_B} \ar[bend right,swap]{uul}{f_2} &.
-\end{tikzcd}\]
-#+end_definition
-
-The same discussion we had earlier for the product can be rewritten here for
-the coproduct only reversing the direction of the arrows. We will write /the/
-coproduct of $A,B$ as $A \amalg B$. As we will see later, the notion of a coproduct
-is dual to the notion of product; and the same proofs can be applied on
-both cases, only by reversing the arrows.
-
-*** Examples of categories
-**** Discrete categories                                          :ignore:
-#+attr_latex: :options [Discrete categories]
-#+begin_exampleth
-A category is *discrete* if it has no other morphisms than the identities.
-A discrete category is uniquely defined by its class of objects and
-every class of objects defines a category.
-#+end_exampleth
-
-**** Monoids, groups                                              :ignore:
-#+attr_latex: :options [Monoids, groups]
-#+begin_exampleth
-A single-object category is a *monoid*. [fn:monoid] A monoid in which
-every morphism is an isomorphism is a *group*. A *groupoid* is a
-category (of any number of objects) where all the morphisms are
-isomorphisms.
-#+end_exampleth
-
-[fn:monoid]: This definition is equivalent to the usual definition of monoid
-if we take the morphisms as elements of the monoid and composition of morphisms
-as the monoid operation.
-
-**** Posets                                                       :ignore:
-#+attr_latex: :options [Partially ordered sets]
-#+begin_exampleth
-Every partial ordering defines a category in which the elements are the
-objects and an only morphism between two objects $\rho_{a,b} : a \to b$ exists 
-
-In particular, every ordinal can be seen as a partially ordered set
-and defines a category.
-#+end_exampleth
-
-**** Category of Sets                                             :ignore:
-#+attr_latex: :options [The category of sets]
-#+begin_exampleth
-The category $\Sets$ is defined as the category with all the
-possible sets as objects and functions between them as morphisms. It
-is trivial to check associativity of composition and the existence of
-the identity function for any set.
-#+end_exampleth
-
-**** Category of Groups                                           :ignore:
-#+attr_latex: :options [The category of groups]
-#+begin_exampleth
-The category $\mathtt{Grp}$ is defined as the category with groups as objects
-and group homomorphisms between them as morphisms.
-#+end_exampleth
-
-**** Category of R-modules                                        :ignore:
-#+attr_latex: :options [The category of R-modules]
-#+begin_exampleth
-The category $R\text{-Mod}$ is defined as the category with $R\text{-modules}$ as
-objects and module homomorphisms between them as morphisms. We know
-that the composition of module homomorphisms and the identity are
-also module homomorphisms.
-
-In particular, abelian groups form a category as $\mathbb{Z}\text{-modules}$.
-#+end_exampleth
-
-**** Category of Topological spaces                               :ignore:
-#+attr_latex: :options [The category of topological spaces]
-#+begin_exampleth
-The category $\mathtt{Top}$ is defined as the category with topologicaal spaces as
-objects and continuous functions between them as morphisms.
-#+end_exampleth
-
-** Functors and natural transformations
-#+begin_quote
-"Category" has been defined in order to define "functor" and "functor"
-has been defined in order to define "natural transformation".
-
-      -- *Saunders MacLane*, /Categories for the working mathematician/.
-#+end_quote
-
-Functors and natural transformations were defined for the first time
-by Eilenberg and MacLane in cite:maclane42 while studying Čech
-cohomology. While initially they were devised mainly as a language for
-studying homology, they have proven its foundational value with the
-passage of time.
-
-*** Functors
-**** Definition of functor                                        :ignore:
-#+attr_latex: :options [Functor]
-#+begin_definition
-A *functor* will be interpreted as a morphism of categories.
-Given two categories ${\cal C}$ and ${\cal D}$, a functor between them $F : {\cal C} \to {\cal D}$ is given by
-
-  * an *object function*, $F : \mathrm{obj}({\cal C}) \to \mathrm{obj}({\cal D})$;
-  * and an *arrow function*, $F : (A \to B) \to (FA \to FB)$ for any two
-    objects $A,B$ of the category;
-
-such that
-
-  * $F(\id_A) = \id_{FA}$, identities are preserved;
-  * $F(f \circ g) = Ff \circ Fg$, the functor respects composition.
-#+end_definition
-
-**** Composition of functors                                      :ignore:
-Functors can be composed as we did with morphisms. In fact, a category of
-categories can be defined; having functors as morphisms.
-
-#+attr_latex: :options [Composition of functors]
-#+begin_definition
-Given two functors $F \colon {\cal C} \to {\cal B}$ and $G \colon {\cal B} \to {\cal A}$, their composite functor
-$G \circ F : {\cal C} \to {\cal A}$ is given by the composition of object and arrow functions
-of the functors. This composition is trivially associative.
-#+end_definition
-
-#+attr_latex: :options [Identity functor]
-#+begin_definition
-The identity functor on a category $I_{{\cal C}}\colon {\cal C} \to {\cal C}$ is given by identity object
-and arrow functions. It is trivially neutral with respect to composition.
-#+end_definition
-
-**** Full and faithfull functors                                  :ignore:
-#+attr_latex: :options [Full functor]
-#+begin_definition
-A functor $F$ is *full* if the arrow map is surjective. That is, if every
-$g : FA \to FB$ is of the form $Ff$ for some morphism $f \colon A \to B$.
-#+end_definition
-#+attr_latex: :options [Faithful functor]
-#+begin_definition
-A functor $F$ is *faithful* if the arrow map is injective. That is,
-if, for every two arrows $f_1,f_2 : A \to B$, $Ff_1 = Ff_2$ implies
-$f_1 = f_2$.
-#+end_definition
-
-It is easy to notice that the composition of faithful (respectively,
-full) functors is again a faithful functor (respectively, full).
-
-**** Isomorphisms of categories                                   :ignore:
-#+attr_latex: :options [Isomorphism of categories]
-#+begin_definition
-An *isomorphism of categories* is a functor $T$ whose object and arrow functions
-are bijections. Equivalently, it is a functor $T$ such that there exists an /inverse/
-functor $S$ such that $T \circ S$ and $S \circ T$ are identity functors.
-#+end_definition
-
-# Subcategories
-# Category of categories
-*** Natural transformations
-#+attr_latex: :options [Natural transformation]
-#+begin_definition
-A *natural transformation* between two functors with the same domain
-and codomain, $\alpha\colon F \todot G$, is a family of morphisms parameterized by 
-the objects of the domain category, $\alpha_C\colon FC \to GC$ such that the
-following diagram commutes
-
-\[\begin{tikzcd}
-C \dar{f} & & SC \rar{\tau_C}\dar{Sf} & TC \dar{Tf} \\
-C' & & SC' \rar{\tau_{C'}} & TC'
-\end{tikzcd}\]
-
-for every arrow $f : C \to C'$.
-#+end_definition
-
-It is also said that the family of morphisms is /natural/ in its
-parameter. This naturality property is what allows us to translate a
-commutative diagram from a functor to another.
-
-\[\begin{tikzcd}
-A\arrow{dd}{h}\drar{f} &   & & F A\arrow{dd}{F h}\drar{F f} \arrow{rrr}{\tau A} &     & & G A\arrow{dd}{}\drar{G f} &     \\
-  & B \dlar{g} & &     & F B \dlar{F g} \arrow{rrr}{\tau B} & &     & G B \dlar{G g} \\
-C &   & & F C \arrow{rrr}{\tau C} &     & & G C &     \\
-\end{tikzcd}\]
-
-#+attr_latex: :options [Natural isomorphism]
-#+begin_definition
-A *natural isomorphism* is a natural transformation in which every component,
-every morphism of the parameterized family, is invertible.
-#+end_definition
-
-The inverses of a natural transformation form another natural
-transformation, whose naturality follows from the naturality of the
-original transformation.
-
-**** TODO Equivalence of categories
-*** Composition of natural transformations
-**** Vertical composition                                         :ignore:
-#+attr_latex: :options [Vertical composition of natural transformations]
-#+begin_definition
-The *vertical composition* of two natural transformations $\tau : S\to T$
-and $\sigma : R \to S$, denoted by $\tau \cdot \sigma$ is the family of morphisms defined by the objectwise
-composition of the components of the two natural transformations, i.e.
-
-\[\begin{tikzcd}
-Rc \rar{Rf}\dar{\sigma_c}\arrow[swap,bend right=90]{dd}{(\tau \circ \sigma)_c} &
-Rc' \dar{\sigma_{c'}} \arrow[bend left=90]{dd}{(\tau \circ \sigma)_{c'}} \\
-Sc \rar{Sf}\dar{\tau_c}  &
-Sc' \dar{\tau_{c'}} \\
-Tc \rar{Tf}  &  Tc' 
-\end{tikzcd}\]
-#+end_definition
-
-#+attr_latex: :options [Vertical composition is a natural transformation]
-#+begin_proposition
-The vertical composition of two natural transformations is in fact
-a natural transformation.
-#+end_proposition
-#+begin_proof
-Naturality of the composition follows from the naturality of its two
-factors. In other words, the commutativity of the external square on
-the above diagram follows from the commutativity of the two internal
-squares.
-#+end_proof
-
-**** Horizontal composition                                       :ignore:
-#+attr_latex: :options [Horizontal composition of natural transformations]
-#+begin_definition
-The *horizontal composition* of two natural transformations $\tau \colon S \to T$ and
-$\tau' \colon S' \to T'$, with domains and codomains as in the following diagram
-\[\begin{tikzcd}
-C 
-\arrow[bend left=50]{r}[name=U,below]{}{S}
-\arrow[bend right=50]{r}[name=D]{}[swap]{T}
-& 
-B \arrow[Rightarrow,from=U,to=D]{}{\tau}
-\arrow[bend left=50]{r}[name=UU,below]{}{S'}
-\arrow[bend right=50]{r}[name=DD]{}[swap]{T'}
-&
-C \arrow[Rightarrow,from=UU,to=DD]{}{\sigma}
-\end{tikzcd}\]
-
-is denoted by $\tau' \circ \tau \colon S'S \to T'T$ and is defined as the family of morphisms
-given by $\tau' \circ \tau = T' \tau \circ \tau' = \tau' \circ S'\tau$, that is, by the diagonal of the 
-following commutative square
-\[\begin{tikzcd}
-S'Sc\rar{\tau'_{Sc}} \drar{\scriptsize{(\tau' \circ \tau)_c}} \dar[swap]{S'\tau_c} & T'Sc \dar{T' \tau_c} \\
-S'Tc\rar{\tau'_{Tc}} & T'Tc
-\end{tikzcd}\]
-#+end_definition
-
-#+attr_latex: :options [Horizontal composition is a natural transformation]
-#+begin_proposition
-The horizontal composition of two natural transformations is in fact
-a natural transformation.
-#+end_proposition
-#+begin_proof
-It is natural as the following diagram is the composition of two
-naturality squares
-\[\begin{tikzcd}
-S'Sc \rar{S'\tau} \dar{S'Sf} &
-S'Tc \rar{\tau'}  \dar{S'Tf} &
-T'Tc \dar{T'Tf} \\
-S'Sb \rar{S'\tau} &
-S'Tb \rar{\tau'} &
-T'Tb
-\end{tikzcd}\]
-
-defined respectively by the naturality of $S'\tau$ and $\tau'$.
-#+end_proof
-
-** Constructions on categories
-*** Opposite categories and contravariant functors
-#+attr_latex: :options [Opposite category]
-#+begin_definition
-The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
-same objects as ${\cal C}$ but with all its arrows reversed. That is, for each
-morphism $f : A \to B$, there exists a morphism $f^{op} : B \to A$ in ${\cal C}^{op}$.
-Composition is defined as
-\[
-f^{op} \circ g^{op} = (g\circ f)^{op},
-\]
-exactly when the composite $g \circ f$ is defined in ${\cal C}$.
-#+end_definition
-
-Reversing all the arrows is a process that directly translates every
-property of the category into a /dual/ property. A morphism $f$ is a
-monomorphism if and only if $f^{op}$ is an epimorphism; a terminal object
-in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse becomes a left
-inverse on the opposite category. This process is also an /involution/,
-where $(f^{op})^{op}$ can be seen as $f$ and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
-
-#+attr_latex: :options [Contravariant functor]
-#+begin_definition
-A *contravariant* functor from ${\cal C}$ to ${\cal D}$ is a functor from the opposite category,
-that is, $F \colon {\cal C}^{op}\to {\cal D}$. Non-contravariant functors are often called *covariant*
-functors, to emphasize the difference.
-#+end_definition
-
-# Hom functors as an example of covariant and contravariant functors
-*** TODO The category of all categories
-*** Product categories
-#+attr_latex: :options [Product category]
-#+begin_definition
-The *product category* of two categories ${\cal C}$ and ${\cal D}$, denoted by ${\cal C} \times {\cal D}$ is a
-category having
-
-  * pairs $\left\langle c,d \right\rangle$ as objects, where $c \in {\cal C}$ and $d \in {\cal D}$;
-  * and pairs $\pair{f,g} : \pair{c,d} \to \pair{c',d'}$ as morphisms, where $f \colon c \to c'$ and
-    $g \colon d \to d'$ are morphisms in their respective categories.
-
-The identity morphism of any object $\pair{c,d}$ is $\pair{\id_c, \id_d}$, and composition is
-defined componentwise as
-\[
-(f',g') \circ (f,g) = (f' \circ f,g' \circ g).
-\]
-#+end_definition
-
-We also define *projection functors* $P\colon {\cal C} \times {\cal D} \to {\cal C}$ and $Q : {\cal C} \times {\cal D} \to {\cal D}$
-on arrows as $P\pair{f,g} = f$ and $Q\pair{f,g} = g$. Note that this definition of
-product, using these projections, would be the product of two categories on a
-category of categories with functors as morphisms.
-
-#+attr_latex: :options [Product of functors]
-#+begin_definition
-The *product functor* of two functors $F\colon {\cal C} \to {\cal C}'$ and $G \colon {\cal D} \to {\cal D}'$ is a
-functor $F \times G \colon {\cal C} \times {\cal D} \to {\cal C}' \times {\cal D}'$ which can be defined
-
-  * on objects as $(F \times G)\pair{c,d} = \pair{Fc,Gd}$;
-  * and on arrows as $(F \times G)\pair{f,g} = \pair{Ff,Gg}$.
-#+end_definition
-
-It can be seen as the unique functor making the following diagram
-commute
-
-\[\begin{tikzcd}
-{\cal C} \dar{F} &
-{\cal C} \times {\cal D}  \rar{Q}\lar[swap]{P} \dar[dashed]{F \times G}&
-{\cal D} \dar{G} \\
-{\cal C}' &
-{\cal C}' \times {\cal D}' \rar[swap]{Q'}\lar{P'}&
-{\cal D}'
-\end{tikzcd}\]
-
-In this sense, the $\times$ operation is itself a functor acting on objects
-and morphisms of the $\mathtt{Cat}$ category of all categories.
-
-*** TODO Bifunctors
-# Definition of Bifunctors
-# Bifunctors are defined by its two parts, obtained by fixing an element
-# Proposition 1 on page 37 Maclane
-
-*** TODO Comma categories
-** Universality
-*** Universal arrows
-#+attr_latex: :options [Universal arrow]
-#+begin_definition
-A *universal arrow* from $c$ to $S$ is an arrow $u \colon c \to Sr$ such that
-for every $c \to Sd$ exists a unique $r \to d$ making this diagram commute
-
-\[\begin{tikzcd}
-& Sd & d \\
-c \rar[swap]{u}\urar{g} & Sr \uar[swap,dashed]{Sf} & r \uar[dashed]{\exists! f} &.
-\end{tikzcd}\]
-#+end_definition
-
-#+attr_latex: :options [Universality in terms of hom-sets]
-#+begin_proposition
-The arrow $u \colon c \to Sr$ is universal iff $f \mapsto Sf \circ u$ is a bijection
-$\hom(r,d) \cong \hom(c,Sd)$ natural in $d$. Any natural bijection of this
-kind is determined by a unique universal arrow.
-#+end_proposition
-#+begin_proof
-Bijection follows from the definition of universal arrow, and
-naturality follows from $S(gf)\circ u = Sg \circ Sf \circ u$.
-
-Given a bijection $\varphi$, we define $u = \varphi(\id_r)$.
-By naturality we have the bijection $\varphi(f) = Sf \circ u$, every arrow
-is written in this way.
-#+end_proof
-
-# TODO Universal from a functor to another
-
-*** Representability
-#+attr_latex: :options [Representation of a functor]
-#+begin_definition
-A *representation* of $K \colon D \to \Sets$ is a natural isomorphism
-\[
-\psi\colon \hom_{D}(r,-) \cong K.
-\]
-
-A functor is /representable/ if it has a representation. An object $r$ is
-called a /representing object/. $D$ must have small hom-sets.
-#+end_definition
-
-#+attr_latex: :options [Representations in terms of universal arrows]
-#+begin_proposition
-If $u \colon \ast \to Kr$ is a universal arrow for a functor $K\colon D \to \Sets$, then
-$f \mapsto K(f)(u\ast)$ is a representation. Every representation is obtained
-in this way.
-#+end_proposition
-#+begin_proof
-We know that $\hom(\ast, X) \xrightarrow{.} X$ is a natural isomorphism in $X$; in particular
-$\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
-
-\[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
-
-for every natural isomorphism $D(r,-) \cong \Sets(\ast,K-)$. But every natural
-isomorphism of this kind is a [[*Universal arrows as natural bijections][universal arrow]].
-#+end_proof
-
-*** Yoneda Lemma
-#+attr_latex: :options [Yoneda Lemma]
-#+begin_lemma
-For any $K\colon D \to \Sets$ and $r \in D$, there is a bijection
-\[
-y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
-\]
-
-sending the natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
-to the image of the identity, $\alpha_r1_r$.
-#+end_lemma
-#+begin_proof
-
-#+end_proof
-
-#+attr_latex: :options [Characterization of natural transformations between representable functors]
-#+begin_corollary
-Given $r,s \in D$, any natural transformation $\hom(r,-) \xrightarrow{.} \hom(s,-)$ has
-the form $h_{\ast}$ for a unique $h\colon s \to r$.
-#+end_corollary
-#+begin_proof
-Using Yoneda Lemma, we know that
-\[
-\mathrm{Nat}(\hom_D(r,-), \hom_D(s,-)) \cong \hom_D(s,r),
-\]
-
-sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to r$. The
-rest of the natural transformation is determined as $h_{\ast}$ by naturality.
-#+end_proof
-
-#+attr_latex: :options [Addendum to the Yoneda Lemma]
-#+begin_proposition
-The bijection on the [[*Yoneda Lemma][Yoneda Lemma]] is a natural isomorphism between
-two $\Sets^D \times D \to \Sets$ functors.
-#+end_proposition
-#+begin_proof
-# TODO
-#+end_proof
-
-#+begin_definition
-In the conditions of [[*Yoneda Lemma][Yoneda Lemma]], the *Yoneda functor*,
-$Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
-
-\[
-\left(f \colon s \to r\right) \mapsto 
-\Big(D(f,-) \colon D(r,-) \to D(s,-)\Big).
-\]
-#+end_definition
-
-#+begin_proposition
-The Yoneda functor is full and faithful.
-#+end_proposition
-#+begin_proof
-# TODO
-#+end_proof
-
-# The Yoneda functor is a currying of the hom functor.
-
-*** TODO Products and limits
-**** TODO Pullbacks
-**** TODO Example: p-adic numbers
-*** TODO Coproducts and colimits
-**** TODO Coproducts as universal arrows
-**** TODO Pushouts
-**** Colimits
-#+attr_latex: :options [Colimits]
-#+begin_definition
-A *colimit* of a functor from a given /index category/ $F \colon J \to {\cal C}$ is an object
-$r \in {\cal C}$ such that there exists a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
-It is usually written as $r = \varinjlim F$.
-#+end_definition
-
-** Adjoints
-*** Adjunctions
-#+attr_latex: :options [Adjunction]
-#+begin_definition
-An *adjunction* from categories $X$ to $A$ is a pair of functors
-$F\colon X \to A$, $G\colon A \to X$ with a natural bijection
-\[
-\varphi \colon \hom(Fx,a) \cong \hom(x,Ga),
-\]
-
-natural in both $x\in X$ and $a \in A$. We write it as $F \dashv G$.
-#+end_definition
-
-#+attr_latex: :options [Unit and counit of an adjunction]
-#+begin_definition
-An adjunction determines a *unit* and a *counit*;
-
- 1) the *unit* is natural transformation made with universal arrows $\eta\colon I \todot GF$, where
-    the right adjoint of each $f \colon Fx \to a$ is
-    \[
-    \varphi f = Gf \circ \eta_x \colon x \to Ga.
-    \]
- 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot I$, where
-    the left adjoint of each $g \colon x \to Ga$ is
-    \[
-    \varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.
-    \]
-
-that follow the /triangle identities/ $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
-#+end_definition
-
-#+attr_latex: :options [Characterization of adjunctions]
-#+begin_proposition
-Each adjunction is completely determined by any of
-
- 1) functors $F,G$ and $\eta\colon 1 \todot GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
- 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, creating a functor $F$.
- 3) functors $F,G$ and $\varepsilon\colon FG \todot 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
- 4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$, creating a functor $G$.
- 5) functors $F,G$, with units and counits satisfiying the triangle
-    identities $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
-#+end_proposition
-#+begin_proof
-# TODO
-#+end_proof
-
-** Monads and algebras
-*** Monads
-**** Definition of Monads                                         :ignore:
-#+attr_latex: :options [Monad]
-#+begin_definition
-A *monad* is a functor $T\colon X \to X$ with natural transformations
-
- * $\eta\colon I \todot T$, called /unit/
- * $\mu \colon T^2 \todot T$, called /multiplication/
-
-such that
-\[\begin{tikzcd}
-T^3 \rar{T\mu}\dar{\mu T} & T^2\dar{\mu} \\
-T^2 \rar{\mu} & T
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-IT \rar{\eta T}\drar[swap]{\cong} & T^2\dar{\mu} & \lar[swap]{T\eta}\dlar{\cong} TI \\
-& T & &.
-\end{tikzcd}\]
-#+end_definition
-
-**** Each adjunction gives rise to a monad                        :ignore:
-#+attr_latex: :options [Each adjunction gives rise to a monad]
-#+begin_proposition
-Given $F \dashv G$, $GF$ is a monad.
-#+end_proposition
-#+begin_proof
-We take the unit of the adjunction as the monad unit. We define the
-product as $\mu = G\varepsilon F$. Associativity follows from these diagrams
-\[\begin{tikzcd}
-FGFG\rar{FG\varepsilon} \dar[swap]{\varepsilon FG} & FG \dar{\varepsilon} \\
-FG\rar{\varepsilon} & I
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-GFGFGF\rar{GFG\varepsilon F} \dar[swap]{G\varepsilon FGF} & GFGF \dar{G\varepsilon F} \\
-GFGF\rar{G\varepsilon F} & GF &,
-\end{tikzcd}\]
-
-where the first is commutative by the [[*Interchange law][interchange law]] and the second
-is obtained by applying functors $G$ and $F$. Unit laws follow from
-the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
-#+end_proof
-
-*** Comonads
-#+attr_latex: :options [Comonad]
-#+begin_definition
-A *comonad* is a functor $L\colon X \to X$ with natural transformations
-
- * $\varepsilon\colon L\to I$, called /counit/
- * $\delta\colon L \to L^2$, called /comultiplication/
-
-such that
-\[\begin{tikzcd}
-L\rar{\delta} \dar[swap]{\delta} & L^{2} \dar{L\delta} \\
-L^{2}\rar{\delta L} & L^{3}
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-& L \dar{\delta} \dlar[swap]{\cong} \drar{\cong} & \\
-IL & 
-L^2 \lar{\varepsilon L}\rar[swap]{L \varepsilon} & 
-LI
-&.
-\end{tikzcd}\]
-#+end_definition
-
-*** Algebras for a monad
-#+attr_latex: :options [T-algebra]
-#+begin_definition
-For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
-/structure map/ making these diagrams commute
-\[\begin{tikzcd}
-T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
-Tx\rar{h} & x &.
-\end{tikzcd}
-\]
-#+end_definition
-
-#+attr_latex: :options [Morphism of T-algebras]
-#+begin_definition
-A *morphism of T-algebras* is an arrow $f\colon x \to x'$ making the following square
-commute
-\[\begin{tikzcd}
-Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
-Tx' \rar[swap]{h'} & Tx' &.
-\end{tikzcd}\]
-#+end_definition
-
-#+attr_latex: :options [Category of T-algebras]
-#+begin_proposition
-The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
-#+end_proposition
-#+begin_proof
-Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
-is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
-
-\[\begin{tikzcd}
-Tx \rar{h}\dar[swap]{Tf} & 
-x \dar{f}\\
-Tx' \dar[swap]{Tg} \rar{h'} &
-x' \dar{g}\\
-Tx'' \rar{h''}&
-x''
-\end{tikzcd}\]
-
-commutes.
-#+end_proof
-** Kan extensions
-*** Dinatural transformations
-#+ATTR_LATEX: :options [Dinatural transformation]
-#+BEGIN_definition
-A *dinatural transformation* between functors $F,G \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$
-is a family of morphisms $\alpha_x \colon F(x,x) \to G(x,x)$ for each $x \in {\cal C}$,
-called /components/, such that for every $f \colon x \to y$,
-\[\begin{tikzcd} &
-F(x,x) \rar{\alpha_{x}} &
-G(x,x) \drar{G(\id,f)} & \\
-F(y,x) \urar{F(f,\id)}\drar[swap]{F(\id,f)} & & &
-G(x,y) \\
-&
-F(y,y) \rar{\alpha_{y}} &
-G(y,y) \urar[swap]{G(f,\id)} &
-\end{tikzcd}\]
-
-commutes
-#+END_definition
-
-# TODO: Every natural transformation gives a dinatural transformation.
-
-**** TODO Natural transformation of covariant to contravariant functor :ignore:
-**** Extranatural transformations (wedges)                        :ignore:
-#+ATTR_LATEX: :options [Extranatural transformation]
-#+BEGIN_definition
-An *extranatural transformation* (also called *wedge*) is a dinatural
-transformation to a constant functor.
-#+END_definition
-
-That is, an extranatural transformation from the functor $F$ to the
-object $a$ is a family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
-
-\[\begin{tikzcd}
-F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
-F(x,x)\rar[swap]{\alpha_{x}} & b
-\end{tikzcd}\]
-
-commutes for every $f \colon x \to y$. We write wedges as $\alpha \colon F \toddot b$.
-
-**** TODO Examples of dinatural transformations                   :ignore:
-*** Ends
-# cowedges ?
-
-#+ATTR_LATEX: :options [End]
-#+BEGIN_definition
-An *end* of $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is a universal dinatural transformation
-from a constant $e$ to $F$. That is, a wedge $\sigma \colon e \toddot F$ such that for every
-other $\tau \colon k \toddot F$, there exists a unique $u \colon k \to e$ such that $\sigma_x \circ u = \tau_x$.
-#+END_definition
-
-We usually call /end/ to the object $e$, and we write
-\[
-e = \int_x F(c,c).
-\]
-
-**** TODO Examples of ends
-\[
-\mathrm{Nat}(U,V) = \int_x \hom(Ux,Vx)
-\]
-
-*** Coends
-*** Kan extensions
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 #+LATEX: \end{center}}
 * Lambda calculus
 ** Untyped \lambda-calculus
-The *\lambda-calculus* is a collection of formal systems, 
-all of them based on the lambda notation discovered by Alonzo 
-Church in the 1930s while trying to develop a foundational notion 
-of function on mathematics.
+# TODO: Escribir motivación delante de cada definición
+# TODO: Sistemas de escritura en las formas normales, noetherianidad
 
-The *untyped* or *pure lambda calculus* is, syntactically, the
-simplest of those formal systems.
+How should we define functions? Classically in mathematics, /functions are graphs/.
+A function from a
+domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
+space $f \subset X \times Y$.
+Any two functions are equal if they map equal inputs to equal outputs;
+and a function its completely determined by what its outputs are.
+This vision is called */extensional/*.
+
+From a computational point of view, this perspective could be incomplete
+in some cases. We usually care not only about the result but, crucially,
+about /how/ can it be computed. 
+Classically in computer science, /functions are formulae/; and two functions 
+mapping equal inputs to equal outputs need not to be equal. E.g., two sorting algorithms
+can have different efficiencies or different memory requisites, even if 
+they output the same sorted list. This vision, where two functions are
+equal if and only if they are given by essentially the same formula is
+called */intensional/*.
+
+The *\lambda-calculus* is a collection of formal systems, all of them
+based on the lambda notation discovered by Alonzo Church in the 1930s
+while trying to develop a foundational notion of /functions as formulae/
+on mathematics. It is a logical theory of functions, where application and
+abstraction are primitive notions; and, at the same time, it
+is also one of the simplest programming languages, in which many other
+full-fledged languages are based, as we will detail later.
+
+The *untyped* or *pure \lambda-calculus* is, syntactically, the
+simplest of those formal systems. In it, a function does not need a
+domain nor a codomain; every function is a formula which can be
+directly applied to any expression. It even allows functions to be
+applied to themselves, a notion which would be troublesome[fn:lambdaregularityaxiom]
+in our usual set-theoretical foundations. In exchange, we will have
+to deal with other problems such as non-terminating functions.
+
 This presentation of the untyped lambda calculus will follow
 cite:Hindley08 and cite:selinger13.
 
+[fn:lambdaregularityaxiom]: In particular, if $f$ is a member of its own
+domain, the infinite descending sequence
+\[
+f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
+\]
+would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
+set theory.
+
 *** Definition
+As a language, the untyped \lambda-calculus is given by a set of
+expressions, called /\lambda-terms/, and a set of manipulation rules.
+These terms can stand for functions or arguments indistinctly, and
+they all use the same \lambda-notation in order to define function
+abstractions and applications.
+
+*\lambda-notation* allows a function to be written and inlined as any other element
+of the language, identifying it with the formula it represents and 
+admitting a more compact notation. For example, the polynomial function
+$p(x) = x^2 + x$
+would be written in \lambda-calculus as
+$\lambda x.\ x^2 + x$; and $p(2)$ would be written as $(\lambda x.\ x^2+x)(2)$. In general,
+$\lambda x.M$ would be a function taking $x$ as an argument and returning $M$,
+which would be a term where $x$ could appear in.
+
+\lambda-notation also eases the writing of *higher-order functions*, functions whose arguments or
+outputs are functions themselves. For instance,
+\[
+\lambda f.(\ \lambda y.\ f(f(y))\ )
+\]
+would be a function taking $f$ as an argument and returning $\lambda y.\ f(f(y))$,
+which is itself a function; most commonly written as $f \circ f$. In particular,
+\[
+\Big( \big( \lambda f.(\ \lambda y.\ f(f(y))\ ) \big)
+\big( \lambda x.\ x^2 + x \big) \Big) (1)
+\]
+evaluates to $6$.
+
 #+attr_latex: :options [Lambda terms]
 #+begin_definition
-The *\lambda-terms* are defined inductively as
+The *\lambda-terms* are defined inductively knowing that
 
-  * every /variable/, taken from an infinite and numerable set ${\cal V}$ of
-    variables, and usually written as lowercase single letters
+  * every */variable/*, taken from an infinite countable set of
+    variables and usually written as lowercase single letters
     (x,y,z,...), is a \lambda-term.
 
-  * given two \lambda-terms $M,N$; its /application/, $MN$ is a \lambda-term.
+  * given two \lambda-terms $M,N$; its */application/*, $MN$, is a \lambda-term.
 
-  * given a \lambda-term $M$ and a variable $x$, its /abstraction/, $\lambda x.M$
-    is a lambda term.
+  * given a \lambda-term $M$ and a variable $x$, its */abstraction/*, $\lambda x.M$,
+    is a \lambda-term.
 
-They can be also defined by the following BNF
-\[ \mathtt{Exp} ::= x \mid (\mathtt{Exp}\ \mathtt{Exp}) \mid (\lambda x.\mathtt{Exp})
+Equivalently, they can be also defined by the following Backus-Naur form,
+\[
+\mathtt{Term} ::= x \mid (\mathtt{Term}\ \mathtt{Term}) \mid (\lambda x.\mathtt{Term})\quad,
 \]
-where $x \in {\cal V}$ is any variable.
+where $x$ can be any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
 left-associativity, i.e., $MNP$ will mean $(MN)P$.
-Multiple \lambda-abstractions can be also contracted to a single 
-multivariate abstraction; thus $\lambda x.\lambda y.M$ can 
-become $\lambda x,y.M$.
+We also take the \lambda-abstraction as having the lowest
+precedence, i.e., $\lambda x. M N$ should be read as $\lambda x.(MN)$
+instead of $(\lambda x.M) N$.
+
+# NOTE: This is not necessary.
+# Multiple \lambda-abstractions can be also contracted to a single 
+# multivariate abstraction; thus $\lambda x.\lambda y.M$ can 
+# become $\lambda x,y.M$.
 
 *** Free and bound variables, substitution
-Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said to be
-bound; and any not bound variable is said to be free. We can define formally
-the set of free variables as follows.
+In \lambda-calculus, the scope of a variable restricts to the \lambda-abstraction
+where it appeared, if any. Thus, the same variable can be used multiple
+times on the same term independently. For example, in 
+$(\lambda x.x)(\lambda x.x)$, which evaluates to $(\lambda x.x)$, $x$ appears two times
+as a variable with two different meanings.
+
+Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said
+to be */bound/*; and any not bound variable is said to be
+*/free/*. Formally, we can define the set of free variables on a given
+term as follows.
 
 #+attr_latex: :options [Free variables]
 #+begin_definition
@@ -997,21 +160,38 @@ The *set of free variables* of a term $M$ is defined inductively as
 \end{aligned}\]
 #+end_definition
 
-A free ocurrence of a variable can be substituted by a term. This should
-be done avoiding the unintended bounding of free variables which happens
-when a variable is substituted inside of the scope of a binder with the
-same name, as in the following example, where we substitute $y$ by $(\lambda z.xz)$
-on $(\lambda x.yx)$ and the second free variable $x$ gets bounded by the first binder
-\[
-(\lambda x.yx) \overset{y \mapsto (\lambda z.xz)}\longrightarrow (\lambda x.(\lambda z.xz)x).
-\]
+Evaluation in \lambda-calculus relies in the notion of */substitution/*.
+Any free ocurrence of a variable can be substituted by a term, as we do
+when we are evaluating terms. For instance, in the previous example, we
+evaluated $(\lambda x.\ x^2+x)(2)$ by substituting $2$ in $x^{2} + x$ in the place of $x$;
+as in
+\[\begin{tikzcd}
+(\lambda x.\ x^2+x)(2) \rar{x \mapsto 2}
+&
+2^{2} + 2.
+\end{tikzcd}\]
+This, however, should
+be done avoiding the unintended bounding which happens
+when a variable is substituted inside the scope of a binder with the
+same name, as in the following example: if we were to evaluate the expression
+$(\lambda x.\ y x)(\lambda z.\ xz)$,
+where $x$ appears two times (once bound and once free), we should substitute $y$ by $(\lambda z.xz)$
+on $(\lambda x.yx)$ and $x$ (the free variable) would get tied to $x$ (the bounded variable)
+\[\begin{tikzcd}
+(\lambda x.yx)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} && (\lambda x.(\lambda z.xz)x).
+\end{tikzcd}\]
 
-To avoid this, the $x$ should be renamed before the substitution.
+To avoid this, the bounded $x$ should be given a new name before the
+substitution, which should be carried as
+\[\begin{tikzcd}
+(\lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u),
+\end{tikzcd}\]
+keeping the free character of $x$.
 
 #+attr_latex: :options [Substitution on lambda terms]
 #+begin_definition
-The *substitution* of a variable $x$ by a term $N$ on $M$ is defined
-inductively as
+The *substitution* of a variable $x$ by a term $N$ on $M$ is
+written as $M[N/x]$ and is defined inductively as
 \[\begin{aligned}
 x[N/x] &\equiv N,\\
 y[N/x] &\equiv y,\\
@@ -1026,13 +206,31 @@ where, in the last clause, $z$ is a fresh unused variable.
 
 We could define a criterion for choosing exactly what this new
 variable should be, or simply accept that our definition will not be
-well-defined, but well-defined up to a change on the name of the
-variables. This equivalence relation will be defined formally on the
-next section. In practice, it is common to follow the 
+exactly well-defined, but only
+/well-defined up to a change on the name of the variables/.
+This equivalence relation will be defined 
+formally on the next section. In practice, it is common to follow the 
 /Barendregt's variable convention/ which simply assumes that bound 
 variables have been renamed to be distinct.
 
 *** \alpha-equivalence
+In \lambda-terms, variables are only placeholders and its name, as we have
+seen before, is not relevant. Two \lambda-terms whose only difference is
+the naming of the variables are called \alpha-equivalent. For example,
+\[
+(\lambda x.\lambda y. x y) \quad\text{ is $\alpha$-equivalent to }\quad (\lambda f.\lambda x. f x).
+\]
+
+*\alpha-equivalence* formally captures the fact that the name of a bound
+variable can be changed without changing the properties of the term. This
+idea appears recurrently on mathematics; e.g., the renaming of variables of
+integration or the variable on a limit are a examples of \alpha-equivalence.
+\[
+\int_0^1 x^2\ dx = \int_0^1 y^2\ dy;
+\qquad
+\lim_{x \to \infty} \frac{1}{x} = \lim_{y \to \infty} \frac{1}{y}.
+\]
+
 #+attr_latex: :options [\alpha-equivalence]
 #+begin_definition
 *\alpha-equivalence* is the smallest relation $=_{\alpha}$ on
@@ -1049,54 +247,75 @@ and it is compatible with the structure of lambda terms,
   * if $y$ does not appear on $M$, $\lambda x.M =_{\alpha} \lambda y.M[y/x]$.
 #+end_definition
 
-\alpha-equivalence formally captures the fact that the name of a bound
-variable can be changed without changing the properties of the term. This
-idea appears recurrently on mathematics; e.g., the renaming of the variable of
-integration is an example of \alpha-equivalence.
-\[
-\int_0^1 x^2\ dx = \int_0^1 y^2\ dy
-\]
-
 *** \beta-reduction
 The core idea of evaluation in \lambda-calculus is captured by the notion
-of \beta-reduction.
+of *\beta-reduction*.
+Until now, evaluation has been only informally described; it is time
+to define it as a relation, $\tto_{\beta}$, going from the initial term to
+any of its partial evaluations. We
+will firstly consider a /one-step reduction/ relationship, called
+$\to_{\beta}$, which will be extended by transitivity to $\tto_{}_{\beta}$.
 
-#+attr_latex: :options [Beta-reduction]
+Ideally, we would like to define evaluation as a series of reductions
+into a canonical form which could not be reduced
+further. Unfortunately, as we will see later, it is not possible to
+find, in general, that canonical form.
+
+#+attr_latex: :options [\beta-reduction]
 #+begin_definition
 <<def-betared>>
 The *single-step \beta-reduction* is the smallest relation on \lambda-terms
 capturing the notion of evaluation 
-\[(\lambda x.M)N \to_{\beta}M[N/x],\]
-
+\[
+(\lambda x.M)N \to_{\beta}M[N/x],
+\]
 and some congruence rules that preserve the structure of
 \lambda-terms, such as
 
   * $M \to_{\beta} M'$ implies $MN \to_{\beta} M'N$ and $NM \to_{\beta} NM'$;
   * $M \to_{\beta}M'$ implies $\lambda x.M \to_{\beta} \lambda x.M'$.
 
-The reflexive transitive closure of $\to_{\beta}$ is written as $\twoheadrightarrow_{\beta}$. The symmetric
-closure of $\twoheadrightarrow_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$ or simply $=$.
+The reflexive transitive closure of $\to_{\beta}$ is written as $\tto_{\beta}$. The symmetric
+closure of $\tto_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$ or simply $=$.
 #+end_definition
 
 *** \eta-reduction
-The idea of function extensionality in \lambda-calculus is captured by the
-notion of \eta-reduction. Function extensionality implies the equality of
-any two terms that define the same function over any argument.
+Although we lost the extensional view of functions when we decided to
+adopt the /functions as formulae/ perspective, the idea of function
+extensionality in \lambda-calculus can be partially recovered by the notion
+of \eta-reduction.
+This form of /function extensionality for \lambda-terms/ can be captured
+in the notion that any term which directly applies a function to the
+argument it takes can be reduced to the actual function. That is,
+any $\lambda x.M x$ can be reduced to $M$.
 
-#+attr_latex: :options [Eta reduction]
+#+attr_latex: :options [\eta-reduction]
 #+begin_definition
-The \eta-reduction is the smallest relation on \lambda-terms satisfiying the
+The *\eta-reduction* is the smallest relation on \lambda-terms satisfiying the
 same congruence rules as \beta-reduction and the following axiom
 \[
 \lambda x.Mx \to_{\eta} M,\text{ for any } x \notin \mathrm{FV}(M).
 \]
-#+end_definition
-
 We define single-step \beta\eta-reduction as the union of \beta-reduction
 and \eta-reduction. This will be written as $\to_{\beta\eta}$, and its reflexive transitive
 closure will be $\tto_{\beta\eta}$.
+#+end_definition
+
+Note that, in the particular case where $M$ is itself a \lambda-abstraction,
+\eta-reduction is simply a particular case of \beta-reduction.
+
+# TODO: Comments in https://cstheory.stackexchange.com/a/8261/28986
+# suggest a theorem in Urzyczyn, Sorensen which might be relevant
 
 *** Confluence
+# What is confluence
+As we said earlier, it is not possible in general to evaluate a \lambda-term
+into a canonical, non-reducible term. However, we will be able to prove
+that, in the cases where it exists, it will be unique. This property
+is a consequence of a sightly more general one, */confluence/*, which
+can be defined in any abstract rewriting system.
+
+#+attr_latex: :options [Confluence]
 #+begin_definition
 A relation $\to$ is *confluent* if, given its reflexive transitive closure
 $\tto$, $M \tto N$ and $M \tto P$ imply the existence of some $Z$ such that
@@ -1106,13 +325,12 @@ $N \tto Z$ and $P \tto Z$.
 Given any binary relation $\to$ of which $\tto$ is its reflexive transitive
 closure, we can consider three seemingly related properties
 
-  * the *confluence* or Church-Rosser property we have just defined.
+  * the *confluence* (also called /Church-Rosser property/) we have just defined.
   * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$.
   * the *diamond property*, which is defined substituting $\tto$ by $\to$ on
     the definition on confluence.
 
 Diagrammatically, the three properties can be represented as
-
 \[\begin{tikzcd}[column sep=small]
 & 
 M \drar[two heads]\dlar[two heads] &&& 
@@ -1128,23 +346,22 @@ Z &&&
 Z &&&
 Z &\\
 \end{tikzcd}\]
-
-and the implication relation between them is that the diamond relation
-implies confluence; while the quasidiamond does not. Both claims are
-easy to prove, and they show us that, in order to prove confluence for
-a given relation, we need to prove the diamond property instead of try
-to prove it from the quasidiamond property, as a naive attempt of proof
-would try.
+and we can show that the diamond relation implies confluence; while
+the quasidiamond does not. Both claims are easy to prove, and they
+show us that, in order to prove confluence for a given relation, we
+can use the diamond property instead of the quasidiamond property, as
+a naive attempt of proof by induction would attempt.
 
 The statement of $\tto_{\beta}$ and $\tto_{\beta\eta}$ being confluent is what we are going to
-call the Church-Rosser theorem. The definition of a relation satisfying
+call the */Church-Rosser theorem/*. The definition of a relation satisfying
 the diamond property and whose reflexive transitive closure is $\tto_{\beta\eta}$ will
 be the core of our proof.
 
 *** The Church-Rosser theorem
 The proof presented here is due to Tait and Per Martin-Löf; an earlier
 but more convoluted proof was discovered by Alonzo Church and Barkley 
-Rosser in 1935. It is based on the idea of parallel one-step reduction.
+Rosser in 1935 (see cite:barendregt84 and cite:pollack95).
+It is based on the idea of parallel one-step reduction.
 
 #+attr_latex: :options [Parallel one-step reduction]
 #+begin_definition
@@ -1305,18 +522,21 @@ whose diamond property implies confluence for $\to_{\beta\eta}$.
 #+end_proof
 
 *** Normalization
+Once the Church-Rosser theorem is proved, we can formally define the notion
+of a normal form as a completely reduced \lambda-term.
+
 #+attr_latex: :options [Normal forms]
 #+begin_definition
 A \lambda-term is said to be in *\beta-normal form* if \beta-reduction
-cannot be applied to it or any of its subformulas. We define *\eta-reduction*
-and *\beta\eta-reduction* analogously.
+cannot be applied to it or any of its subformulas. We define *\eta-normal forms*
+and *\beta\eta-normal forms* analogously.
 #+end_definition
 
-Computing with \lambda-terms means to apply reductions to them until
+Fully evaluating \lambda-terms usually means to apply reductions to them until
 a normal form is reached. We know, by virtue of Theorem [[theorem-churchrosser]], 
 that, if a normal form exists, it is unique; but we do not know if a
 normal form actually exists. We say that a term *has* a normal form
-if it can be reduced to a normal form. 
+when it can be reduced to a normal form.
 
 #+begin_definition
 A term is *weakly normalizing* if there exists a sequence of reductions
@@ -1343,6 +563,7 @@ is
 
 *** Standarization and evaluation strategies
 # Barendregt, 1985, section 13.2
+
 # Leftmost vs Rightmost evaluation
 # Leftmost does always normalize if it is possible
 # Rightmost only normalizes if it is necessary
@@ -1360,7 +581,7 @@ is
 # Statement: http://www.nyu.edu/projects/barker/Lambda/barendregt.94.pdf
 # Barendregt (1984) Theorem 13.2.2
 We would like to find a \beta-reduction strategy such that, if a term
-has a normal form, it can be found by following this strategy. Our
+has a normal form, it can be found by following that strategy. Our
 basic result will be the *standarization theorem*, which shows that,
 if a \beta-reduction to a normal form exists, a sequence of
 \beta-reductions from left to right on the \lambda-expression will be
@@ -1506,7 +727,7 @@ that is, for any Ski-term $U$,
 \]
 #+end_theorem
 #+begin_proof
-By induction on $U$,
+By structural induction on $U$,
 
   * $\skiabs\Lambda(x) = x$, for any variable $x$;
   * $\skiabs\Lambda(I) = [x].x = I$;
@@ -1517,6 +738,8 @@ By induction on $U$,
 
 *** TODO Turing completeness
 ** Simply typed \lambda-calculus
+# TODO: Explicar notación y motivar
+
 We will give now a presentation of the *simply-typed \lambda-calculus*
 (STLC) based on cite:Hindley08. Our presentation will rely only on the
 /arrow type/ $\to$; while other presentations of simply typed
@@ -3427,6 +2650,8 @@ tutorials are an example of this feature and can be seen on Figure [[mikrokosmos
 [fn:ghcjs]: The GHCjs documentation is available on its web page https://github.com/ghcjs/ghcjs
 
 ** Programming in the untyped \lambda-calculus
+# Untyped \lambda-calculus in programming languages
+
 This section explains how to use the untyped \lambda-calculus to
 encode data structures and useful data, such as booleans, linked lists,
 natural numbers or binary trees. All this is done on pure \lambda-calculus
@@ -3929,6 +3154,923 @@ notnotlem
 #+END_SRC
 
 whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
+* Category theory (abstract)                                         :ignore:
+* Category theory
+# TODO: Presheaf categories
+
+** Categories
+*** Definition of category
+We will think of a category as the algebraic structure that captures
+the notion of composition. A category will be built from some sort
+of objects linked by composable arrows; to which some associativity and
+identity laws will apply.
+
+**** Categories, objects and morphisms                            :ignore:
+#+attr_latex: :options [Category]
+#+begin_definition
+A *category* ${\cal C}$, as defined in cite:maclane78, is given by
+
+ * ${\cal C}_0$, a collection[fn:collection] whose elements are called
+   *objects*[fn:objectnotation], and
+ * ${\cal C}_1$, a collection whose elements are called *morphisms*.
+
+Every morphism $f \in {\cal C}_1$ has two objects assigned: a
+*domain*, written as $\mathrm{dom}(f) \in {\cal C}_0$, and a
+*codomain*, written as $\mathrm{cod}(f) \in {\cal C}_0$; a common
+notation for such morphism is
+\[
+f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
+\]
+
+Given two morphisms $f \colon A \to B$ and $g \colon B \to C$ there
+exists a *composition morphism*, written as $g \circ f \colon A \to C$.
+Morphism composition is a binary associative operation with
+identity elements $\id_{A}\colon A \to A$, that is
+\[
+h \circ (g \circ f) = (h \circ g) \circ f
+\quad\text{ and }\quad
+f \circ \id_A = f = \id_B \circ f.
+\]
+#+end_definition
+
+[fn:objectnotation]: We will sometimes write this class of objects of
+a category ${\cal C}$ as $\mathrm{obj}({\cal C})$, but it is common to simply use ${\cal C}$ to denote it.
+
+[fn:collection]: We use the term /collection/ to denote
+some unspecified formal notion of compilation of "things" that could
+be given by sets or proper classes. We will want to define categories
+whose objects are all the possible sets and we will need the objects
+to form a proper class in order to avoid inconsistent results such as
+the Russell's paradox.
+
+**** Definition of hom-sets and small categories                  :ignore:
+#+attr_latex: :options [Hom-sets]
+#+begin_definition
+The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
+between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
+of an object $A$ is the hom-set $\mathrm{end}(A) = \hom(A,A)$.
+#+end_definition
+
+Sometimes, when considering a hom-set, it will be useful to explicitly
+specify the category on which we are working as $\hom_{{\cal C}}(A,B)$.
+
+#+attr_latex: :options [Small and locally small categories]
+#+begin_definition
+A category is said to be *small* if the collections ${\cal C}_0,{\cal C}_1$ of objects and morphisms
+are both sets (instead of proper classes). It is said to be *locally small* if every
+hom-set is actually a set.
+#+end_definition
+
+*** Morphisms
+**** Isomorphisms                                                 :ignore:
+#+attr_latex: :options [Isomorphisms]
+#+begin_definition
+A morphism $f : A \to B$ is an *isomorphism* if an inverse morphism $f^{-1} : B \to A$
+such that
+
+  * $f^{-1} \circ f = \id_{A}$,
+  * $f \circ f^{-1} = \id_{B}$;
+
+exists.
+#+end_definition
+
+We call *automorphisms* to the endomorphisms which are also isomorphisms.
+
+#+attr_latex: :options [Unicity of inverses]
+#+begin_proposition
+<<prop-unicityinverse>>
+If the inverse of a morphism exists, it is unique. In fact, if a
+morphism has a left-side inverse and a right-side inverse, they are
+both-side inverses and they are equal.
+#+end_proposition
+#+begin_proof
+Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
+\[
+g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) = 
+(g_1 \circ f) \circ g_2 =
+\id \circ g_2 = g_2.
+\]
+We have used associativity of composition, neutrality of the identity 
+and the fact that $g_1$ is a left-side inverse and $g_2$ is a 
+right-side inverse.
+#+end_proof
+
+#+begin_definition
+Two objects are *isomorphic* if an isomorphism between them exists.
+We write $A \cong B$ when $A$ and $B$ are isomorphic.
+#+end_definition
+
+#+attr_latex: :options [Isomorphy is an equivalence relation]
+#+begin_proposition
+The relation of being isomorphic is an equivalence relation. In
+particular,
+
+ * the identity, $\id = \id^{-1}$;
+ * the inverse of an isomorphism, $(f^{-1})^{-1} = f$;
+ * and the composition of isomorphisms, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$;
+
+are all isomorphisms.
+#+end_proposition
+
+**** Monomorphisms and epimorphisms                               :ignore:
+#+attr_latex: :options [Monomorphisms and epimorphisms]
+#+begin_definition
+A *monomorphism* is a left-cancellable morphism, that is, $f : A \to B$ is
+a monomorphism if, for every $g,h : B \to A$, 
+\[ f \circ g = f \circ h  \implies g = h.
+\]
+An *epimorphism* is a right-cancellable morphism, that is, $f : A \to B$ is
+an epimorphism if, for every $g,h : B \to A$,
+\[ g \circ f = h \circ f \implies g = h.
+\]
+A morphism which is a monomorphism and an epimorphism at the same time is
+called a *bimorphism*.
+#+end_definition
+
+#+begin_remark
+A morphism can be a bimorphism without being an isomorphism.
+#+end_remark
+
+**** Retractions and sections                                     :ignore:
+#+attr_latex: :options [Retractions and sections]
+#+begin_definition
+A *retraction* is a left inverse, that is, a morphism which has a right inverse;
+conversely, a *section* is a right inverse, a morphism which has a left inverse.
+#+end_definition
+
+By virtue of Proposition [[prop-unicityinverse]], a morphism which is both a
+retraction and a section is an isomorphism.
+
+*** Terminal objects, products and coproducts
+#+attr_latex: :options [Initial object]
+#+begin_definition
+An object $I$ is an *initial object* if every object is the domain of exactly
+one morphism to it. That is, for every object $A$ exists an unique morphism $I \to A$.
+#+end_definition
+
+#+attr_latex: :options [Terminal object]
+#+begin_definition
+An object $T$ is a *terminal object* if every object is the codomain of exactly
+one morphism from it. That is, for every object $A$ exists an unique $A \to T$.
+#+end_definition
+
+#+attr_latex: :options [Zero object]
+#+begin_definition
+A *zero object* is an object which is both initial and terminal at the
+same time.
+#+end_definition
+
+#+attr_latex: :options [Initial and final objects are essentially unique]
+#+begin_proposition
+<<prop-initialfinalunique>>
+Initial and final objects in a category are essentially unique; that
+is, any two initial objects are isomorphic and any two final objects
+are isomorphic.
+#+end_proposition
+#+begin_proof
+If $A,B$ were initial objects, by definition, there would be only one
+morphism $f : A \to B$ and only one morphism $g : B \to A$. Moreover, there
+would be only an endomorphism in $\mathrm{End}(A)$ and $\mathrm{End}(B)$ which should be
+the identity. That implies,
+
+  * $f \circ g = \id$,
+  * $g \circ f = \id$.
+
+As a consequence, $A \cong B$. A similar proof can be written for the terminal
+object.
+#+end_proof
+
+# The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
+
+#+attr_latex: :options [Product object]
+#+begin_definition
+An object $C$ is the *product* of two objects $A,B$ on a category if there
+are two morphisms
+\[\begin{tikzcd}
+A & C \rar{\pi_B}\lar[swap]{\pi_A} & B
+\end{tikzcd}\]
+such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
+$f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = \pi_A \circ h$
+and $f_2 = \pi_B \circ h$. Diagramatically,
+\[\begin{tikzcd}[column sep=tiny]
+& D \dar[dashed]{\exists! h} \ar[bend left]{ddr}{f_2}\ar[bend right,swap]{ddl}{f_1} & \\
+& C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
+A && B &.
+\end{tikzcd}\]
+#+end_definition
+
+Note that the product of two objects does not have to exist on a category;
+but when it exists, it is essentially unique. In fact, we will be able later
+to construct a category in which the product object is the final object of
+the category and Proposition [[prop-initialfinalunique]] can be applied. We will
+write /the/ product object of $A,B$ as $A \times B$.
+
+
+#+attr_latex: :options [Coproduct object]
+#+begin_definition
+An object $C$ is the *coproduct* of two objects $A,B$ on a category if there
+are two morphisms
+\[\begin{tikzcd}
+A \rar{i_A} & C & B \lar[swap]{i_B}
+\end{tikzcd}\]
+such that, for any other object $D$ with two morphisms $f_1 : D \to A$ and
+$f_2 : D \to B$, an unique morphism $h : D \to C$, such that $f_1 = i_A \circ h$
+and $f_2 = i_B \circ h$. Diagramatically,
+\[\begin{tikzcd}[column sep=tiny]
+& D & \\
+& C \uar[dashed]{\exists! h}  & \\
+A \ar[bend left]{uur}{f_1}\urar{i_A} && B \ular[swap]{i_B} \ar[bend right,swap]{uul}{f_2} &.
+\end{tikzcd}\]
+#+end_definition
+
+The same discussion we had earlier for the product can be rewritten here for
+the coproduct only reversing the direction of the arrows. We will write /the/
+coproduct of $A,B$ as $A \amalg B$. As we will see later, the notion of a coproduct
+is dual to the notion of product; and the same proofs can be applied on
+both cases, only by reversing the arrows.
+
+*** Examples of categories
+**** Discrete categories                                          :ignore:
+#+attr_latex: :options [Discrete categories]
+#+begin_exampleth
+A category is *discrete* if it has no other morphisms than the identities.
+A discrete category is uniquely defined by its class of objects and
+every class of objects defines a category.
+#+end_exampleth
+
+**** Monoids, groups                                              :ignore:
+#+attr_latex: :options [Monoids, groups]
+#+begin_exampleth
+A single-object category is a *monoid*. [fn:monoid] A monoid in which
+every morphism is an isomorphism is a *group*. A *groupoid* is a
+category (of any number of objects) where all the morphisms are
+isomorphisms.
+#+end_exampleth
+
+[fn:monoid]: This definition is equivalent to the usual definition of monoid
+if we take the morphisms as elements of the monoid and composition of morphisms
+as the monoid operation.
+
+**** Posets                                                       :ignore:
+#+attr_latex: :options [Partially ordered sets]
+#+begin_exampleth
+Every partial ordering defines a category in which the elements are the
+objects and an only morphism between two objects $\rho_{a,b} : a \to b$ exists 
+
+In particular, every ordinal can be seen as a partially ordered set
+and defines a category.
+#+end_exampleth
+
+**** Category of Sets                                             :ignore:
+#+attr_latex: :options [The category of sets]
+#+begin_exampleth
+The category $\Sets$ is defined as the category with all the
+possible sets as objects and functions between them as morphisms. It
+is trivial to check associativity of composition and the existence of
+the identity function for any set.
+#+end_exampleth
+
+**** Category of Groups                                           :ignore:
+#+attr_latex: :options [The category of groups]
+#+begin_exampleth
+The category $\mathtt{Grp}$ is defined as the category with groups as objects
+and group homomorphisms between them as morphisms.
+#+end_exampleth
+
+**** Category of R-modules                                        :ignore:
+#+attr_latex: :options [The category of R-modules]
+#+begin_exampleth
+The category $R\text{-Mod}$ is defined as the category with $R\text{-modules}$ as
+objects and module homomorphisms between them as morphisms. We know
+that the composition of module homomorphisms and the identity are
+also module homomorphisms.
+
+In particular, abelian groups form a category as $\mathbb{Z}\text{-modules}$.
+#+end_exampleth
+
+**** Category of Topological spaces                               :ignore:
+#+attr_latex: :options [The category of topological spaces]
+#+begin_exampleth
+The category $\mathtt{Top}$ is defined as the category with topologicaal spaces as
+objects and continuous functions between them as morphisms.
+#+end_exampleth
+
+** Functors and natural transformations
+#+begin_quote
+"Category" has been defined in order to define "functor" and "functor"
+has been defined in order to define "natural transformation".
+
+      -- *Saunders MacLane*, /Categories for the working mathematician/.
+#+end_quote
+
+Functors and natural transformations were defined for the first time
+by Eilenberg and MacLane in cite:maclane42 while studying Čech
+cohomology. While initially they were devised mainly as a language for
+studying homology, they have proven its foundational value with the
+passage of time.
+
+*** Functors
+**** Definition of functor                                        :ignore:
+#+attr_latex: :options [Functor]
+#+begin_definition
+A *functor* will be interpreted as a morphism of categories.
+Given two categories ${\cal C}$ and ${\cal D}$, a functor between them $F : {\cal C} \to {\cal D}$ is given by
+
+  * an *object function*, $F : \mathrm{obj}({\cal C}) \to \mathrm{obj}({\cal D})$;
+  * and an *arrow function*, $F : (A \to B) \to (FA \to FB)$ for any two
+    objects $A,B$ of the category;
+
+such that
+
+  * $F(\id_A) = \id_{FA}$, identities are preserved;
+  * $F(f \circ g) = Ff \circ Fg$, the functor respects composition.
+#+end_definition
+
+**** Composition of functors                                      :ignore:
+Functors can be composed as we did with morphisms. In fact, a category of
+categories can be defined; having functors as morphisms.
+
+#+attr_latex: :options [Composition of functors]
+#+begin_definition
+Given two functors $F \colon {\cal C} \to {\cal B}$ and $G \colon {\cal B} \to {\cal A}$, their composite functor
+$G \circ F : {\cal C} \to {\cal A}$ is given by the composition of object and arrow functions
+of the functors. This composition is trivially associative.
+#+end_definition
+
+#+attr_latex: :options [Identity functor]
+#+begin_definition
+The identity functor on a category $I_{{\cal C}}\colon {\cal C} \to {\cal C}$ is given by identity object
+and arrow functions. It is trivially neutral with respect to composition.
+#+end_definition
+
+**** Full and faithfull functors                                  :ignore:
+#+attr_latex: :options [Full functor]
+#+begin_definition
+A functor $F$ is *full* if the arrow map is surjective. That is, if every
+$g : FA \to FB$ is of the form $Ff$ for some morphism $f \colon A \to B$.
+#+end_definition
+#+attr_latex: :options [Faithful functor]
+#+begin_definition
+A functor $F$ is *faithful* if the arrow map is injective. That is,
+if, for every two arrows $f_1,f_2 : A \to B$, $Ff_1 = Ff_2$ implies
+$f_1 = f_2$.
+#+end_definition
+
+It is easy to notice that the composition of faithful (respectively,
+full) functors is again a faithful functor (respectively, full).
+
+**** Isomorphisms of categories                                   :ignore:
+#+attr_latex: :options [Isomorphism of categories]
+#+begin_definition
+An *isomorphism of categories* is a functor $T$ whose object and arrow functions
+are bijections. Equivalently, it is a functor $T$ such that there exists an /inverse/
+functor $S$ such that $T \circ S$ and $S \circ T$ are identity functors.
+#+end_definition
+
+# Subcategories
+# Category of categories
+*** Natural transformations
+#+attr_latex: :options [Natural transformation]
+#+begin_definition
+A *natural transformation* between two functors with the same domain
+and codomain, $\alpha\colon F \todot G$, is a family of morphisms parameterized by 
+the objects of the domain category, $\alpha_C\colon FC \to GC$ such that the
+following diagram commutes
+
+\[\begin{tikzcd}
+C \dar{f} & & SC \rar{\tau_C}\dar{Sf} & TC \dar{Tf} \\
+C' & & SC' \rar{\tau_{C'}} & TC'
+\end{tikzcd}\]
+
+for every arrow $f : C \to C'$.
+#+end_definition
+
+It is also said that the family of morphisms is /natural/ in its
+parameter. This naturality property is what allows us to translate a
+commutative diagram from a functor to another.
+
+\[\begin{tikzcd}
+A\arrow{dd}{h}\drar{f} &   & & F A\arrow{dd}{F h}\drar{F f} \arrow{rrr}{\tau A} &     & & G A\arrow{dd}{}\drar{G f} &     \\
+  & B \dlar{g} & &     & F B \dlar{F g} \arrow{rrr}{\tau B} & &     & G B \dlar{G g} \\
+C &   & & F C \arrow{rrr}{\tau C} &     & & G C &     \\
+\end{tikzcd}\]
+
+#+attr_latex: :options [Natural isomorphism]
+#+begin_definition
+A *natural isomorphism* is a natural transformation in which every component,
+every morphism of the parameterized family, is invertible.
+#+end_definition
+
+The inverses of a natural transformation form another natural
+transformation, whose naturality follows from the naturality of the
+original transformation.
+
+**** TODO Equivalence of categories
+*** Composition of natural transformations
+**** Vertical composition                                         :ignore:
+#+attr_latex: :options [Vertical composition of natural transformations]
+#+begin_definition
+The *vertical composition* of two natural transformations $\tau : S\to T$
+and $\sigma : R \to S$, denoted by $\tau \cdot \sigma$ is the family of morphisms defined by the objectwise
+composition of the components of the two natural transformations, i.e.
+
+\[\begin{tikzcd}
+Rc \rar{Rf}\dar{\sigma_c}\arrow[swap,bend right=90]{dd}{(\tau \circ \sigma)_c} &
+Rc' \dar{\sigma_{c'}} \arrow[bend left=90]{dd}{(\tau \circ \sigma)_{c'}} \\
+Sc \rar{Sf}\dar{\tau_c}  &
+Sc' \dar{\tau_{c'}} \\
+Tc \rar{Tf}  &  Tc' 
+\end{tikzcd}\]
+#+end_definition
+
+#+attr_latex: :options [Vertical composition is a natural transformation]
+#+begin_proposition
+The vertical composition of two natural transformations is in fact
+a natural transformation.
+#+end_proposition
+#+begin_proof
+Naturality of the composition follows from the naturality of its two
+factors. In other words, the commutativity of the external square on
+the above diagram follows from the commutativity of the two internal
+squares.
+#+end_proof
+
+**** Horizontal composition                                       :ignore:
+#+attr_latex: :options [Horizontal composition of natural transformations]
+#+begin_definition
+The *horizontal composition* of two natural transformations $\tau \colon S \to T$ and
+$\tau' \colon S' \to T'$, with domains and codomains as in the following diagram
+\[\begin{tikzcd}
+C 
+\arrow[bend left=50]{r}[name=U,below]{}{S}
+\arrow[bend right=50]{r}[name=D]{}[swap]{T}
+& 
+B \arrow[Rightarrow,from=U,to=D]{}{\tau}
+\arrow[bend left=50]{r}[name=UU,below]{}{S'}
+\arrow[bend right=50]{r}[name=DD]{}[swap]{T'}
+&
+C \arrow[Rightarrow,from=UU,to=DD]{}{\sigma}
+\end{tikzcd}\]
+
+is denoted by $\tau' \circ \tau \colon S'S \to T'T$ and is defined as the family of morphisms
+given by $\tau' \circ \tau = T' \tau \circ \tau' = \tau' \circ S'\tau$, that is, by the diagonal of the 
+following commutative square
+\[\begin{tikzcd}
+S'Sc\rar{\tau'_{Sc}} \drar{\scriptsize{(\tau' \circ \tau)_c}} \dar[swap]{S'\tau_c} & T'Sc \dar{T' \tau_c} \\
+S'Tc\rar{\tau'_{Tc}} & T'Tc
+\end{tikzcd}\]
+#+end_definition
+
+#+attr_latex: :options [Horizontal composition is a natural transformation]
+#+begin_proposition
+The horizontal composition of two natural transformations is in fact
+a natural transformation.
+#+end_proposition
+#+begin_proof
+It is natural as the following diagram is the composition of two
+naturality squares
+\[\begin{tikzcd}
+S'Sc \rar{S'\tau} \dar{S'Sf} &
+S'Tc \rar{\tau'}  \dar{S'Tf} &
+T'Tc \dar{T'Tf} \\
+S'Sb \rar{S'\tau} &
+S'Tb \rar{\tau'} &
+T'Tb
+\end{tikzcd}\]
+
+defined respectively by the naturality of $S'\tau$ and $\tau'$.
+#+end_proof
+
+** Constructions on categories
+*** Opposite categories and contravariant functors
+#+attr_latex: :options [Opposite category]
+#+begin_definition
+The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
+same objects as ${\cal C}$ but with all its arrows reversed. That is, for each
+morphism $f : A \to B$, there exists a morphism $f^{op} : B \to A$ in ${\cal C}^{op}$.
+Composition is defined as
+\[
+f^{op} \circ g^{op} = (g\circ f)^{op},
+\]
+exactly when the composite $g \circ f$ is defined in ${\cal C}$.
+#+end_definition
+
+Reversing all the arrows is a process that directly translates every
+property of the category into a /dual/ property. A morphism $f$ is a
+monomorphism if and only if $f^{op}$ is an epimorphism; a terminal object
+in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse becomes a left
+inverse on the opposite category. This process is also an /involution/,
+where $(f^{op})^{op}$ can be seen as $f$ and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
+
+#+attr_latex: :options [Contravariant functor]
+#+begin_definition
+A *contravariant* functor from ${\cal C}$ to ${\cal D}$ is a functor from the opposite category,
+that is, $F \colon {\cal C}^{op}\to {\cal D}$. Non-contravariant functors are often called *covariant*
+functors, to emphasize the difference.
+#+end_definition
+
+# Hom functors as an example of covariant and contravariant functors
+*** TODO The category of all categories
+*** Product categories
+#+attr_latex: :options [Product category]
+#+begin_definition
+The *product category* of two categories ${\cal C}$ and ${\cal D}$, denoted by ${\cal C} \times {\cal D}$ is a
+category having
+
+  * pairs $\left\langle c,d \right\rangle$ as objects, where $c \in {\cal C}$ and $d \in {\cal D}$;
+  * and pairs $\pair{f,g} : \pair{c,d} \to \pair{c',d'}$ as morphisms, where $f \colon c \to c'$ and
+    $g \colon d \to d'$ are morphisms in their respective categories.
+
+The identity morphism of any object $\pair{c,d}$ is $\pair{\id_c, \id_d}$, and composition is
+defined componentwise as
+\[
+(f',g') \circ (f,g) = (f' \circ f,g' \circ g).
+\]
+#+end_definition
+
+We also define *projection functors* $P\colon {\cal C} \times {\cal D} \to {\cal C}$ and $Q : {\cal C} \times {\cal D} \to {\cal D}$
+on arrows as $P\pair{f,g} = f$ and $Q\pair{f,g} = g$. Note that this definition of
+product, using these projections, would be the product of two categories on a
+category of categories with functors as morphisms.
+
+#+attr_latex: :options [Product of functors]
+#+begin_definition
+The *product functor* of two functors $F\colon {\cal C} \to {\cal C}'$ and $G \colon {\cal D} \to {\cal D}'$ is a
+functor $F \times G \colon {\cal C} \times {\cal D} \to {\cal C}' \times {\cal D}'$ which can be defined
+
+  * on objects as $(F \times G)\pair{c,d} = \pair{Fc,Gd}$;
+  * and on arrows as $(F \times G)\pair{f,g} = \pair{Ff,Gg}$.
+#+end_definition
+
+It can be seen as the unique functor making the following diagram
+commute
+
+\[\begin{tikzcd}
+{\cal C} \dar{F} &
+{\cal C} \times {\cal D}  \rar{Q}\lar[swap]{P} \dar[dashed]{F \times G}&
+{\cal D} \dar{G} \\
+{\cal C}' &
+{\cal C}' \times {\cal D}' \rar[swap]{Q'}\lar{P'}&
+{\cal D}'
+\end{tikzcd}\]
+
+In this sense, the $\times$ operation is itself a functor acting on objects
+and morphisms of the $\mathtt{Cat}$ category of all categories.
+
+*** TODO Bifunctors
+# Definition of Bifunctors
+# Bifunctors are defined by its two parts, obtained by fixing an element
+# Proposition 1 on page 37 Maclane
+
+*** TODO Comma categories
+** Universality
+*** Universal arrows
+#+attr_latex: :options [Universal arrow]
+#+begin_definition
+A *universal arrow* from $c$ to $S$ is an arrow $u \colon c \to Sr$ such that
+for every $c \to Sd$ exists a unique $r \to d$ making this diagram commute
+
+\[\begin{tikzcd}
+& Sd & d \\
+c \rar[swap]{u}\urar{g} & Sr \uar[swap,dashed]{Sf} & r \uar[dashed]{\exists! f} &.
+\end{tikzcd}\]
+#+end_definition
+
+#+attr_latex: :options [Universality in terms of hom-sets]
+#+begin_proposition
+The arrow $u \colon c \to Sr$ is universal iff $f \mapsto Sf \circ u$ is a bijection
+$\hom(r,d) \cong \hom(c,Sd)$ natural in $d$. Any natural bijection of this
+kind is determined by a unique universal arrow.
+#+end_proposition
+#+begin_proof
+Bijection follows from the definition of universal arrow, and
+naturality follows from $S(gf)\circ u = Sg \circ Sf \circ u$.
+
+Given a bijection $\varphi$, we define $u = \varphi(\id_r)$.
+By naturality we have the bijection $\varphi(f) = Sf \circ u$, every arrow
+is written in this way.
+#+end_proof
+
+# TODO Universal from a functor to another
+
+*** Representability
+#+attr_latex: :options [Representation of a functor]
+#+begin_definition
+A *representation* of $K \colon D \to \Sets$ is a natural isomorphism
+\[
+\psi\colon \hom_{D}(r,-) \cong K.
+\]
+
+A functor is /representable/ if it has a representation. An object $r$ is
+called a /representing object/. $D$ must have small hom-sets.
+#+end_definition
+
+#+attr_latex: :options [Representations in terms of universal arrows]
+#+begin_proposition
+If $u \colon \ast \to Kr$ is a universal arrow for a functor $K\colon D \to \Sets$, then
+$f \mapsto K(f)(u\ast)$ is a representation. Every representation is obtained
+in this way.
+#+end_proposition
+#+begin_proof
+We know that $\hom(\ast, X) \xrightarrow{.} X$ is a natural isomorphism in $X$; in particular
+$\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
+
+\[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
+
+for every natural isomorphism $D(r,-) \cong \Sets(\ast,K-)$. But every natural
+isomorphism of this kind is a [[*Universal arrows as natural bijections][universal arrow]].
+#+end_proof
+
+*** Yoneda Lemma
+#+attr_latex: :options [Yoneda Lemma]
+#+begin_lemma
+For any $K\colon D \to \Sets$ and $r \in D$, there is a bijection
+\[
+y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
+\]
+
+sending the natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
+to the image of the identity, $\alpha_r1_r$.
+#+end_lemma
+#+begin_proof
+
+#+end_proof
+
+#+attr_latex: :options [Characterization of natural transformations between representable functors]
+#+begin_corollary
+Given $r,s \in D$, any natural transformation $\hom(r,-) \xrightarrow{.} \hom(s,-)$ has
+the form $h_{\ast}$ for a unique $h\colon s \to r$.
+#+end_corollary
+#+begin_proof
+Using Yoneda Lemma, we know that
+\[
+\mathrm{Nat}(\hom_D(r,-), \hom_D(s,-)) \cong \hom_D(s,r),
+\]
+
+sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to r$. The
+rest of the natural transformation is determined as $h_{\ast}$ by naturality.
+#+end_proof
+
+#+attr_latex: :options [Addendum to the Yoneda Lemma]
+#+begin_proposition
+The bijection on the [[*Yoneda Lemma][Yoneda Lemma]] is a natural isomorphism between
+two $\Sets^D \times D \to \Sets$ functors.
+#+end_proposition
+#+begin_proof
+# TODO
+#+end_proof
+
+#+begin_definition
+In the conditions of [[*Yoneda Lemma][Yoneda Lemma]], the *Yoneda functor*,
+$Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
+
+\[
+\left(f \colon s \to r\right) \mapsto 
+\Big(D(f,-) \colon D(r,-) \to D(s,-)\Big).
+\]
+#+end_definition
+
+#+begin_proposition
+The Yoneda functor is full and faithful.
+#+end_proposition
+#+begin_proof
+# TODO
+#+end_proof
+
+# The Yoneda functor is a currying of the hom functor.
+
+*** TODO Products and limits
+**** TODO Pullbacks
+**** TODO Example: p-adic numbers
+*** TODO Coproducts and colimits
+**** TODO Coproducts as universal arrows
+**** TODO Pushouts
+**** Colimits
+#+attr_latex: :options [Colimits]
+#+begin_definition
+A *colimit* of a functor from a given /index category/ $F \colon J \to {\cal C}$ is an object
+$r \in {\cal C}$ such that there exists a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
+It is usually written as $r = \varinjlim F$.
+#+end_definition
+
+** Adjoints
+*** Adjunctions
+#+attr_latex: :options [Adjunction]
+#+begin_definition
+An *adjunction* from categories $X$ to $A$ is a pair of functors
+$F\colon X \to A$, $G\colon A \to X$ with a natural bijection
+\[
+\varphi \colon \hom(Fx,a) \cong \hom(x,Ga),
+\]
+
+natural in both $x\in X$ and $a \in A$. We write it as $F \dashv G$.
+#+end_definition
+
+#+attr_latex: :options [Unit and counit of an adjunction]
+#+begin_definition
+An adjunction determines a *unit* and a *counit*;
+
+ 1) the *unit* is natural transformation made with universal arrows $\eta\colon I \todot GF$, where
+    the right adjoint of each $f \colon Fx \to a$ is
+    \[
+    \varphi f = Gf \circ \eta_x \colon x \to Ga.
+    \]
+ 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot I$, where
+    the left adjoint of each $g \colon x \to Ga$ is
+    \[
+    \varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.
+    \]
+
+that follow the /triangle identities/ $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
+#+end_definition
+
+#+attr_latex: :options [Characterization of adjunctions]
+#+begin_proposition
+Each adjunction is completely determined by any of
+
+ 1) functors $F,G$ and $\eta\colon 1 \todot GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
+ 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, creating a functor $F$.
+ 3) functors $F,G$ and $\varepsilon\colon FG \todot 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
+ 4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$, creating a functor $G$.
+ 5) functors $F,G$, with units and counits satisfiying the triangle
+    identities $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
+#+end_proposition
+#+begin_proof
+# TODO
+#+end_proof
+
+** Monads and algebras
+*** Monads
+**** Definition of Monads                                         :ignore:
+#+attr_latex: :options [Monad]
+#+begin_definition
+A *monad* is a functor $T\colon X \to X$ with natural transformations
+
+ * $\eta\colon I \todot T$, called /unit/
+ * $\mu \colon T^2 \todot T$, called /multiplication/
+
+such that
+\[\begin{tikzcd}
+T^3 \rar{T\mu}\dar{\mu T} & T^2\dar{\mu} \\
+T^2 \rar{\mu} & T
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+IT \rar{\eta T}\drar[swap]{\cong} & T^2\dar{\mu} & \lar[swap]{T\eta}\dlar{\cong} TI \\
+& T & &.
+\end{tikzcd}\]
+#+end_definition
+
+**** Each adjunction gives rise to a monad                        :ignore:
+#+attr_latex: :options [Each adjunction gives rise to a monad]
+#+begin_proposition
+Given $F \dashv G$, $GF$ is a monad.
+#+end_proposition
+#+begin_proof
+We take the unit of the adjunction as the monad unit. We define the
+product as $\mu = G\varepsilon F$. Associativity follows from these diagrams
+\[\begin{tikzcd}
+FGFG\rar{FG\varepsilon} \dar[swap]{\varepsilon FG} & FG \dar{\varepsilon} \\
+FG\rar{\varepsilon} & I
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+GFGFGF\rar{GFG\varepsilon F} \dar[swap]{G\varepsilon FGF} & GFGF \dar{G\varepsilon F} \\
+GFGF\rar{G\varepsilon F} & GF &,
+\end{tikzcd}\]
+
+where the first is commutative by the [[*Interchange law][interchange law]] and the second
+is obtained by applying functors $G$ and $F$. Unit laws follow from
+the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
+#+end_proof
+
+*** Comonads
+#+attr_latex: :options [Comonad]
+#+begin_definition
+A *comonad* is a functor $L\colon X \to X$ with natural transformations
+
+ * $\varepsilon\colon L\to I$, called /counit/
+ * $\delta\colon L \to L^2$, called /comultiplication/
+
+such that
+\[\begin{tikzcd}
+L\rar{\delta} \dar[swap]{\delta} & L^{2} \dar{L\delta} \\
+L^{2}\rar{\delta L} & L^{3}
+\end{tikzcd}
+\qquad
+\begin{tikzcd}
+& L \dar{\delta} \dlar[swap]{\cong} \drar{\cong} & \\
+IL & 
+L^2 \lar{\varepsilon L}\rar[swap]{L \varepsilon} & 
+LI
+&.
+\end{tikzcd}\]
+#+end_definition
+
+*** Algebras for a monad
+#+attr_latex: :options [T-algebra]
+#+begin_definition
+For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
+/structure map/ making these diagrams commute
+\[\begin{tikzcd}
+T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
+Tx\rar{h} & x &.
+\end{tikzcd}
+\]
+#+end_definition
+
+#+attr_latex: :options [Morphism of T-algebras]
+#+begin_definition
+A *morphism of T-algebras* is an arrow $f\colon x \to x'$ making the following square
+commute
+\[\begin{tikzcd}
+Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
+Tx' \rar[swap]{h'} & Tx' &.
+\end{tikzcd}\]
+#+end_definition
+
+#+attr_latex: :options [Category of T-algebras]
+#+begin_proposition
+The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
+#+end_proposition
+#+begin_proof
+Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
+is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
+
+\[\begin{tikzcd}
+Tx \rar{h}\dar[swap]{Tf} & 
+x \dar{f}\\
+Tx' \dar[swap]{Tg} \rar{h'} &
+x' \dar{g}\\
+Tx'' \rar{h''}&
+x''
+\end{tikzcd}\]
+
+commutes.
+#+end_proof
+** Kan extensions
+*** Dinatural transformations
+#+ATTR_LATEX: :options [Dinatural transformation]
+#+BEGIN_definition
+A *dinatural transformation* between functors $F,G \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$
+is a family of morphisms $\alpha_x \colon F(x,x) \to G(x,x)$ for each $x \in {\cal C}$,
+called /components/, such that for every $f \colon x \to y$,
+\[\begin{tikzcd} &
+F(x,x) \rar{\alpha_{x}} &
+G(x,x) \drar{G(\id,f)} & \\
+F(y,x) \urar{F(f,\id)}\drar[swap]{F(\id,f)} & & &
+G(x,y) \\
+&
+F(y,y) \rar{\alpha_{y}} &
+G(y,y) \urar[swap]{G(f,\id)} &
+\end{tikzcd}\]
+
+commutes
+#+END_definition
+
+# TODO: Every natural transformation gives a dinatural transformation.
+
+**** TODO Natural transformation of covariant to contravariant functor :ignore:
+**** Extranatural transformations (wedges)                        :ignore:
+#+ATTR_LATEX: :options [Extranatural transformation]
+#+BEGIN_definition
+An *extranatural transformation* (also called *wedge*) is a dinatural
+transformation to a constant functor.
+#+END_definition
+
+That is, an extranatural transformation from the functor $F$ to the
+object $a$ is a family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
+
+\[\begin{tikzcd}
+F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
+F(x,x)\rar[swap]{\alpha_{x}} & b
+\end{tikzcd}\]
+
+commutes for every $f \colon x \to y$. We write wedges as $\alpha \colon F \toddot b$.
+
+**** TODO Examples of dinatural transformations                   :ignore:
+*** Ends
+# cowedges ?
+
+#+ATTR_LATEX: :options [End]
+#+BEGIN_definition
+An *end* of $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is a universal dinatural transformation
+from a constant $e$ to $F$. That is, a wedge $\sigma \colon e \toddot F$ such that for every
+other $\tau \colon k \toddot F$, there exists a unique $u \colon k \to e$ such that $\sigma_x \circ u = \tau_x$.
+#+END_definition
+
+We usually call /end/ to the object $e$, and we write
+\[
+e = \int_x F(c,c).
+\]
+
+**** TODO Examples of ends
+\[
+\mathrm{Nat}(U,V) = \int_x \hom(Ux,Vx)
+\]
+
+*** Coends
+*** Kan extensions
 
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
