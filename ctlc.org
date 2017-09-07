@@ -862,105 +862,154 @@ The set of *simple types* is given by the following Backus-Naur form
 where $\iota$ would be any /basic type/.
 #+end_definition
 
-That is to say that, for every two types $A,B$, there exists a *function type*
-$A \to B$ between them.
+That is to say that, for every two types $A,B$, there exists a
+*function type* $A \to B$ between them.
 
 *** Typing rules for the simply typed \lambda-calculus
-We will now define the terms of the simply typed \lambda-calculus (STLC) using the
-same constructors we used on the untyped version. Those are the *raw typed \lambda-terms*.
+We will now define the terms of the simply typed \lambda-calculus
+using the same constructors we used on the untyped version. Those are
+the */raw typed \lambda-terms/*.
 
 #+attr_latex: :options [Raw typed lambda terms]
 #+begin_definition
 The set of *typed lambda terms* is given by the BNF
 \[ \mathtt{Term} ::=
 x \mid
-\mathtt{Term}\mathtt{Term} \mid
+\mathtt{Term}\ \mathtt{Term} \mid
 \lambda x^{\mathtt{Type}}. \mathtt{Term} \mid
 \]
 #+end_definition
 
-The set of raw typed \lambda-terms contains some meaningless terms
-under our type interpretation, such as $\pi_1(\lambda x^A.M)$. *Typing rules*
-will give them the desired semantics; only a subset of these raw
-lambda terms will be typeable.
+The main difference here with Definition [[def-lambdaterms]] is 
+that every bound variable has a type, and therefore, every \lambda-abstraction
+of the form $(\lambda x^A. M)$ can be applied only over terms type $A$; if $M$ is of
+type $B$, this term will be of type $A \to B$. 
 
+However, the set of raw typed \lambda-terms contains some meaningless terms
+under this type interpretation, such as $(\lambda x^A. M)(\lambda x^A. M)$.[fn:meaninglesstype]
+*Typing rules* will give them the desired expressive power; only a subset
+of these raw lambda terms will be typeable, and we will choose to work
+only with that subset. When a particular term $M$ has type $A$, we write
+this relation as $M : A$, where the $:$ symbol should be read as ''is of type''.
+
+[fn:meaninglesstype]: In particular, we can not apply a term of type $A \to B$ to
+a term of type $A \to B$; a term of type $A$ was expected.
+
+**** Typing rules                                                 :ignore:
 #+attr_latex: :options [Typing context]
 #+begin_definition
 A *typing context* is a sequence of typing assumptions
-$x_1:A_1,\dots,x_n:A_n$, where no variable appears more than once.
+$x_1:A_1,\dots,x_n:A_n$, where no variable $x_{i}$ appears more than once.
+We will implicitely assume that the order in which these
+assumptions appear does not matter.
 #+end_definition
 
-Every typing rule assumes a typing context, usually denoted by $\Gamma$ 
-or by a concatenation of typing contexts written as $\Gamma,\Gamma'$; and 
-a consequence from that context, separated by the $\vdash$ symbol.
+Every typing rule assumes a typing context, usually denoted by $\Gamma$.
+Concatenation of typing contexts is written as $\Gamma,\Gamma'$; and
+the fact that $\psi$ follows from $\Gamma$ is written as $\Gamma \vdash \psi$.
+Typing rules are written as rules of inference; the premises are
+listed above and the conclusion is written below the line.
 
  1) The $(var)$ rule simply makes explicit the type of a variable from
-    the context.
+    the context. That is, a context that assumes $x : A$ can
+    be written as $\Gamma,x:A$; and we can trivially deduce from it that $x:A$.
 
     \begin{prooftree}
-    \LeftLabel{($var$)}
+    \RightLabel{($var$)}
     \AXC{}
     \UIC{$\Gamma, x:A \vdash x:A$}
     \end{prooftree}
 
- 2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
-    functions from the variable type to the result type. It acts as
-    a constructor of function terms.
+ 2) The $(abs)$ rule declares that the type of a \lambda-abstraction is the type of
+    functions from the variable type to the result type. If a term $M:B$ can
+    be built from the assumption that $x:A$, then $\lambda x^{A}. M : A \to B$. It acts as
+    a /constructor/ of function terms.
 
    \begin{prooftree}
-   \LeftLabel{$(abs)$}
+   \RightLabel{$(abs)$}
    \AXC{$\Gamma, x:A \vdash M : B$}
    \UIC{$\Gamma \vdash \lambda x.M : A \to B$}
    \end{prooftree}
 
- 3) The $(app)$ rule gives the type of a well-typed application of a
-    lambda term. A term $f : A \to B$ applied to a term $a : A$ is a term
-    of type $B$. It acts as a destructor of function terms.
+ 3) The $(app)$ rule declares the type of a well-typed application.
+    A term $f : A \to B$ applied to a term $a : A$ is a term
+    $f\ a : B$. It acts as a /destructor/ of function terms.
 
     \begin{prooftree}
-    \LeftLabel{$(app)$}
+    \RightLabel{$(app)$}
     \AXC{$\Gamma \vdash f : A \to B$}
     \AXC{$\Gamma \vdash a : A$}
     \BIC{$\Gamma \vdash f a : B$}
     \end{prooftree}
 
 #+begin_definition
-A term is *typeable* if we can assign types to all its variables in
-such a way that a typing judgment for the type is derivable.
+A term is *typeable* if a typing judgment for the term is derivable.
 #+end_definition
 
-From now on, we only consider typeable terms on the STLC to be used as
-real terms. As a consequence, the set of \lambda-terms of the STLC is
-only a subset of the terms of the untyped \lambda-calculus.
+From now on, we only consider typeable terms as the terms of the
+STLC. As a consequence, the set of \lambda-terms of the STLC is only a
+subset of the terms of the untyped \lambda-calculus.
 
-# Examples of typeable and non-typeable terms.
+**** Examples of typeable and non-typeable terms                  :ignore:
+#+ATTR_LATEX: :options [Typeable and non-typeable terms]
+#+BEGIN_exampleth
+The term $\lambda f.\lambda x.f (f x)$ is typeable.
+If we abbreviate $\Gamma = f:A \to A,\ x:A$, the detailed typing derivation
+can be written as
+\begin{prooftree}
+\AX$\fCenter$
+\RightLabel{$(var)$}
+\UI$\Gamma\ \fCenter\vdash f : A \to A$
+\AX$\fCenter$
+\RightLabel{$(var)$}
+\UI$\Gamma\ \fCenter\vdash x : A$
+\AX$\fCenter$
+\RightLabel{$(var)$}
+\UI$\Gamma\ \fCenter\vdash f : A \to A$
+\RightLabel{$(app)$}
+\BI$\Gamma\ \fCenter\vdash f\ x : A$
+\RightLabel{$(app)$}
+\BI$f : A \to A, x : A\ \fCenter\vdash f (f x) : A$
+\RightLabel{$(abs)$}
+\UI$f : A \to A\ \fCenter\vdash \lambda x. f (f x) : A \to A$
+\RightLabel{$(abs)$}
+\UI$\fCenter\vdash \lambda f.\lambda x.f (f x) : (A \to A) \to A \to A$
+\end{prooftree}
+The term $(\lambda x.x\ x)$, however, is not typeable. If $x$ were of type $\psi$,
+it also should be of type $\psi \to \sigma$ for some $\sigma$ in order for $x\ x$ to
+be well-typed;
+but $\psi \equiv \psi \to \sigma$ is not solvable, at it can be shown by structural
+induction on the term $\psi$.
+#+END_exampleth
 
-# It is easy to check if a term is typeable because there is only
-# one way to type it.
-
-# If we want to derive term bottom-up, there is only one possible
-# choice at each step. Has this to do with the natural deduction
-# properties?
+It can be seen that the typing derivation of a term somehow encodes
+the complete \lambda-term. If we were to derive the term bottom-up, there
+would be only one possible choice at each step on which rule to use.
+In the following sections we will discuss a type inference algorithm
+which determines if a type is typeable and what its type should be,
+and we will make precise these intuitions.
 
 *** Curry-style types
-Two different approaches to typing \lambda-terms are commonly used.
+Two different approaches to typing in \lambda-calculus are commonly used.
 
- * *Church-style* typing, also known as /explicit typing/ originated from
+ * *Church-style* typing, also known as /explicit typing/, originated from
    the work of Alonzo Church in cite:church40, where he described a STLC
    with two basic types. The term's type is defined as an intrinsic property
-   of the term; and the same term has to be interpreted always with the same
+   of the term; and the same term has to always be interpreted with the same
    type.
 
- * *Curry-style* typing, also known as /implicit typing/; which creates a
-   formalism where every single term can be given an infinite number of types.
-   This technique is called *polymorphism* in general; and here it is only used
-   to tell the kinds of combinations that are allowed with any given term.
+ * *Curry-style* typing, also known as /implicit typing/; which
+   creates a formalism where every single term can be given an
+   infinite number of types.  This technique is called
+   */polymorphism/* when it is a formal part of the language; but
+   here, it is only used allow us to intermediate terms without having to
+   directly specify their type.
 
 As an example, we can consider the identity term $I = \lambda x.x$. It would have to be 
 defined for each possible type. That is, we should consider a family of different 
 identity terms $I_A = \lambda x.x : A \to A$. Curry-style typing allow us to consider 
 parametric types with type variables, and to type the identity as 
-$I = \lambda x.x : \sigma \to \sigma$ where $\sigma$ is a type variable.
+$I = \lambda x.x : \sigma \to \sigma$ where $\sigma$ would a free type variable.
 
 #+attr_latex: :options [Type variables]
 #+begin_definition
@@ -970,7 +1019,9 @@ or /type-schemes/ inductively as
 \iota \mid
 \mathtt{Tvar} \mid 
 \mathtt{PType} \to \mathtt{PType}, \]
-that is, all basic types and type variables are atomic parametric types; and we also
+where $\iota$ is a basic type, $\mathtt{Tvar}$ is a type variable and $\mathtt{PType}$ is
+a parametric type.
+That is, all basic types and type variables are atomic parametric types; and we also
 consider the arrow type between two parametric types.
 #+end_definition
 
@@ -996,9 +1047,9 @@ replaced according to the substitution $\sigma$.
 We consider a type to be /more general/ than other if the latter can be obtained by
 applying a substitution to the former. In this case, the latter is called an /instance/
 of the former. For instance, $A \to B$ is more general than its instance
-$(C \to D) \to B$, where $A$ is a type variable affected by the substitution. An
+$(C \to D) \to B$, where $A$ has been instantiated to $C \to D$. An
 interesting property of STLC is that every type has a most general type, called
-its /principal type/.
+its /principal type/. This is proved in Theorem [[thm-typeinfer]].
 
 #+attr_latex: :options [Principal type]
 #+begin_definition
@@ -1197,7 +1248,6 @@ of typing rules.
 
  1) The $(var)$ rule simply makes explicit the type of a variable from
     the context.
-
     \begin{prooftree}
     \LeftLabel{($var$)}
     \AXC{}
@@ -1207,17 +1257,15 @@ of typing rules.
  2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
     functions from the variable type to the result type. It acts as
     a constructor of function terms.
-
-   \begin{prooftree}
-   \LeftLabel{$(abs)$}
-   \AXC{$\Gamma, x:A \vdash M : B$}
-   \UIC{$\Gamma \vdash \lambda x.M : A \to B$}
-   \end{prooftree}
+    \begin{prooftree}
+    \LeftLabel{$(abs)$}
+    \AXC{$\Gamma, x:A \vdash M : B$}
+    \UIC{$\Gamma \vdash \lambda x.M : A \to B$}
+    \end{prooftree}
 
  3) The $(app)$ rule gives the type of a well-typed application of a
     lambda term. A term $f : A \to B$ applied to a term $a : A$ is a term
     of type $B$. It acts as a destructor of function terms.
-
     \begin{prooftree}
     \LeftLabel{$(app)$}
     \AXC{$\Gamma \vdash f : A \to B$}
@@ -1227,7 +1275,6 @@ of typing rules.
 
  4) The $(pair)$ rule gives the type of a pair of elements. It acts as
     a constructor of pair terms.
-
     \begin{prooftree}
     \LeftLabel{$(pair)$}
     \AXC{$\Gamma \vdash a : A$}
@@ -1237,7 +1284,6 @@ of typing rules.
 
  5) The $(\pi_1)$ rule extracts the first element from a pair. It acts as
     a destructor of pair terms.
-
     \begin{prooftree}
     \LeftLabel{$(\pi_1)$}
     \AXC{$\Gamma \vdash m : A \times B$}
@@ -1246,7 +1292,6 @@ of typing rules.
 
  6) The $(\pi_1)$ rule extracts the second element from a pair. It acts as
     a destructor of pair terms.
-
     \begin{prooftree}
     \LeftLabel{$(\pi_2)$}
     \AXC{$\Gamma \vdash m : A \times B$}
@@ -1255,7 +1300,6 @@ of typing rules.
 
  7) The $(inl)$ rule creates a union type from the left side type of
     the sum. It acts as a constructor of union terms.
-
     \begin{prooftree}
     \LeftLabel{$(inl)$}
     \AXC{$\Gamma \vdash a : A$}
@@ -1264,36 +1308,31 @@ of typing rules.
 
  8) The $(inr)$ rule creates a union type from the right side type of
     the sum. It acts as a constructor of union terms.
-
     \begin{prooftree}
     \LeftLabel{$(inr)$}
     \AXC{$\Gamma \vdash b : B$}
     \UIC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
     \end{prooftree}
 
- 9) The $(case)$ rule extracts a term from an union and uses on any of the
-    two cases
-
+ 9) The $(case)$ rule extracts a term from an union and applies the appropiate
+    deduction on any of the two cases
     \begin{prooftree}
     \LeftLabel{$(case)$}
     \AXC{$\Gamma \vdash m : A + B$}
     \AXC{$\Gamma, a:A \vdash n : C$}
     \AXC{$\Gamma, b:B \vdash p : C$}
-    \TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) : C$}
+    \TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].n;\ [b].p) : C$}
     \end{prooftree}
 
  10) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
      of the unit type.
-
      \begin{prooftree}
      \LeftLabel{$(\ast)$}
      \AXC{$$}
      \UIC{$\Gamma \vdash \ast : 1$}
      \end{prooftree}
 
-
  11) The $(abort)$ rule extracts a term of any type from the void type.
-
      \begin{prooftree}
      \LeftLabel{$(abort)$}
      \AXC{$\Gamma \vdash M : 0$}
@@ -1305,7 +1344,7 @@ of typing rules.
 
 The \beta-reduction of terms is defined the same way as for the untyped
 \lambda-calculus; except for the inclusion of \beta-rules governing the
-new terms, one for every destruction rule.
+new terms, each for every new destruction rule.
 
   1) Function application, $(\lambda x.M)N \to_{\beta} M[N/x]$.
   2) First projection, $\pi_1 \left\langle M,N \right\rangle \to_{\beta} M$.
@@ -1313,7 +1352,7 @@ new terms, one for every destruction rule.
   4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) \to_{\beta} N a$ if $m$ is of the form $m = \mathrm{inl}\ a$; and
      $(\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) \to_{\beta} P b$ if $m$ is of the form $m = \mathrm{inr}\ b$.
 
-On the other side, \eta-rules are defined one for every construction rule.
+On the other side, new \eta-rules are defined, each for every new construction rule.
 
   1) Function extensionality, $\lambda x.M x \to_{\eta} M$.
   2) Definition of product, $\langle \pi_1 M, \pi_{2} M \rangle \to_{\eta} M$.
