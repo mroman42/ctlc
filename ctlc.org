@@ -677,8 +677,34 @@ every step has to be of the form $\to_{l}$.
 #+end_proof
 
 *** SKI combinators
-**** TODO Combinatorial algebras
-**** Transformation of SKI combinators :ignore:
+**** SKI definition                                               :ignore:
+As we have seen in previous sections, untyped \lambda-calculus is already
+a very syntactically simple system; but it can be further reduced to
+a few \lambda-terms without losing its expressiveness. In particular, untyped
+\lambda-calculus can be /essentially/ recovered from only two of its terms;
+these are
+
+ * $S = \lambda x.\lambda y.\lambda z. xz(yz)$, and
+ * $K = \lambda x.\lambda y.x$.
+
+A language can be defined with these combinators and function
+application. Every \lambda-term can be translated to this language and recovered up
+to $=_{\beta\eta}$ equivalence. For example, the identity \lambda-term, $I$, can be written as
+\[
+I = \lambda x.x = SKK.
+\]
+It is common to also add the $I = \lambda x.x$ as a basic term to this language,
+even if it can be written in terms of $S$ and $K$, as a
+way to ease the writing of long complex terms. Terms written with
+these combinators are called */Ski-terms/*.
+
+The language of *Ski-terms* can be defined by the following Backus-Naus form
+\[
+\mathtt{Ski} ::= x \mid (\mathtt{Ski}\ \mathtt{Ski}) \mid S \mid K \mid I\quad,
+\]
+where $x$ are free variables.
+
+**** Transformation of SKI combinators                            :ignore:
 #+attr_latex: :options [Lambda transform]
 #+begin_definition
 The *\Lambda-transform* of a Ski-term is a \lambda-term defined
@@ -721,7 +747,6 @@ where $[x].U$ is the bracket abstraction of the Ski-term $U$.
 #+begin_theorem
 The Ski-abstraction is a retraction of the \Lambda-transform of the term,
 that is, for any Ski-term $U$,
-
 \[
 \skiabs(\Lambda(U)) = U.
 \]
@@ -736,24 +761,97 @@ By structural induction on $U$,
   * $\skiabs\Lambda(MN) = MN$.
 #+end_proof
 
+In general this translation is not an isomorphism. As an example
+\[
+\Lambda(\skiabs(\lambda u. v u)) = \Lambda(v) = v.
+\]
+However, the \lambda-terms can be essentially recovered if we relax equality
+between \lambda-terms to mean $=_{\beta\eta}$.
+# This problem could be addressed by using a relaxed form of
+# equality containing \eta-equivalence, see cite:Hindley08 for details.
+
+#+ATTR_LATEX: :options [Closed lambda terms and SKI combinators]
+#+BEGIN_theorem
+For any \lambda-term $M$,
+\[
+\Lambda(\skiabs(M)) =_{\beta\eta} M.
+\]
+#+END_theorem
+#+BEGIN_proof
+We can firstly prove by structural induction that $\Lambda([x].M) = \lambda x.\Lambda(M)$
+for any $M$. In fact, we know that $\Lambda([x].x) = \lambda x.x$ for any 
+variable $x$; we also know that
+\[\begin{aligned}
+\Lambda([x].MN) &= \Lambda(S([x].M)([x].N)) \\
+          &= (\lambda x.\lambda y.\lambda z. xz(yz))(\lambda x.\Lambda(M))(\lambda x.\Lambda(N)) \\
+          &= \lambda z.\Lambda(M)\Lambda(N);
+\end{aligned}\]
+also, if $x$ is free in $M$,
+\[
+\Lambda([x].M) = \Lambda(KM) = (\lambda x.\lambda y.x) \Lambda(M) =_{\beta} \lambda x.\Lambda(M);
+\]
+and finally, if $x$ is free in $U$,
+\[
+\Lambda([x].Ux) = \Lambda(U) =_{\eta} \lambda x.\Lambda(U)x\ .
+\]
+Now we can use this result to prove the main theorem. Again by
+structural induction,
+
+ * $\Lambda\skiabs(x) = x$;
+ * $\Lambda\skiabs(MN) = \Lambda\skiabs(M)\Lambda\skiabs(N) = MN$;
+ * $\Lambda\skiabs(\lambda x.M) = \Lambda([x].\skiabs(M)) =_{\beta\eta} \lambda x.\Lambda\skiabs(M) = \lambda x.M$.
+#+END_proof
+
 *** TODO Turing completeness
+# Turing, Church and Gödel.
+# Papers by Turing, Church and Gödel.
+# The lambda calculus as a reasonable machine. Ugo Dal Lago.
+
+# https://en.wikipedia.org/wiki/Entscheidungsproblem
+
+# A complete implementation of untyped \lambda-calculus is discussed in 
+# chapter ?; and a detailed description on how to use the untyped \lambda-calculus
+# as a programming language is given in ?.
+
 ** Simply typed \lambda-calculus
-# TODO: Explicar notación y motivar
+*/Types/* were introduced in mathematics as a response to the
+Russell's paradox, found in the first naive axiomatizations of set
+theory. An attempt to use the untyped \lambda-calculus as a foundational
+logical system by Church suffered from the */Rosser-Kleene paradox/*, as
+detailed in cite:kleene35 and cite:curry46; and types were a way to avoid it.
+Once types are added, a deep connection between the \lambda-calculus and
+logic arises. This connection will be discussed in the [[*The Curry-Howard correspondence][next chapter]].
 
-We will give now a presentation of the *simply-typed \lambda-calculus*
-(STLC) based on cite:Hindley08. Our presentation will rely only on the
-/arrow type/ $\to$; while other presentations of simply typed
-\lambda-calculus extend this definition with type constructors such as
-pairs or union types, as it is done in cite:selinger13.
+In programming languages, types signal how the programmer intends to
+use the data, prevent errors and enforce certain invariants and levels
+of abstraction in programs. The role of types in the \lambda-calculus as
+a programming language closely matches what we would expect of types
+in any common programming language, and typed \lambda-calculus has been the basis
+of many modern type systems for programming languages.
 
-It seems clearer to present a first minimal version of the
-\lambda-calculus. Such extensions will be explained later, profiting
-from the logical interpretation of propositions as types.
+The *simply typed \lambda-calculus* (STLC) is a refinment of the untyped
+\lambda-calculus. In it, each term has a type, which limits how it can be
+combined with other terms. Only a set of basic types and function
+types between any to types are considered in this system. If functions
+in untyped \lambda-calculus could be applied over any term, now a function
+of type $A \to B$ can only be applied over a term of type $A$, to produce
+a new term of type $B$, where $A$ and $B$ could be, themselves, function types.
+
+We will give now a presentation of the simply typed \lambda-calculus
+based on cite:Hindley08. Our presentation will rely only on the
+/arrow type constructor/ $\to$. While other presentations of simply typed
+\lambda-calculus extend this definition with type constructors providing
+pairs or union types, as it is done in cite:selinger13,
+it seems clearer to present a first minimal version of the
+\lambda-calculus. Such extensions will be explained later, and its exposition
+will profit from the logical interpretation of propositions as types.
 
 *** Simple types
-We start assuming that a set of *basic types* exists. Those basic
-types would correspond, in a programming language interpretation, with
-things like the type of strings or the type of integers.
+We start assuming a set of *basic types*. Those basic types would
+correspond, in a programming language interpretation, with the
+fundamental types of the language. Examples would be the type of
+strings or the type of integers. Minimal presentations of \lambda-calculus
+tend to use only one basic type.
 
 #+attr_latex: :options [Simple types]
 #+begin_definition
