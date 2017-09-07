@@ -4,7 +4,7 @@
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
-# TODO: Corregir apuntadores de las páginas
+# TODO: Corregir apuntadores de los capítulos, los de página funcionan
 
 ** Abstract
 :PROPERTIES:
@@ -29,30 +29,29 @@ for commutative diagrams.
 #+LATEX: \end{center}}
 * Lambda calculus
 ** Untyped \lambda-calculus
-# TODO: Escribir motivación delante de cada definición
 # TODO: Sistemas de escritura en las formas normales, noetherianidad
 
 How should we define functions? Classically in mathematics, /functions are graphs/.
 A function from a
 domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
-space $f \subset X \times Y$.
+space, $f \subset X \times Y$.
 Any two functions are equal if they map equal inputs to equal outputs;
 and a function its completely determined by what its outputs are.
 This vision is called */extensional/*.
 
 From a computational point of view, this perspective could be incomplete
-in some cases. We usually care not only about the result but, crucially,
+in some cases. Computationally, we usually care not only about the result but, crucially,
 about /how/ can it be computed. 
 Classically in computer science, /functions are formulae/; and two functions 
 mapping equal inputs to equal outputs need not to be equal. E.g., two sorting algorithms
-can have different efficiencies or different memory requisites, even if 
+can have a different efficiency or different memory requisites, even if 
 they output the same sorted list. This vision, where two functions are
 equal if and only if they are given by essentially the same formula is
 called */intensional/*.
 
 The *\lambda-calculus* is a collection of formal systems, all of them
 based on the lambda notation discovered by Alonzo Church in the 1930s
-while trying to develop a foundational notion of /functions as formulae/
+while trying to develop a foundational notion of functions (/as formulae/)
 on mathematics. It is a logical theory of functions, where application and
 abstraction are primitive notions; and, at the same time, it
 is also one of the simplest programming languages, in which many other
@@ -77,9 +76,9 @@ f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
 set theory.
 
-*** Definition
+*** The untyped \lambda-calculus
 As a language, the untyped \lambda-calculus is given by a set of
-expressions, called /\lambda-terms/, and a set of manipulation rules.
+expressions, called /\lambda-terms/, and by some manipulation rules.
 These terms can stand for functions or arguments indistinctly, and
 they all use the same \lambda-notation in order to define function
 abstractions and applications.
@@ -108,6 +107,7 @@ evaluates to $6$.
 
 #+attr_latex: :options [Lambda terms]
 #+begin_definition
+<<def-lambdaterms>>
 The *\lambda-terms* are defined inductively knowing that
 
   * every */variable/*, taken from an infinite countable set of
@@ -534,7 +534,7 @@ and *\beta\eta-normal forms* analogously.
 
 Fully evaluating \lambda-terms usually means to apply reductions to them until
 a normal form is reached. We know, by virtue of Theorem [[theorem-churchrosser]], 
-that, if a normal form exists, it is unique; but we do not know if a
+that, if a normal form exists, it is unique; but we do not know whether a
 normal form actually exists. We say that a term *has* a normal form
 when it can be reduced to a normal form.
 
