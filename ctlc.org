@@ -1612,74 +1612,73 @@ results on the construction of a particular kind of \lambda-term, they can
 be interpreted as encodings of proof in the form of derivation trees. That is,
 terms are proofs of the propositions represented by their types.
 
-# TODO: Example of the correspondence. Terms-Proofs
-
-Under this interpretation, simplification rules are precisely the
-\beta-reduction rules. This makes execution of \lambda-calculus
+Under this interpretation, 
+*/simplification rules are precisely the \beta-reduction rules/*.
+This makes execution of \lambda-calculus
 programs correspond to proof simplification on natural deduction.
 The Curry-Howard correspondence is then not only a simple bijection
 between types and propositions, but a deeper isomorphism regarding the
 way they are constructed, used in derivations, and simplified.
 
-# TODO: Check with mikrokosmos
 #+attr_latex: :options [Curry-Howard example]
 #+begin_exampleth
-As an example, we will write a proof/term of the proposition/type =A → B + A=
+As an example of this duality, we will write a proof/term of the proposition/type =A → B + A=
 and we are going to simplify/compute it using proof simplification rules/\beta-rules.
+Similar examples can be found in cite:wadler15.
 
-We start with the following derivation tree
-
+We start with the following derivation tree; in which terms are colored in
+$\cterms{red}$ and types are colored in $\ctypes{blue}$
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$[A+B]$}
-\AXC{$[A]$}
+\AXC{$\cterms{c }\ctypes{:: [A+B]}$}
+\AXC{$\cterms{a }\ctypes{:: A}$}
 \RightLabel{$(inr)$}
-\UIC{$B+A$}
-\AXC{$[B]$}
+\UIC{$\cterms{inr a }\ctypes{:: B+A}$}
+\AXC{$\cterms{b }\ctypes{:: B}$}
 \RightLabel{$(inl)$}
-\UIC{$B+A$}
+\UIC{$\cterms{inl b }\ctypes{:: B+A}$}
 \RightLabel{$(case)$}
-\TIC{$B+A$}
+\TIC{$\cterms{case c of [a].inr a; [b].inl b }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$A+B \to B +A$}
+\UIC{$\cterms{λc.case c of [a].inr a; [b].inl b }\ctypes{:: A+B \to B+A}$}
 
-\AXC{$[A]$}
+\AXC{$\cterms{z }\ctypes{:: A}$}
 \RightLabel{$(inl)$}
-\UIC{$A+B$}
+\UIC{$\cterms{inl z }\ctypes{:: A+B}$}
 \RightLabel{$(app)$}
-\BIC{$B+A$}
+\BIC{$\cterms{(λc.case c of [a].inr a; [b].inl b)(inl z) }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$A \to B + A$}
+\UIC{$\cterms{λa.(λc.case c of [a].inr a; [b].inl b) (λz.inl z) }\ctypes{:: A \to B + A}$}
 \end{prooftree}
 
-which is encoded by the term =λa.(λc.case c of (inr) (inl)) (inl a)=.
+which is encoded by the term =λa.(λc.case c of [a].inr a; [b].inl b) (λz.inl z)=.
 We apply the simplification rule/\beta-rule of the implication/function application
 to get
 
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$[A]$}
+\AXC{$\cterms{z }\ctypes{:: A}$}
 \RightLabel{$(inl)$}
-\UIC{$A+B$}
-\AXC{$[A]$}
+\UIC{$\cterms{inl z }\ctypes{:: A+B}$}
+\AXC{$\cterms{a }\ctypes{:: A}$}
 \RightLabel{$(inr)$}
-\UIC{$B+A$}
-\AXC{$[B]$}
+\UIC{$\cterms{inr a }\ctypes{:: B+A}$}
+\AXC{$\cterms{b }\ctypes{:: B}$}
 \RightLabel{$(inl)$}
-\UIC{$B+A$}
+\UIC{$\cterms{inl b }\ctypes{:: B+A}$}
 \RightLabel{$(case)$}
-\TIC{$B+A$}
+\TIC{$\cterms{case (inl z) of [a].inr a; [b].inl b }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$A \to B +A$}
+\UIC{$\cterms{λ z.case (inl z) of [a].inr a; [b].inl b}\ctypes{:: A \to B +A}$}
 \end{prooftree}
 
 which is encoded by the term =λa.case (inl a) of (inr) (inl)=. We finally
 apply the =case= simplification/reduction rule to get
 
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$[A]$}
+\AXC{$\cterms{a }\ctypes{:: A}$}
 \RightLabel{$(inr)$}
-\UIC{$B+A$}
+\UIC{$\cterms{inr a }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$A \to B +A$}
+\UIC{$\cterms{λ a.inr a }\ctypes{:: A \to B + A}$}
 \end{prooftree}
 
 which is encoded by =λa.(inr a)=.
@@ -1687,12 +1686,23 @@ which is encoded by =λa.(inr a)=.
 On the chapter on [[*Mikrokosmos][Mikrokosmos]], we develop a \lambda-calculus interpreter
 which is able to check and simplify proofs on intuitionistic logic.
 This example could be checked and simplified by this interpreter as
+it is shown in image [[mikrogentzen]]. 
 
-#+BEGIN_SRC haskell
-\a.((\c.caseof c (\x.inr x) (\y.inl y))(inl a))
----> output: λa.(INR a) ⇒ inr :: A → B + A
-#+END_SRC
+#+caption: Curry-Howard example in Mikrokosmos.
+#+name: mikrogentzen
+[[./images/mikrogentzen.png]]
 #+end_exampleth
+
+Note that Mikrokosmos implements a slightly more complex but nicer
+to implement version of the $(case)$ rule that depends on functions instead of
+abstractions. Namely,
+\begin{prooftree}
+\LeftLabel{$(case)$}
+\AXC{$\Gamma \vdash p:A \to C$}
+\AXC{$\Gamma \vdash q:B \to C$}
+\AXC{$\Gamma \vdash m : A + B$}
+\TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ p;\ q) : C$}
+\end{prooftree}                
 
 # Extending the Curry-Howard correspondence
 ** Other type systems
@@ -1714,7 +1724,7 @@ properties of the systems. These properties are
 
   1) *parametric polymorphism*, terms that depend on types. This is
      achieved via universal quantification over types. It allows type
-     variables and binders for them as in the following parametric
+     variables and binders for them. An example is the following parametric
      identity function
      \[
      \mathrm{id} \equiv \Lambda \tau . \lambda x . x : \forall \tau . \tau \to \tau, 
@@ -1772,7 +1782,7 @@ The \lambda-cube is generalized by the theory of pure type systems.
 All systems on the \lambda-cube are strongly normalizing.
 
 # https://cstheory.stackexchange.com/questions/7561/whats-the-relation-and-difference-between-calculus-of-inductive-constructions-a
-A different approach to higher-order type systems will be presented on the
+A different approach to higher-order type systems will be presented in the
 chapter on Type Theory.
 
 *** TODO Pure type systems
@@ -4608,7 +4618,7 @@ A lattice homomorphism is a function between lattices preserving
 finite products and coproducts. That is, a function $f$ such that
 
   * $f(0) = 0$, $f(1) = 1$,
-  * $f(x \wedge y) = f(x) \wedge f(y)$,
+  * $f(x \wedge y) = f(x) \land f(y)$,
   * $f(x \vee y) = f(x) \vee f(y)$;
 
 and the category of lattices and lattice homomorphisms is denoted
