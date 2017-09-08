@@ -4,8 +4,6 @@
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
-# TODO: Corregir apuntadores de los capítulos, los de página funcionan
-
 ** Abstract
 :PROPERTIES:
 :UNNUMBERED: t
@@ -32,7 +30,7 @@ for commutative diagrams.
 How should we define functions? Classically in mathematics, /functions are graphs/.
 A function from a
 domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
-space, $f \subset X \times Y$.
+space: $f \subset X \times Y$.
 Any two functions are equal if they map equal inputs to equal outputs;
 and a function its completely determined by what its outputs are.
 This vision is called */extensional/*.
@@ -60,8 +58,8 @@ simplest of those formal systems. In it, a function does not need a
 domain nor a codomain; every function is a formula which can be
 directly applied to any expression. It even allows functions to be
 applied to themselves, a notion which would be troublesome[fn:lambdaregularityaxiom]
-in our usual set-theoretical foundations. In exchange, we will have
-to deal with other problems such as non-terminating functions.
+in our usual set-theoretical foundations. In exchange, it presents
+other problems such as non-terminating functions.
 
 This presentation of the untyped lambda calculus will follow
 cite:Hindley08 and cite:selinger13.
@@ -76,8 +74,8 @@ set theory.
 
 *** The untyped \lambda-calculus
 As a language, the untyped \lambda-calculus is given by a set of
-expressions, called /\lambda-terms/, and by some manipulation rules.
-These terms can stand for functions or arguments indistinctly, and
+expressions, called /\lambda-terms/, and some manipulation rules.
+These terms can stand for functions or arguments indistinctly:
 they all use the same \lambda-notation in order to define function
 abstractions and applications.
 
@@ -110,7 +108,7 @@ The *\lambda-terms* are defined inductively knowing that
 
   * every */variable/*, taken from an infinite countable set of
     variables and usually written as lowercase single letters
-    (x,y,z,...), is a \lambda-term.
+    $(x, y, z, \dots)$, is a \lambda-term.
 
   * given two \lambda-terms $M,N$; its */application/*, $MN$, is a \lambda-term.
 
@@ -125,9 +123,9 @@ where $x$ can be any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
-left-associativity, i.e., $MNP$ will mean $(MN)P$.
+left-associativity, i.e., $MNP$ will always mean $(MN)P$.
 We also take the \lambda-abstraction as having the lowest
-precedence, i.e., $\lambda x. M N$ should be read as $\lambda x.(MN)$
+precedence, e.g., $\lambda x. M N$ should be read as $\lambda x.(MN)$
 instead of $(\lambda x.M) N$.
 
 # NOTE: This is not necessary.
@@ -169,7 +167,7 @@ as in
 2^{2} + 2.
 \end{tikzcd}\]
 This, however, should
-be done avoiding the unintended bounding which happens
+be done avoiding the unintended binding which happens
 when a variable is substituted inside the scope of a binder with the
 same name, as in the following example: if we were to evaluate the expression
 $(\lambda x.\ y x)(\lambda z.\ xz)$,
@@ -208,7 +206,7 @@ exactly well-defined, but only
 /well-defined up to a change on the name of the variables/.
 This equivalence relation will be defined 
 formally on the next section. In practice, it is common to follow the 
-/Barendregt's variable convention/ which simply assumes that bound 
+/Barendregt's variable convention/, which simply assumes that bound 
 variables have been renamed to be distinct.
 
 *** \alpha-equivalence
@@ -216,7 +214,7 @@ In \lambda-terms, variables are only placeholders and its name, as we have
 seen before, is not relevant. Two \lambda-terms whose only difference is
 the naming of the variables are called \alpha-equivalent. For example,
 \[
-(\lambda x.\lambda y. x y) \quad\text{ is $\alpha$-equivalent to }\quad (\lambda f.\lambda x. f x).
+(\lambda x.\lambda y. x\ y) \quad\text{ is $\alpha$-equivalent to }\quad (\lambda f.\lambda x. f\ x).
 \]
 
 *\alpha-equivalence* formally captures the fact that the name of a bound
@@ -252,12 +250,12 @@ Until now, evaluation has been only informally described; it is time
 to define it as a relation, $\tto_{\beta}$, going from the initial term to
 any of its partial evaluations. We
 will firstly consider a /one-step reduction/ relationship, called
-$\to_{\beta}$, which will be extended by transitivity to $\tto_{}_{\beta}$.
+$\to_{\beta}$, which will be extended by transitivity to $\tto_{\beta}$.
 
 Ideally, we would like to define evaluation as a series of reductions
-into a canonical form which could not be reduced
-further. Unfortunately, as we will see later, it is not possible to
-find, in general, that canonical form.
+into a canonical form which could not be further reduced.
+Unfortunately, as we will see later, it is not possible to find, in
+general, that canonical form.
 
 #+attr_latex: :options [\beta-reduction]
 #+begin_definition
@@ -283,7 +281,7 @@ adopt the /functions as formulae/ perspective, the idea of function
 extensionality in \lambda-calculus can be partially recovered by the notion
 of \eta-reduction.
 This form of /function extensionality for \lambda-terms/ can be captured
-in the notion that any term which directly applies a function to the
+by the notion that any term which simply applies a function to the
 argument it takes can be reduced to the actual function. That is,
 any $\lambda x.M x$ can be reduced to $M$.
 
@@ -1851,17 +1849,6 @@ it is shown in image [[mikrogentzen]].
 #+name: mikrogentzen
 [[./images/mikrogentzen.png]]
 #+end_exampleth
-
-Note that Mikrokosmos uses a slightly more complex but equivalent
-version of the $(case)$ rule that relies on functions instead of
-abstractions. Namely,
-\begin{prooftree}
-\LeftLabel{$(case)$}
-\AXC{$\Gamma \vdash p:A \to C$}
-\AXC{$\Gamma \vdash q:B \to C$}
-\AXC{$\Gamma \vdash m : A + B$}
-\TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ p;\ q) : C$}
-\end{prooftree}                
 
 # Extending the Curry-Howard correspondence
 ** Other type systems
