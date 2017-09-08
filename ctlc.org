@@ -1213,32 +1213,143 @@ variables. By virtue of Theorem [[thm-typeinfer]], the result is the most genera
 if we assume the variables to have the given types.
 #+end_proof
 
-*** TODO Subject reduction
+*** Subject reduction and normalization
+A crucial property is that type inference and \beta-reductions do not
+interfere with each other. A term can be \beta-reduced without changing
+its type.
 
-# 6.1 on Selinger
 #+attr_latex: :options [Subject reduction]
 #+begin_theorem
 The type is preserved on \beta-reductions; that is, if $\Gamma \vdash M : A$ and
-and $M \longrightarrow_{\beta} M'$, then $\Gamma \vdash M' : A$.
+and $M \tto_{\beta} M'$, then $\Gamma \vdash M' : A$.
 #+end_theorem
 #+begin_proof
-
+If $M$ has been derived by \beta-reduction, $M = (\lambda x.P)$
+and $M' = P[Q/x]$. $\Gamma \vdash M:A$ implies $\Gamma,x:B \vdash P : A$ and
+$\Gamma \vdash Q : B$. Again by structural induction on $P$ (where the only crucial
+case uses that $x$ and $Q$ have the same type) we can prove
+that substitutions do not alter the type and thus, $\Gamma,Q:B \vdash P[Q/x] : A$.
 #+end_proof
 
-*** TODO Normalization
 We have seen previously that the term $\Omega = (\lambda x.xx)(\lambda x.xx)$ is
 not weakly normalizing; but it is also non-typeable. In this section
-we will prove that, in fact, every typeable term is strongly
-normalizing.
+we will prove that, in fact, every typeable term is strongly normalizing.
+We start proving some lemmas about the notion of /reducibility/, which
+will lead us to the Strong Normalization Theorem. This proof will
+follow cite:girard89.
 
-# Proof in Girard, Lafont, Taylor; chapters 4 and 6
-# http://www.paultaylor.eu/stable/prot.pdf
-#+attr_latex: :options [Strong normalization in STLC]
+The notion of */reducibility/* is an abstract concept originally
+defined by Tait in cite:tait67 which we will use to ease this
+proof. It should not be confused with the notion of \beta-reduction.
+
+#+ATTR_LATEX: :options [Reducibility]
+#+BEGIN_definition
+We inductively define the set of *reducible* terms of type $T$
+for basic and arrow types.
+
+ * If $t : T$ where $T$ a basic type, $t \in \redu_{T}$ if $t$ is strongly
+   normalizable.
+
+ * If $t : U \to V$, an arrow type, $t \in \redu_{U \to V}$ if $t\ u \in \redu_{V}$ for all
+   $u \in \redu_{U}$.
+#+END_definition
+
+Properties of reducibility will be used directly in the Strong
+Normalization Theorem. We prove three of them at the same time in
+order to use mutual induction.
+
+#+ATTR_LATEX: :options [Properties of reducibility]
+#+BEGIN_proposition
+<<prop-reducibilityprop>>
+The following three properties hold;
+
+  1. if $t \in \redu_{T}$, then $t$ is strongly normalizable;
+  2. if $t \in \redu_{T}$ and $t \to_{\beta} t'$, $t' \in \redu_{T}$; and
+  3. if $t$ is not a \lambda-abstraction and $t' \in \redu_{T}$ for every $t \to_{\beta} t'$,
+     then $t \in \redu_{T}$.
+#+END_proposition
+#+BEGIN_proof
+For basic types,
+
+  1. holds trivially.
+
+  2. holds by the definition of strong normalization.
+
+  3. if any one-step \beta-reduction leads to a strongly normalizing term,
+     the term itself must be strongly normalizing.
+
+For arrow types,
+
+  1. if $x : U$ is a variable, we can inductively apply (3) to get $x \in \redu_{U}$;
+     then, $t\ x \in \redu_{V}$ is strongly normalizing and $t$ in particular must be 
+     strongly normalizing.
+
+  2. if $t \to_{\beta} t'$ then for every $u \in \redu_{U}$, $t\ u \in \redu_{V}$ and $t\ u \to_{\beta} t'\ u$.
+     By induction, $t'\ u \in \redu_{V}$.
+
+  3. if $u \in \redu_{U}$, it is strongly normalizable. As $t$ is not a \lambda-abstraction,
+     he term $t\ u$ can only be reduced to $t'\ u$ or $t\ u'$. If $t \to_{\beta} t'$; by induction, $t'\ u \in \redu_{V}$.
+     If $u \to_{\beta} u'$, we could proceed by induction over the length of the longest
+     chain of \beta-reductions starting from $u$ and assume that $t\ u'$ is irreducible.
+     In every case, we have proved that $t\ u$ only reduces to already reducible terms;
+     thus, $t\ u \in \redu_{U}$.
+#+END_proof
+
+#+ATTR_LATEX: :options [Abstraction lemma]
+#+BEGIN_lemma
+<<lemma-reductionabstraction>>
+If $v[u/x] \in \redu_{V}_{}$ for all $u \in \redu_{U}$, then $\lambda x.v \in \redu_{U \to V}_{}_{}$.
+#+END_lemma
+#+BEGIN_proof
+We apply induction over the sum of the lengths of the longest
+\beta-reduction sequences from $v[x/x]$ and $u$. The term $(\lambda x.v) u$ can be \beta-reduced to
+
+  * $v[u/x] \in \redu_{U}$; in the base case of induction, this is the only choice.
+  * $(\lambda x.v')u$ where $v \to_{\beta }v'$, and, by induction, $(\lambda x.v') u \in \redu_{V}$.
+  * $(\lambda x.v)u'$ where $u \to_{\beta} u'$, and, again by induction, $(\lambda x.v) u' \in \redu_{V}$.
+
+Thus, by Proposition [[prop-reducibilityprop]], $(\lambda x.v) \in \redu_{U \to V}$.
+#+END_proof
+
+A final lemma is needed before the proof of the Strong Normalization Theorem.
+It is a generalization of the main theorem, useful because of the stronger
+induction hypothesis it provides.
+
+#+ATTR_LATEX: :options [Strong Normalization lemma]
+#+BEGIN_lemma
+<<lemma-strongnormalization>>
+Given an arbitrary $t : T$ with free variables $x_{1} : U_{1}, \dots, x_{n} : U_{n}$, and reducible
+terms $u_{1} \in \redu_{U_1}, \dots, u_{n} \in \redu_{U_{2}}$, we know that
+\[
+t[u_1 / x_1][u_2 / x_{2}]\dots[u_n / x_n] \in \redu_{T}.
+\]
+#+END_lemma
+#+BEGIN_proof
+We call $\tilde{t} = t[u_1 / x_1][u_2 / x_{2}]\dots[u_n / x_n]$ and apply structural induction over $t$,
+
+  * if $t = x_i$, then we simply use that $u_i \in \redu_{U_i}$.
+
+  * if $t = v\ w$, then we apply induction hypothesis to get $\tilde{v} \in \redu_{R \to T},\tilde{w} \in \redu_{R}$ 
+    for some type $R$. Then, by definition, $\tilde{t} = \tilde{v}\ \tilde{w} \in \redu_T$.
+
+  * if $t = \lambda y. v : R \to S$, then by induction $\tilde{v}[r/y] \in \redu_S$ for every $r : R$.
+    We can then apply Lemma [[lemma-reductionabstraction]] to get that
+    $\tilde{t} = \lambda y.\tilde{v} \in \redu_{R \to S}$.
+#+END_proof
+
+#+attr_latex: :options [Strong Normalization Theorem]
 #+begin_theorem
 In the STLC, all terms are strongly normalizing.
 #+end_theorem
+#+BEGIN_proof
+It is the particular case of Lemma [[lemma-strongnormalization]] where we
+take $u_i = x_i$.
+#+END_proof
 
 # [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
+Every term normalizes in the STLC and every computation ends.  We
+know, however, that the Halting Problem is unsolvable, so the STLC
+must be not Turing complete.
 
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
@@ -1677,25 +1788,25 @@ Similar examples can be found in cite:wadler15.
 We start with the following derivation tree; in which terms are colored in
 $\cterms{red}$ and types are colored in $\ctypes{blue}$
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{c }\ctypes{:: [A+B]}$}
-\AXC{$\cterms{a }\ctypes{:: A}$}
+\AXC{$\cterms{b }\ctypes{:: [A+B]}$}
+\AXC{$\cterms{c }\ctypes{:: A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr a }\ctypes{:: B+A}$}
-\AXC{$\cterms{b }\ctypes{:: B}$}
+\UIC{$\cterms{inr c }\ctypes{:: B+A}$}
+\AXC{$\cterms{c }\ctypes{:: B}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl b }\ctypes{:: B+A}$}
+\UIC{$\cterms{inl c }\ctypes{:: B+A}$}
 \RightLabel{$(case)$}
-\TIC{$\cterms{case c of [a].inr a; [b].inl b }\ctypes{:: B+A}$}
+\TIC{$\cterms{case b of [c].inr c; [c].inl c }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λc.case c of [a].inr a; [b].inl b }\ctypes{:: A+B \to B+A}$}
+\UIC{$\cterms{λb.case b of [c].inr c; [c].inl c }\ctypes{:: A+B \to B+A}$}
 
-\AXC{$\cterms{z }\ctypes{:: A}$}
+\AXC{$\cterms{a }\ctypes{:: A}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl z }\ctypes{:: A+B}$}
+\UIC{$\cterms{inl a }\ctypes{:: A+B}$}
 \RightLabel{$(app)$}
-\BIC{$\cterms{(λc.case c of [a].inr a; [b].inl b)(inl z) }\ctypes{:: B+A}$}
+\BIC{$\cterms{(λb.case b of [c].inr c; [c].inl c)(inl a) }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λa.(λc.case c of [a].inr a; [b].inl b) (λz.inl z) }\ctypes{:: A \to B + A}$}
+\UIC{$\cterms{λa.(λb.case b of [c].inr c; [c].inl c) (λa.inl a) }\ctypes{:: A \to B + A}$}
 \end{prooftree}
 
 which is encoded by the term =λa.(λc.case c of [a].inr a; [b].inl b) (λz.inl z)=.
@@ -1715,7 +1826,7 @@ to get
 \RightLabel{$(case)$}
 \TIC{$\cterms{case (inl z) of [a].inr a; [b].inl b }\ctypes{:: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λ z.case (inl z) of [a].inr a; [b].inl b}\ctypes{:: A \to B +A}$}
+\UIC{$\cterms{λ z.case (inl z) of [a].inr a; [b].inl b }\ctypes{:: A \to B +A}$}
 \end{prooftree}
 
 which is encoded by the term =λa.case (inl a) of (inr) (inl)=. We finally
@@ -1741,8 +1852,8 @@ it is shown in image [[mikrogentzen]].
 [[./images/mikrogentzen.png]]
 #+end_exampleth
 
-Note that Mikrokosmos implements a slightly more complex but nicer
-to implement version of the $(case)$ rule that depends on functions instead of
+Note that Mikrokosmos uses a slightly more complex but equivalent
+version of the $(case)$ rule that relies on functions instead of
 abstractions. Namely,
 \begin{prooftree}
 \LeftLabel{$(case)$}
@@ -1759,7 +1870,7 @@ abstractions. Namely,
 **** TODO System F is strongly normalizing
 *** TODO Type algebra
 # Type algebra should be studied, at least, on System F.
-# Properties of type algebra can be proved on Agda.
+# Properties of type algebra can be proved in Agda.
 
 **** Lists, trees and generating functions
 **** Derivatives and one-hole contexts
