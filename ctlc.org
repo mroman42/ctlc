@@ -29,8 +29,6 @@ for commutative diagrams.
 #+LATEX: \end{center}}
 * Lambda calculus
 ** Untyped \lambda-calculus
-# TODO: Sistemas de escritura en las formas normales, noetherianidad
-
 How should we define functions? Classically in mathematics, /functions are graphs/.
 A function from a
 domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
@@ -707,14 +705,14 @@ where $x$ are free variables.
 **** Transformation of SKI combinators                            :ignore:
 #+attr_latex: :options [Lambda transform]
 #+begin_definition
-The *\Lambda-transform* of a Ski-term is a \lambda-term defined
+The *Lambda-transform* of a Ski-term is a \lambda-term defined
 recursively as
 
-  * $\Lambda(x) = x$, for any variable $x$;
-  * $\Lambda(I) = (\lambda x.x)$;
-  * $\Lambda(K) = (\lambda x.\lambda y.x)$;
-  * $\Lambda(S) = (\lambda x.\lambda y.\lambda z.xz(yz))$;
-  * $\Lambda(XY) = \Lambda(X)\Lambda(Y)$.
+  * $\lambdatrans(x) = x$, for any variable $x$;
+  * $\lambdatrans(I) = (\lambda x.x)$;
+  * $\lambdatrans(K) = (\lambda x.\lambda y.x)$;
+  * $\lambdatrans(S) = (\lambda x.\lambda y.\lambda z.xz(yz))$;
+  * $\lambdatrans(XY) = \lambdatrans(X)\lambdatrans(Y)$.
 #+end_definition
 
 #+attr_latex: :options [Bracket abstraction]
@@ -745,73 +743,109 @@ where $[x].U$ is the bracket abstraction of the Ski-term $U$.
 
 #+attr_latex: :options [Ski combinators and lambda terms]
 #+begin_theorem
-The Ski-abstraction is a retraction of the \Lambda-transform of the term,
+The Ski-abstraction is a retraction of the Lambda-transform of the term,
 that is, for any Ski-term $U$,
 \[
-\skiabs(\Lambda(U)) = U.
+\skiabs(\lambdatrans(U)) = U.
 \]
 #+end_theorem
 #+begin_proof
 By structural induction on $U$,
 
-  * $\skiabs\Lambda(x) = x$, for any variable $x$;
-  * $\skiabs\Lambda(I) = [x].x = I$;
-  * $\skiabs\Lambda(K) = [x].[y].x = [x].Kx = K$;
-  * $\skiabs\Lambda(S) = [x].[y].[z].xz(yz) = [x].[y].Sxy = S$; and
-  * $\skiabs\Lambda(MN) = MN$.
+  * $\skiabs\lambdatrans(x) = x$, for any variable $x$;
+  * $\skiabs\lambdatrans(I) = [x].x = I$;
+  * $\skiabs\lambdatrans(K) = [x].[y].x = [x].Kx = K$;
+  * $\skiabs\lambdatrans(S) = [x].[y].[z].xz(yz) = [x].[y].Sxy = S$; and
+  * $\skiabs\lambdatrans(MN) = MN$.
 #+end_proof
 
 In general this translation is not an isomorphism. As an example
 \[
-\Lambda(\skiabs(\lambda u. v u)) = \Lambda(v) = v.
+\lambdatrans(\skiabs(\lambda u. v u)) = \lambdatrans(v) = v.
 \]
 However, the \lambda-terms can be essentially recovered if we relax equality
 between \lambda-terms to mean $=_{\beta\eta}$.
 # This problem could be addressed by using a relaxed form of
 # equality containing \eta-equivalence, see cite:Hindley08 for details.
 
-#+ATTR_LATEX: :options [Closed lambda terms and SKI combinators]
+#+ATTR_LATEX: :options [Recovering lambda terms from SKI combinators]
 #+BEGIN_theorem
 For any \lambda-term $M$,
 \[
-\Lambda(\skiabs(M)) =_{\beta\eta} M.
+\lambdatrans(\skiabs(M)) =_{\beta\eta} M.
 \]
 #+END_theorem
 #+BEGIN_proof
-We can firstly prove by structural induction that $\Lambda([x].M) = \lambda x.\Lambda(M)$
-for any $M$. In fact, we know that $\Lambda([x].x) = \lambda x.x$ for any 
+We can firstly prove by structural induction that $\lambdatrans([x].M) = \lambda x.\lambdatrans(M)$
+for any $M$. In fact, we know that $\lambdatrans([x].x) = \lambda x.x$ for any 
 variable $x$; we also know that
 \[\begin{aligned}
-\Lambda([x].MN) &= \Lambda(S([x].M)([x].N)) \\
-          &= (\lambda x.\lambda y.\lambda z. xz(yz))(\lambda x.\Lambda(M))(\lambda x.\Lambda(N)) \\
-          &= \lambda z.\Lambda(M)\Lambda(N);
+\lambdatrans([x].MN) &= \lambdatrans(S([x].M)([x].N)) \\
+          &= (\lambda x.\lambda y.\lambda z. xz(yz))(\lambda x.\lambdatrans(M))(\lambda x.\lambdatrans(N)) \\
+          &= \lambda z.\lambdatrans(M)\lambdatrans(N);
 \end{aligned}\]
 also, if $x$ is free in $M$,
 \[
-\Lambda([x].M) = \Lambda(KM) = (\lambda x.\lambda y.x) \Lambda(M) =_{\beta} \lambda x.\Lambda(M);
+\lambdatrans([x].M) = \lambdatrans(KM) = (\lambda x.\lambda y.x) \lambdatrans(M) =_{\beta} \lambda x.\lambdatrans(M);
 \]
 and finally, if $x$ is free in $U$,
 \[
-\Lambda([x].Ux) = \Lambda(U) =_{\eta} \lambda x.\Lambda(U)x\ .
+\lambdatrans([x].Ux) = \lambdatrans(U) =_{\eta} \lambda x.\lambdatrans(U)x\ .
 \]
 Now we can use this result to prove the main theorem. Again by
 structural induction,
 
- * $\Lambda\skiabs(x) = x$;
- * $\Lambda\skiabs(MN) = \Lambda\skiabs(M)\Lambda\skiabs(N) = MN$;
- * $\Lambda\skiabs(\lambda x.M) = \Lambda([x].\skiabs(M)) =_{\beta\eta} \lambda x.\Lambda\skiabs(M) = \lambda x.M$.
+ * $\lambdatrans\skiabs(x) = x$;
+ * $\lambdatrans\skiabs(MN) = \lambdatrans\skiabs(M)\lambdatrans\skiabs(N) = MN$;
+ * $\lambdatrans\skiabs(\lambda x.M) = \lambdatrans([x].\skiabs(M)) =_{\beta\eta} \lambda x.\lambdatrans\skiabs(M) = \lambda x.M$.
 #+END_proof
 
-*** TODO Turing completeness
+*** Turing completeness
 # Turing, Church and Gödel.
 # Papers by Turing, Church and Gödel.
 # The lambda calculus as a reasonable machine. Ugo Dal Lago.
 
 # https://en.wikipedia.org/wiki/Entscheidungsproblem
 
-# A complete implementation of untyped \lambda-calculus is discussed in 
-# chapter ?; and a detailed description on how to use the untyped \lambda-calculus
-# as a programming language is given in ?.
+Three different notions of computability were proposed in the 1930s
+
+ * the *general recursive functions* were defined by Herbrand and Gödel.
+   They form a class of functions over the natural numbers closed under
+   composition, recursion and unbound search.
+
+ * the *\lambda-definable functions* were proposed by Church. They are
+   functions on the natural numbers that can be represented by
+   \lambda-terms.
+
+ * the *Turing computable functions*, proposed by Alan Turing as the
+   functions that can be defined on a theoretical model of a machine,
+   the /Turing machines/.
+
+In cite:church36 and cite:turing37, Church and Turing proved the equivalence of
+the three definitions. This lead to the metatheoretical */Church-Turing thesis/*,
+which postulated the equivalence between these models of computation and the
+intuitive notion of /effective calculability/ mathematicians were using.
+In practice, this means that the \lambda-calculus, as a programming language, is as
+expressive as Turing machines; it can define every computable function.
+It is Turing-complete.
+
+# We will informally prove this equivalence: 
+# a \lambda-calculus interpreter will be written in chapter ?, proving
+# that \lambda-calculus is representable in a Turing machine
+# equivalent, namely, our computer;
+# general recursive functions will be implemented in \lambda-calculus
+# in chapter ? proving that a Turing machine can be represented in it.
+# interpreter and implementing general recursive functions on it.
+
+A complete implementation of untyped \lambda-calculus is discussed in the
+chapter on [[*Mikrokosmos][Mikrokosmos]]; and a detailed description on how to use the
+untyped \lambda-calculus as a programming language is given in the chapter
+''[[*Programming in the untyped \lambda-calculus][Programming in the untyped \lambda-calculus]]''.
+
+# Church - An unsolvable problem of elementary number theory
+# Corollary 1 pág 362.
+# The set of well-formed formulas which have no normal form is not
+# recursively enumerable.
 
 ** Simply typed \lambda-calculus
 */Types/* were introduced in mathematics as a response to the
@@ -949,6 +983,20 @@ A term is *typeable* if a typing judgment for the term is derivable.
 From now on, we only consider typeable terms as the terms of the
 STLC. As a consequence, the set of \lambda-terms of the STLC is only a
 subset of the terms of the untyped \lambda-calculus.
+
+**** TODO Beta rules for STLC                                     :noexport:ignore:
+# These rules are not necessary, we are only using function types.
+
+Typeable terms follow the following set of \beta-reduction rules, which include
+the untyped \beta-reduction rule defined in Definition [[def-betared]] and
+add explicit reduction rules for the new types. Namely,
+
+ * function application, $(\lambda x.M)N \to_{\beta} M[N/x]$;
+ * first projection $\pi_{1} (M,N) \to_{\beta} M$; and
+ * second projection $\pi_{2}_{} (M,N) \to_{\beta} M$.
+
+These rules govern how can we compute with pair types. With this
+rules $\tto_{\beta}$ and $=_{\beta}$ should be redefined accordingly.
 
 **** Examples of typeable and non-typeable terms                  :ignore:
 #+ATTR_LATEX: :options [Typeable and non-typeable terms]
