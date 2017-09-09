@@ -2516,18 +2516,35 @@ typeinfer (x:vars) ctx (App p q) b = do -- Writing inside the Maybe monad.
 
 The final form of the type inference algorithm will use a
 normalization algorithm shortening the type names and will apply the
-type inference to the empty type context.
+type inference to the empty type context. The complete code can be
+found on the [[*Mikrokosmos complete code][Appendix]].
+
+**** Gentzen deduction trees                                      :ignore:
+A generalized version of the type inference algorithm is used
+to generate derivation trees from terms, as it was described in
+[[*Propositions as types][Propositions as types]].
+
+In order to draw these diagrams in Unicode characters, a data type for
+character blocks has been defined. A monoidal structure is defined
+over them; blocks can be joined vertically and horizontally; and
+every deduction step can be drawn independently.
 
 #+BEGIN_SRC haskell
--- | Type inference of a lambda expression.
-typeinference :: Exp -> Maybe Type
-typeinference e = normalize <$> 
-  (typeinfer variables emptyctx e (Tvar 0) <*> pure (Tvar 0))
+newtype Block = Block { getBlock :: [String] }
+  deriving (Eq, Ord)
+
+instance Monoid Block where
+  mappend = joinBlocks -- monoid operation, joins blocks vertically
+  mempty  = Block [[]] -- neutral element
+
+-- Type signatures
+joinBlocks :: Block -> Block -> Block
+stackBlocks :: String -> Block -> Block -> Block
+textBlock :: String -> Block
+deductionBlock :: Block -> String -> [Block] -> Block
+box :: Block -> Block
 #+END_SRC
 
-The complete code can be found on the [[*Mikrokosmos complete code][Appendix]].
-
-*** TODO Gentzen deduction trees
 ** User interaction
 *** Monadic parser combinators
 A common approach to building parsers in functional programming is to
@@ -2655,7 +2672,6 @@ of SKI combinators.
 #+begin_example
 mikro> 2
 λa.λb.(a (a b)) ⇒ S(S(KS)K)I ⇒ 2
-
 mikro> and
 λa.λb.((a b) a) ⇒ SSK ⇒ and
 #+end_example
@@ -2982,7 +2998,7 @@ tutorials are an example of this feature and can be seen on Figure [[mikrokosmos
 This section explains how to use the untyped \lambda-calculus to
 encode data structures and useful data, such as booleans, linked lists,
 natural numbers or binary trees. All this is done on pure \lambda-calculus
-avoiding the addition of any new syntax or axioms.
+avoiding the addition of new syntax or axioms.
 
 This presentation follows the Mikrokosmos tutorial on \lambda-calculus, which
 aims to teach how it is possible to program using untyped \lambda-calculus
@@ -3008,11 +3024,12 @@ compose = \f.\g.\x.f (g x)
 const = \x.\y.x
 #+END_SRC
 
-Evaluation of terms will be denoted with the ==>= symbol, as in
+Evaluation of terms will be denoted with presented as comments to the
+code,
 
 #+BEGIN_SRC haskell
 compose id id
----> λa.a ⇒ id
+-- [1]: λa.a ⇒ id
 #+END_SRC
 
 It is important to notice that multiple argument functions are defined as
