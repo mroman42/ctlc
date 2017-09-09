@@ -24,7 +24,13 @@ has been used for code listings and the =tikzcd= package has been used
 for commutative diagrams.
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
+The \lambda-calculus is a collection of systems formalizing the notion
+of computation. They can be seen as programming languages and formal
+logics at the same time. We discuss the properties of the untyped
+\lambda-calculus and simply typed \lambda-calculus and its relation to
+logic.
 #+LATEX: \end{center}}
+
 * Lambda calculus
 ** Untyped \lambda-calculus
 How should we define functions? Classically in mathematics, /functions are graphs/.
@@ -70,7 +76,7 @@ domain, the infinite descending sequence
 f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 \]
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
-set theory.
+set theory. See, for example, cite:kunen11.
 
 *** The untyped \lambda-calculus
 As a language, the untyped \lambda-calculus is given by a set of
@@ -1853,6 +1859,7 @@ it is shown in image [[mikrogentzen]].
 # Extending the Curry-Howard correspondence
 ** Other type systems
 *** TODO Hindley-Milner
+*** TODO Gödel's System T
 *** TODO System F                                                :noexport:
 **** TODO System F is strongly normalizing
 *** TODO Type algebra
@@ -1951,12 +1958,13 @@ and the relation between logic and types.
 *** The Haskell programming language
 **** Haskell as a programming choice                              :ignore:
 *Haskell* is the purely functional programming language of our choice
-to implement Mikrokosmos. Its design is heavily influenced by the
-\lambda-calculus and is a general-purpose language with a rich
-ecosystem and plenty of consolidated libraries [fn:hackagelibs] in
-areas such as parsing, testing or system interaction; matching the
-requisites of our project. In the following sections, we describe this
-ecosystem in more detail.
+to implement Mikrokosmos, our \lambda-calculus interpreter. Its own
+design is heavily influenced by the \lambda-calculus and is a
+general-purpose language with a rich ecosystem and plenty of
+consolidated libraries[fn:hackagelibs] in areas such as parsing,
+testing or system interaction; matching the requisites of our
+project. In the following sections, we describe this ecosystem in more
+detail.
 
 [fn:hackagelibs]: In the central package archive of the Haskell community,
 Hackage, a categorized list of libraries can be found: https://hackage.haskell.org/packages/
@@ -1978,35 +1986,57 @@ its design decisions is detailed on cite:hudak07_haskell.
 **** Haskell's properties                                         :ignore:
 Haskell is
 
-  * *strongly and statically typed*, meaning that it only compiles
+ 1. *strongly and statically typed*, meaning that it only compiles
     well-typed programs and it does not allow implicit type
     casting. The compiler will generate an error if a term is
     non-typeable.
 
-  * *lazy*, with /non-strict semantics/, meaning that it will not
-    evaluate a term or the argument of a function until it is
-    needed.
+ 2. *lazy*, with /non-strict semantics/, meaning that it will not
+    evaluate a term or the argument of a function until it is needed.
+    In cite:hughes89, John Hughes, codesigner of the language, argues
+    for the benefits of a lazy functional language, which could solve
+    the traditional efficiency problems on functional programming.
 
-    In cite:hughes89, Hughes argued for the benefits of a lazy
-    functional language, which could solve the efficiency problem.
-
-  * *purely functional*. As the evaluation order is demand-driven and
+ 3. *purely functional*. As the evaluation order is demand-driven and
     not explicitly known, it is not possible in practice to perform
     ordered input/output actions or any other side-effects by relying
     on the evaluation order. This helps modularity of the code,
     testing and verfication.
 
-  * *referentially transparent*. As a consequence of its purity, every
+ 4. *referentially transparent*. As a consequence of its purity, every
     term on the code could be replaced by its definition without
     changing the global meaning of the program. This allows equational
-    reasoning with rules that derive directly from \lambda-calculus.
+    reasoning with rules that are directly derived from \lambda-calculus.
 
-  * based on *System F\omega* with some restrictions. Crucially, it
+ 5. based on *System F\omega* with some restrictions. Crucially, it
     implements *System F* adding quantification over type operators
     even if it does not allow abstraction on type operators. The GHC
     Haskell compiler, however, allows the user the ability to activate
     extensions that implement dependent types.
     # https://stackoverflow.com/a/21220357/2552681
+
+#+ATTR_LATEX: :options [A first example in Haskell]
+#+BEGIN_exampleth
+This example shows the basic syntax and how its type system and
+its implicit laziness can be used.
+
+#+BEGIN_SRC haskell
+-- The type of the term can be declared.
+-- Polymorphic type variables are allowed.
+id :: a -> a
+-- Functions are defined equationally
+id x = x
+-- This definition performs short circuit evaluation thanks
+-- to laziness. The unused argument can be omitted.
+(&&) :: Bool -> Bool -> Bool
+True  && x = x
+False && _ = False
+-- Laziness also allows infinite data structures.
+-- We can define the list of all natural numbers.
+nats :: [Integer]
+nats = 1 : map (+1) nats
+#+END_SRC
+#+END_exampleth
 
 **** Haskell's syntax                                             :ignore:
 Where most imperative languages use semicolons to separate sequential
@@ -2019,7 +2049,6 @@ tree and its preorder as
 #+BEGIN_SRC haskell
 -- A tree is either empty or a node with two subtrees.
 data Tree a = Empty | Node a (Tree a) (Tree a)
-
 -- The preorder function takes a tree and returns a list
 preorder :: Tree a -> [a]
 preorder Empty            = []
@@ -2041,7 +2070,6 @@ could be written in two ways as
 #+BEGIN_SRC haskell
 squareList :: [Int] -> [Int]
 squareList list = map square list
-
 squareList' :: [Int] -> [Int]
 squareList' = map square
 #+END_SRC
