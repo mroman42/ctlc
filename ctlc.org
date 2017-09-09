@@ -3037,51 +3037,53 @@ higher one-argument functions which return another functions as arguments.
 These intermediate functions are also valid \lambda-terms. For example
 
 #+BEGIN_SRC haskell
-alwaysid = const id
+discard = const id
 #+END_SRC
 
-is a function that discards one argument and returns the identity =id=.
+is a function that discards one argument and returns the identity, =id=.
 This way of defining multiple argument functions is called the *currying*
 of a function in honor to the american logician Haskell Curry in cite:haskell58.
-It is a particular instance of a deeper fact, the *hom-tensor adjunction*
+It is a particular instance of a deeper fact: exponentials are defined
+by the following adjunction
 \[
-\hom(A \times B, C) \cong \hom(A, \hom(B,C))
+\hom(A \times B, C) \cong \hom(A, \hom(B,C)).
 \]
-or the definition of exponentials.
 
 *** A technique on inductive data encoding
 Over this presentation, we will implicitly use a technique on the
 majority of our data encodings which allows us to write an encoding
-for any algebraically inductive generated data. This technique is
-used without comment on cite:selinger13 and is the basic of what is
-called the *Church encoding*.
+for any algebraically inductive generated data. This technique is used
+without comment on cite:selinger13 and represents the basis of what is
+called the *Church encoding* of data in \lambda-calculus.
 
 We start considering the usual inductive representation of
-the data type with data constructors, as we do when we represent a
+a data type with constructors, as we do when representing a
 syntax with a BNF, for example,
-\[ \mathtt{Nat} ::= \mathtt{Zero} \mid \mathtt{Succ}\ \mathtt{Nat}. \]
-
+\[
+\mathtt{Nat} ::= \mathtt{Zero} \mid \mathtt{Succ}\ \mathtt{Nat}.
+\]
 Or, in general
 \[
-\mathtt{T} ::= C_1 \mid C_2 \mid C_3 \mid \dots
+\mathtt{D} ::= C_1 \mid C_2 \mid C_3 \mid \dots
 \]
 
-We do not have any possibility of encoding constructors on
-\lambda-calculus. Even if we had, they would have, in theory, no
-computational content; the application of constructors would not
+It is not possible to directly encode constructors on
+\lambda-calculus. Even if we were able, they would have, in theory, no
+computational content; the data structure would not
 be reduced under any \lambda-term, and we would need at least the 
 ability to pattern match on the constructors to define functions
-on them. The \lambda-calculus would need to be extended with
-additional syntax for every new type.
+on them. Our \lambda-calculus would need to be extended with
+additional syntax for every new data structure.
 
 This technique, instead, defines a data term as a function on
-multiple variables representing the constructors. In our example, the number $2$, which
-would be written as $\mathtt{Succ}(\mathtt{Succ}(\mathtt{Zero}))$, would be encoded as
+multiple arguments representing the missing constructors. In our example, 
+the number $2$, which would be written as $\mathtt{Succ}(\mathtt{Succ}(\mathtt{Zero}))$,
+would be encoded as
 \[
-\lambda s.\ \lambda z.\ s (s (z)).
+2 = \lambda s.\ \lambda z.\ s (s (z)).
 \]
 
-In general, any instance of the type $\mathtt{T}$ would be encoded as a
+In general, any instance of the data structure $\mathtt{D}$ would be encoded as a
 \lambda-expression depending on all its constuctors
 \[
 \lambda c_{1}.\ \lambda c_{2}.\ \lambda c_{3}.\ \dots\ \lambda c_{n}. (\textit{term}).
@@ -3121,10 +3123,9 @@ We can test this interpretation on the interpreter to get
 
 #+BEGIN_SRC haskell
 true id const
---- => id
-
 false id const
---- => const
+--- [1]: id
+--- [2]: const
 #+END_SRC
 
 This inspires the definition of an =ifelse= combinator as the identity
@@ -3132,9 +3133,9 @@ This inspires the definition of an =ifelse= combinator as the identity
 #+BEGIN_SRC haskell
 ifelse = \b.b
 (ifelse true) id const
---- => id
 (ifelse false) id const
---- => false
+--- [1]: id
+--- [2]: const
 #+END_SRC
 
 **** Logic gates                                                  :ignore:
@@ -3149,11 +3150,13 @@ xor = \a.\b.a (not b) b
 implies = \p.\q.or (not p) q
 
 xor true true
---- => false
+and true true
+--- [1]: false
+--- [2]: true
 #+END_SRC
 
 *** Natural numbers
-**** Peano natural numbers :ignore:
+**** Peano natural numbers                                        :ignore:
 Our definition of natural numbers is inspired by the Peano natural numbers.
 We use two constructors
 
@@ -3187,38 +3190,70 @@ We can then name some natural numbers as
 
 even if we can not define an infinite number of terms as we might wish.
 
-**** Interpretation as higher-order functions :ignore:
+**** Interpretation as higher-order functions                     :ignore:
 The interpretation the natural number $n$ as a higher order function
 is a function taking an argument =f= and applying them $n$ times over
 the second argument.
 
 #+BEGIN_SRC haskell
 5 not true
---- => false
 4 not true
---- => true
-
 double = \n.\s.\z.n (compose s s) z
 double 3
---- => 6
+--- [1]: false
+--- [2]: true
+--- [3]: 6
 #+END_SRC
 
-**** Addition and multiplication :ignore:
+**** Addition and multiplication                                  :ignore:
 Addition $n+m$ applies the successor $m$ times to $n$; and multiplication
 $nm$ applies the $n\text{-fold}$ application of the successor $m$ times to $0$.
 
 #+BEGIN_SRC haskell
 plus = \m.\n.\s.\z.m s (n s z)
 mult = \m.\n.\s.\z.m (n s) z
-
 plus 2 1
---- => 3
 mult 2 4
---- => 8
+--- [1]: 3
+--- [2]: 8
 #+END_SRC
 
 *** The predecessor function and predicates on numbers
-**** TODO Predecessor                                             :ignore:
+**** Predecessor                                                  :ignore:
+The predecessor function is much more complex than the previous ones.
+As we can see, it is not trivial how could we compute the predecessor
+using the limited form of induction that Church numerals allow.
+
+Stephen Kleene, one of the students of Alonzo Church only discovered
+how to write the predecessor function after thinking about it for a
+long time (and he only discovered it while a long visit at the
+dentist's, which is the reason why this definition is often called the
+*/wisdom tooth trick/*, see cite:crossley75). We will use a slightly
+different version of the definition that does not depend on a pair
+datatype.
+
+We will start defining a /reverse composition/ operator, called
+=rcomp=; and we will study what happens when it is composed to itself;
+that is
+
+#+BEGIN_SRC haskell
+rcomp = \f.\g.\h.h (g f)
+\f.3 (inc f)
+\f.4 (inc f)
+\f.5 (inc f)
+--- [1]: λa.λb.λc.c (a (a (b a)))
+--- [2]: λa.λb.λc.c (a (a (a (b a))))
+--- [3]: λa.λb.λc.c (a (a (a (a (b a)))))
+#+END_SRC
+
+will allow us now to use the =b= argument to discard the first instance
+of the =a= argument and return the same number wihtout the last constructor.
+Thus, our definition of =pred= is
+
+#+BEGIN_SRC haskell
+pred = \n.\s.\z.(n (inc s) (\x.z) (\x.x))
+#+END_SRC
+
 **** Predicates                                                   :ignore:
 From the definition of =pred=, some predicates on numbers can be
 defined. The first predicate will be a function distinguishing a
@@ -3230,9 +3265,9 @@ value.
 #+BEGIN_SRC haskell
 iszero = \n.(n (const false) true)
 iszero 0
---- => true
 iszero 2
---- => false
+--- [1]: true
+--- [2]: false
 #+END_SRC
 
 From this predicate, we can derive predicates on equality and ordering.
@@ -3242,7 +3277,7 @@ leq = \m.\n.(iszero (minus m n))
 eq  = \m.\n.(and (leq m n) (leq n m))
 #+END_SRC
 
-*** Lists
+*** Lists and trees
 We would need two constructors to represent a list: a =nil= signaling
 the end of the list and a =cons=, joining an element to the head of
 the list. An example of list would be
@@ -3274,9 +3309,9 @@ any  = fold or false
 length = foldr (\h.\t.succ t) 0
 
 sum (cons 1 (cons 2 (cons 3 nil)))
---- => 6
 all (cons true (cons true (cons true nil)))
---- => true
+--- [1]: 6
+--- [2]: true
 #+END_SRC
 
 **** Map and filter                                               :ignore:
