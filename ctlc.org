@@ -2078,14 +2078,14 @@ where the second one, because of its simplicity, is usually
 preferred. 
 
 **** Type classes, monads                                         :ignore:
-A characteristic piece of Haskell are *type classes*, which allow to
-define common interfaces for different types. In the following
-example, we define a =Monad= as a type with a suitably typed =return=
-and =bind= operators.
+A characteristic piece of Haskell are *type classes*, which allow 
+defining common interfaces for different types. In the following
+example, we define =Monad= as the type class of types with suitably
+typed =return= and =bind= operators.
 
 #+BEGIN_SRC haskell
 class Monad m where
-  return :: a -> m a
+  return :: a   -> m a
   (>>=)  :: m a -> (a -> m b) -> m b
 #+END_SRC
 
@@ -2093,8 +2093,8 @@ And lists, for example, are monads in this sense.
 
 #+BEGIN_SRC haskell
 instance Monad [] where
-  return x = [x]
-  xs >>= f = concat (map f xs)
+  return x = [x]               -- returns a one-element list
+  xs >>= f = concat (map f xs) -- map and concatenation
 #+END_SRC
 
 Haskell uses monads in varied forms. They are used in I/O, error
@@ -2105,33 +2105,33 @@ uses the list monad to compute the list of Pythagorean triples.
 
 #+BEGIN_SRC haskell
 pythagorean = do
-  a <- [1..]
-  b <- [1..a]
-  c <- [1..b]
-  guard (a^2 == b^2 + c^2)
-  return (a,b,c)
+  a <- [1..]               -- let a be any natural
+  b <- [1..a]              -- let b be a natural between 1 and a
+  c <- [1..b]              -- let c be a natural between 1 and b
+  guard (a^2 == b^2 + c^2) -- filter the list
+  return (a,b,c)           -- return matching tuples
 #+END_SRC
 
 Note that this list is infinite. As the language is lazy, this does not
 represent a problem: the list will be evaluated only on demand.
 
 For a more detailed treatment of monads, and their relation to
-categorical monads, see the chapter on Type Theory, where we will
-program with monads in Agda.
+categorical monads, see the chapter on Category Theory and the chapter
+on Type Theory, where we will program with monads in Agda.
 
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
-
 *** Cabal, Stack and Haddock
 The Mikrokosmos documentation as a Haskell library is included
 in its own code. It uses *Haddock*, a tool that generates documentation
-from annotated Haskell code; it is the de facto standard in for Haskell
+from annotated Haskell code; it is the /de facto/ standard in for Haskell
 software.
 
 Dependencies and packaging details for Mikrokosmos are specified in
-the file =mikrokosmos.cabal=. It is used by the package managers
-*stack* and *cabal* to provide the necessary libraries even if they
-are not available system-wide. The *stack* tool is also used to package
-the software, which is uploaded to Hackage.
+a file distributed with the source code called =mikrokosmos.cabal=.
+It is used by the package managers *stack* and *cabal* to provide the
+necessary libraries even if they are not available system-wide. The
+*stack* tool is also used to package the software, which is uploaded
+to /*Hackage*/.
 
 *** Testing
 *Tasty* is the Haskell testing framework of our choice for this
@@ -2156,10 +2156,9 @@ example of unit test, as found in =tests.hs=. It checks that the type
 inference of the identity term is correct.
 
 #+BEGIN_SRC haskell
+-- Checks that the type of λx.x is exactly A → A
 testCase "Identity type inference" $
-typeinference (Lambda (Var 1))
-@?=
-Just (Arrow (Tvar 0) (Tvar 0))
+  typeinference (Lambda (Var 1)) @?= Just (Arrow (Tvar 0) (Tvar 0))
 #+END_SRC
 
 We are using the *QuickCheck* library for property-based tests. It
@@ -2167,10 +2166,11 @@ tests transformation properties of lambda expressions. In the following
 example, it tests that any deBruijn expression keeps is meaning when
 is translated into a \lambda-term.
 
-#+BEGIN_example
+#+BEGIN_SRC haskell
+-- Tests that naming lambda expressions does not alter their meaning
 QC.testProperty "Expression -> named -> expression" $
   \expr -> toBruijn emptyContext (nameExp expr) == expr
-#+END_example
+#+END_SRC
 
 We are using the *tasty-golden* package for golden tests.  Mikrokosmos
 can be passed a file as an argument to interpret it and show only the
@@ -2202,13 +2202,18 @@ https://github.com/M42/mikrokosmos
 #+end_center
 
 Development takes place on the =development= git branch and permanent
-changes are released into the =master= branch.
+changes are released into the =master= branch. Some more minor
+repositories have been used in the development; they directly
+depend on the main one
+
+ * https://github.com/m42/mikrokosmos-js
+ * https://github.com/M42/jupyter-mikrokosmos
+ * https://github.com/M42/mikrokosmos-lib
 
 The code uses the *Travis CI* continuous integration system to run
 tests and check that the software builds correctly after each change
 and in a reproducible way on a fresh Linux installation provided by
 the service.
-
 ** Implementation of \lambda-expressions
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
@@ -2291,7 +2296,7 @@ subs n p (Var m)
   | otherwise = Var m     -- An unrelated variable remains untouched
 #+END_SRC
 
-Then \beta-reduction can be then defined using this =subs= function.
+Then \beta-reduction can be defined using this =subs= function.
 
 #+BEGIN_SRC haskell
 betared :: Exp -> Exp
@@ -2322,12 +2327,12 @@ tobruijn :: Map.Map String Integer -- ^ names of the variables used
          -> Exp
 -- Every lambda abstraction is inserted in the variable dictionary,
 -- and every number in the dictionary increases to reflect we are entering
--- into a deeper context.
+-- a deeper context.
 tobruijn d context (LambdaAbstraction c e) = 
      Lambda $ tobruijn newdict context e
         where newdict = Map.insert c 1 (Map.map succ d)
 
--- Translation of applications is trivial.
+-- Translation distributes over applications.
 tobruijn d context (LambdaApplication f g) = 
      App (tobruijn d context f) (tobruijn d context g)
 
@@ -2353,7 +2358,8 @@ variableNames = concatMap (`replicateM` ['a'..'z']) [1..]
 -- natural lambda expression.
 nameIndexes :: [String] -> [String] -> Exp -> NamedLambda
 nameIndexes _    _   (Var 0) = LambdaVariable "undefined"
-nameIndexes used _   (Var n) = LambdaVariable (used !! pred (fromInteger n))
+nameIndexes used _   (Var n) = 
+  LambdaVariable (used !! pred (fromInteger n))
 nameIndexes used new (Lambda e) = 
   LambdaAbstraction (head new) (nameIndexes (head new:used) (tail new) e)
 nameIndexes used new (App f g) = 
@@ -2446,7 +2452,7 @@ subs _ _ Bottom = Bottom
 **** Unification                                                  :ignore:
 Unification will be implemented making extensive use of the =Maybe=
 monad. If the unification fails, it will return an error value, and
-the error will be propagated to all the computation. The algorithm
+the error will be propagated to the whole computation. The algorithm
 is exactly the same that was defined in Lemma [[lemma-unification]].
 
 #+BEGIN_SRC haskell
