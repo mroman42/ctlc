@@ -3544,18 +3544,15 @@ using the extended typed constructors. The following terms are presented
 
 #+BEGIN_SRC haskell
 :load types
-
 swap = \m.(snd m,fst m)
 swap
----> λa.((SND a),(FST a)) ⇒ swap :: (A × B) → B × A
-
+--- [1]: λa.((SND a),(FST a)) ⇒ swap :: (A × B) → B × A
 caseof (inl 1) pred (mult 2)
 caseof (inr 1) pred (mult 2)
----> λa.λb.b ⇒ nil, 0, false :: A → B → B
----> λa.λb.(a (a b)) ⇒ 2 :: (A → A) → A → A
-
+--- [2]: λa.λb.b ⇒ nil, 0, false :: A → B → B
+--- [3]: λa.λb.(a (a b)) ⇒ 2 :: (A → A) → A → A
 \x.((abort x),(absurd x))
----> λa.((ABORT a),(ABSURD a)) :: ⊥ → A × ⊥
+--- [4]: λa.((ABORT a),(ABSURD a)) :: ⊥ → A × ⊥
 #+END_SRC
 
 Now it is possible to define a new encoding of the booleans with an
@@ -3567,9 +3564,9 @@ btrue = inl unit
 bfalse = inr unit
 bnot = \a.caseof a (\a.bfalse) (\a.btrue)
 bnot btrue
----> (INR UNIT) ⇒ bfalse :: A + ⊤
+--- [1]: (INR UNIT) ⇒ bfalse :: A + ⊤
 bnot bfalse
----> (INL UNIT) ⇒ btrue :: ⊤ + A
+--- [2]: (INL UNIT) ⇒ btrue :: ⊤ + A
 #+END_SRC
 #+end_exampleth
 
@@ -3603,16 +3600,21 @@ difference between assuming $A$ to prove $\neg A$ and assuming $\neg
 A$ to prove $A$: the first one is simply a proof of a negation, the
 second one uses implicitly the law of excluded middle.
 
-This can be translated to the Mikrokosmos implementation of simply typed \lambda-calculus
-as the term
-
+This can be translated to the Mikrokosmos implementation of simply
+typed \lambda-calculus as the term
 #+BEGIN_SRC haskell
 notnotlem = \f.absurd (f (inr (\a.f (inl a))))
 notnotlem
----> λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
+--- [1]: λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
 #+END_SRC
+whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$. The derivation tree
+can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 
-whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$.
+#+caption: Proof of the double negation of LEM.
+#+name: mikrogentzen
+[[./images/mikrogentzen2.png]]
+
+# TODO: Show the proof with Gentzen deduction trees!
 * Category theory (abstract)                                         :ignore:
 * Category theory
 # TODO: Presheaf categories
@@ -4903,7 +4905,7 @@ and coproducts.
 
 We will usually work with bounded lattices and simply call them
 /lattices/. A bounded lattice can be defined then by the following
-inference rules
+bidirectional inference rules
 
 \begin{prooftree}
 \AXC{$0 \leq x \leq 1$}
