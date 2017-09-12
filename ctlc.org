@@ -4188,8 +4188,7 @@ that is, $F \colon {\cal C}^{op}\to {\cal D}$. Non-contravariant functors are of
 functors, to emphasize the difference.
 #+end_definition
 
-# Hom functors as an example of covariant and contravariant functors
-*** TODO The category of all categories
+# TODO: Hom functors as an example of covariant and contravariant functors
 *** Product categories
 #+attr_latex: :options [Product category]
 #+begin_definition
@@ -4236,24 +4235,172 @@ commute
 In this sense, the $\times$ operation is itself a functor acting on objects
 and morphisms of the $\mathtt{Cat}$ category of all categories.
 
-*** TODO Bifunctors
+**** Bifunctors                                                   :ignore:
 # Definition of Bifunctors
 # Bifunctors are defined by its two parts, obtained by fixing an element
 # Proposition 1 on page 37 Maclane
+A *bifunctor* is a functor from a product category.
 
-*** TODO Comma categories
-** Universality
+#+ATTR_LATEX: :options [Conditions of existence bifunctors]
+#+BEGIN_proposition
+Let ${\cal B}, {\cal C}, {\cal D}$ categories with two families of functors
+\[
+\{L_c \colon {\cal B} \to {\cal D}\}_{c \in {\cal C}}
+\quad\text{ and }\quad
+\{M_b \colon {\cal C} \to {\cal D}\}_{b \in {\cal B}},
+\]
+such that $M_b(c) = L_c(b)$ for all $b,c$.
+
+A bifunctor $S \colon {\cal B} \times {\cal C} \to {\cal D}$ such that $S(-,c) = L_c$ and $S(b,-) = M_b$ 
+for all $b,c$ exists if and only if for every $f \colon b \to b'$ and $g \colon c \to c'$,
+\[
+M_{b'}g \circ L_cf = L_{c'}f \circ M_bg.
+\]
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+#+ATTR_LATEX: :options [Naturality for bifunctors]
+#+BEGIN_proposition
+Given $S,S'$ bifunctors, $\alpha_{b,c} \colon S(b,c) \to S'(b,c)$ is a natural transformation
+if and only if $\alpha(b,c)$ is natural in $b$ for each $c$ and natural in $c$ for each $b$.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+*** Functor categories
+#+ATTR_LATEX: :options [Functor category]
+#+BEGIN_definition
+Given two categories ${\cal B},{\cal C}$, the *functor category* ${\cal B}^{{\cal C}}$ has all functors
+${\cal C} \to {\cal B}$ as objects and natural transformations between them as morphisms.
+#+END_definition
+
+If we consider the category of small categories $\mathtt{Cat}$, there is
+a functor $-^{-} \colon \mathtt{Cat}^{op} \times \mathtt{Cat} \to \mathtt{Cat}$ sending any two categories
+to their functor category.
+
+**** TODO Examples
+**** TODO The category of all categories
+**** TODO Sheaves!
+*** Comma categories
+#+ATTR_LATEX: :options [Comma category]
+#+BEGIN_definition
+Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $T \colon {\cal E} \to {\cal C}$ and $S \colon {\cal D} \to {\cal C}$.
+The *comma category* $(T \downarrow S)$ has
+
+  * morphisms of the form $f \colon Te \to Sd$ as objects, for $e \in {\cal E}, d \in {\cal D}$;
+  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon e \to e'$ and $h \colon d \to d'$ such
+    that $f' \circ Tk = Sh \circ f$, as arrows.
+
+Diagramatically, a morphism in this category is a commutative diagram
+\[\begin{tikzcd}
+\color{black!50}{Te} \rar{Tk} \dar[swap,color=black!50]{f} & \color{black!50}{Te'}\dar[,color=black!50]{f'} \\
+\color{black!50}Sd \rar{Sh}                & \color{black!50}{Sd'}          \\
+\end{tikzcd}\]
+where the objects of the category are drawn in grey.
+#+END_definition
+# \[\begin{tikzcd}[remember picture]
+# Te \rar{Tk}\dar[swap]{f} & Te'  \dar{f'} \\
+# Sd \rar{Sh}              & Sd'          \\
+# \end{tikzcd}
+# \begin{tikzpicture}[remember picture,overlay]
+# \node (A) at ([xshift=0.1cm]\tikzcdmatrixname-1-1) {};
+# \node (B) at ([xshift=-0.1cm]\tikzcdmatrixname-2-1) {};
+# \node (C) at ([xshift=0.1cm]\tikzcdmatrixname-1-2) {};
+# \node (D) at ([xshift=-0.1cm]\tikzcdmatrixname-2-2) {};
+# \node[draw=black!50, fit=(A) (B)]() {};
+# \node[draw=black!50, fit=(C) (D)]() {};
+# \end{tikzpicture}\]
+
+
+**** Slice category                                               :ignore:
+# Motivation
+
+#+ATTR_LATEX: :options [Slice category]
+#+BEGIN_definition
+A *slice category* is a particular case of a comma category $(T \downarrow S)$
+in which $T = \mathrm{Id}$ is the identity functor and $S$ is a functor from the
+terminal category, a category with only one object and its identity
+morphism.
+#+END_definition
+
+A functor from the terminal category simply chooses an object
+of the category.
+If we call $a = S(\ast)$, objects of this category are morphisms
+$f \colon c \to a$, where $c \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$, where
+$k \colon c \to c'$ such that $f' \circ k = f$. Diagramatically a morphism is
+drawn as
+\[\begin{tikzcd}[remember picture, column sep=tiny]
+\color{black!50}{c} \ar{rr}{Tk}\drar[swap,color=black!50]{f} & &
+\color{black!50}{c'} \dlar[color=black!50]{f'} \\
+              & \color{black!50}{a} &          \\
+\end{tikzcd}\]
+
+This slice category is conventionally written as $({\cal C} \downarrow a)$. In
+general, we write $(T \downarrow a)$ when $S$ is a functor from the terminal
+category picking an object $a$; and we write $({\cal C} \downarrow S)$ when $T$ is
+the identity functor.
+
+**** Coslice category                                             :ignore:
+#+ATTR_LATEX: :options [Coslice category]
+#+BEGIN_definition
+*Coslice categories* are the categorical dual of slice categories. It
+is the particular case of a comma category $(T \downarrow S)$ in which $S = \mathrm{Id}$
+is the identity functor and $T$ is a functor from the terminal category,
+a category with only one object and its identity morphism.
+#+END_definition
+
+If we call $a = T(\ast)$, objects of this category are morphisms
+$f \colon c \to a$, where $c \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$, where
+$k \colon c \to c'$ such that $k \circ f' = f$. Diagramatically a morphism is
+drawn as
+\[\begin{tikzcd}[remember picture, column sep=tiny]
+& \color{black!50}{a} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
+\color{black!50}{c} \ar{rr}{Sk} & & \color{black!50}{c'} \\
+\end{tikzcd}\]
+
+This slice category is conventionally written as $(a \downarrow {\cal C})$. In
+general, we write $(a \downarrow S)$ when $T$ is a functor from the terminal
+category picking an object $a$; and we write $(T \downarrow {\cal C})$ when $S$ is
+the identity functor.
+
+**** Arrow category                                               :ignore:
+#+ATTR_LATEX: :options [Arrow category]
+#+BEGIN_definition
+*Arrow categories* are a particular case of comma categories $(T \downarrow S)$
+in which both functors are the identity. They are usually written as ${\cal C}^{\to}$.
+#+END_definition
+
+Objects in this category are morphisms in ${\cal C}$, and morphisms in this
+category are commutative squares in ${\cal C}$. Diagramatically,
+\[\begin{tikzcd}
+\color{black!50}{a}\rar{k}\dar[swap,color=black!50]{f} & 
+\color{black!50}{b} \dar[color=black!50]{f'} \\
+\color{black!50}{a'}\rar{h} & \color{black!50}{b'}
+\end{tikzcd}\]
+.
+
+** Universality and limits
 *** Universal arrows
+# Every arrow to the given functor S factors uniquely through the
+# universal arrow.
+
 #+attr_latex: :options [Universal arrow]
 #+begin_definition
-A *universal arrow* from $c$ to $S$ is an arrow $u \colon c \to Sr$ such that
-for every $c \to Sd$ exists a unique $r \to d$ making this diagram commute
-
+A *universal arrow* from $c$ to $S$ is a morphism $u \colon c \to Sr$ such that
+for every $g \colon c \to Sd$ exists a unique morphism $f \colon r \to d$ making this diagram
+commute
 \[\begin{tikzcd}
 & Sd & d \\
-c \rar[swap]{u}\urar{g} & Sr \uar[swap,dashed]{Sf} & r \uar[dashed]{\exists! f} &.
+c \rar[swap]{u}\urar{g} & Sr \uar[swap,dashed]{Sf} & r \uar[dashed,swap]{\exists! f} &.
 \end{tikzcd}\]
 #+end_definition
+
+Note how an universal arrow is, equivalently, the initial object of
+the comma category $(c \downarrow S)$. Thus, universal arrows must be unique up
+to isomorphism.
 
 #+attr_latex: :options [Universality in terms of hom-sets]
 #+begin_proposition
@@ -4270,8 +4417,25 @@ By naturality we have the bijection $\varphi(f) = Sf \circ u$, every arrow
 is written in this way.
 #+end_proof
 
-# TODO Universal from a functor to another
+The categorical dual of an universal arrow from an object to a functor
+is the notion of universal arrow from a functor to an object. Note how,
+particularly in this case, we avoid the name /couniversal arrow/; as
+both arrows are representing what we usually call a /universal property/.
 
+#+ATTR_LATEX: :options [Dual universal arrow]
+#+BEGIN_definition
+A *universal arrow* from $S$ to $c$ is a morphism $v \colon Sr \to c$ such that
+for every $g \colon Sd \to c$ exists a unique morphism $f \colon d \to r$ making this diagram
+commute
+\[\begin{tikzcd}
+d\dar[dashed,swap]{\exists! f} & Sd \dar[swap,dashed]{Sf}\drar{g} & \\
+r & Sr \rar[swap]{v} & c
+\end{tikzcd}\]
+#+END_definition
+
+# TODO Universal from a functor to another
+**** TODO Examples
+# TODO Equivalence relations
 *** Representability
 #+attr_latex: :options [Representation of a functor]
 #+begin_definition
@@ -4358,12 +4522,94 @@ The Yoneda functor is full and faithful.
 
 # The Yoneda functor is a currying of the hom functor.
 
-*** TODO Products and limits
+**** TODO Tikzcd diagram                                        :noexport:
+\[\begin{tikzcd}[row sep={6mm,between origins},column sep={1cm,between origins}]
+hom_{D}(a,a) \arrow[rrrr, "\tau_{a}"] \arrow[ddd, "{hom_{D}(a,f)}", swap] 
+    & & & & Ta \arrow[ddd, "Tf"] \\  
+    & 1_{a} \arrow[rr, |->] \arrow[d, |->] & & x \arrow[d, |->] & \\[1cm]
+    & f \arrow[rr, |->] & & Tf(x) \\
+hom_{D}(a,b) \arrow[rrrr, "\tau_{b}", swap] & & & & Tb\\  
+\end{tikzcd}\]
+*** Limits
+**** Motivation: products                                         :ignore:
+**** Limits                                                       :ignore:
+#+ATTR_LATEX: :options [Diagonal functor]
+#+BEGIN_definition
+The *diagonal functor* $\Delta \colon {\cal C} \to {\cal C}^{{\cal J}}$ sends each object $c \in {\cal C}$ to a
+constant functor $\Delta c \colon {\cal J} \to {\cal C}$ defined as
+
+ * the constantly-$c$ function for objects, $\Delta(j) = c$;
+ * and the constantly-$\id_c$ function for morphisms, $\Delta(f) = \id_{c}$.
+
+The diagonal functor sends a morphism $g \colon c \to c'$ to a natural
+transformation $\Delta g \colon \Delta c \to \Delta c'$ whose components are all $g$.
+#+END_definition
+
+We could say that $\Delta c$ squeezes the whole category ${\cal J}$ into $c$. A
+natural transformation from this functor to some other $F \colon {\cal J} \to {\cal C}$
+should be regarded as a */\red{cone}/* from the object $c$ to a copy
+of ${\cal J}$ inside the category ${\cal C}$; as the following diagram exemplifies.
+# TODO: Cone diagram
+\[\begin{tikzcd}[column sep=tiny, row sep=tiny]
+&&& &&& & c \ar[color=myred]{dd}\ar[bend left, color=myred]{ddr}\ar[bend right, color=myred]{dddl}\ar[bend left, color=myred]{dddrr} &&\\
+&\phantom{gap}&& &&& & \phantom{gap} &&\\
+  & \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr}  & \ar[Rightarrow, shorten <= 3mm, shorten >= 14mm]{uurrrr}[xshift=-3mm]{\Delta}  &&&   & \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr} & \\
+\cdot \ar{rrr} &&& \cdot \ar[Rightarrow, yshift=3mm,swap, shorten <= 2mm, shorten >= 2mm]{rrr}{F}           &\phantom{gap}&& \cdot \ar{rrr} &   &   & \cdot \\
+&{\cal J}&& &&& &F{\cal J}&&
+\end{tikzcd}\]
+The components of the natural transformation appear highlighted in
+the diagram. The naturality of the transformation implies that each
+triangle
+\[\begin{tikzcd}[column sep=tiny,row sep=small]
+&\cdot
+\drar[color=myred, shorten >= -1.5mm, shorten <= -2mm]
+\dlar[color=myred, shorten >= -1.5mm, shorten <= -2mm] &\\
+\cdot 
+\ar[shorten >= -1mm, shorten <= -1mm]{rr} &&
+\cdot
+\end{tikzcd}\]
+on that cone must be commutative. Thus, natural transformations are
+a way to recover all the information that was encoded in $c$ by the
+diagonal functor. As we did with products, we want to find the cone
+that best encodes that information; a universal cone, such that every
+other cone factorizes through it. Diagramatically, an $r$ such that,
+for each $d$,
+\[\begin{tikzcd}[column sep=tiny, row sep=tiny]
+&d 
+\ar[color=myred,bend right]{dddd}
+\ar[bend left, color=myred]{ddddr}
+\ar[bend right, color=myred]{dddddl}
+\ar[bend left, color=myred]{dddddrr}
+\ar[dashed]{dd}{\exists!} &&\\
+&&\phantom{d}&\\
+& r \ar[color=myred]{dd}\ar[bend left, color=myred]{ddr}\ar[bend right, color=myred]{dddl}\ar[bend left, color=myred]{dddrr} &&\\
+& \phantom{gap} &&\\
+& \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr} & \\
+\cdot \ar{rrr} &   &   & \cdot \\
+\end{tikzcd}\]
+That factorization will be represented in the formal definition of
+limit by a universal natural transformation between the two diagonal
+functors.
+
+
+#+ATTR_LATEX: :options [Limit]
+#+BEGIN_definition
+The *limit* of a functor $F \colon {\cal J} \to {\cal C}$ is an object $r \in {\cal C}$ such that
+there exists a universal arrow $v \colon \Delta r \todot F$ from $\Delta$ to $F$. It is
+usually written as $r = \Limit F$.
+#+END_definition
+
+That is, for every natural transformation $w \colon \Delta d \todot F$, there is a unique
+morphism $f \colon d \to r$ such that
+\[\begin{tikzcd}
+d\dar[dashed,swap]{\exists! f} & \Delta d \dar[swap,dashed]{Sf}\drar{g} & \\
+r & \Delta r \rar[swap]{v} & c
+\end{tikzcd}\]
+commutes.
+
 **** TODO Pullbacks
 **** TODO Example: p-adic numbers
 *** TODO Coproducts and colimits
-**** TODO Coproducts as universal arrows
-**** TODO Pushouts
 **** Colimits
 #+attr_latex: :options [Colimits]
 #+begin_definition
