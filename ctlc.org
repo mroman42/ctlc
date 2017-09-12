@@ -6011,6 +6011,11 @@ proposition, that is,
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
 
 ** TODO Martin-Löf Type Theory, dependent types
+# Locally cartesian closed categories
+# http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
+# The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
+# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.646.9598&rep=rep1&type=pdf 
+
 *** Type in type
 # Russell's paradox code
 # Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
@@ -6023,6 +6028,11 @@ proposition, that is,
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
 ** TODO Homotopy Type Theory
+\begin{tikzcd}[column sep=large]
+  \tikz\draw[{[-]},yshift=0.5ex] (0,0)node[below]{$0$} -- (2,0)node[below]{$1$};
+  \arrow[r, "\textrm{gluing}"]
+& \tikz\draw (0,0) circle (1cm)  (0.8,0) -- (1.2,0) node[right]{$\mathbb Z$};
+\end{tikzcd}
 * Conclusions
 * Appendices
 bibliographystyle:alpha
