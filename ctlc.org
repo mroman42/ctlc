@@ -3787,16 +3787,39 @@ By virtue of Proposition [[prop-unicityinverse]], a morphism which is both a
 retraction and a section is an isomorphism.
 
 *** Terminal objects, products and coproducts
+/*Products and coproducts*/ are very widespread notions in mathematics.
+Whenever a new structure is defined, it is common to wonder what the
+product or union of two of these structures would be. Examples of
+products are the cartesian product of sets, the product topology or
+the product of abelian groups; examples of coproducts are the disjoint
+union of sets, topological sum or the free product of groups.
+
+We will abstract categorically these notions in terms of /universal/
+/properties/. This viewpoint, however, is an important shift with
+respect to how these properties are usually defined. We will not
+define the product of two objects in terms of its internal structure
+(categorically, objects are atomic and do not have any); but in terms
+of all the other objects, in terms of the complete structure of the
+category. This turns inside-out the focus of definitions.  Moreover,
+objects defined in terms of universal properties are usually not
+uniquely determined, but only determined up to isomorphism. This
+reinforces our previous idea of considering two isomorphic objects in
+a category as essentialy the same object.
+
+Initial and terminal objects will be a first example of this viewpoint
+based on universal properties.
+
 #+attr_latex: :options [Initial object]
 #+begin_definition
 An object $I$ is an *initial object* if every object is the domain of exactly
-one morphism to it. That is, for every object $A$ exists an unique morphism $I \to A$.
+one morphism from it. That is, for every object $A$ exists an unique morphism
+$i_A \colon I \to A$.
 #+end_definition
 
 #+attr_latex: :options [Terminal object]
 #+begin_definition
 An object $T$ is a *terminal object* if every object is the codomain of exactly
-one morphism from it. That is, for every object $A$ exists an unique $A \to T$.
+one morphism to it. That is, for every object $A$ exists an unique $t_A \colon A \to T$.
 #+end_definition
 
 #+attr_latex: :options [Zero object]
@@ -3840,7 +3863,7 @@ and $f_2 = \pi_B \circ h$. Diagramatically,
 \[\begin{tikzcd}[column sep=tiny]
 & D \dar[dashed]{\exists! h} \ar[bend left]{ddr}{f_2}\ar[bend right,swap]{ddl}{f_1} & \\
 & C \drar{\pi_B}\dlar[swap]{\pi_A} & \\
-A && B &.
+A && B
 \end{tikzcd}\]
 #+end_definition
 
@@ -3879,8 +3902,9 @@ both cases, only by reversing the arrows.
 #+attr_latex: :options [Discrete categories]
 #+begin_exampleth
 A category is *discrete* if it has no other morphisms than the identities.
-A discrete category is uniquely defined by its class of objects and
-every class of objects defines a category.
+A discrete category is uniquely defined by the class of its objects and
+every class of objects defines a discrete category. Thus, discrete categories
+are classes or sets, without any additional categorical structure.
 #+end_exampleth
 
 **** Monoids, groups                                              :ignore:
@@ -3906,6 +3930,7 @@ In particular, every ordinal can be seen as a partially ordered set
 and defines a category.
 #+end_exampleth
 
+**** TODO Concrete categories                                     :ignore:
 **** Category of Sets                                             :ignore:
 #+attr_latex: :options [The category of sets]
 #+begin_exampleth
@@ -3955,11 +3980,13 @@ studying homology, they have proven its foundational value with the
 passage of time.
 
 *** Functors
+A */functor/* will be interpreted as a homomorphism of categories.
+
 **** Definition of functor                                        :ignore:
 #+attr_latex: :options [Functor]
 #+begin_definition
-A *functor* will be interpreted as a morphism of categories.
-Given two categories ${\cal C}$ and ${\cal D}$, a functor between them $F : {\cal C} \to {\cal D}$ is given by
+Given two categories ${\cal C}$ and ${\cal D}$, a *functor* between 
+them, $F : {\cal C} \to {\cal D}$, is given by
 
   * an *object function*, $F : \mathrm{obj}({\cal C}) \to \mathrm{obj}({\cal D})$;
   * and an *arrow function*, $F : (A \to B) \to (FA \to FB)$ for any two
@@ -4125,6 +4152,13 @@ T'Tb
 
 defined respectively by the naturality of $S'\tau$ and $\tau'$.
 #+end_proof
+
+**** Interchange law                                              :ignore:
+#+ATTR_LATEX: :options [Interchange law]
+#+BEGIN_proposition
+<<prop-interchangelaw>>
+
+#+END_proposition
 
 ** Constructions on categories
 *** Opposite categories and contravariant functors
