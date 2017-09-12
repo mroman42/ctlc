@@ -3,7 +3,9 @@
 %------------------------
 \usepackage{amsthm}
 \usepackage{amsmath}
+\usepackage{tikz}
 \usepackage{tikz-cd}
+\usetikzlibrary{shapes,fit}
 \usepackage{bussproofs}
 \EnableBpAbbreviations{}
 \usepackage{mathtools}
@@ -21,6 +23,7 @@
 \DeclareUnicodeCharacter{2192}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\to}}}}
 \DeclareUnicodeCharacter{21D2}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\Rightarrow}}}}
 % \DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\mathchardef\mhyphen="2D % define a math hyphen
 
 %------------------------
 % Theorem styles
@@ -71,6 +74,11 @@
 \newcommand{\todot}{\xrightarrow{.}}
 \newcommand{\toddot}{\xrightarrow{..}}
 \newcommand{\Sets}{\mathtt{Sets}}
+\newcommand{\Nat}{\operatorname{Nat}}
+\newcommand{\Limit}{\varprojlim}
+\newcommand{\Colimit}{\varinjlim}
+\colorlet{myred}{red!75!black}
+\newcommand{\red}[1]{\color{myred}{#1}}
 
 % Type Systems on the lambda cube
 \newcommand{\ctypes}[1]{\color{blue!90!black}{#1}}
