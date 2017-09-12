@@ -3682,6 +3682,26 @@ hom-set is actually a set.
 #+end_definition
 
 *** Morphisms
+Objects in category theory are an atomic concept and can be only
+studied by their morphisms; that is, by how they are related to all
+the objects of the category. Thus, the essence of a category is given
+not by its objects, but by its morphisms and how composition is
+defined.
+
+It is so much so, that we will consider two objects essentially
+equivalent (and we will call them /*isomorphic*/) whenever they relate
+to other objects in the exact same way; that is, whenever an
+invertible morphism between them exists. This will constitute an
+equivalence relation on the category.
+
+In a sense, morphisms are an abstraction of the notion of the
+structure-preserving homomorphisms that are defined between algebraic
+structures. Taking this perspective, /*monomorphisms*/ and /*epimorphisms*/
+can be thought as abstractions of the usual injective and surjective
+homomorphisms. We will see, however, how some properties that we take
+for granted, such as ''isomorphism'' meaning exactly the same as
+''both injective and surjective'' are not true in general.
+
 **** Isomorphisms                                                 :ignore:
 #+attr_latex: :options [Isomorphisms]
 #+begin_definition
@@ -3694,7 +3714,8 @@ such that
 exists.
 #+end_definition
 
-We call *automorphisms* to the endomorphisms which are also isomorphisms.
+We call *automorphisms* to these morphisms which are both endomorphisms
+and isomorphisms.
 
 #+attr_latex: :options [Unicity of inverses]
 #+begin_proposition
@@ -3731,6 +3752,9 @@ particular,
 
 are all isomorphisms.
 #+end_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
 
 **** Monomorphisms and epimorphisms                               :ignore:
 #+attr_latex: :options [Monomorphisms and epimorphisms]
@@ -3750,6 +3774,7 @@ called a *bimorphism*.
 #+begin_remark
 A morphism can be a bimorphism without being an isomorphism.
 #+end_remark
+# TODO: Example
 
 **** Retractions and sections                                     :ignore:
 #+attr_latex: :options [Retractions and sections]
