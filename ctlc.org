@@ -4848,45 +4848,286 @@ commutes
 
 **** TODO Natural transformation of covariant to contravariant functor :ignore:
 **** Extranatural transformations (wedges)                        :ignore:
-#+ATTR_LATEX: :options [Extranatural transformation]
+#+ATTR_LATEX: :options [Wedge]
 #+BEGIN_definition
-An *extranatural transformation* (also called *wedge*) is a dinatural
-transformation to a constant functor.
-#+END_definition
+A *wedge* (also called *extranatural transformation*) is a dinatural
+transformation from a constant functor.
 
-That is, an extranatural transformation from the functor $F$ to the
-object $a$ is a family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
+That is, given a functor $T \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$, a *wedge* $\alpha \colon x \toddot T$ is a
+family of morphisms $\alpha_c \colon x \to T(c,c)$ such that
 
 \[\begin{tikzcd}
-F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
-F(x,x)\rar[swap]{\alpha_{x}} & b
+x        \dar[swap]{\alpha_{c'}} \rar{\alpha_{c}} &
+T(c,c)   \dar{T(\id,f)} \\
+T(c',c') \rar[swap]{T(f,\id)} &
+T(c,c')
 \end{tikzcd}\]
 
-commutes for every $f \colon x \to y$. We write wedges as $\alpha \colon F \toddot b$.
+commutes for every $f \colon c \to c'$. 
+#+END_definition
+
+# Wedges or cowedges?
+# #+ATTR_LATEX: :options [Cowedge]
+# #+BEGIN_definition
+# A *wedge* (also called *extranatural transformation*) is a dinatural
+# transformation from a constant functor. We write wedges as $\alpha \colon F \toddot b$.
+# #+END_definition
+
+# That is, given a functor $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$, a wedge $\alpha \colon F \toddot b$ is a
+# family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
+
+# \[\begin{tikzcd}
+# F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
+# F(x,x)\rar[swap]{\alpha_{x}} & b
+# \end{tikzcd}\]
+
+# commutes for every $f \colon x \to y$. 
 
 **** TODO Examples of dinatural transformations                   :ignore:
 *** Ends
-# cowedges ?
-
+**** Definition of Ends                                           :ignore:
 #+ATTR_LATEX: :options [End]
 #+BEGIN_definition
-An *end* of $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is a universal dinatural transformation
-from a constant $e$ to $F$. That is, a wedge $\sigma \colon e \toddot F$ such that for every
-other $\tau \colon k \toddot F$, there exists a unique $u \colon k \to e$ such that $\sigma_x \circ u = \tau_x$.
+An *end* of $T \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is its universal wedge.
+That is, a wedge $\alpha \colon e \toddot T$ such that for every other $\beta \colon k \toddot T$,
+there exists a unique $u \colon k \to e$ such that $\alpha_c \circ u = \beta_c$ for
+each $c \in {\cal C}$.
 #+END_definition
 
-We usually call /end/ to the object $e$, and we write
+Diagramatically,
+
+\[\begin{tikzcd}
+k \ar[dashed]{dr}{\exists! u} \ar[bend left]{drr}{\beta_{c}} \ar[swap,bend right]{ddr}{\beta_{c'}} & &\\
+&e        \dar[swap]{\alpha_{c'}} \rar{\alpha_{c}} &
+T(c,c)   \dar{T(\id,f)} \\
+&T(c',c') \rar[swap]{T(f,\id)} &
+T(c,c')
+\end{tikzcd}\]
+
+
+We usually call /end/ to the object $e$, and we use the following integral
+notation
 \[
-e = \int_x F(c,c).
+e = \int_{c \in {\cal C}} T(c,c).
 \]
 
-**** TODO Examples of ends
+**** Examples of ends 1                                           :ignore:
+We present some examples of Ends, taken mainly from cite:thecatsters.
+
+#+ATTR_LATEX: :options [Natural transformations as Ends]
+#+BEGIN_exampleth
+Natural transformations are ends; they can be written as
 \[
-\mathrm{Nat}(U,V) = \int_x \hom(Ux,Vx)
+\Nat(F,G) = \int_{c\in {\cal C}} \hom(Fc,Gc)\ .
 \]
+
+Take $T = \hom(F-,G-) \colon {\cal C}^{op} \times {\cal C} \to \Sets$, where $F,G \colon {\cal C} \to {\cal E}$ are
+two arbitrary functors. A wedge $x \toddot T$ would be defined by a set $x \in \Sets$
+and a family of functions $\omega_c \colon x \to \hom(Fc,Gc)$ such that
+\[\begin{tikzcd}
+x        \dar[swap]{\omega_{c'}} \rar{\omega_{c}} &
+\hom(Fc,Gc)   \dar{Gf \circ -} \\
+\hom(Fc',Gc') \rar[swap]{- \circ Ff} &
+\hom(Fc,Gc')
+\end{tikzcd}\]
+commutes for each $f \colon c \to c'$. That is, for each element of the
+set, $a \in x$, we get $\omega_c(a) \colon Fc \to Gc$ such that $Gf \circ \omega_c(a) = \omega_{c'}(a) \circ Ff$;
+in other words, the following square is natural
+\[\begin{tikzcd}
+Fc \rar{\omega_c(a)}\dar[swap]{Ff} & Gc \dar{Gf} \\
+Fc' \rar[swap]{\omega_{c'}(a)} & Gc' \\
+\end{tikzcd}\]
+and $\omega_c(a)$ is a natural transformation from $F$ to $G$, for each $a \in x$. 
+
+Thus, we have proved that a wedge $x \toddot T$ is a set $x$ mapping to the
+set of natural transformations. The universal set with this property
+is clearly (it can be seen as the terminal object of the slice
+category) the set of natural transformations. That is,
+\[
+\Nat(F,G) = \int_{c\in {\cal C}} \hom_{{\cal E}}(Fc,Gc)\ .
+\]
+
+The particular case
+\[
+\Nat(\id,\id) = \int_{c\in{\cal C}} \hom_{{\cal C}}(c,c)
+\]
+is sometimes known as the center of the category.
+#+END_exampleth
+
+**** Examples of ends 2                                           :ignore:
+#+ATTR_LATEX: :options [Tannakian reconstruction]
+#+BEGIN_exampleth
+Let $M$ be a monoid in $\Sets$. We consider $M\mhyphen\Sets$, the category of sets
+in which $M$ acts; that is, pairs $(S,\sigma)$, where $s$ is an arbitrary
+set and $\sigma \colon M \times S \to S$ is an action of the monoid on the set.
+Morphisms are of the form $f \colon (S,\sigma) \to (R,\rho)$ where $f \circ \sigma = \rho \circ f$.
+
+There is
+a forgetful functor $U \colon M\mhyphen\Sets \to \Sets$ that simply forgets the $M\mhyphen\text{action}$
+on the set; and we can recover the monoid from this functor as
+\[
+\int_{(s,\sigma) \in M\mhyphen\Sets} \hom(U(s,\sigma), U(s,\sigma)) =
+\Nat(U,U) = M.
+\]
+This is a very particular instance of the idea of Tannakian reconstruction,
+as described in cite:joyal91.
+
+The forgetful functor $U \colon M\mhyphen\Sets \to \Sets$ is a representable functor;
+represented by $(M,\mu) \in M\mhyphen\Sets$. There exists a function
+\[
+g \colon \hom_{M\mhyphen\Sets}((M,\mu), (S,\sigma)) \to S = U(S,\sigma)
+\]
+sending $g(f) = f(e)$. Note that $f$ is completely determined by $f(e)$; as
+$f(m) = f(\mu(m,e)) = \sigma(m,f(e))$; and this $g$ is a bijection. We have
+proved that $U \cong \hom((M,\mu),-)$.
+
+Now, using this fact and the dual Yoneda lemma,
+\[\begin{aligned}
+\Nat(U,U) &\cong \Nat(\hom((M,\mu),-), \hom((M,\mu),-)) \\
+          &= \hom_{M\mhyphen\Sets}((M,\mu),(M,\mu)) = M;
+\end{aligned}\]
+and the components of the natural transformation are simply
+multiplication by $m$ for some fixed $m \in M$. Diagramatically, for
+any given $\psi \in \Nat(U,U)$,
+\[\begin{tikzcd}[row sep={4mm,between origins},column sep={8mm,between origins}]
+(M,\mu) \arrow[rrrr, "\psi_{(S,\sigma)}"] \arrow[ddd, "{\sigma(-,s)}", swap] 
+    & & & & (M,\mu) \arrow[ddd, "{\sigma(-,s)}"] \\  
+    & e \arrow[rr, |->] \arrow[d, |->] & & m \arrow[d, |->] & \\[1cm]
+    & s \arrow[rr, |->] & & \sigma(m,s) \\
+(S,\sigma) \arrow[rrrr, "\psi_{(S,\sigma)}", swap] & & & & (S,\sigma)\\  
+\end{tikzcd}\]
+it must be the case that $\psi_{(S,\sigma)}(s) = ms$.
+#+END_exampleth
+
+**** Examples of ends 3                                           :ignore:
+#+ATTR_LATEX: :options [Reconstruction of the center]
+#+BEGIN_exampleth
+A variant on the previous example is to use identity functors
+to recover
+\[
+\int_{(s,\sigma) \in M\mhyphen\Sets} \hom((s,\sigma),(s,\sigma)) = \Nat(\id,\id) = {\cal Z}(M)
+\]
+the center of the monoid.
+
+If $\psi \in \Nat(\id,\id)$, we can apply the forgetful functor to get
+$U\psi \in \Nat(U,U)$. By the previous example, the natural transformation
+must be of the form $\psi_{(S,\sigma)}(s) = \sigma(m,s)$ for each $(S,\sigma)$, given some
+fixed $m \in M$.
+
+However, further restrictions apply in this case. In particular,
+$\psi_{(M,\mu)}$ must be a morphism in $M\mhyphen\Sets$, therefore, for any $n \in M$,
+\[
+nm = \mu(n,\mu(m,e)) = \mu(m,\mu(n,e)) = mn,
+\]
+and $m \in {\cal Z}(M)$. The fact that any $m \in {\cal Z}(M)$ defines a natural
+transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
+#+END_exampleth
 
 *** Coends
 *** Kan extensions
+
+** n-categories
+*** 2-categories
+# The category of two categories
+In a 2-category, instead of having sets of morphisms; we have a
+category of morphisms between any two objects. It has objects,
+called */0-cells/*; morphisms between objects, called */1-cells/*; and
+morphisms between morphisms, called */2-cells/*.
+\[\begin{tikzcd}
+x
+&
+x \rar{f}&y 
+&
+x\phantom{y} 
+\arrow[bend left=50]{r}[name=U,below]{}{f}
+\arrow[bend right=50]{r}[name=D]{}[swap]{g}
+& 
+\phantom{x}y \arrow[Rightarrow,from=U,to=D]{}{\alpha}
+\end{tikzcd}\]
+As, morphisms between two objects form a category, morphisms between
+morphisms can be composed vertically in their category; 
+\[\begin{tikzcd}
+x\phantom{y}
+\arrow[bend left=80]{rr}[name=U2,below]{}{f}
+\arrow[]{rr}[name=C2,below]{}[name=C1,above]{}[above=2mm, left=3mm]{g}
+\arrow[bend right=80]{rr}[name=D2]{}[swap]{h}
+&& 
+\phantom{x}y
+\arrow[Rightarrow,from=U2,to=C1]{}{\alpha}
+\arrow[Rightarrow,from=C2,to=D2]{}{\beta}
+&
+x\phantom{y} 
+\arrow[bend left=50]{r}[name=U,below]{}{f}
+\arrow[bend right=50]{r}[name=D]{}[swap]{h}
+& 
+\phantom{x}y \arrow[Rightarrow,from=U,to=D]{}{\beta \circ \alpha}
+\end{tikzcd}\]
+but the 2-category will also provide a horizontal composition of
+morphisms between two objects
+\[\begin{tikzcd}
+\makebox[0pt][l]{$x$}\phantom{y} 
+\arrow[bend left=50]{r}[name=U,below]{}{f}
+\arrow[bend right=50]{r}[name=D]{}[swap]{f'}
+& 
+\phantom{}y
+\arrow[Rightarrow,from=U,to=D]{}{\alpha}
+\arrow[bend left=50]{r}[name=U,below]{}{g}
+\arrow[bend right=50]{r}[name=D]{}[swap]{g'}
+& 
+\makebox[0pt][l]{$z$}\phantom{y}
+\arrow[Rightarrow,from=U,to=D]{}{\beta}
+&
+x
+\arrow[bend left=50]{rr}[name=U,below]{}{g \circ f}
+\arrow[bend right=50]{rr}[name=D]{}[swap]{g' \circ f'}
+&&
+z
+\arrow[Rightarrow,from=U,to=D]{}{\beta \ast \alpha}
+\end{tikzcd}\]
+which, as we will formalize, will act functorially with respect to
+vertical composition. An interchange law which will act as a
+generalization of Proposition <<prop-interchangelaw>> will follow
+from functoriality. In fact, the category of small categories, with
+functors and natural transformations between them will be an example
+of 2-category.
+
+#+ATTR_LATEX: :options [2-category]
+#+BEGIN_definition
+A *2-category* is given by
+
+  * a collection of objects;
+  * a vertical category $T(a,b)$ for every pair of objects $a,b$;
+  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$.
+  * a horizontal composition functor $K_{a,b,c}\colon T(b,c) \times T(a,b) \to T(a,c)$;
+
+where we usually write the action of $K$ on morphisms as $K(\beta,\alpha) = \beta \ast \alpha$.
+# TODO: Such that some axioms hold?
+#+END_definition
+
+#+ATTR_LATEX: :options [Interchange law]
+#+BEGIN_proposition
+Given any $\alpha,\alpha',\beta,\beta'$ composable 2-cells,
+\[
+(\beta' \circ \beta) \ast (\alpha' \circ \alpha) =
+(\beta' \ast \alpha') \circ (\beta \ast \alpha).
+\]
+#+END_proposition
+#+BEGIN_proof
+Unfolding the definition in the product category and applying
+the functoriality of $K$, we get
+\[\begin{aligned}
+(\beta' \circ \beta) \ast (\alpha' \circ \alpha) &=
+K(\beta' \circ \beta, \alpha' \circ \alpha)  = K((\beta' , \alpha') \circ (\beta , \alpha)) \\
+&= K(\beta', \alpha') \circ K(\beta, \alpha) = (\beta' \ast \alpha') \circ (\beta \ast \alpha).
+\end{aligned}\]
+#+END_proof
+
+**** TODO Strict and weak 2-categories                            :ignore:
+**** TODO Eckmann-Hilton                                          :ignore:
+**** TODO Double categories                                       :ignore:
+** TODO Monoidal categories
+*** TODO String diagrams
+# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
 
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
@@ -5648,8 +5889,26 @@ The category $\mathtt{\lambda Thr}$ has \lambda-theories as objects and translat
 between them as morphisms.
 #+END_definition
 
-# TODO: Notion of isomorphism of types
-# TODO: Equivalence of theories
+
+#+ATTR_LATEX: :options [Isomorphism of types]
+#+BEGIN_definition
+Two types in a \lambda-theory $\mathbb{T}$ are isomorphic if there exist
+terms $x:A \mid t:B$ and $y:B \mid u:A$ such that
+\[
+x:A\mid u[t/y] = x : A, \quad\text{ and }\quad y : B \mid t[u/x] = y : B,
+\]
+are provable in $\mathbb{T}$.
+#+END_definition
+
+#+ATTR_LATEX: :options [Equivalence of theories]
+#+BEGIN_definition
+Two \lambda-theories $\mathbb{T},\mathbb{U}$ are equivalent if there are a pair of translations
+$\tau : \mathbb{T} \to \mathbb{U}$ and $\sigma : \mathbb{U} \to \mathbb{T}$ such that
+\[
+\sigma(\tau A) \cong A, \quad\text{ and }\quad \tau(\sigma B) = B;
+\]
+for any given types $A,B$.
+#+END_definition
 
 *** Internal language of a category
 #+ATTR_LATEX: :options [Internal language]
@@ -5682,14 +5941,25 @@ is a \lambda-theory given by
     \end{aligned}\]
     for any $A,B \in {\cal C}$.
 
-Satisfying
-# TODO
+Satisfying that
+\[\begin{aligned}
+u : \intl{1}                 &\mid \mathtt{T}\ast = u : \intl{1} \\
+z : \intl{A \times B}        &\mid \mathtt{P}_{A,B}\pair{\intl{\pi_0} z, \intl{\pi_1} z} = z : \intl{A \times B} \\
+w : \intl{A} \times \intl{B} &\mid \pair{\intl{\pi_0}(\mathtt{P}_{A,B}w), \intl{\pi_1}(\mathtt{P}_{A,B}w)} = w : \intl{A} \times \intl{B} \\
+f : \intl{B^A}               &\mid \mathtt{E}_{A,B}(\lambda x^{\scriptsize\intl{A}}. \intl{\mathtt{ev}_{A,B}}\ (\mathtt{P}_{A,B}\pair{f,x})) = f : \intl{B^A} \\
+g : \intl{A} \to \intl{B}    &\mid \lambda x^{\scriptsize\intl{A}}.\intl{\mathtt{ev_{A,B}}} (\mathtt{P}_{A,B}\pair{\mathtt{E}_{A,B}g,x}) = g : \intl{A} \to \intl{B} \\
+\end{aligned}\]
 #+END_definition
 
-**** TODO Category of CCCs and category of lambdaTheories
+These axioms ensure the isomorphism between the terminal, product and
+exponential types of the category and the language; that is,
+
+ * $\intl{1} \cong 1$,
+ * $\intl{A \times B} \cong \intl{A} \times \intl{B}$,
+ * $\intl{B^A} \cong \intl{A} \to \intl{B}$.
+
 **** TODO Equivalence of CC categories
 *** TODO Bicartesian closed categories
-** TODO First-order logic
 ** TODO Models of \lambda-calculus
 # Parece que esta sección es innecesaria después de todo lo
 # anterior.
@@ -5700,6 +5970,7 @@ Satisfying
 # From Selinger
 *** TODO Continuous partial orderings
 # From Selinger
+** TODO First-order logic
 ** Topoi
 *** Subobject classifier
 #+attr_latex: :options [Subobject classifier]
