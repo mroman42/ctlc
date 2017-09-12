@@ -4617,6 +4617,8 @@ A *colimit* of a functor from a given /index category/ $F \colon J \to {\cal C}$
 $r \in {\cal C}$ such that there exists a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
 It is usually written as $r = \varinjlim F$.
 #+end_definition
+**** TODO Coproducts as universal arrows
+**** TODO Pushouts
 
 ** Adjoints
 *** Adjunctions
@@ -4704,12 +4706,12 @@ GFGFGF\rar{GFG\varepsilon F} \dar[swap]{G\varepsilon FGF} & GFGF \dar{G\varepsil
 GFGF\rar{G\varepsilon F} & GF &,
 \end{tikzcd}\]
 
-where the first is commutative by the [[*Interchange law][interchange law]] and the second
+where the first is commutative by Proposition [[prop-interchangelaw]] and the second
 is obtained by applying functors $G$ and $F$. Unit laws follow from
 the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
 
-*** Comonads
+**** Comonads                                                     :ignore:
 #+attr_latex: :options [Comonad]
 #+begin_definition
 A *comonad* is a functor $L\colon X \to X$ with natural transformations
@@ -4739,7 +4741,7 @@ For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon
 /structure map/ making these diagrams commute
 \[\begin{tikzcd}
 T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
-Tx\rar{h} & x &.
+Tx\rar{h} & x
 \end{tikzcd}
 \]
 #+end_definition
@@ -4750,7 +4752,7 @@ A *morphism of T-algebras* is an arrow $f\colon x \to x'$ making the following s
 commute
 \[\begin{tikzcd}
 Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
-Tx' \rar[swap]{h'} & Tx' &.
+Tx' \rar[swap]{h'} & Tx'
 \end{tikzcd}\]
 #+end_definition
 
@@ -4773,8 +4775,57 @@ x''
 
 commutes.
 #+end_proof
+
+*** Free algebras for a monad
+*** Kleisli categories
+#+ATTR_LATEX: :options [Kleisli category]
+#+BEGIN_definition
+The *Kleisli category* of a monad $T \colon {\cal X} \to {\cal X}$ is written as ${\cal X}_T$ 
+and is given by
+
+ * an object $x_T$ for every $x \in {\cal X}$; and
+
+ * an arrow $f^{\flat} \colon x_T \to y_T$ for every $f \colon x \to T y$.
+
+And the composite of two morphisms is defined as
+\[
+g^{\flat} \circ f^{\flat} = (\mu \circ Tg \circ f)^{\flat}.
+\]
+#+END_definition
+
+#+ATTR_LATEX: :options [Adjunction on a Kleisli category]
+#+BEGIN_theorem
+The functors $F_T \colon {\cal X} \to {\cal X}_T$ and $G \colon {\cal X}_T \to {\cal X}$ from and
+to the Kleisli category which are defined on objects as $F_T(x) = x_T$ and
+$G_T(x_T) = Tx$, and defined on morphisms as
+
+\[\begin{aligned}
+F_T \colon& (k \colon x \to y)             &\mapsto&\ (\eta_y \circ k)^{\flat} \colon x_T \to y_T \\
+G_T \colon& (f^{\flat} \colon x_T \to y_T) &\mapsto&\ (\eta_y \circ Tf) \colon Tx \to Ty \\
+\end{aligned}\]
+
+form an adjunction $\flat \colon \hom(x,Ty) \to \hom(x_T,y_T)$ whose monad
+is precisaly $T$.
+#+END_theorem
+#+BEGIN_proof
+# TODO
+# Theorem 1 pag 147 MacLane
+#+END_proof
+
+*** TODO Beck's theorem
+#+ATTR_LATEX: :options [Beck's theorem]
+#+BEGIN_theorem
+
+#+END_theorem
 ** Kan extensions
+*** TODO Profunctors
+# Where could I write the definition of profunctors?
+# Maybe as part of an example.
 *** Dinatural transformations
+# Extension of the concept of naturality to a special type of
+# bifunctors.
+# Natural diagonal between functors.
+
 #+ATTR_LATEX: :options [Dinatural transformation]
 #+BEGIN_definition
 A *dinatural transformation* between functors $F,G \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$
