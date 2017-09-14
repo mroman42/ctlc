@@ -4196,6 +4196,7 @@ functors, to emphasize the difference.
 
 # TODO: Hom functors as an example of covariant and contravariant functors
 *** Product categories
+**** Product category                                             :ignore:
 #+attr_latex: :options [Product category]
 #+begin_definition
 The *product category* of two categories ${\cal C}$ and ${\cal D}$, denoted by ${\cal C} \times {\cal D}$ is a
@@ -4208,7 +4209,7 @@ category having
 The identity morphism of any object $\pair{c,d}$ is $\pair{\id_c, \id_d}$, and composition is
 defined componentwise as
 \[
-(f',g') \circ (f,g) = (f' \circ f,g' \circ g).
+\pair{f',g'} \circ \pair{f,g} = \pair{f' \circ f,g' \circ g}.
 \]
 #+end_definition
 
@@ -4243,11 +4244,12 @@ and morphisms of the $\mathtt{Cat}$ category of all categories.
 
 **** Bifunctors                                                   :ignore:
 # Definition of Bifunctors
-# Bifunctors are defined by its two parts, obtained by fixing an element
-# Proposition 1 on page 37 Maclane
-A *bifunctor* is a functor from a product category.
+A *bifunctor* is a functor from a product category; and it also can be
+seen as a functor on two variables. As we will show in the following
+proposition, it is completely determined by the two families of functors
+that we obtain when we fix any of the elements.
 
-#+ATTR_LATEX: :options [Conditions of existence bifunctors]
+#+ATTR_LATEX: :options [Conditions for the existence of bifunctors]
 #+BEGIN_proposition
 Let ${\cal B}, {\cal C}, {\cal D}$ categories with two families of functors
 \[
@@ -4256,7 +4258,6 @@ Let ${\cal B}, {\cal C}, {\cal D}$ categories with two families of functors
 \{M_b \colon {\cal C} \to {\cal D}\}_{b \in {\cal B}},
 \]
 such that $M_b(c) = L_c(b)$ for all $b,c$.
-
 A bifunctor $S \colon {\cal B} \times {\cal C} \to {\cal D}$ such that $S(-,c) = L_c$ and $S(b,-) = M_b$ 
 for all $b,c$ exists if and only if for every $f \colon b \to b'$ and $g \colon c \to c'$,
 \[
@@ -4264,7 +4265,28 @@ M_{b'}g \circ L_cf = L_{c'}f \circ M_bg.
 \]
 #+END_proposition
 #+BEGIN_proof
-# TODO
+If the equality holds, the bifunctor can be defined as $S(b,c) = M_b(c) = L_c(b)$
+in objects and as $S(f,g) = M_{b'}g \circ L_cf = L_{c'}f \circ M_bg$ on morphisms. This
+bifunctor preserves identities, as 
+\[
+S(\id_b,\id_c) = M_b(\id_c) \circ L_c(\id_b) = \id_{M_b(c)} \circ \id_{L_c(b)} = \id,
+\]
+and it preserves composition, as
+\[
+S(f',g') \circ S(f,g) =
+Mg' \circ Lf' \circ Mg \circ Lf =
+Mg' \circ Mg \circ Lf' \circ Lf =
+S(f'\circ f, g' \circ g)
+\]
+for any composable morphisms $f,f',g,g'$. On the other hand, if a bifunctor exists,
+\[\begin{aligned}
+M_{b'}(g) \circ L_c(f) 
+&= S(\id_{b'}, g) \circ S(f, \id_c)
+= S(\id_{b'} \circ f, g \circ \id_c) \\
+&= S(f \circ \id_b, \id_{c'} \circ g)
+= S(f,\id_{c'}) \circ S(\id_b,g) \\
+&= L_{c'}(f) \circ M_b(f).
+\end{aligned}\]
 #+END_proof
 
 #+ATTR_LATEX: :options [Naturality for bifunctors]
@@ -4273,9 +4295,32 @@ Given $S,S'$ bifunctors, $\alpha_{b,c} \colon S(b,c) \to S'(b,c)$ is a natural t
 if and only if $\alpha(b,c)$ is natural in $b$ for each $c$ and natural in $c$ for each $b$.
 #+END_proposition
 #+BEGIN_proof
-# TODO
+If $\alpha$ is natural, in particular, we can use the identities to prove that
+it must be natural in its two components
+\[\begin{tikzcd}
+S(b,c) \rar{\alpha_{b,c}}\dar[swap]{S\pair{f,\id_c}} & 
+S'(b,c) \dar{S'\pair{f,\id_c}} &&
+S(b,c) \rar{\alpha_{b,c}} \dar[swap]{S\pair{\id_b,g}} &
+S'(b,c) \dar{S'\pair{\id_b,g}} \\
+S(b',c) \rar{\alpha_{b',c}} &
+S'(b',c) &&
+S(b,c') \rar{\alpha_{b,c'}} &
+S'(b,c') \\
+\end{tikzcd}\]
+If both components of $\alpha$ are natural, the naturality of the natural
+transformation follows from the composition of these two squares
+\[\begin{tikzcd}
+S(b,c)   \rar{\alpha_{b,c}} \dar[swap]{S\pair{f,\id_{c}}} &
+S'(b,c)  \dar{S'\pair{f,\id_c}} \\
+S(b',c)  \rar{\alpha_{b',c}} \dar[swap]{S\pair{\id_{b'},g}} &
+S'(b',c) \dar{S'\pair{\id_{b'},g}} \\
+S(b',c') \rar{\alpha_{b',c'}}  &
+S'(b',c') \\
+\end{tikzcd}\]
+where each square is commutative by the naturality of each component
+of $\alpha$.
 #+END_proof
-
+**** TODO [#C] Examples of product categories
 *** Functor categories
 #+ATTR_LATEX: :options [Functor category]
 #+BEGIN_definition
@@ -4288,6 +4333,7 @@ a functor $-^{-} \colon \mathtt{Cat}^{op} \times \mathtt{Cat} \to \mathtt{Cat}$ 
 to their functor category.
 
 **** TODO Examples
+***** Category of graphs
 **** TODO The category of all categories
 **** TODO Sheaves!
 *** Comma categories
@@ -4935,7 +4981,6 @@ $F\colon X \to A$, $G\colon A \to X$ with a natural bijection
 \[
 \varphi \colon \hom(Fx,a) \cong \hom(x,Ga),
 \]
-
 natural in both $x\in X$ and $a \in A$. We write it as $F \dashv G$.
 #+end_definition
 
