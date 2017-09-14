@@ -3753,7 +3753,12 @@ particular,
 are all isomorphisms.
 #+end_proposition
 #+BEGIN_proof
-# TODO
+We can check that those are in fact inverses. From their existance
+follows
+
+ * reflexivity, $A \cong A$;
+ * symmetry, $A \cong B$ implies $B \cong A$;
+ * transitivity, $A \cong B$ and $B \cong C$ imply $A \cong C$.
 #+END_proof
 
 **** Monomorphisms and epimorphisms                               :ignore:
@@ -3772,9 +3777,9 @@ called a *bimorphism*.
 #+end_definition
 
 #+begin_remark
-A morphism can be a bimorphism without being an isomorphism.
+A morphism can be a bimorphism without being an isomorphism. We will
+cover [[*Examples of categories][examples]] of this fact later.
 #+end_remark
-# TODO: Example
 
 **** Retractions and sections                                     :ignore:
 #+attr_latex: :options [Retractions and sections]
@@ -3852,6 +3857,7 @@ object.
 
 #+attr_latex: :options [Product object]
 #+begin_definition
+<<def-product>>
 An object $C$ is the *product* of two objects $A,B$ on a category if there
 are two morphisms
 \[\begin{tikzcd}
@@ -3912,7 +3918,7 @@ are classes or sets, without any additional categorical structure.
 #+begin_exampleth
 A single-object category is a *monoid*. [fn:monoid] A monoid in which
 every morphism is an isomorphism is a *group*. A *groupoid* is a
-category (of any number of objects) where all the morphisms are
+category (of any number of objects) where all morphisms are
 isomorphisms.
 #+end_exampleth
 
