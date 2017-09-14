@@ -4538,30 +4538,52 @@ hom_{D}(a,b) \arrow[rrrr, "\tau_{b}", swap] & & & & Tb\\
 \end{tikzcd}\]
 *** Limits
 **** Motivation: products                                         :ignore:
-**** Limits                                                       :ignore:
-#+ATTR_LATEX: :options [Diagonal functor]
+In the definition of product, we chose two objects of the category, we
+considered all possible */\red{cones}/* over two objects and we picked the
+universal one. Diagramtically,
+\[\begin{tikzcd}[column sep=tiny]
+&&& && d \dar[dashed]{\exists!} \ar[bend left,color=myred]{ddr}\ar[bend right,swap,color=myred]{ddl} & \\
+& c \drar[color=myred]\dlar[color=myred] & &&& a \times b \drar[color=myred]\dlar[color=myred] & \\
+a && b &\phantom{gap}& a && b
+\end{tikzcd}\]
+$c$ is a cone and $a \times b$ is the universal one: every cone factorizes through
+it. In this particular case, the base of each cone is given by two objects;
+or, in other words, by the image of a functor from the discrete category with
+only two objects, called the /index category/.
+
+We will be able to create new constructions on categories by formalizing
+the notion of cone and generalizing to arbitrary bases, given as functors
+from arbitrariliy complex index categories.
+Constant functors are the first step into formalizing the notion of
+/cone/.
+
+**** Constant functors                                            :ignore:
+#+ATTR_LATEX: :options [Constant functor]
 #+BEGIN_definition
-The *diagonal functor* $\Delta \colon {\cal C} \to {\cal C}^{{\cal J}}$ sends each object $c \in {\cal C}$ to a
+The *constant functor* $\Delta \colon {\cal C} \to {\cal C}^{{\cal J}}$ sends each object $c \in {\cal C}$ to a
 constant functor $\Delta c \colon {\cal J} \to {\cal C}$ defined as
 
  * the constantly-$c$ function for objects, $\Delta(j) = c$;
  * and the constantly-$\id_c$ function for morphisms, $\Delta(f) = \id_{c}$.
 
-The diagonal functor sends a morphism $g \colon c \to c'$ to a natural
+The constant functor sends a morphism $g \colon c \to c'$ to a natural
 transformation $\Delta g \colon \Delta c \to \Delta c'$ whose components are all $g$.
 #+END_definition
 
 We could say that $\Delta c$ squeezes the whole category ${\cal J}$ into $c$. A
 natural transformation from this functor to some other $F \colon {\cal J} \to {\cal C}$
 should be regarded as a */\red{cone}/* from the object $c$ to a copy
-of ${\cal J}$ inside the category ${\cal C}$; as the following diagram exemplifies.
-# TODO: Cone diagram
+of ${\cal J}$ inside the category ${\cal C}$; as the following diagram exemplifies
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &&& &&& & c \ar[color=myred]{dd}\ar[bend left, color=myred]{ddr}\ar[bend right, color=myred]{dddl}\ar[bend left, color=myred]{dddrr} &&\\
 &\phantom{gap}&& &&& & \phantom{gap} &&\\
-  & \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr}  & \ar[Rightarrow, shorten <= 3mm, shorten >= 14mm]{uurrrr}[xshift=-3mm]{\Delta}  &&&   & \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr} & \\
-\cdot \ar{rrr} &&& \cdot \ar[Rightarrow, yshift=3mm,swap, shorten <= 2mm, shorten >= 2mm]{rrr}{F}           &\phantom{gap}&& \cdot \ar{rrr} &   &   & \cdot \\
-&{\cal J}&& &&& &F{\cal J}&&
+& \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr}  & \ar[Rightarrow, shorten <= 3mm, shorten >= 14mm]{uurrrr}[xshift=-3mm]{\Delta}  &&&
+& \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr} & \\
+\cdot \arrow{rrr}[description, yshift=-5mm]{\big{\cal J}} &&& 
+\cdot \ar[Rightarrow, yshift=3mm,swap, shorten <= 2mm, shorten >= 2mm]{rrr}{F}
+&\phantom{gap}&&
+\cdot \arrow{rrr}[description, yshift=-5mm]{\big{F \cal J}}  &   &   & \cdot \\
+%&{\cal J}&& &&& &F{\cal J}&&
 \end{tikzcd}\]
 The components of the natural transformation appear highlighted in
 the diagram. The naturality of the transformation implies that each
@@ -4575,11 +4597,11 @@ triangle
 \cdot
 \end{tikzcd}\]
 on that cone must be commutative. Thus, natural transformations are
-a way to recover all the information that was encoded in $c$ by the
-diagonal functor. As we did with products, we want to find the cone
-that best encodes that information; a universal cone, such that every
-other cone factorizes through it. Diagramatically, an $r$ such that,
-for each $d$,
+a way to recover all the information of an arbitrary /*index category*/ ${\cal J}$ that
+was encoded in $c$ by the constant functor. As we did with products,
+we want to find the cone that best encodes that information; a universal
+cone, such that every other cone factorizes through it. Diagramatically
+an $r$ such that, for each $d$,
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &d 
 \ar[color=myred,bend right]{dddd}
