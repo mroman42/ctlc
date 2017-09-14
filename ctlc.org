@@ -4616,10 +4616,10 @@ an $r$ such that, for each $d$,
 \cdot \ar{rrr} &   &   & \cdot \\
 \end{tikzcd}\]
 That factorization will be represented in the formal definition of
-limit by a universal natural transformation between the two diagonal
+limit by a universal natural transformation between the two constant
 functors.
 
-
+**** Definition of limit                                          :ignore:
 #+ATTR_LATEX: :options [Limit]
 #+BEGIN_definition
 The *limit* of a functor $F \colon {\cal J} \to {\cal C}$ is an object $r \in {\cal C}$ such that
@@ -4630,24 +4630,302 @@ usually written as $r = \Limit F$.
 That is, for every natural transformation $w \colon \Delta d \todot F$, there is a unique
 morphism $f \colon d \to r$ such that
 \[\begin{tikzcd}
-d\dar[dashed,swap]{\exists! f} & \Delta d \dar[swap,dashed]{Sf}\drar{g} & \\
-r & \Delta r \rar[swap]{v} & c
+d\dar[dashed,swap]{\exists! f} & \Delta d \dar[swap,dashed]{\Delta f}\drar{w} & \\
+r & \Delta r \rar[swap]{v} & F
+\end{tikzcd}\]
+commutes. This reflects directly on the universality of the cone we described
+earlier and proves that limits are unique up to isomorphism.
+
+By choosing different index categories, we will be able to define multiple
+different constructions on categories as limits.
+
+*** Examples of limits
+**** Equalizers                                                   :ignore:
+For our first example, we will take the following category,
+called $\downarrow\downarrow$ as index category,
+\[\begin{tikzcd}
+\cdot
+\rar[bend left]
+\rar[bend right] & 
+\cdot
+\end{tikzcd}\]
+A functor $F \colon \downarrow\downarrow \to {\cal C}$ is a pair of parallel arrows in ${\cal C}$.
+Limits of functors from this category are called *equalizers*.
+With this definition, the *equalizer* of two parallel arrows
+$f,g \colon a \to b$ is an object $\mathrm{eq}(f,g)$ with a morphism
+$e \colon \mathrm{eq}(f,g) \to a$ such that $f \circ e = g \circ e$; and such that
+any other object with a similar morphism factorizes uniquely
+through it
+\[\begin{tikzcd}[column sep=tiny]
+&
+d
+\dar[dashed]{\exists!}
+\arrow[bend right, swap, color=myred]{ddl}{e'}
+\arrow[bend left, color=myred]{ddr}  &\\& 
+\operatorname{eq}(f,g)
+\drar[color=myred]
+\dlar[swap, color=myred]{e} &\\
+a 
+\arrow[bend left=15]{rr}{f}
+\arrow[bend right=15, swap]{rr}{g} &&
+b
+\end{tikzcd}\]
+note how the right part of the cone is completely determined
+as $f \circ e$. Because of this, equalizers can be written without
+specifying it, and the diagram can be simplified to
+\[\begin{tikzcd}
+\mathrm{eq}(f,g) 
+\rar{e} & 
+a 
+\arrow[bend left=15]{r}{f}
+\arrow[bend right=15, swap]{r}{g} &
+b \\
+d 
+\ar[swap]{ur}{e'} 
+\ar[dashed]{u}{\exists!} &&&
+\end{tikzcd}\]
+.
+
+#+ATTR_LATEX: :options [Equalizers in Sets]
+#+BEGIN_exampleth
+The equalizer of two parallel functions $f,g \colon A \to B$ in $\Sets$ 
+is $\left\{ x \in A \mid f(a) = g(a) \right\}$
+with the inclusion morphism. Given any other function $h \colon D \to A$
+such that $f \circ h = g \circ h$, we know that $f(h(d)) = g(h(d))$ for
+any $d \in D$. Thus, $h$ can be factorized through the equalizer.
+\[\begin{tikzcd}
+\left\{ x \in A \mid f(a) = g(a) \right\}
+\rar[hook]{i} & 
+A 
+\arrow[bend left=15]{r}{f}
+\arrow[bend right=15, swap]{r}{g} &
+B \\
+D 
+\ar[swap]{ur}{h} 
+\ar[dashed]{u}{\exists!} &&&
+\end{tikzcd}\]
+#+END_exampleth
+
+#+ATTR_LATEX: :options [Kernels]
+#+BEGIN_exampleth
+In the category of abelian groups, the kernel of a function $f$,
+$\mathrm{ker}(f)$, is the equalizer of $f \colon G \to H$ and a function sending
+each element to the zero element of $H$. The same notion of kernel
+can be defined in the category of $R\mhyphen\text{Modules}$, for any ring $R$.
+#+END_exampleth
+
+**** Pullbacks                                                    :ignore:
+*Pullbacks* are defined as limits whose index category is $\cdot \to \cdot \gets \cdot$.
+Any functor from that category is a pair of arrows with a common
+codomain; and the pullback is the universal cone over them.
+\[\begin{tikzcd}
+& d
+\arrow[bend right,swap,color=myred]{ddl}{p'}
+\arrow[bend left,color=myred]{ddr}{q'}
+\arrow[bend right,color=myred]{dd}
+\arrow[dashed]{d}{\exists!} &\\
+& a
+\drar[bend left,swap,color=myred]{q}
+\dlar[bend right,color=myred]{p}
+\arrow[color=myred]{d} & \\
+x\rar[swap]{f} & z & y\lar{g} \\
+\end{tikzcd}\]
+Again, the central arrow of the diagram is determined as
+$f \circ q = g \circ p$; so it can be ommited in the diagram. The usual
+definition of a pullback for two morphisms $f \colon x \to z$ and
+$g \colon y \to z$ is pair of morphisms $p \colon a \to x$ and $q \colon a \to y$
+such that $f \circ q = g \circ p$ which are also universal, that is,
+given any pair of morphisms $p' \colon d \to x$ and $q' \colon d \to y$,
+there exists a unique $u \colon d \to a$ making the diagram commute.
+Usually we write the pullback object as $x \times_z y$ and we write
+this property diagramatically as
+\[\begin{tikzcd}
+d
+\ar[dashed]{dr}{\exists! u} 
+\ar[bend left]{drr}{p'} 
+\ar[swap,bend right]{ddr}{q'} &&\\
+& x \times_z y
+\dar[swap]{q}
+\rar{p} &
+x
+\dar{f} \\
+& y
+\rar[swap]{g} &
+z
+\end{tikzcd}\]
+The square in this diagram is usually called a 
+/pullback square/, and the pullback object is usually called a
+/fibered product/.
+
+# TODO: Example of pullback
+# TODO: Equalizers are a particular example of pullbacks
+
+**** TODO Arbitrary products                                      :ignore:
+**** TODO Powers                                                  :ignore:
+**** TODO Posets
+*** Colimits
+A colimit is the dual notion of a limit. We could consider 
+cocones to be the dual of cones and pick the universal one.
+Once an index category ${\cal J}$ and a base category ${\cal C}$ are fixed,
+a */\blue{cocone}/* is a natural transformation from a functor on the
+base category to a constant functor. Diagramatically,
+\[\begin{tikzcd}[column sep=tiny, row sep=tiny]
+&&& &&& & c &&\\
+&\phantom{gap}&& &&& & \phantom{gap} &&\\
+& \cdot \ar{ld}\ar{r}\ar{drr} & \cdot \ar{dr}  & \ar[Rightarrow, shorten <= 3mm, shorten >= 14mm]{uurrrr}[xshift=-3mm]{\Delta}  &&&
+& \cdot \ar{ld}\ar{r}\ar{drr}\ar[color=myblue]{uu} & \cdot \ar{dr} \ar[color=myblue,bend right]{uul} & \\
+\cdot \arrow{rrr}[description, yshift=-5mm]{\big{\cal J}} &&& 
+\cdot \ar[Rightarrow, yshift=3mm,swap, shorten <= 2mm, shorten >= 2mm]{rrr}{F}
+&\phantom{gap}&&
+\cdot \arrow[color=myblue, bend left]{uuur} \arrow{rrr}[description, yshift=-5mm]{\big{F \cal J}} &&&
+\cdot \arrow[color=myblue, bend right]{uuull}\\
+\end{tikzcd}\]
+is an example of a cocone, and the universal one would be the
+$r$, such that, for each cone $d$,
+\[\begin{tikzcd}[column sep=tiny, row sep=tiny]
+&d  &&\\
+&&\phantom{d}&\\
+& r \ar[dashed,swap]{uu}{\exists!}
+&&\\
+& \phantom{gap} &&\\
+& \cdot 
+\ar{ld}\ar{r}\ar{drr} 
+\ar[color=myblue,bend left]{uuuu}
+\ar[color=myblue]{uu}&
+\cdot \ar{dr} 
+\ar[bend right, color=myblue]{uuuul} \ar[color=myblue,bend right]{uul}& \\
+\cdot \ar{rrr} 
+\ar[bend left, color=myblue]{uuuuur}
+\ar[bend left, color=myblue]{uuur} &&& 
+\cdot
+\ar[bend right, color=myblue]{uuull}
+\ar[bend right, color=myblue]{uuuuull} \\
+\end{tikzcd}\]
+and naturality implies that each triangle
+\[\begin{tikzcd}[column sep=tiny,row sep=small]
+&\cdot &\\
+\cdot
+\ar[color=myblue, shorten >= -1.5mm, shorten <= -2mm]{ur}
+\ar[shorten >= -1mm, shorten <= -1mm]{rr} &&
+\cdot
+\ar[color=myblue, shorten >= -1.5mm, shorten <= -2mm]{ul}
 \end{tikzcd}\]
 commutes.
 
-**** TODO Pullbacks
-**** TODO Example: p-adic numbers
-*** TODO Coproducts and colimits
-**** Colimits
 #+attr_latex: :options [Colimits]
 #+begin_definition
-A *colimit* of a functor from a given /index category/ $F \colon J \to {\cal C}$ is an object
-$r \in {\cal C}$ such that there exists a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$.
-It is usually written as $r = \varinjlim F$.
+The *colimit* of a functor $F \colon J \to {\cal C}$ is an object $r \in {\cal C}$ such that there exists
+a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$. It is usually written as $r = \Colimit F$.
 #+end_definition
-**** TODO Coproducts as universal arrows
-**** TODO Pushouts
 
+That is, for every natural transformation $w \colon F \todot \Delta d$, there is a unique
+morphism $f \colon r \to d$ such that
+\[\begin{tikzcd}
+d & \Delta d  & \\
+r\uar[dashed]{\exists! f} &
+\Delta r \uar[dashed]{\Delta f} &
+F \lar{v}\ular[swap]{w}
+\end{tikzcd}\]
+commutes. This reflects directly on the universality of the cocone we described
+earlier and proves that colimits are unique up to isomorphism.
+
+*** Examples of colimits
+**** Coequalizers                                                 :ignore:
+*Coequalizers* are the dual of /equalizers/; colimits of functors
+from $\downarrow\downarrow$. The coequalizer of two parallel arrows is an object
+$\mathrm{coeq}(f,g)$ with a morphism $e \colon b \to \mathrm{coeq}(f,g)$ such that $e \circ f = e \circ g$;
+and such that any other object with a similar morphism factorizes uniquely
+through it
+\[\begin{tikzcd}[column sep=tiny]
+&
+d &\\& 
+\operatorname{coeq}(f,g)
+\uar[dashed]{\exists!} &\\
+a
+\ar[bend left, color=myblue, swap]{uur}
+\ar[color=myblue]{ur}
+\arrow[bend left=15]{rr}{f}
+\arrow[bend right=15, swap]{rr}{g} &&
+b
+\ar[color=myblue, swap]{ul}{e}
+\ar[color=myblue, bend right, swap]{uul}{e'}
+\end{tikzcd}\]
+as the right part of the cocone is completely determined by
+the left one, the diagram can be written as
+\[\begin{tikzcd}
+a 
+\ar[bend left=15]{r}{f}
+\ar[bend right=15, swap]{r}{g} &
+b
+\ar{r}{e}
+\ar[swap]{dr}{e'}&
+\mathrm{coeq}(f,g) \ar[dashed]{d}{\exists!} \\
+&&
+d 
+\end{tikzcd}\]
+
+#+ATTR_LATEX: :options [Coequalizers in Sets]
+#+BEGIN_exampleth
+The coequalizer of two parallel functions $f,g \colon A \to B$ in
+$\Sets$ is $B /(\sim_{f=g})$, where $\sim_{f = g}$ is the minimal equivalence
+relation in which we have $f(a) \sim g(a)$ for each $a \in A$.
+Given any other function $h \colon B \to D$ such that $h(f(a)) = h(g(a))$,
+it can be factorized in a unique way by $h' \colon B/\sim_{f=g} \to D$.
+\[\begin{tikzcd}
+A
+\ar[bend left=15]{r}{f}
+\ar[bend right=15, swap]{r}{g} &
+B
+\ar{r}{e}
+\ar[swap]{dr}{e'}&
+B/(\sim_{f=g}) \ar[dashed]{d}{\exists!} \\
+&&
+D 
+\end{tikzcd}\]
+#+END_exampleth
+**** Pushouts                                                     :ignore:
+*Pushouts* are the dual of pullbacks; colimits whose index category
+is $\cdot \gets \cdot \to \cdot$, that is, the dual of the index category for pullbacks.
+Diagramatically,
+\[\begin{tikzcd}
+& d
+&\\
+& a
+\arrow[dashed,swap]{u}{\exists!} & \\
+x 
+\urar[bend left,color=myblue]{p}
+\arrow[bend left,color=myblue]{uur}{p'} & 
+z 
+\lar{f}
+\rar[swap]{g}
+\arrow[color=myblue]{u}
+\arrow[bend left,color=myblue]{uu} &
+y
+\ular[bend right,swap,color=myblue]{q}
+\arrow[bend right,swap,color=myblue]{uul}{q'} \\
+\end{tikzcd}\]
+and we can define the pushout of two morphisms $f \colon z \to x$ and
+$g \colon z \to y$ as a pair of morphisms $p \colon x \to a$ and $q \colon y \to a$ such
+that $p \circ f = q \circ g$ which are also universal, that is, given any
+pair of morphisms $p' \colon x \to d$ and $q' \colon y \to d$, there exists a unique
+$u \colon a \to d$ making the diagram commute.
+\[\begin{tikzcd}
+z
+\rar{g}
+\dar[swap]{f} & 
+y \dar{q}\ar[bend left]{rdd}{q'} & \\
+x \rar{p}\ar[bend right,swap]{drr}{p'} &
+x \amalg_z y \ar[dashed,swap]{dr}{\exists! u} & \\
+& & d
+\end{tikzcd}\]
+The square in this diagram is usually called a 
+/pushout square/, and the pullback object is usually called a
+/fibered coproduct/.
+
+# TODO Seifert Van-Kampen
+**** TODO Arbitrary coproducts                                    :ignore:
+**** TODO Copowers                                                :ignore:
+**** TODO Posets                                                  :ignore:
 ** Adjoints
 *** Adjunctions
 #+attr_latex: :options [Adjunction]
@@ -5988,17 +6266,8 @@ exponential types of the category and the language; that is,
 
 **** TODO Equivalence of CC categories
 *** TODO Bicartesian closed categories
-** TODO Models of \lambda-calculus
-# Parece que esta sección es innecesaria después de todo lo
-# anterior.
-
-*** TODO Types and sets
-# From the Hott book
-*** TODO Models
-# From Selinger
-*** TODO Continuous partial orderings
-# From Selinger
-** TODO First-order logic
+** TODO First-order logic (?)
+** TODO Locally closed cartesian categories
 ** Topoi
 *** Subobject classifier
 #+attr_latex: :options [Subobject classifier]
@@ -6018,13 +6287,8 @@ forms a pullback square.
 An *elementary topos* (plural /topoi/) is a cartesian closed category
 with all finite limits and a subobject classifier.
 #+end_definition
-* Type theory
-# to conduct my thoughts in an orderly fashion, by commencing with those
-# objects that are simplest and easiest to know, in order to ascend
-# little by little, as by degrees, to the knowledge of the most
-# composite things, and by supposing an order even among those things
-# that do not naturally precede one another.
 
+* Type theory
 ** Intuitionistic logic
 *** Constructive mathematics
 *** Agda example
