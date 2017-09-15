@@ -3614,7 +3614,6 @@ can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 #+name: mikrogentzen
 [[./images/mikrogentzen2.png]]
 
-# TODO: Show the proof with Gentzen deduction trees!
 * Category theory (abstract)                                         :ignore:
 * Category theory
 ** Categories
@@ -4036,6 +4035,9 @@ $f_1 = f_2$.
 
 It is easy to notice that the composition of faithful (respectively,
 full) functors is again a faithful functor (respectively, full).
+# TODO:
+# Note that a faithful functor has not to be injective on morphisms
+# or objects.
 
 **** Isomorphisms of categories                                   :ignore:
 #+attr_latex: :options [Isomorphism of categories]
@@ -4159,7 +4161,7 @@ T'Tb
 defined respectively by the naturality of $S'\tau$ and $\tau'$.
 #+end_proof
 
-**** Interchange law                                              :ignore:
+**** TODO Interchange law                                         :ignore:
 #+ATTR_LATEX: :options [Interchange law]
 #+BEGIN_proposition
 <<prop-interchangelaw>>
@@ -4167,34 +4169,6 @@ defined respectively by the naturality of $S'\tau$ and $\tau'$.
 #+END_proposition
 
 ** Constructions on categories
-*** Opposite categories and contravariant functors
-#+attr_latex: :options [Opposite category]
-#+begin_definition
-The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
-same objects as ${\cal C}$ but with all its arrows reversed. That is, for each
-morphism $f : A \to B$, there exists a morphism $f^{op} : B \to A$ in ${\cal C}^{op}$.
-Composition is defined as
-\[
-f^{op} \circ g^{op} = (g\circ f)^{op},
-\]
-exactly when the composite $g \circ f$ is defined in ${\cal C}$.
-#+end_definition
-
-Reversing all the arrows is a process that directly translates every
-property of the category into a /dual/ property. A morphism $f$ is a
-monomorphism if and only if $f^{op}$ is an epimorphism; a terminal object
-in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse becomes a left
-inverse on the opposite category. This process is also an /involution/,
-where $(f^{op})^{op}$ can be seen as $f$ and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
-
-#+attr_latex: :options [Contravariant functor]
-#+begin_definition
-A *contravariant* functor from ${\cal C}$ to ${\cal D}$ is a functor from the opposite category,
-that is, $F \colon {\cal C}^{op}\to {\cal D}$. Non-contravariant functors are often called *covariant*
-functors, to emphasize the difference.
-#+end_definition
-
-# TODO: Hom functors as an example of covariant and contravariant functors
 *** Product categories
 **** Product category                                             :ignore:
 #+attr_latex: :options [Product category]
@@ -4321,6 +4295,63 @@ where each square is commutative by the naturality of each component
 of $\alpha$.
 #+END_proof
 **** TODO [#C] Examples of product categories
+*** Opposite categories and contravariant functors
+#+attr_latex: :options [Opposite category]
+#+begin_definition
+The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
+same objects as ${\cal C}$ but with all its arrows reversed. That is, for each
+morphism $f : A \to B$, there exists a morphism $f^{op} : B \to A$ in ${\cal C}^{op}$.
+Composition is defined as
+\[
+f^{op} \circ g^{op} = (g\circ f)^{op},
+\]
+exactly when the composite $g \circ f$ is defined in ${\cal C}$.
+#+end_definition
+
+Reversing all the arrows is a process that directly translates every
+property of the category into its */dual/* property. A morphism $f$ is a
+monomorphism if and only if $f^{op}$ is an epimorphism; a terminal object
+in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse becomes a left
+inverse on the opposite category. This process is also an /involution/,
+where $(f^{op})^{op}$ can be seen as $f$ and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
+
+#+attr_latex: :options [Contravariant functor]
+#+begin_definition
+A *contravariant* functor from ${\cal C}$ to ${\cal D}$ is a functor from the opposite category,
+that is, $F \colon {\cal C}^{op}\to {\cal D}$. Non-contravariant functors are often called *covariant*
+functors, to emphasize the difference.
+#+end_definition
+
+#+ATTR_LATEX: :options [Hom functors]
+#+BEGIN_exampleth
+In a locally small category ${\cal C}$, the *Hom-functor* is the bifunctor
+\[
+\hom \colon {\cal C}^{op} \times {\cal C} \to \Sets,
+\]
+defined as $\hom(a,b)$ for any two objects $a,b \in {\cal C}$. Given $f \colon a \to a'$
+and $g \colon b \to b'$, this functor is defined on any $p \in \hom(a,b)$ as
+\[
+\hom(f,g)(p) = f \circ p \circ g \in \hom(a',b').
+\]
+
+Partial applications of the functors give rise to
+
+ * $\hom(a,-)$, a covariant functor for any fixed $a \in {\cal C}$. Given $g \colon b \to b'$,
+   \[
+   \hom(a,f) \colon \hom(a,b) \to \hom(a,b')
+   \]
+   is defined as the postcomposition with $g$, that we write as $- \circ g$.
+
+ * $\hom(-,b)$, a contravariant functor for any fixed $b \in {\cal C}$. Given $f \colon a \to a'$,
+   \[
+   \hom(f,b) \colon \hom(a',b) \to \hom(a,b)
+   \]
+   is defined as the precomposition with $f$, that we write as $f \circ -$.
+
+This kind of functor, contravariant on the first variable and covariant on
+the second is usually called a *profunctor*.
+#+END_exampleth
+
 *** Functor categories
 #+ATTR_LATEX: :options [Functor category]
 #+BEGIN_definition
