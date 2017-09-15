@@ -5693,10 +5693,19 @@ the equation is the same on that context, $I(\Gamma \mid u) = I(\Gamma \mid v)$.
 We usually would like to find interpretations where all the axioms of the
 theory were satisfied. These are called *models of the algebraic theory*.
 
+***** TODO [#C] Example, groups                                  :ignore:
+# Maybe this example could be written once we have developed
+# the categorical definition.
+
+# For instance, the term $(x \cdot y) \cdot z$ in our previously discussed theory of
+# groups would be intepreted in a category with finite products and
+# a terminal object $1$ as the morphism
+# \[\begin{tikzcd}
+# A \cong A \times 1 \rar{\pair{\id,!}} & A \times A \rar & A
+# \end{tikzcd}\]
+# and the axiom $(x \cdot y) \cdot z = x \cdot (y \cdot z)$ would be represented by the following commutative
+# square:
 **** Notion of representation-free theories                       :ignore:
-# This notion is not representation free
-# Example
-# Category of an algebraic theory
 The problem with this notion of algebraic theory is that it is not
 representation-free; it is not independent of the choice of constants,
 operations or axioms. There may be multiple formulations of the same
@@ -5786,9 +5795,10 @@ An *algebraic category* is category equivalent to a category of the form $\matht
 where $\mathbb{A}$ is an algebraic theory.
 #+END_definition
 
-**** Examples                                                     :ignore:
+**** Example: fields                                              :ignore:
 #+ATTR_LATEX: :options [Fields have no algebraic theory]
 #+BEGIN_exampleth
+<<example-fieldsarenotalgebraic>>
 The category $\mathtt{Fields}$ is not an algebraic category.
 Any algebraic category $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$ has a terminal object given by the
 constant functor $\Delta_1 : \mathbb{A} \to {\cal C}$ to $1$, the terminal object of ${\cal C}$. Note that
@@ -5799,8 +5809,22 @@ category of functors ${\cal C}^{\mathbb{A}}$.
 However, $\mathtt{Fields}$ has no terminal object.
 #+END_exampleth
 
+**** TODO Example: groups                                         :ignore:
+#+ATTR_LATEX: :options [Theory of groups]
+#+BEGIN_exampleth
+# Groups as algebraic theory
+# Category of groups as category of models in Set
+# Abelian groups as models in the category Grp
+#+END_exampleth
+
+**** TODO More examples
 *** Completeness for algebraic theories
-# TODO: What completeness is
+When defining interpretation of algebraic theories as categories we
+should ensure the property of */semantic completeness/*. We already
+know that, if an equation can be proved from the axioms, it will be
+valid in all models; but we will also like to prove that, if every
+model of the theory satisfies a particular equation, it can actually
+be proved from the axioms of the theory.
 
 #+ATTR_LATEX: :options [Completeness for algebraic theories]
 #+BEGIN_theorem
