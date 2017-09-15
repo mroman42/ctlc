@@ -5843,9 +5843,9 @@ Simply taking $\mathbb{A}$ with the identity functor, we have an universal
 model for $\mathbb{A}$.
 #+END_proof
 
-The universal model needs not to be set-theoretic, but we can
-always find a universal model in a presheaf category via the
-Yoneda embedding.
+Note that this universal model needs not to be set-theoretic; but,
+even in this situation, we can always find a universal model in a
+presheaf category via the Yoneda embedding.
 
 #+ATTR_LATEX: :options [Yoneda embedding as a universal model]
 #+BEGIN_proposition
@@ -6457,6 +6457,9 @@ exponential types of the category and the language; that is,
 *** TODO Bicartesian closed categories
 ** TODO First-order logic (?)
 ** TODO Locally closed cartesian categories
+# Clive Newstead - Locally closed cartesian categories and ML-type theory.
+# Contar ML aquí y luego contarlo solo desde Agda
+*** TODO Martin-Löf type theory
 ** Topoi
 *** Subobject classifier
 #+attr_latex: :options [Subobject classifier]
@@ -6478,9 +6481,13 @@ with all finite limits and a subobject classifier.
 #+end_definition
 
 * Type theory
-** Intuitionistic logic
-*** Constructive mathematics
-*** Agda example
+** TODO Martin-Löf Type Theory
+# Locally cartesian closed categories
+# http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
+# The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
+# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.646.9598&rep=rep1&type=pdf 
+
+*** Review of proof assistants
 In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
 
@@ -6488,32 +6495,32 @@ proposition, that is,
 \forall A\colon \neg \neg (A \lor \neg A)
 \]
 
-**** Machine proof
+**** Machine proof                                                :ignore:
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
 
-** TODO Martin-Löf Type Theory, dependent types
-# Locally cartesian closed categories
-# http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
-# The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
-# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.646.9598&rep=rep1&type=pdf 
-
+*** Martin-Löf theory in Agda
+*** Higher inductive types
 *** Type in type
 # Russell's paradox code
 # Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
 # Hurkens' paradox: https://github.com/agda/agda/blob/master/test/Succeed/Hurkens.agda
 # Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
 # Burali-Forti paradox
-
-** TODO Type theory as a foundation of mathematics
-** TODO Constructive mathematics
-*** TODO Axiom of choice implies excluded middle
-# In Agda or Coq!?
-** TODO Homotopy Type Theory
+** TODO Homotopy Type Theory I: Univalence
+*** Univalence axiom
+** TODO Homotopy Type Theory II: Mathematics
+*** TODO Categories
 \begin{tikzcd}[column sep=large]
   \tikz\draw[{[-]},yshift=0.5ex] (0,0)node[below]{$0$} -- (2,0)node[below]{$1$};
   \arrow[r, "\textrm{gluing}"]
 & \tikz\draw (0,0) circle (1cm)  (0.8,0) -- (1.2,0) node[right]{$\mathbb Z$};
 \end{tikzcd}
+*** TODO Homotopy theory
+** TODO Constructive mathematics
+*** TODO Axiom of choice implies excluded middle
+# In Agda or Coq!?
+
+*** TODO Type theory as a foundation of mathematics
 * Conclusions
 * Appendices
 bibliographystyle:alpha
