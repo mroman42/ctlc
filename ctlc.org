@@ -5282,10 +5282,11 @@ is precisaly $T$.
 #+BEGIN_theorem
 
 #+END_theorem
+** TODO Spans
+# This implies that the category of spans of finite sets is equivalent
+# to the Lawvere theory of commutative monoids, that is, to the category
+# of finitely generated free commutative monoids.
 ** Kan extensions
-*** TODO Profunctors
-# Where could I write the definition of profunctors?
-# Maybe as part of an example.
 *** Dinatural transformations
 # Extension of the concept of naturality to a special type of
 # bifunctors.
@@ -5489,8 +5490,12 @@ transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
 #+END_exampleth
 
 *** Coends
+*** TODO Profunctors, distributors
+# https://ncatlab.org/nlab/show/profunctor
+**** Composition
+**** Heteromorphisms
+**** https://ncatlab.org/nlab/show/anafunctor
 *** Kan extensions
-
 ** n-categories
 *** 2-categories
 # The category of two categories
@@ -5607,12 +5612,9 @@ forcing techniques with allowed to construct new models of ZFC.
 ** Lawvere theories
 # FROM: Introduction to categorical logic, Awodey & Bauer
 
-# I should join the two first sections and exaplain the first definition
-# only as an introduction.
-
 *** Motivation for algebraic theories
 We will develop an unified approach to the study of algebraic
-structures based on constants, operatio4ns and equations; such as
+structures based on constants, operations and equations; such as
 groups, modules or rings.
 
 **** First definition of algebraic theory                         :ignore:
@@ -5625,13 +5627,13 @@ Our *algebraic theories* are usually given by
   * and a set of /axioms/, which are equations between terms.
 
 **** Examples: theory of groups, theory of fields                 :ignore:
-For example, the theory of groups is given by 
+For example, the theory of groups is given by a signature conaining
 
  * a /binary operation/ called $\cdot$,
  * a /unary operation/ written as $^{-1}$, and
  * a /nullary operation/ or a /constant/ called $e$.
 
-Satisfiying the following equations
+Satisfiying the following axioms
 
  * $(x \cdot y) \cdot z = x \cdot (y \cdot z)$,
 
