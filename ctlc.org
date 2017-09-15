@@ -5645,15 +5645,18 @@ Satisfiying the following axioms
 
  * $x^{-1} \cdot x = e$.
 
-Quantifiers are not needed here, as we are interpreting
-each $x,y,z$ as free variables.
-
+Note how quantifiers are not needed here, as we are interpreting
+each $x,y,z$ as free variables and the universal quantification is
+therefore implicit.
 Theories in which the operations are not defined for every possible
 term, cannot be expressed in this way. Fields, in which the inverse of
-$0$ is not defined, are not expressable in this form.
+$0$ is not defined, are not expressable in this form; this fact will
+be proved formally in Example [[example-fieldsarenotalgebraic]].
+
+\\
 
 **** Interpretations of algebraic theories                        :ignore:
-A theory can be *interpreted* on a category ${\cal C}$ as
+A theory can be *interpreted* on a suitable category ${\cal C}$ as
 
   * an object of the category, $A \in {\cal C}$;
   * with morphisms $If \colon A^k \to A$ for every k-ary operation $f$.
@@ -5680,6 +5683,7 @@ $I(x_1,\dots,x_n \mid t) \colon A^n \to A}$ defined inductively knowing that
     If \circ \pair{It_1,\dots,It_k}
     \colon A^n \to A.
     \]
+    where we implicitely assume the context to be $x_1,\dots,x_n$.
 
 The interpretation of a particular variable depends therefore on the
 context. We say that an interpretation *satisfies* an equation $\Gamma \mid u=v$
