@@ -4360,11 +4360,46 @@ ${\cal C} \to {\cal B}$ as objects and natural transformations between them as m
 #+END_definition
 
 If we consider the category of small categories $\mathtt{Cat}$, there is
-a functor $-^{-} \colon \mathtt{Cat}^{op} \times \mathtt{Cat} \to \mathtt{Cat}$ sending any two categories
+a profunctor $-^{-} \colon \mathtt{Cat}^{op} \times \mathtt{Cat} \to \mathtt{Cat}$ sending any two categories
 to their functor category.
 
+In cite:lawvere09, multiple examples of usual mathematical
+constructions in terms of functor categories can be found.
+
+**** Category of graphs                                           :ignore:
+Graphs, for instance, can be seen as functors; and graphs
+homomorphisms as the natural transformations between them.
+
+#+ATTR_LATEX: :options [Graphs as functors]
+#+BEGIN_exampleth
+We consider the category given by two objects and two non-identity
+morphisms,
+\[\begin{tikzcd}
+\cdot
+\rar[bend left]
+\rar[bend right,swap] & 
+\cdot
+\end{tikzcd}\]
+usually called $\downarrow\downarrow$. To define a functor from this category to $\Sets$
+amounts to choose two sets $E,V$ (not necessarily different) called
+the set of /edges/ and the set of /vertices/; and two functions $s,t \colon E \to V$,
+called /source/ and /target/. That is, our usual definition of directed
+multigraph,
+\[\begin{tikzcd}
+E
+\rar[bend left]{s}
+\rar[bend right,swap]{t} & 
+V
+\end{tikzcd}\]
+can be seen as an object in the category $\Sets^{\downarrow\downarrow}$. Note how a natural transformation
+between two graphs $(E,V)$ and $(E',V')$ is a pair of morphisms $\alpha_E \colon E \to E'$
+and $\alpha_V \colon V \to V'$ such that $s \circ \alpha_E = \alpha_V \circ s$ and $t \circ \alpha_E = \alpha_V \circ t$.
+This provides a convenient notion of graph homomorphism: a pair of morphisms
+preserving the incidence of edges. We can call $\mathtt{Graph}$ to this functor category.
+#+END_exampleth
+
 **** TODO Examples
-***** Category of graphs
+**** TODO Pointed Sets (?)
 **** TODO The category of all categories
 **** TODO Sheaves!
 *** Comma categories
@@ -4550,69 +4585,117 @@ isomorphism of this kind is a [[*Universal arrows as natural bijections][univers
 *** Yoneda Lemma
 #+attr_latex: :options [Yoneda Lemma]
 #+begin_lemma
+<<lemma-yoneda>>
 For any $K\colon D \to \Sets$ and $r \in D$, there is a bijection
 \[
 y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
 \]
-
 sending the natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
-to the image of the identity, $\alpha_r1_r$.
+to the image of the identity, $\alpha_r(\id_r)$.
 #+end_lemma
 #+begin_proof
-
+The complete natural transformation $\alpha$ is determined by $\alpha_r(\id_r)$.
+By naturality, given any $f \colon r \to s$,
+\[\begin{tikzcd}[row sep={8mm,between origins},column sep={12mm,between origins}]
+\hom(r,r) \arrow{rrrr}{\alpha_r} \arrow[swap]{ddd}{f \circ -}
+    & & & & Kr \arrow{ddd}{Kf} \\  
+    & \id_r \arrow[rr, |->] \arrow[d, |->] & & \alpha_r(\id_r) \arrow[d, |->] & \\[1cm]
+    & f \arrow[rr, |->] & & \alpha_s(f) \\
+\hom(r,s) \arrow[swap]{rrrr}{\alpha_s} & & & & Ks\\  
+\end{tikzcd}\]
+it must be the case that $\alpha_s(f) = Kf(\alpha_r(\id_r))$.
 #+end_proof
 
 #+attr_latex: :options [Characterization of natural transformations between representable functors]
 #+begin_corollary
-Given $r,s \in D$, any natural transformation $\hom(r,-) \xrightarrow{.} \hom(s,-)$ has
-the form $h_{\ast}$ for a unique $h\colon s \to r$.
+Given $r,s \in D$, any natural transformation $\hom(r,-) \xrightarrow{.} \hom(s,-)$ is
+of the form $- \circ h$ for a unique morphism $h\colon s \to r$.
 #+end_corollary
 #+begin_proof
-Using Yoneda Lemma, we know that
+Using Yoneda Lemma (Lemma [[lemma-yoneda]]), we know that
 \[
 \mathrm{Nat}(\hom_D(r,-), \hom_D(s,-)) \cong \hom_D(s,r),
 \]
-
 sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to r$. The
-rest of the natural transformation is determined as $h_{\ast}$ by naturality.
+rest of the natural transformation is determined as $- \circ h$ by naturality.
 #+end_proof
 
-#+attr_latex: :options [Addendum to the Yoneda Lemma]
+#+attr_latex: :options [Naturality of the Yoneda Lemma]
 #+begin_proposition
-The bijection on the [[*Yoneda Lemma][Yoneda Lemma]] is a natural isomorphism between
-two $\Sets^D \times D \to \Sets$ functors.
+The bijection on the [[lemma-yoneda][Yoneda Lemma]] (Lemma [[lemma-yoneda]]),
+\[
+y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr,
+\]
+is a natural isomorphism between two functors from $\Sets^D \times D$
+to $\Sets$.
 #+end_proposition
 #+begin_proof
-# TODO
+We define $N \colon \Sets^D \times D \to \Sets$ on objects as
+$N\pair{r,K} = \Nat(\hom(r,-),K)$.
+Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on 
+morphisms as
+\[
+N\pair{f,F}(\alpha) =
+F \circ \alpha \circ (- \circ f) \in
+\Nat(\hom(r',-),K),
+\]
+where $\alpha \in \Nat(\hom(r,-),K)$.
+We define $E \colon \Sets^D \times D \to \Sets$  on objects as
+$E\pair{r,K} = Kr$.
+Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on morphisms as
+\[
+E\pair{f,F}(a) =
+F(Kf(a)) = K'f(Fa) \in
+K'r',
+\]
+where $a \in Kr$, and the equality holds because of the naturality
+of $F$.
+
+The naturality of $y$ is equivalent to the commutativity of the
+following diagram
+\[\begin{tikzcd}[column sep=huge]
+\Nat(\hom(r,-),K) \rar{y}\dar[swap]{N\pair{f,F}}&
+Kr \dar{E\pair{f,F}} \\
+\Nat(\hom(r',-),K') \rar{y} &
+K'r'
+\end{tikzcd}\]
+where, given any $\alpha \in \Nat(\hom(r,-),K)$, it follows from naturality
+of $\alpha$ that
+\[\begin{aligned}
+y\big(N\pair{f,F}(\alpha)\big)
+&= y\big (F \circ \alpha \circ (- \circ f) \big)
+= F \circ \alpha \circ (- \circ f) (\id_{r'})
+= F(\alpha(f)) \\
+&= F(\alpha(\id_{r'} \circ f))
+= F(Kf(\alpha_r(\id_r)))
+= E\pair{f,F}\alpha_r(\id_{r}) \\
+&= E\pair{f,F}\big(y (\alpha)\big).
+\end{aligned}\]
 #+end_proof
 
 #+begin_definition
-In the conditions of [[*Yoneda Lemma][Yoneda Lemma]], the *Yoneda functor*,
+In the conditions of the [[lemma-yoneda][Yoneda Lemma]] the *Yoneda functor*,
 $Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
-
 \[
 \left(f \colon s \to r\right) \mapsto 
-\Big(D(f,-) \colon D(r,-) \to D(s,-)\Big).
+\Big(\hom_D(f,-) \colon \hom_D(r,-) \to \hom_D(s,-)\Big).
 \]
+It can be also written as $Y' \colon D \to \Sets^{D^{op}}$.
 #+end_definition
 
 #+begin_proposition
 The Yoneda functor is full and faithful.
 #+end_proposition
 #+begin_proof
-# TODO
+By [[lemma-yoneda][Yoneda Lemma]], we know that
+\[
+y \colon \Nat(\hom(r,-), \hom(s,-)) \cong \hom(s,r)
+\]
+is a bijection, where $y(\hom(f,-)) = f$.
 #+end_proof
 
-# The Yoneda functor is a currying of the hom functor.
+# TODO: The Yoneda functor is a currying of the hom functor.
 
-**** TODO Tikzcd diagram                                        :noexport:
-\[\begin{tikzcd}[row sep={6mm,between origins},column sep={1cm,between origins}]
-hom_{D}(a,a) \arrow[rrrr, "\tau_{a}"] \arrow[ddd, "{hom_{D}(a,f)}", swap] 
-    & & & & Ta \arrow[ddd, "Tf"] \\  
-    & 1_{a} \arrow[rr, |->] \arrow[d, |->] & & x \arrow[d, |->] & \\[1cm]
-    & f \arrow[rr, |->] & & Tf(x) \\
-hom_{D}(a,b) \arrow[rrrr, "\tau_{b}", swap] & & & & Tb\\  
-\end{tikzcd}\]
 *** Limits
 **** Motivation: products                                         :ignore:
 In the definition of product, we chose two objects of the category, we
