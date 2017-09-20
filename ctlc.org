@@ -2,7 +2,7 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: %\input{titlepage}
+#+LATEX_HEADER_EXTRA: \input{titlepage}
 
 ** Abstract
 :PROPERTIES:
@@ -26,24 +26,24 @@ for commutative diagrams.
 #+LATEX: \ctparttext{\color{black}\begin{center}
 The \lambda-calculus is a collection of systems formalizing the notion
 of computation. They can be seen as programming languages and formal
-logics at the same time. We discuss the properties of the untyped
+logics at the same time. We focus on the properties of the untyped
 \lambda-calculus and simply typed \lambda-calculus and its relation to
 logic.
 #+LATEX: \end{center}}
 
 * Lambda calculus
 ** Untyped \lambda-calculus
-How should we define functions? Classically in mathematics, /functions are graphs/.
+When are two functions equal? Classically in mathematics, /functions are graphs/.
 A function from a
 domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
 space: $f \subset X \times Y$.
-Any two functions are equal if they map equal inputs to equal outputs;
+Any two functions are identical if they map equal inputs to equal outputs;
 and a function its completely determined by what its outputs are.
 This vision is called */extensional/*.
 
-From a computational point of view, this perspective could be incomplete
-in some cases. Computationally, we usually care not only about the result but, crucially,
-about /how/ can it be computed. 
+From a computational point of view, this perspective could seem incomplete
+in some cases. Computationally, we usually care not only about the result but,
+crucially, about /how/ it can be computed. 
 Classically in computer science, /functions are formulae/; and two functions 
 mapping equal inputs to equal outputs need not to be equal. E.g., two sorting algorithms
 can have a different efficiency or different memory requisites, even if 
@@ -91,7 +91,7 @@ admitting a more compact notation. For example, the polynomial function
 $p(x) = x^2 + x$
 would be written in \lambda-calculus as
 $\lambda x.\ x^2 + x$; and $p(2)$ would be written as $(\lambda x.\ x^2+x)(2)$. In general,
-$\lambda x.M$ would be a function taking $x$ as an argument and returning $M$,
+$\lambda x.M$ is a function taking $x$ as an argument and returning $M$,
 which would be a term where $x$ could appear in.
 
 \lambda-notation also eases the writing of *higher-order functions*, functions whose arguments or
@@ -121,7 +121,7 @@ The *\lambda-terms* are defined inductively knowing that
   * given a \lambda-term $M$ and a variable $x$, its */abstraction/*, $\lambda x.M$,
     is a \lambda-term.
 
-Equivalently, they can be also defined by the following Backus-Naur form,
+Equivalently, they can also be defined by the following Backus-Naur form,
 \[
 \mathtt{Term} ::= x \mid (\mathtt{Term}\ \mathtt{Term}) \mid (\lambda x.\mathtt{Term})\quad,
 \]
@@ -143,7 +143,7 @@ instead of $(\lambda x.M) N$.
 In \lambda-calculus, the scope of a variable restricts to the \lambda-abstraction
 where it appeared, if any. Thus, the same variable can be used multiple
 times on the same term independently. For example, in 
-$(\lambda x.x)(\lambda x.x)$, which evaluates to $(\lambda x.x)$, $x$ appears two times
+$(\lambda x.x)(\lambda x.x)$, which evaluates to $(\lambda x.x)$, $x$ appears twice
 as a variable with two different meanings.
 
 Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said
@@ -165,15 +165,14 @@ The *set of free variables* of a term $M$ is defined inductively as
 Evaluation in \lambda-calculus relies in the notion of */substitution/*.
 Any free ocurrence of a variable can be substituted by a term, as we do
 when we are evaluating terms. For instance, in the previous example, we
-evaluated $(\lambda x.\ x^2+x)(2)$ by substituting $2$ in $x^{2} + x$ in the place of $x$;
+evaluated $(\lambda x.\ x^2+x)(2)$ by substituting $2$ in the place of $x$ inside $x^{2} + x$;
 as in
 \[\begin{tikzcd}
 (\lambda x.\ x^2+x)(2) \rar{x \mapsto 2}
 &
 2^{2} + 2.
 \end{tikzcd}\]
-This, however, should
-be done avoiding the unintended binding which happens
+This, however, should be done avoiding the unintended binding which happens
 when a variable is substituted inside the scope of a binder with the
 same name, as in the following example: if we were to evaluate the expression
 $(\lambda x.\ y x)(\lambda z.\ xz)$,
@@ -183,8 +182,8 @@ on $(\lambda x.yx)$ and $x$ (the free variable) would get tied to $x$ (the bound
 (\lambda x.yx)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} && (\lambda x.(\lambda z.xz)x).
 \end{tikzcd}\]
 
-To avoid this, the bounded $x$ should be given a new name before the
-substitution, which should be carried as
+To avoid this, the bounded $x$ must be given a new name before the
+substitution, which must be carried as
 \[\begin{tikzcd}
 (\lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u),
 \end{tikzcd}\]
@@ -534,11 +533,12 @@ cannot be applied to it or any of its subformulas. We define *\eta-normal forms*
 and *\beta\eta-normal forms* analogously.
 #+end_definition
 
-Fully evaluating \lambda-terms usually means to apply reductions to them until
-a normal form is reached. We know, by virtue of Theorem [[theorem-churchrosser]], 
-that, if a normal form exists, it is unique; but we do not know whether a
-normal form actually exists. We say that a term *has* a normal form
-when it can be reduced to a normal form.
+Fully evaluating \lambda-terms usually means to apply reductions to
+them until a normal form is reached. We know, by virtue of Theorem
+[[theorem-churchrosser]], that, if a normal form for a particular term
+exists, it is unique; but we do not know whether a normal form
+actually exists. We say that a term *has* a normal form when it can be
+reduced to a normal form.
 
 #+begin_definition
 A term is *weakly normalizing* if there exists a sequence of reductions
@@ -555,7 +555,7 @@ example, the term
 \]
 is neither weakly nor strongly normalizing; and the term
 \[
-(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x)
+(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x)
 \]
 is weakly normalizing but not strongly normalizing. Its normal form
 is
@@ -870,7 +870,7 @@ of many modern type systems for programming languages.
 The *simply typed \lambda-calculus* (STLC) is a refinment of the untyped
 \lambda-calculus. In it, each term has a type, which limits how it can be
 combined with other terms. Only a set of basic types and function
-types between any to types are considered in this system. If functions
+types between any to types are considered in this system. Whereas functions
 in untyped \lambda-calculus could be applied over any term, now a function
 of type $A \to B$ can only be applied over a term of type $A$, to produce
 a new term of type $B$, where $A$ and $B$ could be, themselves, function types.
@@ -882,7 +882,8 @@ based on cite:Hindley08. Our presentation will rely only on the
 pairs or union types, as it is done in cite:selinger13,
 it seems clearer to present a first minimal version of the
 \lambda-calculus. Such extensions will be explained later, and its exposition
-will profit from the logical interpretation of propositions as types.
+will profit from the logical interpretation that we will detail in
+"[[*Propositions as types][propositions as types]]".
 
 *** Simple types
 We start assuming a set of *basic types*. Those basic types would
@@ -930,8 +931,8 @@ of these raw lambda terms will be typeable, and we will choose to work
 only with that subset. When a particular term $M$ has type $A$, we write
 this relation as $M : A$, where the $:$ symbol should be read as ''is of type''.
 
-[fn:meaninglesstype]: In particular, we can not apply a term of type $A \to B$ to
-a term of type $A \to B$; a term of type $A$ was expected.
+[fn:meaninglesstype]: In particular, we can not apply a function of type $A \to B$ to
+a term of type $A \to B$; it is expecting a term of type $A$.
 
 **** Typing rules                                                 :ignore:
 #+attr_latex: :options [Typing context]
@@ -949,7 +950,7 @@ Typing rules are written as rules of inference; the premises are
 listed above and the conclusion is written below the line.
 
  1) The $(var)$ rule simply makes explicit the type of a variable from
-    the context. That is, a context that assumes $x : A$ can
+    the context. That is, a context that assumes that $x : A$ can
     be written as $\Gamma,x:A$; and we can trivially deduce from it that $x:A$.
 
     \begin{prooftree}
@@ -1047,7 +1048,7 @@ Two different approaches to typing in \lambda-calculus are commonly used.
  * *Church-style* typing, also known as /explicit typing/, originated from
    the work of Alonzo Church in cite:church40, where he described a STLC
    with two basic types. The term's type is defined as an intrinsic property
-   of the term; and the same term has to always be interpreted with the same
+   of the term; and the same term has to be always interpreted with the same
    type.
 
  * *Curry-style* typing, also known as /implicit typing/; which
@@ -5088,49 +5089,180 @@ The square in this diagram is usually called a
 **** TODO Posets                                                  :ignore:
 ** Adjoints
 *** Adjunctions
+**** Definition of adjunction                                     :ignore:
 #+attr_latex: :options [Adjunction]
 #+begin_definition
-An *adjunction* from categories $X$ to $A$ is a pair of functors
-$F\colon X \to A$, $G\colon A \to X$ with a natural bijection
+An *adjunction* from categories ${\cal X}$ to ${\cal Y}$ is a pair of functors
+$F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a natural bijection
 \[
-\varphi \colon \hom(Fx,a) \cong \hom(x,Ga),
+\varphi \colon \hom(Fx,y) \cong \hom(x,Gy),
 \]
-natural in both $x\in X$ and $a \in A$. We write it as $F \dashv G$.
+natural in both $x\in {\cal X}$ and $y \in {\cal Y}$. We write it as $F \dashv G$.
 #+end_definition
 
+Naturality of $\varphi$ means that both
+\[\begin{tikzcd}
+\hom(Fx,y)
+\rar{\varphi_{x,y}}
+\dar[swap]{- \circ Fh} & 
+\hom(x,Gy)
+\dar{- \circ h} & 
+\hom(Fx,y)
+\rar{\varphi_{x,y}}
+\dar[swap]{k \circ -} &
+\hom(x,Gy)
+\dar{Gk \circ -} \\
+\hom(Fx',y) 
+\rar[swap]{\varphi_{x,y}} &
+\hom(x',Gy) &
+\hom(Fx,y')
+\rar[swap]{\varphi_{x,y}} &
+\hom(x,Gy')
+\end{tikzcd}\]
+commute for every $h \colon x \to x'$ and $k \colon y \to y'$. That is, for every $f \colon Fx \to y$,
+$\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k \circ f)$. Equivalently, $\varphi^{-1}$ is natural
+and that means that, for every $g \colon x \to Gy$, $k \circ \varphi^{-1}(g) = \varphi^{-1}(Gk \circ g)$ and
+$\varphi^{-1}(g) \circ Fh = \varphi^{-1}(g \circ h)$.
+
+In the following two propositions, we will characterize all this
+information in terms of natural transformations made up of universal
+arrows.
+
+**** Unit and counit of an adjunction                             :ignore:
 #+attr_latex: :options [Unit and counit of an adjunction]
-#+begin_definition
+#+begin_proposition
 An adjunction determines a *unit* and a *counit*;
 
- 1) the *unit* is natural transformation made with universal arrows $\eta\colon I \todot GF$, where
-    the right adjoint of each $f \colon Fx \to a$ is
+ 1) the *unit* is natural transformation made with universal arrows $\eta\colon \Id \todot GF$, where
+    the right adjunct of each $f \colon Fx \to y$ is
     \[
-    \varphi f = Gf \circ \eta_x \colon x \to Ga.
+    \varphi f = Gf \circ \eta_x \colon x \to Gy;
     \]
- 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot I$, where
-    the left adjoint of each $g \colon x \to Ga$ is
+ 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot \Id$, where
+    the left adjunct of each $g \colon x \to Gy$ is
     \[
-    \varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to a.
+    \varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to y;
     \]
 
-that follow the /triangle identities/ $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
-#+end_definition
+that follow the *triangle identities* $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
+#+end_proposition
+#+BEGIN_proof
+We define $\eta_x = \varphi(\id_{Fx})$ and $\varepsilon_x = \varphi^{-1}(\id_{Gx})$. The right and left adjunct formulas
+and the naturality of $\eta$ and $\varepsilon$ can be deduced from the naturality of $\varphi$,
+\[\begin{aligned}
+GFh \circ \eta_x &=
+GFh \circ \varphi(\id_{Fx}) =
+\varphi(Fh) =
+\varphi(\id_{Fx}) \circ h =
+\eta_x \circ h;\\
+\varepsilon_x \circ FGk &=
+\varphi^{-1}(\id_{Fx}) \circ FGk =
+\varphi^{-1}(Gk) =
+k \circ \varphi^{-1}(\id_{Gx}) =
+k \circ \varepsilon_{x}.
+\end{aligned}\]
+Finally, the triangle identities also follow from naturality of $\varphi$,
+\[\begin{aligned}
+\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta; \\
+\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta.
+\end{aligned}\]
+#+END_proof
 
+**** Characterization of adjunctions                              :ignore:
 #+attr_latex: :options [Characterization of adjunctions]
 #+begin_proposition
-Each adjunction is completely determined by any of
+Each adjunction is completely determined by any of the following data,
 
  1) functors $F,G$ and $\eta\colon 1 \todot GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
- 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, creating a functor $F$.
+ 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, where $F_0x \in {\cal Y}$.
  3) functors $F,G$ and $\varepsilon\colon FG \todot 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
  4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$, creating a functor $G$.
- 5) functors $F,G$, with units and counits satisfiying the triangle
-    identities $\eta G \circ G \varepsilon = \id$ and $F\eta \circ \varepsilon F = \id$.
+ 5) functors $F,G$, with natural transformations satisfiying the triangle
+    identities $G\varepsilon \circ \eta G = \id$ and $\varepsilon F \circ F\eta = \id$.
 #+end_proposition
 #+begin_proof
-# TODO
+ 1) Universality of $\eta_x$ gives a isomorphism $\varphi \colon \hom(Fx,y) \cong \hom(x,Gy)$ between 
+    the arrows in the following diagram
+    \[\begin{tikzcd}
+    & Gy & y \\
+    x \rar[swap]{\eta_x}\urar{f} & GFx \uar[swap,dashed]{Gg} & Fx \uar[dashed,swap]{\exists! g}
+    \end{tikzcd}\]
+    defined as $\varphi(g) = Gg \circ \eta_x$. This isomorphism is natural in $x$; for every
+    $h \colon x' \to x$ we know by naturality of $\eta$ that $Gg \circ \eta \circ h = G(g \circ Fh) \circ \eta$.
+    The isomorphism is also natural in $y$; for every $k \colon y \to y'$ we know by
+    functoriality of $G$ that $Gh\circ Gg \circ \eta = G(h \circ g) \circ \eta$.
+
+ 2) We can define a functor $F$ on objects as $Fx = F_0x$. Given any
+    $h \colon x \to x'$, we can use the naturality of $\eta$ to define
+    $Fh$ as the unique arrow making this diagram commute
+    \[\begin{tikzcd}
+    & GFx' & Fx' \\
+    x \rar[swap]{\eta_x}\urar{\eta_{x'} \circ h} & GFx \uar[swap,dashed]{GFh} & Fx \uar[dashed,swap]{\exists! Fh}
+    \end{tikzcd}\]
+    and this choice makes $F$ a functor, as it can be checked in the
+    following diagrams using the existence and uniqueness given by
+    the universality of $\eta$ in both cases
+    \[\begin{tikzcd}
+    &     &    & x'' \rar{\eta_{x''}}  & GFx''  & Fx'' \\
+    & GFx & Fx & x'  \uar{h'} \rar{\eta_{x'}}  & GFx'  \uar[swap]{GFh'}  & Fx' \uar[dashed]{\exists! Fh'} \\
+    x \rar[swap]{\eta_x}\urar{\eta_{x}} & GFx \uar[swap,dashed]{\id} & Fx \uar[dashed,swap]{\id} & x \rar{\eta_{x}}\uar{h} & GFx \uar[swap]{GFh} & Fx \uar[dashed]{\exists! Fh'} \ar[dashed,swap,bend right]{uu}{\exists! F(h' \circ h)}
+    \end{tikzcd}\]
+
+ 3) The proof is dual to that of 1.
+
+ 4) The proof is dual to that of 2.
+
+ 5) We can define two functions $\varphi(f) = Gf \circ \eta_x$ and $\theta(g) = \varepsilon_y \circ Fg$.
+    We checked in 1 (and 3) that these functions are natural in both arguments;
+    now we will see that they are inverses of each other using naturality
+    and the triangle identities
+    \[\begin{aligned}
+    \varphi(\theta(g)) &=
+    G\varepsilon_a \circ GFg \circ \eta_x =
+    G\varepsilon_a \circ \eta_x \circ g = g; \\
+    \theta(\varphi(f)) &=
+    \varepsilon \circ FGf \circ F\eta =
+    f \circ \varepsilon \circ F\eta = f.
+    \end{aligned}\]
 #+end_proof
 
+*** Properties of adjoints
+**** Uniqueness                                                   :ignore:
+#+ATTR_LATEX: :options [Essential uniqueness of adjoints]
+#+BEGIN_proposition
+Two adjoints to the same functor $F,F' \dashv G$ are naturally isomorphic.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+**** Composition of adjoints                                      :ignore:
+# Theorem 1 pag 103
+#+ATTR_LATEX: :options [Composition of adjunctions]
+#+BEGIN_theorem
+Given two adjunctions between categories ${\cal X},{\cal Y}$ and ${\cal Y},{\cal Z}$
+respectively,
+\[
+\varphi \colon \hom(Fx,y) \cong \hom(x,Gy)
+\qquad
+\theta \colon \hom(F'y,z) \cong \hom(G'y,z)
+\]
+the composite functors yield a composite adjunction
+\[
+\theta \cdot \varphi \colon \hom(F'Fx,y) \cong \hom(x,GG'z).
+\]
+If the unit and counit of $\varphi$ are $\pair{\eta,\varepsilon}$ and the unit and counit
+of $\theta$ are $\pair{\eta',\varepsilon'}$; the unit and counit of the composite adjunction
+are $\pair{G \eta' F \circ \eta,\ \varepsilon' \circ F' \varepsilon G'}$.
+#+END_theorem
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+**** TODO Bicategory of adjoints
+*** TODO Examples of adjoints
+*** TODO Equivalence of categories
+*** TODO Adjoints for preorders (Galois connections)
 ** Monads and algebras
 *** Monads
 **** Definition of Monads                                         :ignore:
@@ -5867,7 +5999,7 @@ such that, for any $f : C \times A \to B$ exists a unique $\widetilde{f} : C \to
 the following diagram commutes
 \[\begin{tikzcd}
 B^A & B^A \times A \drar{e} & \\
-C \uar[dashed]{\widetilde f}  & C \times A \rar[swap]{f}\uar{\widetilde f \times id} & B 
+C \uar[dashed]{\exists! \widetilde f}  & C \times A \rar[swap]{f}\uar{\widetilde f \times id} & B 
 \end{tikzcd}\]
 #+END_definition
 
@@ -5876,11 +6008,13 @@ An object $A$ for which the exponentiation $-^A$ is always defined is called
 
 #+ATTR_LATEX: :options [Exponentials as adjoints]
 #+BEGIN_proposition
+<<prop-exponentialadjoints>>
 An object $A$ in a category with binary products ${\cal C}$ is exponentiable if and only if
 the functor $(- \times A) : {\cal C} \to {\cal C}$ has a right adjoint.
 #+END_proposition
 #+BEGIN_proof
 # TODO
+# Given by the counit
 #+END_proof
 
 *** Cartesian category
@@ -5908,6 +6042,8 @@ right adjoints for the following functors
 #+END_proposition
 #+BEGIN_proof
 # TODO
+We know that the product functor of an object has a right adjoint if and
+only if the object is exponentiable, as we saw in Proposition [[prop-exponentialadjoints]].
 #+END_proof
 
 #+ATTR_LATEX: :options [Category of small cartesian closed categories]
