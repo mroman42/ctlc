@@ -6596,10 +6596,92 @@ exponential types of the category and the language; that is,
 **** TODO Equivalence of CC categories
 *** TODO Bicartesian closed categories
 ** TODO First-order logic (?)
-** TODO Locally closed cartesian categories
+** Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
 # Contar ML aquí y luego contarlo solo desde Agda
-*** TODO Martin-Löf type theory
+
+In the same way that cartesian closed categories provide a
+categorical interpretation of the simply typed \lambda-calculus,
+locally closed cartesian categories will provide an interpretation
+of Martin-Löf type theories.
+
+*** Locally closed cartesian category
+**** The pullback functor                                         :ignore:
+#+ATTR_LATEX: :options [The pullback functor]
+#+BEGIN_definition
+Given a function $f \colon A \to B$ in any category ${\cal C}$ with all pullbacks, the
+*pullback functor* $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ is defined for any object $y \colon Y \to B$
+as the object $f^{\ast}y \colon (f^{\ast}Y) \to A$ such that
+\[\begin{tikzcd}
+(f^{\ast}Y) \rar{} \dar[swap]{f^{\ast}y} & Y \dar{y} \\
+A\rar{f} & B
+\end{tikzcd}\]
+is a pullback square. The functor is defined on any morphism
+$\alpha \colon y \to y'$ between two objects $y \colon Y \to B$, $y' \colon Y' \to B$ as
+the only morphism making the following diagram commute
+\[\begin{tikzcd}
+f^{\ast}Y \ar{rr}\ar[dashed]{dr}{\exists! f^{\ast}\alpha} \ar[bend right,swap]{ddr}{f^{\ast}y} &&
+Y \dar{\alpha}\ar[bend left=60]{dd}{y} \\
+& f^{\ast}Y' \dar[swap]{f^{\ast}y'} \rar & Y' \dar{y'} \\
+& A \rar[swap]{f} & B \\
+\end{tikzcd}\]
+where $x$ and $x'$ form pullback squares with $y$ and $y'$. Note that the pullback
+functor is only defined up to isomorphism in objects and well-defined on
+morphisms by virtue of the universal property of pullbacks.
+#+END_definition
+
+**** Categorical dependent sum                                    :ignore:
+#+ATTR_LATEX: :options [Left adjoint of the pullback functor]
+#+BEGIN_proposition
+Any pullback functor $f^{\ast} \colon A \to B$ has a left adjoint $\Sigma_{f}$.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+
+\[\hom(\Sigma_f x, y) \cong \hom(x, f^{\ast} y)\]
+
+\[\begin{tikzcd}
+X \ar[bend right,swap]{ddr}{x} \ar[dashed]{dr}\ar[dashed, bend left]{drr} & & \\
+& f^{\ast}Y \rar\dar{f^{\ast}y} & Y \dar{y} \\
+& A \rar & B
+\end{tikzcd}\]
+#+END_proof
+
+
+**** Categorical dependent product                                :ignore:
+#+ATTR_LATEX: :options [Right adjoint of the pullback functor]
+#+BEGIN_definition
+A category ${\cal C}$ is locally cartesian closed if and only if the pullback
+functor $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ has a right adjoint, called
+$\Pi_f \colon {\cal C}/A \to {\cal C}/B$.
+#+END_definition
+
+*** TODO Martin-Löf theories
+# http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
+# The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
+# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.646.9598&rep=rep1&type=pdf 
+
+# Extensional theory with universes
+**** Dependent sum                                                :ignore:
+Introduction rule
+
+\begin{prooftree}
+\AXC{$\Gamma \vdash a \colon A$}
+\AXC{$\Gamma \vdash b \colon B[a/x]$}
+\BIC{$\Gamma \vdash \pair{a,b} \colon \sum_{x:A} B$}
+\end{prooftree}
+
+elimination rules
+
+\begin{prooftree}
+\AXC{$\Gamma \vdash c \colon \sum_{x:A} B$}
+\UIC{$\Gamma \vdash \pi_1(c) \colon A$}
+\AXC{$\Gamma \vdash c \colon \sum_{x:A} B$}
+\UIC{$\Gamma \vdash \pi_2(c) \colon B[\pi_1(c) / x]$}
+\noLine
+\BIC{$$}
+\end{prooftree}
+
 ** Topoi
 *** Subobject classifier
 #+attr_latex: :options [Subobject classifier]
