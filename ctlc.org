@@ -6896,6 +6896,9 @@ proposition, that is,
 # Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
 # Burali-Forti paradox
 ** TODO Homotopy Type Theory I: Univalence
+Homotopy Type Theory (HoTT) adds the univalence axiom and higher
+inductive types to intensional type theory (ITT).
+
 *** Univalence axiom
 ** TODO Homotopy Type Theory II: Mathematics
 *** TODO Categories
@@ -6905,6 +6908,8 @@ proposition, that is,
 & \tikz\draw (0,0) circle (1cm)  (0.8,0) -- (1.2,0) node[right]{$\mathbb Z$};
 \end{tikzcd}
 *** TODO Homotopy theory
+** TODO Cubical type theory
+# A hands-on introduction to cubical type theory
 ** TODO Constructive mathematics
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
