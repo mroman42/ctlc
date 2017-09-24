@@ -6703,13 +6703,180 @@ with all finite limits and a subobject classifier.
 #+end_definition
 
 * Type theory
-** TODO Martin-Löf Type Theory
-# Locally cartesian closed categories
-# http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
-# The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
-# http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.646.9598&rep=rep1&type=pdf 
+** Intensional Type Theory
+*** Contexts and judgments
+As we did when we described simply typed \lambda-calculus; we will present
+a type theory using contexts, substitutions and some inference rules. We
+consider three different kinds of judgments for this formal system, namely,
 
-*** Review of proof assistants
+  * $\Gamma\ \mathtt{ctx}$, expressing that $\Gamma$ is a context;
+  * $\Gamma \vdash a : A$, expressing that, from the context $\Gamma$, it follows that $a$ is
+    of type $A$; and
+  * $\Gamma \vdash a \equiv a' : A$, expressing that, from the context $\Gamma$, it follows that
+    $a$ is /definitionally equal/ to $a'$.
+
+*Contexts*, in particular, will be given by a (possibly empty) list of type
+declarations
+\[
+x_1{:}A_1,\ x_2{:}A_2,\ \dots,\ x_n{:}A_n,
+\]
+and we will consider as valid the judgement saying that the empty context
+is a context ($\cdot\ \mathtt{ctx}$), and the judgement saying that, given a context
+$x_1{:}A_1,\ x_2{:}A_2,\ \dots,\e x_{n-1}{:}A_{n-1}$ and any type $A_n$, we can take a new
+unused variable to form a new context
+\[x_1{:}A_1,\ x_2{:}A_2,\ \dots,\e x_{n-1}{:}A_{n-1}, x_n{:}A_n\ \mathtt{ctx}.\]
+
+**** TODO Admissible rules: weakening and substitution            :ignore:
+
+*** Type universes
+If we want to blur the difference between types and terms, we will need
+type declarations for types. Types whose elements are types are called
+/*universes*/. We would like, then, to define a single universe of all
+types ${\cal U}$ containing even itself as an element, ${\cal U} : {\cal U}$; but this leads
+to paradoxes. In particular, we can encode a particular version of Russell's
+paradox.
+# In appendix ?, a mechanized proof in Agda of this fact is shown.
+
+To avoid having to deal with paradoxes, we will postulate a
+*/hierarchy of cumulative universes/*; that is, we will consider
+a list of inclusions between countably many type universes
+\[
+{\cal U}_0 : {\cal U}_1 : {\cal U}_2 : \dots
+\]
+and such that $a : {\cal U}_i$ implies $a : {\cal U}_{i+1}$. The relevant inference rules
+are
+\begin{prooftree}
+\AXC{$$}
+\UIC{$\Gamma \vdash {\cal U}_i : {\cal U}_{i+1}$}
+\AXC{$\Gamma \vdash A : {\cal U}_i$}
+\UIC{$\Gamma \vdash A : {\cal U}_{i+1}$}
+\noLine
+\BIC{$$}
+\end{prooftree}
+for each $i$ in the natural numbers.
+
+# Type universes a la Russell, they are different in other presentations of ITT
+
+Universe indices, however, are usually implicitly assumed when writing
+ITT; as we will mostly work with types from some fixed universe of the
+hierarchy ${\cal U}$ and only refer to higher universes when necessary. This
+should not lead to confusion: a derivation will be only valid if we
+can assign indices to the universes consistently, even if we do not
+explicitly write them.
+
+*** Defining types
+Types will be defined by the formation and elimination rules we can
+apply to them.  We will follow a general pattern for specifying the
+typing rules of ITT. They will be classified into
+
+  * *formation rules*, indicating how to create new types of a
+    particular kind;
+  * *introduction rules*, indicating how to create new terms of
+    a particular type;
+  * *elimination rules*, indicating how to use elements of a
+    particular type;
+  * *\beta-reductions*, indicating how elimination acts on terms;
+  * *\eta-reductions*, defining some kind uniqueness principle.
+
+Depending in how the uniqueness principle is defined, we classify types
+into negative and positive types.
+
+  * Uniqueness of *negative types* states that every element of
+    the type can be reconstructed by applying eliminators to it
+    and then applying a constructor. Products are an example of
+    negative types.
+
+  * Uniqueness of *positive types* states that every funtion from
+    the type is determined by some data. Coproducts are an example
+    of positive types.
+
+*** Dependent function types
+**** Dependent function types: introduction                       :ignore:
+*Dependent function types*, or *\Pi-types*, are the generalized version
+of the function types in STLC. The elements of $\prod_{x:A} B(x)$ are functions
+with the type $A$ as domain and a changing codomain $B(x)$, depending on
+the specific element to which the function is applied. This type is often
+written also as $\Pi(x:A), B(x)$ to resemble the universal quantifier; under
+the /propositions as types/ interpretation, it would correspond to the proof
+that a proposition $B$ holds for any $x : A$, that is, $\forall (x : A), B(x)$.
+
+**** Dependent function types: definition                         :ignore:
+#+ATTR_LATEX: :options [Dependent function type]
+#+BEGIN_definition
+The following rules apply for the dependent function type:
+
+  * its formation rule sinthetizes the fact that the codomain
+    type can depend on the argument to which the function is applied,
+    \begin{prooftree}
+    \RightLabel{$\Pi$\textsc{-form}}
+    \AXC{$\Gamma \vdash A : {\cal U}_i$}
+    \AXC{$\Gamma, x:A \vdash B : U_i$}
+    \BIC{$\Gamma \vdash \prod_{x:A}B : {\cal U}_i$}
+    \end{prooftree}
+    
+  * its introduction rule its a generalized version of \lambda-abstraction,
+\begin{prooftree}
+\RightLabel{$\Pi$\textsc{-intro}}
+\AXC{$\Gamma, x:A \vdash b:B$}
+\UIC{$\Gamma \vdash \lambda x.b : \prod_{x:A}B$}
+\end{prooftree}
+
+  * and its elimination rule generalizes function application,
+\begin{prooftree}
+\RightLabel{$\Pi$\textsc{-elim}}
+\AXC{$\Gamma \vdash f : \prod_{x:A} B$}
+\AXC{$\Gamma \vdash a : A$}
+\BIC{$\Gamma \vdash f(a) : B[a/x]$}
+\end{prooftree}
+
+  * its \beta-rule is similar to STLC's \beta-rule, with the difference that
+    it has to specify a substitution on the type of the codomain
+    \begin{prooftree}
+    \RightLabel{$\Pi$\textsc{-comp}}
+    \AXC{$\Gamma, x:A \vdash b:B$}
+    \AXC{$\Gamma \vdash a:A$}
+    \BIC{$\Gamma \vdash (\lambda x.b)\ a \equiv b[a/x] : B[a/x]$}
+    \end{prooftree}
+
+  * and its \eta-rule is also similar to STLC's one
+    \begin{prooftree}
+    \RightLabel{$\Pi$\textsc{-uniq}}
+    \AXC{$\Gamma \vdash f : \prod_{x:A} B$}
+    \UIC{$\Gamma \vdash f \equiv \lambda x. f(x) : \prod_{x:A} B$}
+    \end{prooftree}
+#+END_definition
+
+In the particular case in which $x$ does not appear in $B$ so that $B$ is constant
+and does not depend on $A$, we obtain our usual *function type*. In ITT, we
+define the function type as a particular case of the dependent function type,
+$A \to B :\equiv \prod_{x:A} B$.
+
+\\
+
+**** Polymorphism                                                 :ignore:
+*Polymorphic functions* can be defined in terms of dependent function
+types and universes. We can see a polymorphic term as a dependent function
+taking a type as its first argument. For example, the identity
+function $\mathrm{id} : \prod_{A:{\cal U}} A \to A$ can be defined as $\mathrm{id} :\equiv \lambda (A : {\cal U}). \lambda (x : A). x$.
+When applied, the type should be passed as an argument, but it is
+a common convention to omit arguments when they are obvious from the
+context and only refer to them when typechecking.
+
+*** Dependent pair types
+**** Dependent pair types: introduction                           :ignore:
+*Dependent pair types*, or *\Sigma-types*, can be seen as a
+generalized version of the product type, but they can be also
+particularized in the union type. The elements of $\sum_{x:A}B(x)$ are
+pairs where the first element is of type $A$ and the second element
+is of type $B(x)$, where $x$ is the first one; that is, the type of
+the second component depends on the first component. This type is
+often written as $\Sigma (x:A), B(x)$ and it corresponds to the
+intuitionistic existential quantifier under the /propositions as types/
+interpretation. That is, the proof of $\exists (x:A), B(x)$ must be seen as
+a pair given by an element $x$ and a proof of $B(x)$.
+
+**** Dependent pair types: definition                             :ignore:
+** TODO Proof assistants
 In intuitionistic logic, the double negation of the LEM holds for every
 proposition, that is,
 
