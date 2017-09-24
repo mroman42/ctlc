@@ -4,6 +4,8 @@
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: \input{titlepage}
 
+# Evitar notas al pie de página
+
 ** Abstract
 :PROPERTIES:
 :UNNUMBERED: t
@@ -25,7 +27,7 @@ for commutative diagrams.
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 The \lambda-calculus is a collection of systems formalizing the notion
-of computation. They can be seen as programming languages and formal
+of functions. They can be seen as programming languages and formal
 logics at the same time. We focus on the properties of the untyped
 \lambda-calculus and simply typed \lambda-calculus and its relation to
 logic.
@@ -38,64 +40,65 @@ A function from a
 domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
 space: $f \subset X \times Y$.
 Any two functions are identical if they map equal inputs to equal outputs;
-and a function its completely determined by what its outputs are.
+and a function it is completely determined by what its outputs are.
 This vision is called */extensional/*.
 
 From a computational point of view, this perspective could seem incomplete
 in some cases. Computationally, we usually care not only about the result but,
 crucially, about /how/ it can be computed. 
 Classically in computer science, /functions are formulae/; and two functions 
-mapping equal inputs to equal outputs need not to be equal. E.g., two sorting algorithms
+mapping equal inputs to equal outputs need not to be equal. For instance, two sorting algorithms
 can have a different efficiency or different memory requisites, even if 
 they output the same sorted list. This vision, where two functions are
 equal if and only if they are given by essentially the same formula is
 called */intensional/*.
 
 The *\lambda-calculus* is a collection of formal systems, all of them
-based on the lambda notation discovered by Alonzo Church in the 1930s
+based on the lambda notation introduced by Alonzo Church in the 1930s
 while trying to develop a foundational notion of functions (/as formulae/)
 on mathematics. It is a logical theory of functions, where application and
 abstraction are primitive notions; and, at the same time, it
 is also one of the simplest programming languages, in which many other
-full-fledged languages are based, as we will detail later.
+full-fledged languages are based, as we will explain in detail later.
 
 The *untyped* or *pure \lambda-calculus* is, syntactically, the
 simplest of those formal systems. In it, a function does not need a
-domain nor a codomain; every function is a formula which can be
+domain nor a codomain; every function is a formula that can be
 directly applied to any expression. It even allows functions to be
-applied to themselves, a notion which would be troublesome[fn:lambdaregularityaxiom]
-in our usual set-theoretical foundations. In exchange, it presents
-other problems such as non-terminating functions.
-
-This presentation of the untyped lambda calculus will follow
-cite:Hindley08 and cite:selinger13.
-
-[fn:lambdaregularityaxiom]: In particular, if $f$ is a member of its own
+applied to themselves, a notion that would be troublesome
+in our usual set-theoretical foundations. In particular, if $f$ is a member of its own
 domain, the infinite descending sequence
 \[
 f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 \]
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
-set theory. See, for example, cite:kunen11.
+set theory (see, for example, cite:kunen11).
+However, untyped \lambda-calculus presents some problems such as non-terminating
+functions.
+
+This presentation of the untyped lambda calculus will follow
+cite:Hindley08 and cite:selinger13.
 
 *** The untyped \lambda-calculus
-As a language, the untyped \lambda-calculus is given by a set of
-expressions, called /\lambda-terms/, and some manipulation rules.
-These terms can stand for functions or arguments indistinctly:
+As a formal language, the untyped \lambda-calculus is given by a set of
+equations between expressions called /\lambda-terms/, and equivalences
+between them can be computed using some manipulation rules.
+These \lambda-terms can stand for functions or arguments indistinctly:
 they all use the same \lambda-notation in order to define function
 abstractions and applications.
 
-*\lambda-notation* allows a function to be written and inlined as any other element
+The *\lambda-notation* allows a function to be written and inlined as any other element
 of the language, identifying it with the formula it represents and 
 admitting a more compact notation. For example, the polynomial function
 $p(x) = x^2 + x$
 would be written in \lambda-calculus as
 $\lambda x.\ x^2 + x$; and $p(2)$ would be written as $(\lambda x.\ x^2+x)(2)$. In general,
 $\lambda x.M$ is a function taking $x$ as an argument and returning $M$,
-which would be a term where $x$ could appear in.
+which is a term where $x$ may appear in.
 
-\lambda-notation also eases the writing of *higher-order functions*, functions whose arguments or
-outputs are functions themselves. For instance,
+The use of \lambda-notation also eases the writing of
+*higher-order functions*, functions whose arguments or outputs are
+functions themselves. For instance,
 \[
 \lambda f.(\ \lambda y.\ f(f(y))\ )
 \]
@@ -107,19 +110,23 @@ which is itself a function; most commonly written as $f \circ f$. In particular,
 \]
 evaluates to $6$.
 
+# Darle la vuelta a la frase
 #+attr_latex: :options [Lambda terms]
 #+begin_definition
 <<def-lambdaterms>>
-The *\lambda-terms* are defined inductively knowing that
+*\lambda-terms* are constructed inductively using the following rules
 
   * every */variable/*, taken from an infinite countable set of
     variables and usually written as lowercase single letters
-    $(x, y, z, \dots)$, is a \lambda-term.
+    $(x, y, z, \dots)$, is a \lambda-term;
 
-  * given two \lambda-terms $M,N$; its */application/*, $MN$, is a \lambda-term.
+  * given two \lambda-terms $M,N$; its */application/*, $MN$, is a \lambda-term;
 
   * given a \lambda-term $M$ and a variable $x$, its */abstraction/*, $\lambda x.M$,
-    is a \lambda-term.
+    is a \lambda-term;
+
+  * every possible \lambda-term can be constructed using these rules, no other
+    \lambda-term exists.
 
 Equivalently, they can also be defined by the following Backus-Naur form,
 \[
@@ -129,10 +136,12 @@ where $x$ can be any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
-left-associativity, i.e., $MNP$ will always mean $(MN)P$.
-We also take the \lambda-abstraction as having the lowest
-precedence, e.g., $\lambda x. M N$ should be read as $\lambda x.(MN)$
-instead of $(\lambda x.M) N$.
+left-associativity, for example, $MNP$ will always mean $(MN)P$. Note
+that the application of \lambda-terms is different from its
+composition, which is distributive and will be formally defined later. We
+consider \lambda-abstraction as having the lowest precedence. For
+example, $\lambda x. M N$ should be read as $\lambda x.(MN)$ instead
+of $(\lambda x.M) N$.
 
 # NOTE: This is not necessary.
 # Multiple \lambda-abstractions can be also contracted to a single 
@@ -143,11 +152,11 @@ instead of $(\lambda x.M) N$.
 In \lambda-calculus, the scope of a variable restricts to the \lambda-abstraction
 where it appeared, if any. Thus, the same variable can be used multiple
 times on the same term independently. For example, in 
-$(\lambda x.x)(\lambda x.x)$, which evaluates to $(\lambda x.x)$, $x$ appears twice
-as a variable with two different meanings.
+$(\lambda x.x)(\lambda x.x)$, the variable $x$ appears twice
+with two different meanings.
 
 Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said
-to be */bound/*; and any not bound variable is said to be
+to be */bound/*; and any variable without bound ocurrences is said to be
 */free/*. Formally, we can define the set of free variables on a given
 term as follows.
 
@@ -179,13 +188,13 @@ $(\lambda x.\ y x)(\lambda z.\ xz)$,
 where $x$ appears two times (once bound and once free), we should substitute $y$ by $(\lambda z.xz)$
 on $(\lambda x.yx)$ and $x$ (the free variable) would get tied to $x$ (the bounded variable)
 \[\begin{tikzcd}
-(\lambda x.yx)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} && (\lambda x.(\lambda z.xz)x).
+(\lambda y.\lambda x.yx)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} && (\lambda x.(\lambda z.xz)x).
 \end{tikzcd}\]
 
 To avoid this, the bounded $x$ must be given a new name before the
 substitution, which must be carried as
 \[\begin{tikzcd}
-(\lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u),
+(\lambda y. \lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u),
 \end{tikzcd}\]
 keeping the free character of $x$.
 
@@ -195,11 +204,11 @@ The *substitution* of a variable $x$ by a term $N$ on $M$ is
 written as $M[N/x]$ and is defined inductively as
 \[\begin{aligned}
 x[N/x] &\equiv N,\\
-y[N/x] &\equiv y,\\
+y[N/x] &\equiv y, & \text{ if } y \neq x,\\
 (MP)[N/x] &\equiv (M[N/x])(P[N/x]),\\
 (\lambda x.P)[N/x] &\equiv \lambda x.P,\\
 (\lambda y.P)[N/x] &\equiv \lambda y.P[N/x] & \text{ if } y \notin \freevars(N), \\
-(\lambda y.P)[N/x] &\equiv \lambda z.P[z/y][N/x] & \text{ if } y \in \freevars(N);
+(\lambda y.P)[N/x] &\equiv \lambda z.P[z/y][N/x] & \text{ if } y \in \freevars(N),
 \end{aligned}\]
 
 where, in the last clause, $z$ is a fresh unused variable.
@@ -223,8 +232,8 @@ the naming of the variables are called \alpha-equivalent. For example,
 \]
 
 *\alpha-equivalence* formally captures the fact that the name of a bound
-variable can be changed without changing the properties of the term. This
-idea appears recurrently on mathematics; e.g., the renaming of variables of
+variable can be changed without changing the meaning of the term. This
+idea appears recurrently on mathematics; for example, the renaming of variables of
 integration or the variable on a limit are a examples of \alpha-equivalence.
 \[
 \int_0^1 x^2\ dx = \int_0^1 y^2\ dy;
@@ -235,7 +244,7 @@ integration or the variable on a limit are a examples of \alpha-equivalence.
 #+attr_latex: :options [\alpha-equivalence]
 #+begin_definition
 *\alpha-equivalence* is the smallest relation $=_{\alpha}$ on
-\lambda-terms which is an equivalence relation, i.e.,
+\lambda-terms that is an equivalence relation, that is to say that
 
   * it is /reflexive/, $M =_{\alpha} M$;
   * it is /symmetric/, if $M =_{\alpha} N$, then $N =_{\alpha} M$;
@@ -266,15 +275,12 @@ general, that canonical form.
 #+begin_definition
 <<def-betared>>
 The *single-step \beta-reduction* is the smallest relation on \lambda-terms
-capturing the notion of evaluation 
-\[
-(\lambda x.M)N \to_{\beta}M[N/x],
-\]
-and some congruence rules that preserve the structure of
-\lambda-terms, such as
+capturing the notion of evaluation and preserving the structure of \lambda-abstractions
+and applications. That is, the smallest relation containing
 
-  * $M \to_{\beta} M'$ implies $MN \to_{\beta} M'N$ and $NM \to_{\beta} NM'$;
-  * $M \to_{\beta}M'$ implies $\lambda x.M \to_{\beta} \lambda x.M'$.
+  * $(\lambda x.M)N \to_{\beta}M[N/x]$ for any terms $M,N$ and any variable $x$,
+  * $MN \to_{\beta} M'N$ and $NM \to_{\beta} NM'$ for any $M,M'$ such that $M \to_{\beta} M'$, and
+  * $\lambda x.M \to_{\beta} \lambda x.M'$, for any $M,M'$ such that $M \to_{\beta} M'$.
 
 The reflexive transitive closure of $\to_{\beta}$ is written as $\tto_{\beta}$. The symmetric
 closure of $\tto_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$ or simply $=$.
@@ -309,25 +315,24 @@ Note that, in the particular case where $M$ is itself a \lambda-abstraction,
 # suggest a theorem in Urzyczyn, Sorensen which might be relevant
 
 *** Confluence
-# What is confluence
-As we said earlier, it is not possible in general to evaluate a \lambda-term
+As we mentioned above, it is not possible in general to evaluate a \lambda-term
 into a canonical, non-reducible term. However, we will be able to prove
-that, in the cases where it exists, it will be unique. This property
+that, in the cases where it exists, it is unique. This property
 is a consequence of a sightly more general one, */confluence/*, which
 can be defined in any abstract rewriting system.
 
 #+attr_latex: :options [Confluence]
 #+begin_definition
-A relation $\to$ is *confluent* if, given its reflexive transitive closure
-$\tto$, $M \tto N$ and $M \tto P$ imply the existence of some $Z$ such that
-$N \tto Z$ and $P \tto Z$.
+A relation $\to$ on a set ${\cal S}$ is *confluent* if, given its reflexive transitive closure
+$\tto$, for any $M,N,P \in {\cal S}$,  $M \tto N$ and $M \tto P$ imply the existence of some
+$Z \in {\cal S}$ such that $N \tto Z$ and $P \tto Z$.
 #+end_definition
 
 Given any binary relation $\to$ of which $\tto$ is its reflexive transitive
 closure, we can consider three seemingly related properties
 
-  * the *confluence* (also called /Church-Rosser property/) we have just defined.
-  * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$.
+  * the *confluence* (also called /Church-Rosser property/) we have just defined,
+  * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$,
   * the *diamond property*, which is defined substituting $\tto$ by $\to$ on
     the definition on confluence.
 
@@ -350,11 +355,10 @@ Z &\\
 and we can show that the diamond relation implies confluence; while
 the quasidiamond does not. Both claims are easy to prove, and they
 show us that, in order to prove confluence for a given relation, we
-can use the diamond property instead of the quasidiamond property, as
-a naive attempt of proof by induction would attempt.
+can use the diamond property instead of the quasidiamond property.
 
-The statement of $\tto_{\beta}$ and $\tto_{\beta\eta}$ being confluent is what we are going to
-call the */Church-Rosser theorem/*. The definition of a relation satisfying
+The statement of $\tto_{\beta}$ and $\tto_{\beta\eta}$ being confluent is what we
+call the */Church-Rosser Theorem/*. The definition of a relation satisfying
 the diamond property and whose reflexive transitive closure is $\tto_{\beta\eta}$ will
 be the core of our proof.
 
@@ -366,9 +370,9 @@ It is based on the idea of parallel one-step reduction.
 
 #+attr_latex: :options [Parallel one-step reduction]
 #+begin_definition
-We define the *parallel one-step reduction* relation, $\rhd$ as the smallest
-relation satisfying that, assuming $P \rhd P'$ and $N \rhd N'$, the following
-properties of
+We define the *parallel one-step reduction* relation on \lambda-terms, $\rhd$,
+as the smallest relation satisfying that, assuming $P \rhd P'$ and $N \rhd N'$,
+the following properties
 
   * reflexivity, $x \rhd x$;
   * parallel application, $PN \rhd P'N'$;
@@ -376,7 +380,7 @@ properties of
   * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$;
   * and extensionality, $\lambda x.P x \rhd P'$, if $x \not\in \mathrm{FV}(P)$,
 
-hold.
+hold for any variable $x$ and any terms $N,N',P,P'$.
 #+end_definition
 
 Using the first three rules, it is trivial to show that this relation
@@ -396,14 +400,14 @@ In particular, given any $M,M'$,
      are
 
      * $(\lambda x.M)N \to M[N/x]$; where we know that, by parallel substitution
-       and reflexivity $(\lambda x.M)N \rhd M[N/x]$.
+       and reflexivity $(\lambda x.M)N \rhd M[N/x]$;
 
      * $MN \to M'N$ and $NM \to NM'$; where we know that, by
        induction $M \rhd M'$, and by parallel application and reflexivity, $MN \rhd M'N$
-       and $NM \rhd NM'$.
+       and $NM \rhd NM'$;
 
      * congruence to \lambda-abstraction, which is a shared property between
-       the two relations where we can apply structural induction again.
+       the two relations where we can apply structural induction again;
 
      * $\lambda x. Px \to P$, where $x \not\in \mathrm{FV}(P)$ and we can apply extensionality for $\rhd$
        and reflexivity.
@@ -411,17 +415,17 @@ In particular, given any $M,M'$,
   2) We can prove this by induction on any derivation of $M \rhd M'$. The
      possible ways in which we arrive at this are
      
-     * the trivial one, reflexivity.
+     * the trivial one, reflexivity;
 
      * parallel application $NP \rhd N'P'$, where, by induction, we have $P \tto P'$ 
-       and $N \tto N'$. Using two steps, $NP \tto N'P \tto N'P'$ we prove $NP \tto N'P'$.
+       and $N \tto N'$. Using two steps, $NP \tto N'P \tto N'P'$ we prove $NP \tto N'P'$;
 
      * congruence to \lambda-abstraction $\lambda x.N \rhd \lambda x.N'$, where, by induction,
-       we know that $N \tto N'$, so $\lambda x.N \tto \lambda x.N'$.
+       we know that $N \tto N'$, so $\lambda x.N \tto \lambda x.N'$;
 
      * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$, where, by induction,
        we know that $P \tto P'$ and $N\tto N'$. Using multiple steps,
-       $(\lambda x.P)N \tto (\lambda x.P')N \tto (\lambda x.P')N' \to P'[N'/x]$.
+       $(\lambda x.P)N \tto (\lambda x.P')N \tto (\lambda x.P')N' \to P'[N'/x]$;
 
      * extensionality, $\lambda x.P x \rhd P'$, where by induction $P \tto P'$, and trivially,
        $\lambda x.Px \tto \lambda x.P'x$.
@@ -462,7 +466,7 @@ variables have been renamed to avoid clashes.
 The *maximal parallel one-step reduct* $M^{\ast}$ of a \lambda-term $M$ is defined
 inductively as
 
-  * $x^{\ast} = x$;
+  * $x^{\ast} = x$, if $x$ is a variable;
   * $(PN)^{\ast} = P^{\ast}N^{\ast}$;
   * $((\lambda x.P)N)^{\ast} = P^{\ast}[N^{\ast}/x]$;
   * $(\lambda x.N)^{\ast} = \lambda x.N^{\ast}$;
@@ -546,10 +550,9 @@ from it to a normal form. It is *strongly* normalizing if every sequence
 of reductions is finite.
 #+end_definition
 
-A consequence of Theorem [[theorem-churchrosser]] is that a term is weakly
-normalizing if and only if it has a normal form. Strong normalization
-implies also weak normalization, but the converse is not true; as an
-example, the term
+A consequence of Theorem [[theorem-churchrosser]] is that a weakly normalizing
+term has a unique normal form. Strong normalization implies weak normalization,
+but the converse is not true; as an example, the term
 \[
 \Omega = (\lambda x.(x x))(\lambda x.(x x))
 \]
@@ -557,8 +560,7 @@ is neither weakly nor strongly normalizing; and the term
 \[
 (\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x)
 \]
-is weakly normalizing but not strongly normalizing. Its normal form
-is
+is weakly but not strongly normalizing. It can be reduced to a normal form as
 \[
 (\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x).
 \]
@@ -585,7 +587,7 @@ is
 We would like to find a \beta-reduction strategy such that, if a term
 has a normal form, it can be found by following that strategy. Our
 basic result will be the *standarization theorem*, which shows that,
-if a \beta-reduction to a normal form exists, a sequence of
+if a \beta-reduction to a normal form exists, then a sequence of
 \beta-reductions from left to right on the \lambda-expression will be
 able to find it. From this result, we will be able to prove that the
 reduction strategy that always reduces the leftmost \beta-abstraction
@@ -598,7 +600,7 @@ This section follows cite:kashima00, cite:barendsen94 and cite:barendregt84.
 We define the relation $M \to_{n} N$ when $N$ can be obtained by \beta-reducing
 the $n\text{-th}$ leftmost \beta-reducible application of the expression.
 We call $\to_{1}$ the *leftmost one-step reduction* and we write it as $\to_{l}$;
-$\tto_{l}$ is its reflexive transitive closure.
+accordingly, $\tto_{l}$ is its reflexive transitive closure.
 #+end_definition
 
 #+attr_latex: :options [Standard sequence]
@@ -608,42 +610,45 @@ is *standard* if $\{n_i\}$ is a non-decreasing sequence.
 #+end_definition
 
 We will prove that every term that can be reduced to a normal form can
-be reduced to it using a standard sequence, from this theorem, the existence
-of an optimal beta reduction strategy, in the sense that it will always find
+be reduced to it using a standard sequence, from this result, the existence
+of an optimal beta reduction strategy, in the sense that it will always reach
 the normal form if it exists, will follow as a corollary.
 
 #+attr_latex: :options [Standarization theorem]
 #+begin_theorem
+<<thm-standarization>>
 If $M \tto_{\beta} N$, there exists a standard sequence from $M$ to $N$.
 #+end_theorem
 #+begin_proof
 We start by defining the following two binary relations. The first one
-is the relation given by the head reduction of the application and it
-is defined by
+is the minimal reflexive transitive relation on \lambda-terms
+capturing a form of \beta-reduction called /head \beta-reduction/;
+that is, it is the minimal relation $\tto_h$ such that
 
-  * $A \tto_h A$, reflexivity.
-  * $(\lambda x.A_0)A_1 \dots \tto_{h} A_0[A_1/x]\dots$, head \beta-reduction.
-  * $A \tto_{h} B \tto_{h} C$ implies $A \tto_{h} C$, transitivity.
+  * $A \tto_h A$,
+  * $(\lambda x.A_0)A_1A_2 \dots A_m \tto_{h} A_0[A_1/x]A_2 \dots A_m$, for any term of the form $A_1A_2\dots A_n$, and
+  * $A \tto_{h} C$ for any terms $A,B,C$ such that $A \tto_{h} B \tto_{h} C$.
 
-The second one is the standard reduction and it is defined by
+The second one is called /standard reduction/. It is the minimal relation
+between \lambda-terms such that
 
-  * $M \tto_h x$ implies $M \tto_s x$, where $x$ is a variable.
-  * if $M \tto_h AB$, $A \tto_s C$ and $B \tto_s D$, then $M \tto_s CD$.
-  * if $M \tto_h \lambda x.A$ and $A \tto_s B$, then $M \to_s \lambda x.B$.
+  * $M \tto_h x$ implies $M \tto_s x$, for any variable $x$,
+  * $M \tto_h AB$, $A \tto_s C$ and $B \tto_s D$, imply $M \tto_s CD$,
+  * $M \tto_h \lambda x.A$ and $A \tto_s B$ imply $M \to_s \lambda x.B$.
 
 We can check the following trivial properties by structural induction
 
-  1) $\tto_h$ implies $\tto_{l}$.
-  2) $\tto_{s}$ implies the existence of a standard \beta-reduction.
-  3) $\tto_{s}$ is reflexive, by induction on the structure of a term.
-  4) if $M \tto_{h} N$, then $MP \tto_{h} NP$.
-  5) if $M \tto_h N \tto_s P$, then $M \tto_{s} P$.
-  6) if $M \tto_h N$, then $M[P/x] \tto_h N[P/x]$.
+  1) $\tto_h$ implies $\tto_{l}$,
+  2) $\tto_{s}$ implies the existence of a standard \beta-reduction,
+  3) $\tto_{s}$ is reflexive, by induction on the structure of a term,
+  4) if $M \tto_{h} N$, then $MP \tto_{h} NP$,
+  5) if $M \tto_h N \tto_s P$, then $M \tto_{s} P$,
+  6) if $M \tto_h N$, then $M[P/x] \tto_h N[P/x]$,
   7) if $M \tto_s N$ and $P \tto_s Q$, then $M[P/z] \tto_{s} N[Q/z]$.
 
-Now we can prove that $K \tto_{s} (\lambda x.M)N$ implies $K \tto_s M[N/x]$.
-From the fact that $K \tto_s (\lambda x.M)$, we know that there must exist $P$ and $Q$ such
-that $K \tto_h \lambda PQ$, $P \tto_s \lambda x.M$ and $Q \tto_s N$; and from $P \tto_s \lambda x.M$, we know
+And now we can prove that $K \tto_{s} (\lambda x.M)N$ implies $K \tto_s M[N/x]$.
+From the fact that $K \tto_s (\lambda x.M)N$, we know that there must exist $P$ and $Q$ such
+that $K \tto_h PQ$, $P \tto_s \lambda x.M$ and $Q \tto_s N$; and from $P \tto_s \lambda x.M$, we know
 that there exists $W$ such that $P \tto_h \lambda x.W$ and $W \tto_s M$. From all this information,
 we can conclude that
 \[
@@ -661,7 +666,7 @@ ways in which $M \to_{\beta} N$ can be derived.
      such that $W \tto_s M$ and $Q \tto_s N$; by induction $W \tto_s M'$, and then $WQ \tto_s M'N$.
      The case $K \tto_s MN \to_{\beta} MN'$ is entirely analogous.
   3) If $K \tto_s \lambda x.M \to_{\beta} \lambda x.M'$, with $M \to_{\beta} M'$, we know that there exists $W$ such
-     that $K \tto_h \lambda x.W$ and $W \tto_s M$. By induction $W \tto_s M'$, and $K \tto_s \lambda x.M'$.
+     that $K \tto_h \lambda x.W$ and $W \tto_s M$. By induction $W \tto_s M'$, and $K \tto_s \lambda x.M'$.$\qedhere$
 #+end_proof
 
 #+attr_latex: :options [Leftmost reduction theorem]
@@ -673,9 +678,9 @@ normal form, the leftmost reduction strategy will lead to it.
 #+end_corollary
 #+begin_proof
 Note that, if $M \to_n N$, where $N$ is in \beta-normal form; $n$ must be exactly
-$1$. If $M$ has a normal form and $M \tto_{\beta} N$, there must exist a standard sequence
-from $M$ to $N$ whose last step is of the form $\to_{l}$; as the sequence is non-decreasing,
-every step has to be of the form $\to_{l}$.
+$1$. If $M$ has a normal form and $M \tto_{\beta} N$, by Theorem [[thm-standarization]],
+there must exist a standard sequence from $M$ to $N$ whose last step is of the
+form $\to_{l}$; as the sequence is non-decreasing, every step has to be of the form $\to_{l}$.
 #+end_proof
 
 *** SKI combinators
@@ -698,18 +703,18 @@ I = \lambda x.x = SKK.
 It is common to also add the $I = \lambda x.x$ as a basic term to this language,
 even if it can be written in terms of $S$ and $K$, as a
 way to ease the writing of long complex terms. Terms written with
-these combinators are called */Ski-terms/*.
+these combinators are called */SKI-terms/*.
 
-The language of *Ski-terms* can be defined by the following Backus-Naus form
+The language of *SKI-terms* can be defined by the following Backus-Naus form
 \[
-\mathtt{Ski} ::= x \mid (\mathtt{Ski}\ \mathtt{Ski}) \mid S \mid K \mid I\quad,
+\mathtt{SKI} ::= x \mid (\mathtt{SKI}\ \mathtt{SKI}) \mid S \mid K \mid I\quad,
 \]
 where $x$ are free variables.
 
 **** Transformation of SKI combinators                            :ignore:
 #+attr_latex: :options [Lambda transform]
 #+begin_definition
-The *Lambda-transform* of a Ski-term is a \lambda-term defined
+The *Lambda-transform* of a SKI-term is a \lambda-term defined
 recursively as
 
   * $\lambdatrans(x) = x$, for any variable $x$;
@@ -721,7 +726,7 @@ recursively as
 
 #+attr_latex: :options [Bracket abstraction]
 #+begin_definition
-The *bracket abstraction* of the Ski-term $U$ on the variable $x$ is
+The *bracket abstraction* of the SKI-term $U$ on the variable $x$ is
 written as $[x].U$ and defined recursively as
 
   * $[x].x = I$;
@@ -733,7 +738,7 @@ where $\freevars$ is the set of free variables; as defined on Definition
 [[def-freevariables]].
 #+end_definition
 
-#+attr_latex: :options [Ski abstraction]
+#+attr_latex: :options [SKI abstraction]
 #+begin_definition
 The *SKI abstraction* of a \lambda-term $M$, written as $\skiabs(M)$ is
 defined recursively as
@@ -742,13 +747,13 @@ defined recursively as
   * $\skiabs(MN) = \skiabs(M)\skiabs(N)$;
   * $\skiabs(\lambda x.M) = [x].\skiabs(M)$;
 
-where $[x].U$ is the bracket abstraction of the Ski-term $U$.
+where $[x].U$ is the bracket abstraction of the SKI-term $U$.
 #+end_definition
 
-#+attr_latex: :options [Ski combinators and lambda terms]
+#+attr_latex: :options [SKI combinators and lambda terms]
 #+begin_theorem
-The Ski-abstraction is a retraction of the Lambda-transform of the term,
-that is, for any Ski-term $U$,
+The SKI-abstraction is a retraction of the Lambda-transform of the term,
+that is, for any SKI-term $U$,
 \[
 \skiabs(\lambdatrans(U)) = U.
 \]
@@ -760,7 +765,7 @@ By structural induction on $U$,
   * $\skiabs\lambdatrans(I) = [x].x = I$;
   * $\skiabs\lambdatrans(K) = [x].[y].x = [x].Kx = K$;
   * $\skiabs\lambdatrans(S) = [x].[y].[z].xz(yz) = [x].[y].Sxy = S$; and
-  * $\skiabs\lambdatrans(MN) = MN$.
+  * $\skiabs\lambdatrans(MN) = MN$.$\qedhere$
 #+end_proof
 
 In general this translation is not an isomorphism. As an example
@@ -801,7 +806,7 @@ structural induction,
 
  * $\lambdatrans\skiabs(x) = x$;
  * $\lambdatrans\skiabs(MN) = \lambdatrans\skiabs(M)\lambdatrans\skiabs(N) = MN$;
- * $\lambdatrans\skiabs(\lambda x.M) = \lambdatrans([x].\skiabs(M)) =_{\beta\eta} \lambda x.\lambdatrans\skiabs(M) = \lambda x.M$.
+ * $\lambdatrans\skiabs(\lambda x.M) = \lambdatrans([x].\skiabs(M)) =_{\beta\eta} \lambda x.\lambdatrans\skiabs(M) = \lambda x.M$.$\qedhere$
 #+END_proof
 
 *** Turing completeness
@@ -882,7 +887,7 @@ based on cite:Hindley08. Our presentation will rely only on the
 pairs or union types, as it is done in cite:selinger13,
 it seems clearer to present a first minimal version of the
 \lambda-calculus. Such extensions will be explained later, and its exposition
-will profit from the logical interpretation that we will detail in
+will profit from the logical interpretation that we will explain in
 "[[*Propositions as types][propositions as types]]".
 
 *** Simple types
@@ -1113,7 +1118,7 @@ $M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\s
 *** Unification and type inference
 **** Unification :ignore:
 The unification of two type templates is the construction of two substitutions
-making them equal as type templates; i.e., the construction of a type that
+making them equal as type templates; that is, the construction of a type that
 is a particular instance of both at the same time. We will not only aim for
 an unifier but for the most general one between them.
 
@@ -3115,7 +3120,7 @@ Note that =true= and =const= are exactly the same term up to
 The absence of types prevents us to make any effort to discriminate
 between these two uses of the same \lambda-term. Another side-effect
 of this definition is that our =true= and =false= terms can be interpreted
-as binary functions choosing between two arguments, i.e.,
+as binary functions choosing between two arguments, that is,
 
   * $\mathtt{true}(a,b) = a$
   * $\mathtt{false}(a,b) = b$
@@ -4093,7 +4098,7 @@ original transformation.
 #+begin_definition
 The *vertical composition* of two natural transformations $\tau : S\to T$
 and $\sigma : R \to S$, denoted by $\tau \cdot \sigma$ is the family of morphisms defined by the objectwise
-composition of the components of the two natural transformations, i.e.
+composition of the components of the two natural transformations, that is
 
 \[\begin{tikzcd}
 Rc \rar{Rf}\dar{\sigma_c}\arrow[swap,bend right=90]{dd}{(\tau \circ \sigma)_c} &
@@ -6241,7 +6246,7 @@ and the double negation elimination rule.
 #+attr_latex: :options [Heyting algebra]
 #+begin_definition
 A *Heyting algebra*, also called *Brouwerian lattice*, is a bounded lattice
-which is cartesian closed as a category; i.e., for every pair of elements
+which is cartesian closed as a category; that is, for every pair of elements
 $x,y$, the exponential $y^x$ exists.
 #+end_definition
 
@@ -6397,6 +6402,7 @@ algebra over an infinite countable set $\{p_0,p_1,p_2,\dots\}$.
 # TODO: Law of excluded middle and reductio ad absurdum.
 
 *** Quantifiers as adjoints
+# Maybe this could be written before, in the adjoints section.
 #+begin_definition
 Given a relation between sets $S \subseteq X \times Y$, the functors $\forall_p, \exists_p \colon {\cal P}(X \times Y) \to {\cal P}(Y)$
 are defined as
@@ -6516,7 +6522,7 @@ in $\mathbb{U}$.
 
 #+ATTR_LATEX: :options [Category of lambda-theories]
 #+BEGIN_definition
-The category $\mathtt{\lambda Thr}$ has \lambda-theories as objects and translations
+The category $\lambda\mhyphen\mathtt{Thr}$ has \lambda-theories as objects and translations
 between them as morphisms.
 #+END_definition
 
