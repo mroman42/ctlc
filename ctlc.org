@@ -511,7 +511,7 @@ We apply again structural induction on the derivation of $M \rhd M'$.
     and we can apply the substitution lemma (lemma [[lemma-subsl]]) to get $M' \rhd M^{\ast}$.
 
   * Extensionality. We know that $P \rhd P'$ and $x \notin \mathrm{FV}(P)$, so by induction hypothesis
-    we know that $P' \rhd P^{\ast} = M^{\ast}$.
+    we know that $P' \rhd P^{\ast} = M^{\ast}$.$\qedhere$
 #+end_proof
 
 #+attr_latex: :options [Church-Rosser Theorem]
@@ -557,9 +557,7 @@ but the converse is not true; as an example, the term
 \Omega = (\lambda x.(x x))(\lambda x.(x x))
 \]
 is neither weakly nor strongly normalizing; and the term
-\[
-(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x)
-\]
+$(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x)$
 is weakly but not strongly normalizing. It can be reduced to a normal form as
 \[
 (\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x).
