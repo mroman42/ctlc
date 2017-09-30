@@ -2,7 +2,7 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: \input{titlepage}
+#+LATEX_HEADER_EXTRA: %\input{titlepage}
 
 # Evitar notas al pie de página
 
@@ -864,7 +864,7 @@ Once types are added, a deep connection between the \lambda-calculus and
 logic arises. This connection will be discussed in the [[*The Curry-Howard correspondence][next chapter]].
 
 In programming languages, types signal how the programmer intends to
-use the data, prevent errors and enforce certain invariants and levels
+use the data, prevent errors, and enforce certain invariants and levels
 of abstraction in programs. The role of types in the \lambda-calculus as
 a programming language closely matches what we would expect of types
 in any common programming language, and typed \lambda-calculus has been the basis
@@ -900,7 +900,7 @@ tend to use only one basic type.
 The set of *simple types* is given by the following Backus-Naur form
 \[\mathtt{Type} ::= 
 \iota \mid 
-\mathtt{Type} \to \mathtt{Type} \]
+\mathtt{Type} \to \mathtt{Type},\]
 where $\iota$ would be any /basic type/.
 #+end_definition
 
@@ -918,7 +918,7 @@ The set of *typed lambda terms* is given by the BNF
 \[ \mathtt{Term} ::=
 x \mid
 \mathtt{Term}\ \mathtt{Term} \mid
-\lambda x^{\mathtt{Type}}. \mathtt{Term} \mid
+\lambda x^{\mathtt{Type}}. \mathtt{Term}.
 \]
 #+end_definition
 
@@ -940,7 +940,7 @@ a term of type $A \to B$; it is expecting a term of type $A$.
 **** Typing rules                                                 :ignore:
 #+attr_latex: :options [Typing context]
 #+begin_definition
-A *typing context* is a sequence of typing assumptions
+A *typing context* is a sequence of type assumptions
 $x_1:A_1,\dots,x_n:A_n$, where no variable $x_{i}$ appears more than once.
 We will implicitely assume that the order in which these
 assumptions appear does not matter.
