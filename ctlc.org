@@ -610,7 +610,7 @@ is *standard* if $\{n_i\}$ is a non-decreasing sequence.
 We will prove that every term that can be reduced to a normal form can
 be reduced to it using a standard sequence, from this result, the existence
 of an optimal beta reduction strategy, in the sense that it will always reach
-the normal form if it exists, will follow as a corollary.
+a normal form if one exists, will follow as a corollary.
 
 #+attr_latex: :options [Standarization theorem]
 #+begin_theorem
@@ -6647,7 +6647,6 @@ X \ar[bend right,swap]{ddr}{x} \ar[dashed]{dr}\ar[dashed, bend left]{drr} & & \\
 \end{tikzcd}\]
 #+END_proof
 
-
 **** Categorical dependent product                                :ignore:
 #+ATTR_LATEX: :options [Right adjoint of the pullback functor]
 #+BEGIN_definition
@@ -6682,6 +6681,9 @@ elimination rules
 \BIC{$$}
 \end{prooftree}
 
+** \infty-groupoids
+# https://arxiv.org/pdf/1709.09519.pdf
+
 ** Topoi
 *** Subobject classifier
 #+attr_latex: :options [Subobject classifier]
@@ -6715,6 +6717,11 @@ with all finite limits and a subobject classifier.
 # result may fail in some toposes but holds in any Π\Pi-pretopos; if you
 # add the restriction that the proof be predicative in a stronger sense,
 # then the result holds in any Heyting pretopos.
+
+* Type theory (abstract)                                             :ignore: 
+#+LATEX: \ctparttext{\color{black}\begin{center}
+This section is mainly based on cite:hottbook.
+#+LATEX: \end{center}}
 
 * Type theory
 Type theory can be seen as an intuitionistic foundation of mathematics.
@@ -6903,6 +6910,30 @@ When applied, the type should be passed as an argument, but it is
 a common convention to omit arguments when they are obvious from the
 context and only refer to them when typechecking.
 
+**** Composition and implicit arguments                           :ignore:
+A more complex example of polymorphic function is /function composition/,
+which is also an example of higher-order function. Its type signature
+takes three types as arguments and two functions between these types,
+\[
+\circ : \prod_{A : {\cal U}_i} \prod_{B : {\cal U}_i} \prod_{C : {\cal U}_i} (A \to B) \to (B \to C) \to A \to C
+\]
+and it is defined as
+\[
+\circ :\equiv \lambda (A : {\cal U}_i). \lambda (B : {\cal U}_i) . \lambda (C : {\cal U}_i).\ 
+\lambda g. \lambda f. \lambda x.\ g(f(x)).
+\]
+However, we face a notational nuisance here: to explicitly write down
+all the types each time we want to notate a function would be very
+wordy. Instead, we will allow arguments to be determined
+implicitely. Implicit arguments must be inferred by the context and
+its supression is not formalized as part of our type theory. At the
+same time, we will use infix notation whenever it is easier to read.
+
+Thus, we will write $f \circ g$ instead of $\circ (A,B,C,f,g)$. 
+
+# Sometimes, when defining a function, it will be also useful to write
+# it not as a lambda expression but as a function with parentheses.
+
 *** Dependent pair types
 **** Dependent pair types: introduction                           :ignore:
 *Dependent pair types*, or *\Sigma-types*, can be seen as a
@@ -6963,6 +6994,75 @@ The following rules apply for the dependent pair type:
 
 Note that we do not postulate an \eta-rule for the dependent pair
 type. We will show later that it follows from these rules.
+
+\\
+
+**** Projections                                                  :ignore:
+The elimination rule says that we can define a function from the
+dependent pair type $\prod_{x:A} B$ to an arbitrary type $C$ by
+assuming some $x:A$ and $y : B(x)$ and constructing a term of type $C$
+with them.
+
+For instance, we can declare of the first projection to be
+$\proj_1 :\left(\sum_{x:A} B(x) \right) \to A$ and define it as $\proj_1((a,b)) :\equiv a$.
+The second projection is slightly more complex, as it must
+be a dependent function
+\[
+\proj_2 : \prod_{p: \sum_{x:A} B(x)} B(\proj_1(p))
+\]
+whose type depends on the first projection. It can be again
+defined as $\proj_2((a,b)) :\equiv b$.
+
+\\
+
+**** Type-theoretic axiom of choice                               :ignore:
+An interesting example arises when we consider a function that builds
+a function from a term $R$ that can be regarded as a proof-relevant
+binary relation, in that any term of type $R(x,y)$ is a witness of the
+relation between some particular $x$ and $y$.
+\[
+\mathtt{ac} : \left( \prod_{x:A}\sum_{y:B} R(x,y) \right)
+\to \left( \sum_{f:A \to B}\prod_{x:A} R(x,f(x)) \right) 
+\]
+Under the propositions as types interpretation, this type represents
+the *axiom of choice*; that is, if for all $x \in A$ there exists a $y \in B$
+such that $R(x,y)$, then there exists a function $f : A \to B$ such that
+$R(x,f(x))$ for all $x \in A$.
+
+The actual *axiom of choice* can be shown to be independent of
+Zermelo-Fraenkel set theory. However, maybe surprisingly, this type
+theoretic version can be directly proved from the axioms of our
+system. The function $\mathtt{ac}$ can be constructed as
+\[
+\mathtt{ac} :\equiv \lambda g . \left( \proj_1 \circ g, \proj_2 \circ g \right),
+\]
+and we can check that, in fact, if $g : \prod_{x:A}\sum_{y:B} R(x,y)$, then
+
+ * $\proj_1 \circ g$ is of type $A \to B$, and
+ * $\proj_2 \circ g$ is of type $\prod_{x:A} R(x,\proj_1(g(x)))$;
+
+effectively proving that $\mathtt{ac}(g)$ has type $\sum_{f : A \to B}\prod_{x:A}R(x,f(x))$.
+
+Why the type-theoretic version of the axiom of choice is, instead, a
+*theorem of choice*? The crucial notion here is that no choice is
+actually involved. The dependent pair $\Sigma$ differs from the classical
+existential quantification $\exists$ in that it is constructive, that is,
+any witness of $\sum_{a:A}B$ has to actually provide an element of $A$ such
+that $B(a)$; while a proof of $\exists a \in A, B$ does not need to point to any
+particular element of $A$.
+
+\\
+
+**** Magmas                                                       :ignore:
+Algebraic structures can be also described as dependent pairs. For
+instance, we can define a *magma* to be a type $A$ endowed with a binary
+operation $A \to A \to A$. This can be encoded in a type of magmas as
+\[
+\mathtt{Magma} :\equiv \sum_{A : {\cal U}} (A \to A \to A).
+\]
+After we introduce identity types, we will be able to add constraints
+to our structures that will allow us to define more complex algebraic
+structures such as groups or categories.
 
 *** Unit and empty type
 **** Empty type                                                   :ignore:
