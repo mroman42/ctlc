@@ -7421,12 +7421,87 @@ type system are
    Type Theory in the NuPRL style.
 
 In this text, we will use Agda as our proof assistant and we will mechanize
-proofs in Martin-Löf type theory using it.
+proofs in Martin-Löf type theory using it. We will follow [Conor's course].
 
 **** Machine proof                                                :ignore:noexport:
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
 
-*** Martin-Löf theory in Agda
+*** Martin-Löf type theory in Agda
+In this chapter, we will describe how to program in MLTT using Agda as
+proof assistant. An Agda file consists of type declarations and
+definitions stated with ~=~, as in the following example.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{example}
+
+This code exemplifies multiple idiosyncratic features of Agda when compared
+to our previous presentation of MLTT.
+
+ * The type of types, ${\cal U}$, is written as =Set=; however, it has nothing
+   to do with our usual /set-theoretical sets/. The hierarchy of universes
+   in Agda is written as
+   \[
+   \mathtt{Set} :
+   \mathtt{Set}_1 :
+   \mathtt{Set}_{2} :
+   \dots
+   \]
+   We will see later that it is possible to use compiler flags to
+   postulate the collapse of this hierarchy into a single
+   $\mathtt{Set} : \mathtt{Set}$ and derive a contradiction from this
+   assumption.
+
+   If we want a definition to work at all levels of the universe
+   hierarchy, we need to explicitly write =∀{l}...Set l= instead
+   of simply write =Set=.
+
+ * Dependent function are implicitly built into the language.  In
+   general, the dependent function type $\prod_{a:A} B$ is written as
+   ~(a : A) → B~. In particular, we write the type
+   $\mathtt{id} : \prod_{A : {\cal U}} A \to A$ as =(A : Set) → A → A=.
+
+ * Agda allows a shorthand for nested dependent function types of
+   the form $\prod_{a:A} \prod_{a':A} B$. We can write them as =(a a' : A) → B=,
+   instead of having to write =(a : A) → (a' : A) → B=.
+
+ * Implicit arguments are declared between curly braces, ={ ... }=.
+   Whenever we call a function with implicit arguments, the type
+   checker will infer them from the context if we decide not to
+   overwrite them explicitely.
+
+ * Infix operators can be defined using underscores ~_~.
+
+**** Data and records                                             :ignore:
+We have seen that Agda directly provides function types, but
+it also provides two mechanisms to define new types:
+/*data declarations*/ and /*record types*/.
+
+ * *Data declarations* can be thought as inductive types. They build the
+   free type (the initial algebra) over a set of constructors; and
+   they are better suited for defining positive types such as the void
+   type, coproducts or natural numbers.
+
+ * *Record types* can be thought as generalized dependent n-tuples in
+   which every element of the tuple is labeled and depends on the
+   previous ones. They are better suited for defining negative
+   types such as the unit type or product types. A constructor can
+   be provided for them.
+
+The complete type constructors of MLTT and the majority of types that
+we will use in this text can be defined in terms of these.
+
+**** Code: types and proofs                                       :ignore:
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{mltt}
+
+Once we have defined these types, we can start profiting from the
+propositions as types interpretation to write and check mathematical
+proofs in Agda.
+
+Functions can be defined by a (possibly empty) list of declarations
+that exhaustively pattern match on all the possible constructors of
+the type.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{mlttproof}
+
 *** Type in type
 # Russell's paradox code
 # Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
@@ -7434,6 +7509,8 @@ proofs in Martin-Löf type theory using it.
 # Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
 # Burali-Forti paradox
 ** Homotopy Type Theory I: Univalence
+# HoTT is the internal language of (infty,1)-toposes
+
 Homotopy Type Theory (HoTT) adds the univalence axiom and higher
 inductive types to intensional type theory (ITT).
 
@@ -7444,7 +7521,7 @@ inductive types to intensional type theory (ITT).
 Finding a type-theoretic description of
 this behavior (that is, introduction, elimination and computation rules which comport
 with Gentzen’s Inversion Principle) is an open problem.
-#+end_
+#+end_quote
 *** Higher inductive types
 ** Homotopy Type Theory II: Mathematics
 *** TODO Categories
