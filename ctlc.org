@@ -7369,7 +7369,7 @@ $B(a)$.
 **** W-types as initial algebras                                  :ignore:
 The relevant endofunctor must be polynomial.
 
-No all endofunctors have initial algebras, but all polynomial functors do have
+Not all endofunctors have initial algebras, but all polynomial functors do have
 initial algebras.
 
 
@@ -7386,10 +7386,10 @@ In fact, this functor is an F-algebra with the function
 \]
 # It is an equivalence and this is an homotopy-initial algebra.
 
-
 **** TODO Two equivalently defined inductive functions are in fact equal
 ** Programming in Martin-Löf Type theory
-# Cite Altenkirch notes on HoTT
+# Cite Connor's course in Agda
+# Cite Altenkirch's notes on HoTT
 
 Martin-Löf type theory can also be regarded as a programming language in
 which is possible to formally specify and prove theorems about the
