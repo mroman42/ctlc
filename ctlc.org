@@ -5,6 +5,7 @@
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
 # Evitar notas al pie de página
+# Quitar abreviaturas
 
 ** Abstract
 :PROPERTIES:
@@ -20,10 +21,11 @@ This is the abstract.
 # Alejandro García, Adrián Ranea and David Charte, template usage.
 
 This document has been written with Emacs26 and org-mode 9, using the
-=org= file format and LaTeX as intermediate format. The document follows
-the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede. The =minted= package
-has been used for code listings and the =tikzcd= package has been used
-for commutative diagrams.
+=org= file format and LaTeX as intermediate format. The document
+follows the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by *André Miede*. The =minted=
+package has been used for code listings and the =tikzcd= package has
+been used for commutative diagrams.
+
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 The \lambda-calculus is a collection of systems formalizing the notion
@@ -371,8 +373,7 @@ It is based on the idea of parallel one-step reduction.
 #+attr_latex: :options [Parallel one-step reduction]
 #+begin_definition
 We define the *parallel one-step reduction* relation on \lambda-terms, $\rhd$,
-as the smallest relation satisfying that, assuming $P \rhd P'$ and $N \rhd N'$,
-the following properties
+as the smallest relation satisfying that the following properties
 
   * reflexivity, $x \rhd x$;
   * parallel application, $PN \rhd P'N'$;
@@ -380,7 +381,7 @@ the following properties
   * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$;
   * and extensionality, $\lambda x.P x \rhd P'$, if $x \not\in \mathrm{FV}(P)$,
 
-hold for any variable $x$ and any terms $N,N',P,P'$.
+hold for any variable $x$ and any terms $N,N',P,P'$ such that $P \rhd P'$ and $N \rhd N'$.
 #+end_definition
 
 Using the first three rules, it is trivial to show that this relation
@@ -389,7 +390,7 @@ is in fact reflexive.
 #+begin_lemma
 <<lemma-transclosureparallel>>
 The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$.
-In particular, given any $M,M'$,
+In particular, given any \lambda-terms $M,M'$,
 
   1) if $M \to_{\beta\eta} M'$, then $M \rhd M'$.
   2) if $M \rhd M'$, then $M \tto_{\beta\eta} M'$;
@@ -1034,7 +1035,7 @@ can be written as
 The term $(\lambda x.x\ x)$, however, is not typeable. If $x$ were of type $\psi$,
 it also should be of type $\psi \to \sigma$ for some $\sigma$ in order for $x\ x$ to
 be well-typed;
-but $\psi \equiv \psi \to \sigma$ is not solvable, at it can be shown by structural
+but $\psi \equiv \psi \to \sigma$ is not solvable, as it can be shown by structural
 induction on the term $\psi$.
 #+END_exampleth
 
@@ -1042,7 +1043,7 @@ It can be seen that the typing derivation of a term somehow encodes
 the complete \lambda-term. If we were to derive the term bottom-up, there
 would be only one possible choice at each step on which rule to use.
 In the following sections we will discuss a type inference algorithm
-which determines if a type is typeable and what its type should be,
+that determines if a type is typeable and what its type should be,
 and we will make precise these intuitions.
 
 *** Curry-style types
@@ -1058,7 +1059,7 @@ Two different approaches to typing in \lambda-calculus are commonly used.
    creates a formalism where every single term can be given an
    infinite number of types.  This technique is called
    */polymorphism/* when it is a formal part of the language; but
-   here, it is only used allow us to intermediate terms without having to
+   here, it is only used to allow us to intermediate terms without having to
    directly specify their type.
 
 As an example, we can consider the identity term $I = \lambda x.x$. It would have to be 
@@ -1093,11 +1094,11 @@ A *substitution* $\psi$ is any function from type variables to type templates. I
 be applied to a type template as $\overline{\psi}$ by recursion and knowing that
 
    * $\overline{\psi} \iota = \iota$,
-   * $\overline{\psi} \sigma = \psi \sigma$,
+   * $\overline{\psi} \sigma = \psi \sigma$, # para toda variable sigma
    * $\overline{\psi} (A \to B) = \overline{\psi} A \to \overline{\psi} B$.
 
 That is, the type template $\overline{\psi} A$ is the same as $A$ but with every type variable
-replaced according to the substitution $\sigma$.
+replaced according to the substitution $\psi$.
 #+end_definition
 
 We consider a type to be /more general/ than other if the latter can be obtained by
@@ -2416,7 +2417,7 @@ We implement a simply-typed lambda calculus with [[*Curry-style types][Curry-sty
 and type templates. Our type system has
 
   * an unit type;
-  * a bottom type;
+  * a void type;
   * product types;
   * union types;
   * and function types.
@@ -4267,6 +4268,7 @@ M_{b'}(g) \circ L_c(f)
 \end{aligned}\]
 #+END_proof
 
+**** Naturality for bifunctors :ignore:
 #+ATTR_LATEX: :options [Naturality for bifunctors]
 #+BEGIN_proposition
 Given $S,S'$ bifunctors, $\alpha_{b,c} \colon S(b,c) \to S'(b,c)$ is a natural transformation
@@ -4298,6 +4300,7 @@ S'(b',c') \\
 where each square is commutative by the naturality of each component
 of $\alpha$.
 #+END_proof
+
 **** TODO [#C] Examples of product categories
 *** Opposite categories and contravariant functors
 #+attr_latex: :options [Opposite category]
@@ -5148,6 +5151,8 @@ An adjunction determines a *unit* and a *counit*;
     \]
 
 that follow the *triangle identities* $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
+# TODO: draw the triangle idenntities
+# TODO: Write adjunctions as logical deductions (Lawvere's notation)
 #+end_proposition
 #+BEGIN_proof
 We define $\eta_x = \varphi(\id_{Fx})$ and $\varepsilon_x = \varphi^{-1}(\id_{Gx})$. The right and left adjunct formulas
@@ -5405,7 +5410,7 @@ G_T \colon& (f^{\flat} \colon x_T \to y_T) &\mapsto&\ (\eta_y \circ Tf) \colon T
 \end{aligned}\]
 
 form an adjunction $\flat \colon \hom(x,Ty) \to \hom(x_T,y_T)$ whose monad
-is precisaly $T$.
+is precisely $T$.
 #+END_theorem
 #+BEGIN_proof
 # TODO
@@ -5730,6 +5735,9 @@ K(\beta' \circ \beta, \alpha' \circ \alpha)  = K((\beta' , \alpha') \circ (\beta
 **** TODO Strict and weak 2-categories                            :ignore:
 **** TODO Eckmann-Hilton                                          :ignore:
 **** TODO Double categories                                       :ignore:
+*** TODO Higher-order categories and homotopy
+# From chapter 2 of HoTT
+*** TODO Weak \infty-groupoids
 ** TODO Monoidal categories
 *** TODO String diagrams
 # Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
@@ -6655,7 +6663,7 @@ functor $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ has a right adjoint, called
 $\Pi_f \colon {\cal C}/A \to {\cal C}/B$.
 #+END_definition
 
-*** TODO Martin-Löf theories
+*** TODO Extensional Martin-Löf Type Theory
 # http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
 # The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
 # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.646.9598&rep=rep1&type=pdf 
@@ -6720,23 +6728,25 @@ with all finite limits and a subobject classifier.
 
 * Type theory (abstract)                                             :ignore: 
 #+LATEX: \ctparttext{\color{black}\begin{center}
-This section is mainly based on cite:hottbook.
+This section is mainly based on cite:hottbook and [Course on Hott, Harper].
 #+LATEX: \end{center}}
 
 * Type theory
+** Martin-Löf Type Theory
 Type theory can be seen as an intuitionistic foundation of mathematics.
 
 *Martin-Löf Type Theory* (MLTT) can be used as a constructive and computational
 foundation of mathematics. It is not directly based on first-order predicate
-logic, but only interpreted in it via the Curry-Howard isomorphism.
+logic, but only interpreted in it via the Curry-Howard isomorphism. It comes
+in two flavours, intensional and extensional.
 
 *Intensional type theory* (ITT) is an intuitionistic type theory serving as
 the core to many other type theories.
 
-*Extensional type theory* (ETT) extends ITT with equality of
-reflection and uniqueness of identity proofs. Types behave like
-sets in ETT, and therefore, it can be seen as an intuitionistic
-theory of sets.
+*Extensional type theory* (ETT) extends Intensional Type Theory with
+equality of reflection and uniqueness of identity proofs. Types behave
+like sets when we interpret them in this setting, and therefore, it
+can be seen as an intuitionistic theory of sets.
 
 
 The principal difference between types and sets is that 
@@ -6748,7 +6758,7 @@ A type declaration is not part of the language.
 
 This section follows [Course on Hott, Harper] and [Hott].
 
-** Martin-Löf Type Theory
+
 We introduce ITT with Naturals, Sigma, Pi, Identity types and Universes.
 [Martin-Löf 73]
 
@@ -6761,7 +6771,9 @@ consider three different kinds of judgments for this formal system, namely,
   * $\Gamma \vdash a : A$, expressing that, from the context $\Gamma$, it follows that $a$ is
     of type $A$; and
   * $\Gamma \vdash a \equiv a' : A$, expressing that, from the context $\Gamma$, it follows that
-    $a$ is /definitionally equal/ to $a'$.
+    $a$ is /definitionally equal/ to $a'$. It is important not to confuse this
+    notion of equality with the notion of /propositional equality/ we will
+    describe later.
 
 *Contexts*, in particular, will be given by a (possibly empty) list of type
 declarations
@@ -7064,7 +7076,7 @@ After we introduce identity types, we will be able to add constraints
 to our structures that will allow us to define more complex algebraic
 structures such as groups or categories.
 
-*** Unit and empty type
+*** Unit, empty, coproduct and boolean types
 **** Empty type                                                   :ignore:
 The *empty* type, $0 \colon {\cal U}$, has no inhabitants and a function $f \colon 0 \to C$
 is defined without having to give any equation.
@@ -7139,7 +7151,7 @@ The following rules apply for the unit type:
 Uniqueness need not to be postulated, it can be proved using these
 axioms.
 
-*** Coproduct and boolean types
+**** Coproducts: definition                                       :ignore:
 #+ATTR_LATEX: :options [Coproduct type]
 #+BEGIN_definition
 The following rules apply for coproduct types:
@@ -7203,9 +7215,18 @@ The following rules apply for coproduct types:
    \end{prooftree}
 #+END_definition
 
+**** Booleans                                                     :ignore:
 # Define booleans as 1+1
 
 *** Natural numbers
+**** Natural numbers: introduction                                :ignore:
+Although we will see later that it can be seen as a particular case of
+inductive datatypes, a *natural numbers* type can be directly
+defined in the core of our type theory. Its introduction rules will match
+Peano's axioms and its elimination and \beta-rules will provide us with
+the notion of induction.
+
+**** Natural numbers: definition                                  :ignore:
 #+ATTR_LATEX: :options [Natural numbers]
 #+BEGIN_definition
 The following rules apply for natural numbers:
@@ -7258,14 +7279,92 @@ The following rules apply for natural numbers:
    \noLine
    \UIC{$\Gamma, x{:} \mathbb{N}, y {:} C \vdash c_s : C[ \mathtt{succ}(x)/x]$}
    \RightLabel{$\mathbb{N}$\textsc{-comp2}}
-   \BIC{$\Gamma \vdash \mathtt{ind}_{\mathbb{N}}([x].C, c_0, [x].[y].c_s, 0) \equiv$}
+   \BIC{$\Gamma \vdash \mathtt{ind}_{\mathbb{N}}([x].C, c_0, [x].[y].c_s, \mathtt{succ}\ n) \equiv$}
    \noLine
    \UIC{$c_s[n/x][\mathrm{ind}_{\mathbb{N}}([x].C, c_0, [x].[y].c_s, n)/y] : C[\mathtt{succ}(n)/x]$}
    \end{prooftree}
-
 #+END_definition
 
+**** Pattern matching                                             :ignore:
+Any function on natural numbers can be defined in two
+equivalent ways, either using the induction principle or its defining
+equations.
+
+ * If we use the induction principle, a function from the naturals
+   to the type $C$ must be defined as
+   \[
+   f :\equiv \mathtt{ind}_{\mathbb{N}}(C, c_0, c_s)
+   \]
+   where $c_s$ can depend on an element of type $C$. Two defining equations
+   capturing the definition could be written in this case as
+   \[\begin{aligned}
+   f(0) :\equiv c_0, \\
+   f( \mathtt{succ}(n)) :\equiv c_s,
+   \end{aligned}\]
+   where $c_s$ would depend on an element of type $C$ that can be interpreted
+   as being $f(n)$, that is, a recursive call to the function.
+
+ * Conversely, we could define a function by its two defining
+   equations. If we had
+   \[\begin{aligned}
+   f(0) :\equiv \Phi_0, \\
+   f( \mathtt{succ}(n)) :\equiv \Phi_s,
+   \end{aligned}\]   
+   where $\Phi_s : C$ depends on $f(n)$, we could substitute $f(n)$ by a variable
+   $r$ and equivalently write the definition as
+   \[
+   f :\equiv \mathtt{ind}_{\mathbb{N}}(C,\Phi_0, \lambda n.\lambda r. \Phi_{s}).
+   \]
+
+This can be done in general with types whose induction principle can be
+split in multiple cases. We will call *pattern matching* to this style
+of defining functions and it will be used from now on because of its
+simplicity. However, we must be careful when doing this, as it could
+create the false impression that arbitrary recursion is allowed in our
+definitions. An equation such as $f(\mathtt{succ}(n)) :\equiv f(\mathtt{succ}(\mathtt{succ}(n)))$,
+for example, is not valid.
+
+\\
+
+**** Addition                                                     :ignore:
+Our first example will be the definition of addition on natural
+numbers. It will be an infix function $+ : \mathbb{N} \to \mathbb{N} \to \mathbb{N}$ given by
+\[\begin{aligned}
+0 + m &:\equiv m, \\
+(\mathtt{succ}\ n) + m &:\equiv \mathtt{succ}(n + m),
+\end{aligned}\]
+where we are applying the induction principle to the first argument.
+In other words,
+\[
+{+} :\equiv \lambda (n{:}\mathbb{N}). \lambda (m{:}\mathbb{N}). \mathtt{ind}_{\mathbb{N}}(\mathbb{N}, m, [s].[r]. \mathtt{succ}\ r, n).
+\]
+
+\\
+
+**** Extensional equality of 2+2=4                                :ignore:
+Under this definition it can be shown that, for example, $2 + 2 :\equiv 4$.
+However, if we wanted to prove the fact that addition is
+commutative, we would have no way of expressing this in terms of an
+extensional equality. We would need a notion of propositional
+equality, that is, an equality $=$ that could be used as a type in an
+expression, in order to write something like
+
+\[
+\mathtt{comm_{+}} : \prod_{n : \mathbb{N}} \prod_{m : \mathbb{N}} (n + m = m + n).
+\]
+
 *** Identity types
+**** Identity types: introduction                                 :ignore:
+Under a /propositions as types/ interpretation, the proposition that
+two elements of a type are equal, should correspond to a type; and
+therefore, equality should correspond to a family of types,
+\[
+{=} : \prod_{A : \cal U} A \to A \to {\cal U}.
+\]
+We will write the equality type between $a,b : A$ interchangeably as
+$a =_A b$ or $\mathrm{Id}_A(a,b)$.
+
+**** Identity types: definition                                   :ignore:
 #+ATTR_LATEX: :options [Identity types]
 #+BEGIN_definition
 The following rules apply for identity types:
@@ -7301,7 +7400,7 @@ The following rules apply for identity types:
    \noLine
    \UIC{$\Gamma \vdash b : A$}
    \AXC{$\Gamma \vdash q : a =_A b$}
-   \RightLabel{$=$\textsc{-comp}}
+   \RightLabel{$=$\textsc{-elim}}
    \TIC{$\Gamma \vdash \mathtt{ind}_{=_A}([x].[y].[p].C, [z].c, a,b,q) : C[a,b,q / x,y,p]$}
    \end{prooftree}
 
@@ -7316,6 +7415,66 @@ The following rules apply for identity types:
    \BIC{$\Gamma \vdash \mathtt{ind}_{=_A}([x].[y].[p].C, [z].c, a, a, \mathtt{refl}_a) \equiv c[a/z] : C[a/x][a/y][\mathtt{refl}_a/p]$}
    \end{prooftree}
 #+END_definition
+
+**** Reflexivity                                                  :ignore:
+Note that the introduction rule on types is a dependent function
+called *reflexivity* that provides us with a basic way of constructing
+an element of type $(a =_A b) : {\cal U}$,
+\[
+\mathtt{refl} :
+\prod_{a : A} (a =_A a).
+\]
+In particular, any two definitionally equal terms, such as $2 + 2 :\equiv 4$,
+are also propositionally equal. In fact, $\mathtt{refl}_4 : 2 + 2 = 4$ is a well-typed
+statement, precisely because of the fact that $2 + 2$ and $4$ are definitionally
+equal.
+
+\\
+
+**** Path induction                                               :ignore:
+The elimination principle and the \beta-rule for identity types are
+usually called the *path induction* principle. It states that, given a
+family of types parametrized over the identity type,
+\[
+C : \prod_{x,y:A} (x =_A y) \to {\cal U},
+\]
+every function defined over the $\mathtt{refl}$ element, $c : \prod_{z:A} C(z,z, \mathtt{refl}_z)$,
+can be extended to any equality term as
+\[
+f : \prod_{x:A}\prod_{y:A}\prod_{p : x=y} C(x,y,p),
+\]
+and it follows from the \beta-rule that $f(x,x, \mathtt{refl}_x) :\equiv c(x)$, that is,
+that it is in fact an extension.
+
+This *path induction* principle could be wrapped into a function
+\[
+\mathtt{ind}_{=} :
+\prod_{\left(C : \prod_{x:A}\prod_{y:A} (x = y) \to {\cal U}\right)}
+\left( \prod_{x:A} C(x,x, \mathtt{refl_x}) \to \prod_{x:A}\prod_{y:A}\prod_{p : x=y} C(x,y,p) \right)
+\]
+and the \beta-rule could be replaced by $\mathtt{ind}_{=}(C,c,x,x, \mathtt{refl}_x) :\equiv c(x)$.
+
+**** Indiscernability of identicals follows from path induction   :ignore:
+We will use path induction to prove a the principle of
+*indiscernability of identicals*, that is, the fact that,
+for every family of types $C : A \to {\cal U}$, there is a function
+between the type associated to propositionally equal elements,
+that is,
+\[
+f : \prod_{x:A} \prod_{y:A} \prod_{p : x=y} C(x) \to C(y),
+\]
+such that, when applied to reflexivity, it outputs the identity
+function, $f(x,x, \mathtt{refl}_x) :\equiv \mathtt{id}_{C(x)}$.
+
+We can prove this principle for any $C : A \to {\cal U}$ by defining
+\[
+f :\equiv
+\mathtt{ind}_{=}
+\left(\lambda x. \lambda y. \lambda p. C(x) \to C(y), \mathtt{id}_{C(x)}\right),
+\]
+and the fact that $f(x,x, \mathtt{refl}_x) :\equiv \mathtt{id}_{C(x)}$ follows from the \beta-rule.
+
+# We will later prove that this function is an equivalence
 
 *** Inductive types
 Inductive types provide the intuitive notion of a free type generated
@@ -7423,9 +7582,6 @@ type system are
 In this text, we will use Agda as our proof assistant and we will mechanize
 proofs in Martin-Löf type theory using it. We will follow [Conor's course].
 
-**** Machine proof                                                :ignore:noexport:
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{id}
-
 *** Martin-Löf type theory in Agda
 In this chapter, we will describe how to program in MLTT using Agda as
 proof assistant. An Agda file consists of type declarations and
@@ -7502,7 +7658,18 @@ the type.
 
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{mlttproof}
 
-*** Type in type
+In particular, we can check our previous proof of the Theorem of
+Choice defining the two projections from a dependent pair type.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{theoremchoice}
+
+The path induction principle follows from the definition of equality
+as an inductive type and can be used to prove indiscernability of
+identicals.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{indiscernability}
+
+*** TODO Type in type
 # Russell's paradox code
 # Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
 # Hurkens' paradox: https://github.com/agda/agda/blob/master/test/Succeed/Hurkens.agda
@@ -7511,8 +7678,28 @@ the type.
 ** Homotopy Type Theory I: Univalence
 # HoTT is the internal language of (infty,1)-toposes
 
+# TODO: Check the unicode error output!
+
+The basic idea of *Homotopy Type Theory* is to think of types as
+\infty-groupoids. Between two elements of a type $a,b:A$ we can define their
+identity type $a =_A b$; between two proofs of equality $p,q : a =_A b$ we
+can define again a new identity type $p =_{a=b} q$; between any two proofs
+of equality between equalities, we could define again a new identity type,
+and so on. All of this \infty-groupoid structure arises from the path
+induction principle.
+
 Homotopy Type Theory (HoTT) adds the univalence axiom and higher
 inductive types to intensional type theory (ITT).
+
+This presentation of Homotopy Type Theory will follow cite:hottbook.
+
+*** Types as \infty-groupoids
+
+**** Types as groupoids                                           :ignore:
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{groupoids}
+
+**** Functions as functors                                        :ignore:
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{groupoid-functors}
 
 *** Univalence axiom
 *** Naturals and Naturals'
