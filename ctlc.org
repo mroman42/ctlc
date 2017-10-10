@@ -5832,6 +5832,8 @@ forcing techniques with allowed to construct new models of ZFC.
 #+LATEX: \end{center}}
 
 * Categorical logic
+# [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Inernal Languages for Higher Toposes - Michael Shulman - YouTube]]
+
 ** Lawvere theories
 # FROM: Introduction to categorical logic, Awodey & Bauer
 
@@ -7642,7 +7644,7 @@ type system are
  * *Agda* implements a variant of MLTT and can be used as a programming
    language or a proof assistant;
 
- * *Coq* was developed in 1984 in the INRIA; it implements Calculus of
+ * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements Calculus of
    Constructions and was used, for example, to check a proof of the
    Four Color Theorem;
    # http://www.ams.org/notices/200811/tx081101382p.pdf
@@ -7652,15 +7654,17 @@ type system are
    MLTT and aims to be a useful programming language instead of a proof
    assistant;
 
- * *NuPRL* implements Extensional Type Theory;
+ * *NuPRL* cite:nuprl86 implements Extensional Type Theory;
 
- * *Cubical* provides an implementation of Cubical Type Theory;
+ * *Cubical* cite:cohen16 provides an implementation of Cubical Type
+   Theory;
 
  * *RedPRL* is still in beta and provides an implementation of Cubical
    Type Theory in the NuPRL style.
 
 In this text, we will use Agda as our proof assistant and we will mechanize
-proofs in Martin-Löf type theory using it. We will follow [Conor's course].
+proofs in Martin-Löf type theory using it. We will introduce Agda using
+ideas from cite:Conor17.
 
 *** Martin-Löf type theory in Agda
 In this chapter, we will describe how to program in MLTT using Agda as
@@ -7749,12 +7753,15 @@ identicals.
 
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{indiscernability}
 
-*** TODO Type in type
+*** Type in type
 # Russell's paradox code
 # Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
 # Hurkens' paradox: https://github.com/agda/agda/blob/master/test/Succeed/Hurkens.agda
 # Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
 # Burali-Forti paradox
+
+#+latex: \ExecuteMetaData[latex/Russell.tex]{russell}
+
 ** Homotopy Type Theory I: Univalence
 # HoTT is the internal language of (infty,1)-toposes
 
@@ -7790,6 +7797,8 @@ this behavior (that is, introduction, elimination and computation rules which co
 with Gentzen’s Inversion Principle) is an open problem.
 #+end_quote
 *** Higher inductive types
+# as free \infty-groupoids
+
 ** Homotopy Type Theory II: Mathematics
 *** TODO Categories
 *** TODO Homotopy theory
