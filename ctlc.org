@@ -5094,6 +5094,8 @@ The square in this diagram is usually called a
 **** TODO Copowers                                                :ignore:
 **** TODO Posets                                                  :ignore:
 ** Adjoints
+# TODO: Lawvere's notation
+
 *** Adjunctions
 **** Definition of adjunction                                     :ignore:
 #+attr_latex: :options [Adjunction]
@@ -5814,6 +5816,8 @@ B(c,d) \times B(a,c) \dlar{\ast} \\
 \end{tikzcd}\]
 #+END_definition
 
+**** TODO Coherence theorem for bicategories                      :ignore:
+# https://ncatlab.org/nlab/show/bicategory
 *** (n,r)-categories
 *** TODO Higher-order categories and homotopy
 # From chapter 2 of HoTT
