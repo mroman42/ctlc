@@ -5637,8 +5637,11 @@ transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
 **** https://ncatlab.org/nlab/show/anafunctor
 *** Kan extensions
 ** n-categories
-*** 2-categories
-# The category of two categories
+# TODO: Bicategories are weak 2-categories
+# TODO: 2-categories are strict 2-categories
+*** Strict 2-categories
+**** 2-categories: introduction                                   :ignore:
+# TODO: The category of two categories
 In a 2-category, instead of having sets of morphisms; we have a
 category of morphisms between any two objects. It has objects,
 called */0-cells/*; morphisms between objects, called */1-cells/*; and
@@ -5701,19 +5704,42 @@ from functoriality. In fact, the category of small categories, with
 functors and natural transformations between them will be an example
 of 2-category.
 
+**** 2-category: definition                                       :ignore:
 #+ATTR_LATEX: :options [2-category]
 #+BEGIN_definition
 A *2-category* is given by
 
   * a collection of objects;
-  * a vertical category $T(a,b)$ for every pair of objects $a,b$;
-  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$.
-  * a horizontal composition functor $K_{a,b,c}\colon T(b,c) \times T(a,b) \to T(a,c)$;
+  * a category $T(a,b)$ for every pair of objects $a,b$, called
+    /vertical category/ between $a,b$;
+  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$;
+  * a horizontal composition functor $K_{a,b,c}\colon T(b,c) \times T(a,b) \to T(a,c)$
+    for every triple of objects $a,b,c$;
 
 where we usually write the action of $K$ on morphisms as $K(\beta,\alpha) = \beta \ast \alpha$.
-# TODO: Such that some axioms hold?
+The functor $K_{a,b,c}$ must be associative and $U_a$ must provide a left and
+right identity.
 #+END_definition
 
+Associativity means that the two following composite functors are
+strictly equal,
+
+\[\begin{tikzcd}[row sep=huge, column sep=tiny]
+&
+T(c,d) \times T(b,c) \times T(a,b)
+\ar[bend left=60]{dd}[name=U,left]{}{}
+\ar[bend right=60]{dd}[name=D]{}[swap]{}
+\drar{K_{a,b,c} \times \id}
+\dlar[swap]{K_{b,c,d} \times \id} & \\
+T(b,d) \times T(a,b) \drar[swap]{K_{a,b,d}} &&
+T(c,d) \times T(a,c) \dlar{K_{a,c,d}} \\
+& T(a,d) & 
+\arrow[phantom,from=U,to=D]{}{=}
+\end{tikzcd}\]
+
+This is a particular case of an *enriched category*.
+
+**** Interchange law                                              :ignore:
 #+ATTR_LATEX: :options [Interchange law]
 #+BEGIN_proposition
 Given any $\alpha,\alpha',\beta,\beta'$ composable 2-cells,
@@ -5732,9 +5758,63 @@ K(\beta' \circ \beta, \alpha' \circ \alpha)  = K((\beta' , \alpha') \circ (\beta
 \end{aligned}\]
 #+END_proof
 
-**** TODO Strict and weak 2-categories                            :ignore:
+**** TODO 2-cat                                                   :ignore:
+# Describe 2-cat as a 3-cat
 **** TODO Eckmann-Hilton                                          :ignore:
 **** TODO Double categories                                       :ignore:
+*** Weak 2-categories
+In the definition of strict 2-categories, we have postulated that the
+horizontal composition of 2-cells should be associative, but we could
+relax this condition and write a similar definition in which the
+horizontal composition is not associative but
+/associative up to isomorphism/. This new definition gives us the
+notion of *bicategories*, which are also called *2-categories*.
+
+**** Formal definition: bicategory                                :ignore:
+#+ATTR_LATEX: :options [Bicategory]
+#+BEGIN_definition
+A *bicategory* is given by
+
+  * a collection of objects;
+  * a category $B(a,b)$ for every pair of objects $a,b$, called
+    /vertical category/ between $a,b$;
+  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$;
+  * a horizontal composition functor $\ast \colon T(b,c) \times T(a,b) \to T(a,c)$
+    for every triple of objects $a,b,c$;
+
+such that, whenever we find the following configuration,
+\[\begin{tikzcd}[]
+a\phantom{b}
+\ar[bend left=60]{r}[name=U1,below]{}{}
+\ar[bend right=60]{r}[name=U2,above]{}{} &
+b\phantom{a}
+\ar[bend left=60]{r}[name=V1,below]{}{}
+\ar[bend right=60]{r}[name=V2,above]{}{} &
+c\phantom{b}
+\ar[bend left=60]{r}[name=W1,below]{}{}
+\ar[bend right=60]{r}[name=W2,above]{}{} &
+d\phantom{c}
+\arrow[Rightarrow,from=U1,to=U2]{}{}
+\arrow[Rightarrow,from=V1,to=V2]{}{}
+\arrow[Rightarrow,from=W1,to=W2]{}{}
+\end{tikzcd}\]
+associativity holds up to natural isomorphism, that is, there exists
+an isomorphism $\alpha$ between the following composite functors
+\[\begin{tikzcd}[row sep=huge, column sep=tiny]
+&
+B(c,d) \times B(b,c) \times B(a,b)
+\ar[bend left=60]{dd}[name=U,left]{\phantom{as}}{}
+\ar[bend right=60]{dd}[name=D,right]{\phantom{as}}[swap]{}
+\drar{\ast \times \id}
+\dlar[swap]{\ast \times \id} & \\
+B(b,d) \times B(a,b) \drar[swap]{\ast} &&
+B(c,d) \times B(a,c) \dlar{\ast} \\
+& B(a,d) & 
+\arrow[Rightarrow,from=D,to=U]{}{\alpha}
+\end{tikzcd}\]
+#+END_definition
+
+*** (n,r)-categories
 *** TODO Higher-order categories and homotopy
 # From chapter 2 of HoTT
 *** TODO Weak \infty-groupoids
