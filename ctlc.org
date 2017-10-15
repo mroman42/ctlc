@@ -3586,7 +3586,7 @@ With these extended types, Mikrokosmos can be used as a proof checker on
 first-order intuitionistic logic by virtue of the Curry-Howard
 correspondence.
 
-*** A proof on intuitionistic logic
+*** A proof in intuitionistic logic
 Under the logical interpretation of Mikrokosmos, we can transcribe proofs in
 intuitionistic logic to \lambda-terms and check them on the interpreter.
 
@@ -3924,18 +3924,22 @@ every class of objects defines a discrete category. Thus, discrete categories
 are classes or sets, without any additional categorical structure.
 #+end_exampleth
 
-**** Monoids, groups                                              :ignore:
+**** Monoids, groups, groupoids                                   :ignore:
 #+attr_latex: :options [Monoids, groups]
 #+begin_exampleth
-A single-object category is a *monoid*. [fn:monoid] A monoid in which
-every morphism is an isomorphism is a *group*. A *groupoid* is a
-category (of any number of objects) where all morphisms are
-isomorphisms.
+A single-object category is a *monoid*. A monoid in which
+every morphism is an isomorphism is a *group*.
 #+end_exampleth
 
-[fn:monoid]: This definition is equivalent to the usual definition of monoid
-if we take the morphisms as elements of the monoid and composition of morphisms
-as the monoid operation.
+This definition is equivalent to the usual definition of monoid if we
+take the morphisms as elements of the monoid and composition of
+morphisms as the monoid operation. Groupoids are also a particular
+case of categories.
+
+#+ATTR_LATEX: :options [Groupoids]
+#+BEGIN_exampleth
+A category in which every morphism is an isomorphism is a *groupoid*.
+#+END_exampleth
 
 **** Posets                                                       :ignore:
 #+attr_latex: :options [Partially ordered sets]
@@ -5100,7 +5104,7 @@ The square in this diagram is usually called a
 **** TODO Arbitrary coproducts                                    :ignore:
 **** TODO Copowers                                                :ignore:
 **** TODO Posets                                                  :ignore:
-** Adjoints
+** Adjoints, monads and algebras
 # TODO: Lawvere's notation
 
 *** Adjunctions
@@ -5280,7 +5284,6 @@ are $\pair{G \eta' F \circ \eta,\ \varepsilon' \circ F' \varepsilon G'}$.
 *** TODO Examples of adjoints
 *** TODO Equivalence of categories
 *** TODO Adjoints for preorders (Galois connections)
-** Monads and algebras
 *** Monads
 **** Definition of Monads                                         :ignore:
 #+attr_latex: :options [Monad]
@@ -5645,6 +5648,9 @@ transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
 **** Heteromorphisms
 **** https://ncatlab.org/nlab/show/anafunctor
 *** Kan extensions
+** TODO Monoidal categories
+*** TODO String diagrams
+# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
 ** n-categories
 # TODO: Bicategories are weak 2-categories
 # TODO: 2-categories are strict 2-categories
@@ -5824,14 +5830,51 @@ B(c,d) \times B(a,c) \dlar{\ast} \\
 #+END_definition
 
 **** TODO Coherence theorem for bicategories                      :ignore:
+# https://ncatlab.org/nlab/show/pentagon+identity
 # https://ncatlab.org/nlab/show/bicategory
-*** (n,r)-categories
+
+*** TODO Groupoids
+*** TODO \infty-groupoids
+# http://www.cs.nott.ac.uk/~psztxa/publ/weakomega2.pdf
+# https://arxiv.org/pdf/1709.09519.pdf
+# https://arxiv.org/pdf/1007.2925.pdf Groth, course on infty-categories
+*** Simplicial sets
+
+*** (\infty,1)-categories
+There is no consensus on the definition of a *(\infty,1)-category* yet,
+but whenever we talk of (\infty,1)-categories, we expect them to have
+
+ - a collection of objects;
+ - morphisms between objects, invertible 2-morphisms between
+   morphisms, invertible 3-morphisms between 2-morphisms, invertible
+   morphisms between 4-morphisms, and so forth;
+ - composition of morphisms, with suitably associative and identity
+   laws.
+
+In general, a *(n,k)-category* has morphisms, 2-morphisms, \dots and
+n-morphisms, and all morphisms above the k-th dimension are
+invertible.
+# We follow [Groth]
+
+**** Simplicial sets                                              :ignore:
+Let $\Delta$ be the category of finite ordinals, with objects of the
+form
+\[
+[n] = (0 < \dots < n),
+\]
+for any $n \in \mathbb{N}$, and order-preserving maps between them. The category
+of *simplicial sets* is the functor category $\Sets^{\Delta^{op}}$.
+
+**** TODO Fundamental \infty-groupoid                             :ignore:
+# Grothendieck homotopy hypothesis
+*** TODO Higher categories
+# https://ncatlab.org/nlab/show/%28n%2Cr%29-category
+# https://ncatlab.org/nlab/show/higher+category+theory
+# https://arxiv.org/pdf/1007.2925.pdf Short course on infty-categories
+
 *** TODO Higher-order categories and homotopy
 # From chapter 2 of HoTT
 *** TODO Weak \infty-groupoids
-** TODO Monoidal categories
-*** TODO String diagrams
-# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
 
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
@@ -5843,10 +5886,10 @@ forcing techniques with allowed to construct new models of ZFC.
 #+LATEX: \end{center}}
 
 * Categorical logic
-# [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Inernal Languages for Higher Toposes - Michael Shulman - YouTube]]
+# [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
 ** Lawvere theories
-# FROM: Introduction to categorical logic, Awodey & Bauer
+This section follows cite:bauer17.
 
 *** Motivation for algebraic theories
 We will develop an unified approach to the study of algebraic
