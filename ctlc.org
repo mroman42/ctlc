@@ -6074,6 +6074,17 @@ An *algebraic category* is category equivalent to a category of the form $\matht
 where $\mathbb{A}$ is an algebraic theory.
 #+END_definition
 
+**** TODO Example: groups                                         :ignore:
+#+ATTR_LATEX: :options [Theory of groups]
+#+BEGIN_exampleth
+# Groups as algebraic theory
+# Category of groups as category of models in Set
+# Abelian groups as models in the category Grp
+#+END_exampleth
+
+# Hopf algebras
+# https://www.youtube.com/watch?v=p3kkm5dYH-w
+
 **** Example: fields                                              :ignore:
 #+ATTR_LATEX: :options [Fields have no algebraic theory]
 #+BEGIN_exampleth
@@ -6086,14 +6097,6 @@ models must preserve all finite products. We know that $\Delta_1$ is a
 terminal object because, in general, it is the terminal object of the
 category of functors ${\cal C}^{\mathbb{A}}$.
 However, $\mathtt{Fields}$ has no terminal object.
-#+END_exampleth
-
-**** TODO Example: groups                                         :ignore:
-#+ATTR_LATEX: :options [Theory of groups]
-#+BEGIN_exampleth
-# Groups as algebraic theory
-# Category of groups as category of models in Set
-# Abelian groups as models in the category Grp
 #+END_exampleth
 
 **** TODO More examples
@@ -6825,9 +6828,6 @@ elimination rules
 \BIC{$$}
 \end{prooftree}
 
-** \infty-groupoids
-# https://arxiv.org/pdf/1709.09519.pdf
-
 ** Topoi
 *** Subobject classifier
 #+attr_latex: :options [Subobject classifier]
@@ -6858,9 +6858,22 @@ with all finite limits and a subobject classifier.
 # that the proof be constructive, then the result holds in any boolean
 # topos. On the other hand, if you add the restriction that the proof be
 # predicative in the weaker sense used by constructivists, then the
-# result may fail in some toposes but holds in any Π\Pi-pretopos; if you
+# result may fail in some toposes but holds in any Π-pretopos; if you
 # add the restriction that the proof be predicative in a stronger sense,
 # then the result holds in any Heyting pretopos.
+
+*** TODO (\infty,1)-toposes
+** TODO Table of correspondences
+[[https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory][relation between type theory and category theory in nLab]]
+
+|------------------------------------+------------------------------------------------|
+| Type theory                        | Category theory                                |
+|------------------------------------+------------------------------------------------|
+| Simply typed lambda calculus       | Cartesian closed categories                    |
+| Extensional dependent type theory  | Locally cartesian closed categories            |
+| Martin-Löf intensional type theory | Locally cartesian closed (\infty,1)-categories |
+| Homotopy type theory               | Elementary (\infty,1)-topos                    |
+|------------------------------------+------------------------------------------------|
 
 * Type theory (abstract)                                             :ignore: 
 #+LATEX: \ctparttext{\color{black}\begin{center}
@@ -7835,11 +7848,15 @@ inductive types to intensional type theory (ITT).
 This presentation of Homotopy Type Theory will follow cite:hottbook.
 
 *** Types as \infty-groupoids
-
 **** Types as groupoids                                           :ignore:
+Types and identity types between their elements are groupoids.
+# Higher Identity types give them a structure of higher groupoids.
+
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{groupoids}
 
 **** Functions as functors                                        :ignore:
+Functions can be seen as functors between groupoids.
+
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{groupoid-functors}
 
 *** Univalence axiom
