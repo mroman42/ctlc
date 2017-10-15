@@ -13,6 +13,7 @@
 :END:
 
 This is the abstract.
+# There is no claim of originality (?)
 
 ** Acknowlegments                                                 :noexport:
 # David Charte and Ignacio Cordón, testing the first versions of
@@ -858,36 +859,38 @@ untyped \lambda-calculus as a programming language is given in the chapter
 ** Simply typed \lambda-calculus
 */Types/* were introduced in mathematics as a response to the
 Russell's paradox, found in the first naive axiomatizations of set
-theory. An attempt to use the untyped \lambda-calculus as a foundational
+theory. An attempt to use untyped \lambda-calculus as a foundational
 logical system by Church suffered from the */Rosser-Kleene paradox/*, as
 detailed in cite:kleene35 and cite:curry46; and types were a way to avoid it.
-Once types are added, a deep connection between the \lambda-calculus and
+Once types are added, a deep connection between \lambda-calculus and
 logic arises. This connection will be discussed in the [[*The Curry-Howard correspondence][next chapter]].
 
-In programming languages, types signal how the programmer intends to
-use the data, prevent errors, and enforce certain invariants and levels
-of abstraction in programs. The role of types in the \lambda-calculus as
-a programming language closely matches what we would expect of types
-in any common programming language, and typed \lambda-calculus has been the basis
-of many modern type systems for programming languages.
+In programming languages, types indicate how the programmer intends to
+use the data, prevent errors, and enforce certain invariants and
+levels of abstraction in programs. The role of types in
+\lambda-calculus when interpreted as a programming language closely
+matches what we would expect of types in any common programming
+language, and typed \lambda-calculus has been the basis of many modern
+type systems for programming languages.
 
-The *simply typed \lambda-calculus* (STLC) is a refinment of the untyped
-\lambda-calculus. In it, each term has a type, which limits how it can be
-combined with other terms. Only a set of basic types and function
-types between any to types are considered in this system. Whereas functions
-in untyped \lambda-calculus could be applied over any term, now a function
-of type $A \to B$ can only be applied over a term of type $A$, to produce
-a new term of type $B$, where $A$ and $B$ could be, themselves, function types.
+*Simply typed \lambda-calculus* is a refinment of the untyped
+\lambda-calculus. In it, each term has a type, which limits how it can
+be combined with other terms. Only a set of basic types and function
+types between any to types are considered in this system. Whereas
+functions in untyped \lambda-calculus could be applied over any term,
+now a function of type $A \to B$ can only be applied over a term of
+type $A$, to produce a new term of type $B$, where $A$ and $B$ could
+be, themselves, function types.
 
-We will give now a presentation of the simply typed \lambda-calculus
-based on cite:Hindley08. Our presentation will rely only on the
-/arrow type constructor/ $\to$. While other presentations of simply typed
-\lambda-calculus extend this definition with type constructors providing
-pairs or union types, as it is done in cite:selinger13,
-it seems clearer to present a first minimal version of the
-\lambda-calculus. Such extensions will be explained later, and its exposition
-will profit from the logical interpretation that we will explain in
-"[[*Propositions as types][propositions as types]]".
+We will give now a presentation of simply typed \lambda-calculus based
+on cite:Hindley08. Our presentation will rely only on the /arrow type constructor/
+$\to$. While other presentations of simply typed
+\lambda-calculus extend this definition with type constructors
+providing pairs or union types, as it is done in cite:selinger13, it
+seems clearer to present a first minimal version of the
+\lambda-calculus. Such extensions will be explained later, and its
+exposition will profit from the logical interpretation that we will
+explain in "[[*Propositions as types][propositions as types]]".
 
 *** Simple types
 We start assuming a set of *basic types*. Those basic types would
@@ -908,14 +911,14 @@ where $\iota$ would be any /basic type/.
 That is to say that, for every two types $A,B$, there exists a
 *function type* $A \to B$ between them.
 
-*** Typing rules for the simply typed \lambda-calculus
-We will now define the terms of the simply typed \lambda-calculus
-using the same constructors we used on the untyped version. Those are
-the */raw typed \lambda-terms/*.
+*** Typing rules for simply typed \lambda-calculus
+We will now define the terms of simply typed \lambda-calculus using
+the same constructors we used on the untyped version. Those are the
+*/raw typed \lambda-terms/*.
 
 #+attr_latex: :options [Raw typed lambda terms]
 #+begin_definition
-The set of *typed lambda terms* is given by the BNF
+The set of *typed lambda terms* is given by the following Backus-Naus form
 \[ \mathtt{Term} ::=
 x \mid
 \mathtt{Term}\ \mathtt{Term} \mid
@@ -986,12 +989,15 @@ listed above and the conclusion is written below the line.
     \end{prooftree}
 
 #+begin_definition
-A term is *typeable* if a typing judgment for the term is derivable.
+A term $M$ is *typeable* in a giving context $\Gamma$ if a typing
+judgement of the form $\Gamma \vdash M : T$ can be derived using only
+the previous typing rules.
 #+end_definition
 
-From now on, we only consider typeable terms as the terms of the
-STLC. As a consequence, the set of \lambda-terms of the STLC is only a
-subset of the terms of the untyped \lambda-calculus.
+From now on, we only consider typeable terms as the only terms of
+simply typed \lambda-calculus. As a consequence, the set of \lambda-terms
+of simply typed \lambda-calculus is only a subset of the terms of untyped
+\lambda-calculus.
 
 **** TODO Beta rules for STLC                                     :noexport:ignore:
 # These rules are not necessary, we are only using function types.
@@ -1059,19 +1065,19 @@ Two different approaches to typing in \lambda-calculus are commonly used.
    creates a formalism where every single term can be given an
    infinite number of types.  This technique is called
    */polymorphism/* when it is a formal part of the language; but
-   here, it is only used to allow us to intermediate terms without having to
-   directly specify their type.
+   here, it is only used to allow us to build intermediate terms
+   without having to directly specify their type.
 
 As an example, we can consider the identity term $I = \lambda x.x$. It would have to be 
 defined for each possible type. That is, we should consider a family of different 
-identity terms $I_A = \lambda x.x : A \to A$. Curry-style typing allow us to consider 
+identity terms $I_A = \lambda x.x : A \to A$. Curry-style typing allows us to consider 
 parametric types with type variables, and to type the identity as 
 $I = \lambda x.x : \sigma \to \sigma$ where $\sigma$ would a free type variable.
 
-#+attr_latex: :options [Type variables]
+#+attr_latex: :options [Parametric types]
 #+begin_definition
 Given a infinite numerable set of /type variables/, we define *parametric types*
-or /type-schemes/ inductively as
+or /type templates/ inductively as
 \[\mathtt{PType} ::= 
 \iota \mid
 \mathtt{Tvar} \mid 
@@ -1090,23 +1096,24 @@ of type substitution.
 
 #+attr_latex: :options [Type substitution]
 #+begin_definition
-A *substitution* $\psi$ is any function from type variables to type templates. It can
-be applied to a type template as $\overline{\psi}$ by recursion and knowing that
+A *substitution* $\psi$ is any function from type variables to type templates. Any
+substitution $\psi$ can be extended to a function between type templates called $\overline{\psi}$
+and defined inductively by
 
-   * $\overline{\psi} \iota = \iota$,
-   * $\overline{\psi} \sigma = \psi \sigma$, # para toda variable sigma
+   * $\overline{\psi} \iota = \iota$, for any basic type $\iota$;
+   * $\overline{\psi} \sigma = \psi \sigma$, for any type variable $\sigma$;
    * $\overline{\psi} (A \to B) = \overline{\psi} A \to \overline{\psi} B$.
 
-That is, the type template $\overline{\psi} A$ is the same as $A$ but with every type variable
+That is, the parametric type $\overline{\psi} A$ is the same as $A$ but with every type variable
 replaced according to the substitution $\psi$.
 #+end_definition
 
 We consider a type to be /more general/ than other if the latter can be obtained by
 applying a substitution to the former. In this case, the latter is called an /instance/
-of the former. For instance, $A \to B$ is more general than its instance
-$(C \to D) \to B$, where $A$ has been instantiated to $C \to D$. An
-interesting property of STLC is that every type has a most general type, called
-its /principal type/. This is proved in Theorem [[thm-typeinfer]].
+of the former. For example, $A \to B$ is more general than its instance
+$(C \to D) \to B$, where $A$ has been substituted by $C \to D$. An
+crucial property of simply typed \lambda-calculus is that every type has a most
+general type, called its /principal type/; this will be proved in Theorem [[thm-typeinfer]].
 
 #+attr_latex: :options [Principal type]
 #+begin_definition
@@ -1852,7 +1859,7 @@ apply the =case= simplification/reduction rule to get
 which is encoded by =λa.(inr a)=.
 
 On the chapter on [[*Mikrokosmos][Mikrokosmos]], we develop a \lambda-calculus interpreter
-which is able to check and simplify proofs on intuitionistic logic.
+which is able to check and simplify proofs in intuitionistic logic.
 This example could be checked and simplified by this interpreter as
 it is shown in image [[mikrogentzen]]. 
 
@@ -3444,7 +3451,7 @@ These definitions unfold as
 
 ** Programming in the simply typed \lambda-calculus
 This section explains how to use the simply typed \lambda-calculus to
-encode compound data structures and proofs on intuitionistic logic.
+encode compound data structures and proofs in intuitionistic logic.
 We will use the interpreter as a typed language and, at the same time,
 as a proof assistant for the intuitionistic propositional logic.
 
