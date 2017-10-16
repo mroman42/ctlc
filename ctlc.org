@@ -3634,13 +3634,21 @@ the notion of composition. A category will be built from some sort
 of objects linked by composable arrows; to which associativity and
 identity laws will apply.
 
+Thus, a category has to rely in some notion of /*collection*/. When
+interpreted inside set-theory, it is common to use the term to denote
+some unspecified formal notion of compilation of entities that could
+be given by sets or proper classes. We will want to define categories
+whose objects are all the possible sets and we will need the objects
+to form a proper class in order to avoid inconsistent results such as
+the Russell's paradox.
+
 *** Definition of category
 **** Categories, objects and morphisms                            :ignore:
 #+attr_latex: :options [Category]
 #+begin_definition
 A *category* ${\cal C}$, as defined in cite:maclane78, is given by
 
- * ${\cal C}_0$, a collection[fn:collection] whose elements are called
+ * ${\cal C}_0$ (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), a collection whose elements are called
    *objects*[fn:objectnotation], and
  * ${\cal C}_1$, a collection whose elements are called *morphisms*.
 
@@ -3666,13 +3674,6 @@ for any $f,g,h$, composable morphisms.
 
 [fn:objectnotation]: We will sometimes write this class of objects of
 a category ${\cal C}$ as $\mathrm{obj}({\cal C})$, but it is common to simply use ${\cal C}$ to denote it.
-
-[fn:collection]: We use the term /collection/ to denote
-some unspecified formal notion of compilation of entities that could
-be given by sets or proper classes. We will want to define categories
-whose objects are all the possible sets and we will need the objects
-to form a proper class in order to avoid inconsistent results such as
-the Russell's paradox.
 
 **** Definition of hom-sets and small categories                  :ignore:
 #+attr_latex: :options [Hom-sets]
