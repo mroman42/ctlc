@@ -3952,6 +3952,19 @@ In particular, every ordinal can be seen as a partially ordered set
 and defines a category.
 #+end_exampleth
 
+For example, if we take the finite ordinal $[n] = (0 < \dots < n)$, it
+could be interpreted as the category given by the following diagram
+\[\begin{tikzcd}
+0 \rar\arrow[loop above]\ar[bend right]{rr}\ar[bend right]{rrrr} &
+1 \rar\arrow[loop above]\ar[bend right]{rrr} &
+2 \rar\arrow[loop above]\ar[bend right]{rr} &
+\dots \rar &
+n \arrow[loop above]
+\end{tikzcd}\]
+in which every object $p$ has an identity arrow and a unique arrow
+to every $q$ such that $p \leq q$. Note how the composition of arrows can
+be only defined in a single way.
+
 **** TODO Concrete categories                                     :ignore:
 **** Category of Sets                                             :ignore:
 #+attr_latex: :options [The category of sets]
@@ -3965,7 +3978,7 @@ the identity function for any set.
 **** Category of Groups                                           :ignore:
 #+attr_latex: :options [The category of groups]
 #+begin_exampleth
-The category $\mathtt{Grp}$ is defined as the category with groups as objects
+The category $\mathsf{Grp}$ is defined as the category with groups as objects
 and group homomorphisms between them as morphisms.
 #+end_exampleth
 
@@ -3983,7 +3996,7 @@ In particular, abelian groups form a category as $\mathbb{Z}\text{-modules}$.
 **** Category of Topological spaces                               :ignore:
 #+attr_latex: :options [The category of topological spaces]
 #+begin_exampleth
-The category $\mathtt{Top}$ is defined as the category with topologicaal spaces as
+The category $\mathsf{Top}$ is defined as the category with topologicaal spaces as
 objects and continuous functions between them as morphisms.
 #+end_exampleth
 
