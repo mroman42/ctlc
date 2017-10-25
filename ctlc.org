@@ -6,6 +6,7 @@
 
 # Evitar notas al pie de página
 # Quitar abreviaturas
+# Usar 1 y 0 para objetos inicial y final
 
 ** Abstract
 :PROPERTIES:
@@ -1380,6 +1381,7 @@ will continue to work. The previous proofs and algorithms can be extended to cov
 all the new cases.
 # And this is done on the mikrokosmos implementation
 
+**** Simple types II                                              :ignore:
 #+attr_latex: :options [Simple types II]
 #+begin_definition
 The new set of *simple types* is given by the following BNF
@@ -1400,6 +1402,7 @@ from $A$ or $B$; an unit type $1$ with only an element, and an empty
 or void type $0$ without inhabitants. The raw typed \lambda-terms are
 extended to use these new types.
 
+**** Raw typed lambda terms II                                    :ignore:
 #+attr_latex: :options [Raw typed lambda terms II]
 #+begin_definition
 The new set of raw *typed lambda terms* is given by the BNF
@@ -1517,6 +1520,7 @@ of typing rules.
      The abort function must be understood as the unique function going
      from the empty set to any given set.
 
+**** Beta-eta reductions in extended typed lambda calculus        :ignore:
 The \beta-reduction of terms is defined the same way as for the untyped
 \lambda-calculus; except for the inclusion of \beta-rules governing the
 new terms, each for every new destruction rule.
@@ -3648,9 +3652,9 @@ the Russell's paradox.
 #+begin_definition
 A *category* ${\cal C}$, as defined in cite:maclane78, is given by
 
- * ${\cal C}_0$ (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), a collection whose elements are called
-   *objects*[fn:objectnotation], and
- * ${\cal C}_1$, a collection whose elements are called *morphisms*.
+ * ${\cal C}_0$ (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), a /collection/ whose
+   elements are called *objects*, and
+ * ${\cal C}_1$, a /collection/ whose elements are called *morphisms*.
 
 Every morphism $f \in {\cal C}_1$ is assigned two objects: a
 *domain*, written as $\mathrm{dom}(f) \in {\cal C}_0$, and a
@@ -3672,19 +3676,16 @@ f \circ \id_A = f = \id_B \circ f,
 for any $f,g,h$, composable morphisms.
 #+end_definition
 
-[fn:objectnotation]: We will sometimes write this class of objects of
-a category ${\cal C}$ as $\mathrm{obj}({\cal C})$, but it is common to simply use ${\cal C}$ to denote it.
-
 **** Definition of hom-sets and small categories                  :ignore:
 #+attr_latex: :options [Hom-sets]
 #+begin_definition
 The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
 between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
-of an object $A$ is the hom-set $\mathrm{end}(A) = \hom(A,A)$.
+of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
 #+end_definition
 
-Sometimes, when considering a hom-set, it will be useful to explicitly
-specify the category on which we are working as $\hom_{{\cal C}}(A,B)$.
+We can use a subscript, as in $\hom_{{\cal C}}(A,B)$ to explicitly
+specify the category we are working in when necessary.
 
 #+attr_latex: :options [Small and locally small categories]
 #+begin_definition
