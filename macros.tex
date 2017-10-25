@@ -64,32 +64,38 @@
 \newcommand{\impl}{\Rightarrow} % Implication
 \DeclarePairedDelimiter\pair{\langle}{\rangle} % Pair notation
 \DeclarePairedDelimiter\intr{\llbracket}{\rrbracket} % Interpretation brackets
-\DeclarePairedDelimiter\intl{\llbracket}{\rrbracket} % Internal language brackets
+% \DeclarePairedDelimiter\intl{\llbracket}{\rrbracket} % Internal language brackets
 
 % Lambda calculus
-\newcommand{\skiabs}{\mathfrak{H}} % SKI abstraction
-\newcommand{\lambdatrans}{\mathfrak{L}} % Lambda transformation
-\newcommand{\tto}{\twoheadrightarrow} % Reduction
+\newcommand\skiabs{\mathfrak{H}} % SKI abstraction
+\newcommand\lambdatrans{\mathfrak{L}} % Lambda transformation
+\newcommand\tto{\twoheadrightarrow} % Reduction
+\newcommand\redu{\mathtt{RED}} % Reducibility
+\newcommand\fst{\mathtt{fst}} % first
+\newcommand\snd{\mathtt{snd}} % second
 \DeclareMathOperator{\freevars}{FV} % Free variables
-\newcommand{\redu}{\mathtt{RED}} % Reducibility
 
 % Categories
-\newcommand{\hom}{\mathrm{hom}}
-\newcommand{\id}{\mathrm{id}}
-\newcommand{\Id}{\mathrm{Id}}
-\newcommand{\todot}{\xrightarrow{.}}
-\newcommand{\toddot}{\xrightarrow{..}}
-\newcommand{\Set}{\mathsf{Set}}
-\newcommand{\Cat}{\mathsf{Cat}}
-\newcommand{\Sets}{\mathsf{Sets}}
-\newcommand{\sSets}{\mathsf{sSets}}
-\newcommand{\Nat}{\operatorname{Nat}}
-\newcommand{\Limit}{\varprojlim}
-\newcommand{\Colimit}{\varinjlim}
+\newcommand\hom{\mathrm{hom}}
+\newcommand\id{\mathrm{id}}
+\newcommand\Id{\mathrm{Id}}
+\newcommand\todot{\xrightarrow{.}}
+\newcommand\toddot{\xrightarrow{..}}
+\newcommand\Set{\mathsf{Set}}
+\newcommand\Cats{\mathsf{Cat}}
+\newcommand\Sets{\mathsf{Set}}
+\newcommand\sSets{\mathsf{sSets}}
+\newcommand\Nat{\operatorname{Nat}}
+\newcommand\Limit{\varprojlim}
+\newcommand\Colimit{\varinjlim}
 \colorlet{myred}{red!75!black}
-\newcommand{\red}[1]{\color{myred}{#1}}
 \colorlet{myblue}{cyan!90!black}
+\newcommand{\red}[1]{\color{myred}{#1}}
 \newcommand{\blue}[1]{\color{myblue}{#1}}
+% Topos
+\newcommand\Sub{\operatorname{Sub}}
+\newcommand\FinSet{\mathsf{FinSet}}
+
 
 % Type Systems on the lambda cube
 \newcommand{\ctypes}[1]{\color{blue!90!black}{#1}}
@@ -109,3 +115,4 @@
 \newcommand{\wtype}{\mathop{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\huge{\textsf{W}}}}}{\vcenter{\hbox{\Large\textsf{W}}}}{\textsf{W}}{\textsf{W}}}\displaylimits}
 \newcommand{\wt}{\textsf{W}}
 \newcommand{\proj}{\mathtt{pr}}
+\newcommand\refl{\mathtt{refl}}
