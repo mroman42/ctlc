@@ -6130,7 +6130,7 @@ composable morphisms of length $n$.
 The *nerve functor* $N \colon \Cat \to \sSets$ is fully faithful.
 #+END_lemma
 
-**** Standard n-simplex
+**** Standard n-simplex                                           :ignore:
 #+ATTR_LATEX: :options [Standard n-simplex]
 #+BEGIN_definition
 The *standard n-simplex*, $\Delta^n$, is defined as the nerve of $[n]$,
@@ -6149,7 +6149,6 @@ correspond to maps between ordinals
 Thus, coface and codegeracy maps can be defined between n-simplices.
 In particular, the i-th face of $\Delta^n$, written as $\partial_i \Delta^n$ is defined as the image of
 $d^i : \Delta^{n-1} \to \Delta^n$.
-
 
 **** Boundaries                                                   :ignore:
 The boundary is the smallest subsimplicial set of $\Delta^n$
@@ -6216,8 +6215,6 @@ has a solution, which needs not to be unique.
 \end{tikzcd}\]
 #+END_definition
 
-
-
 *** (\infty,1)-categories
 # https://ncatlab.org/nlab/show/%28n%2Cr%29-category
 # https://ncatlab.org/nlab/show/higher+category+theory
@@ -6239,9 +6236,8 @@ have
 In general, a *(n,k)-category* has morphisms, 2-morphisms, \dots and
 n-morphisms, and all morphisms above the k-th dimension are
 invertible. This section will follow cite:groth10.
-# We follow [Groth] and 
 
-**** \infty-categories :ignore:
+**** \infty-categories                                            :ignore:
 #+ATTR_LATEX: :options [\infty-category]
 #+BEGIN_definition
 An *\infty-category* is a simplicial set ${\cal C} \in \sSets$ such that every
@@ -6250,9 +6246,29 @@ An *\infty-category* is a simplicial set ${\cal C} \in \sSets$ such that every
 
 # Spaces and categories give rise to \infty-categories
 
-# Source, target and identities as coface and codegeneracy maps
+In particular, we call 
 
-*** \infty-groupoids
+ - *objects* to the vertices of the simplicial set ${\cal C}_0$;
+
+ - *morphisms* to the 1-simplices $f \in {\cal C}_1$; the /source map/ is given
+   by the first face map $d_1 : {\cal C}_1 \to {\cal C}_0$ and the /target map/ is given
+   by the second face map $d_2 : {\cal C}_1 \to {\cal C}_0$.
+
+ - *identity map* to the degeneracy map $s_0 \colon {\cal C}_0 \to {\cal C}_1$;
+   # it is an endomorphism
+
+ - *composition* of two morphisms $f : x \to y$ and $g : y \to z$ to the morphism
+   that we obtain by extending an inner horn $l : \Lambda^2_1 \to {\cal C}$ such that $d_0(l) = g$
+   and $d_2(l) = f$ to a 2-simplex $\sigma : \Delta^2 \to {\cal C}$. Note that this, however, does
+   not provide a unique candidate for composition.
+
+
+**** Functors of \infty-categories                                :ignore:
+A functor between two \infty-categories ${\cal C},{\cal D}$ is just a map of
+simplicial sets between them; a natural transformation is defined
+as a map $\Delta^1 \times {\cal C} \to {\cal D}$.
+
+**** \infty-groupoids                                             :ignore:
 # http://www.cs.nott.ac.uk/~psztxa/publ/weakomega2.pdf
 # https://arxiv.org/pdf/1709.09519.pdf
 # https://arxiv.org/pdf/1007.2925.pdf Groth, course on infty-categories
