@@ -6291,7 +6291,6 @@ complex.
 *** TODO Higher-order categories and homotopy
 # From chapter 2 of HoTT
 *** TODO Weak \infty-groupoids
-
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
@@ -6498,7 +6497,7 @@ where $\mathbb{A}$ is an algebraic theory.
 # Abelian groups as models in the category Grp
 #+END_exampleth
 
-# Hopf algebras
+# Antipode in Hopf algebras
 # https://www.youtube.com/watch?v=p3kkm5dYH-w
 
 **** Example: fields                                              :ignore:
@@ -6648,6 +6647,7 @@ infima and arbitrary suprema.
 # introduction to topos theory
 
 ** Heyting algebras
+# Tarski-Stone representation theorem
 In this section, we develop the notion of a *Heyting algebra* and show
 its differences with a Boolean algebra.
 
@@ -6987,19 +6987,126 @@ has left and right adjoints, called $\exists_f$ and $\forall_f$.
 
 ** Simply-typed \lambda-theories
 *** Simply-typed \lambda-theories
+We will consider again the previously defined simply typed
+\lambda-calculus, but this time, as a theory instead of as a
+programming language. Recall that a /context/ was a sequence
+of typed variables $x_1,x_2,\dots,x_n$, of the form
+\[
+\Gamma = x_1:A_1, \dots, x_n:A_n.
+\]
+And any /typing judgment/ was of the form $\Gamma \vdash a : A$. This time,
+the theory will also introduce equations of the form $\Gamma \vdash a = b : A$
+as judgments.
+
+In particular, we will work only with a fragment of system that we
+defined in "[[*Extending the simply typed \lambda-calculus][Extending the simply typed \lambda-calculus]]", namely, the
+fragment containing only arrow types, an unit type and product
+types. 
+
+\\
+
+**** Equality in simply-typed \lambda-theories                    :ignore:
+Equality must now be defined over these typed terms. We have the
+following set of rules for it, clearly inspired by the usual properties
+of equivalence relations, \beta-reductions and \eta-reductions.
+
+ 1) The assumptions needed to prove an equality can be weakened
+    \begin{prooftree}
+    \RightLabel{\textsc{weak}}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \UIC{$\Gamma, w:B \vdash u = v : A$}
+    \end{prooftree}
+
+ 2) Equality is reflexive, transitive and symmetric; that is, it is an
+    equivalence relation
+    \begin{prooftree}
+    \RightLabel{\textsc{refl}}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash u = u : A$}
+    \RightLabel{\textsc{symm}}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \UIC{$\Gamma \vdash v = u : A$}
+    \RightLabel{\textsc{trans}}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \AXC{$\Gamma \vdash v = w : A$}
+    \BIC{$\Gamma \vdash u = w : A$}
+    \noLine
+    \TIC{$$}
+    \end{prooftree}
+
+ 3) The unit type has only one element
+    \begin{prooftree}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash t = \ast : \top$}
+    \end{prooftree}
+
+ 4) Reduction rules for products define the following equalities
+    for pair constructors
+    \begin{prooftree}
+    \AXC{$\Gamma \vdash u = w : A$}
+    \AXC{$\Gamma \vdash v = t : B$}
+    \BIC{$\Gamma \vdash \pair{u,v} = \pair{w,t} : A \times B$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash \fst \pair{u,v} = u : A$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash \snd \pair{u,v} = v : B$}
+    \noLine
+    \TIC{$$}
+    \end{prooftree}
+    and the following ones for projections
+    \begin{prooftree}
+    \AXC{$\Gamma \vdash m = n : A \times B$}
+    \UIC{$\Gamma \vdash \fst\ m = \fst\ n : A$}
+    \AXC{$\Gamma \vdash m = n : A \times B$}
+    \UIC{$\Gamma \vdash \snd\ m = \snd\ n : B$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash m = \pair{\fst\ m, \snd\ m} : A \times B$}
+    \noLine
+    \TIC{$$}
+    \end{prooftree}
+
+ 5) Reduction rules for functions translate into the following equations,
+    where the second one is directly derived from the \beta-rule
+    \begin{prooftree}
+    \AXC{$\Gamma \vdash f = g : A \to B$}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \BIC{$\Gamma \vdash f\ u = g\ v : B$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash (\lambda x. w)\ u = w[u/x] : A$}
+    \noLine
+    \BIC{$$}
+    \end{prooftree}
+    and the following ones, where the second one is directly derived from
+    the \eta-rule
+    \begin{prooftree}
+    \AXC{$\Gamma, x:A \vdash w = t : B$}
+    \UIC{$\Gamma \vdash (\lambda x.w) = (\lambda x.t) : A \to B$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash (\lambda x.f\ x) = f : A \to B$}
+    \noLine
+    \BIC{$$}
+    \end{prooftree}
+
+**** Lambda theories
+In a \lambda-theory we may want to add a set of additional equations
+apart from those defined in the previous set of rules.
+
 #+ATTR_LATEX: :options [Simply typed lambda theory]
 #+BEGIN_definition
 A simply-typed \lambda-theory is given by
 
-  * a set of /basic types/.
-  * a set of /basic constants/ with their types.
-  * a set of /equations/ on those terms, of the form $\Gamma \mid u = t : A$,
+  * a set of /basic types/;
+  * a set of /basic constants/ with their types; and
+  * a set of /equations/ on those terms, of the form $\Gamma \vdash a = b : A$,
     where $\Gamma$ is the variable context.
 #+END_definition
 
-# TODO Example: Groups
 # TODO Any algebraic theory is a lambda theory
+# TODO Preorders
 # TODO Theory of a reflexive type
+
+# The difference here is that we can now write equalities between
+# functions.
 
 *** Interpretation of \lambda-theories
 #+ATTR_LATEX: :options [Interpretation of a lambda theory]
