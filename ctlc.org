@@ -7125,35 +7125,92 @@ object, binary products and exponentials
  * $\intr{A \impl B} = \intr{B}^{\intr{A}}$.
 
 Every context $\Gamma = x_1:A_1, \dots,x_n:A_n$ can be interpreted as the
-object $$
+object $\intr{A_1} \times \dots \times \intr{A_n}$.
 #+END_definition
+# TODO: check definition. Motivation.
 
 *** Syntactic categories
+**** Definition of the syntatic category for a lambda theory      :ignore:
 #+ATTR_LATEX: :options [Syntactic category]
 #+BEGIN_definition
 The *syntactic category* of a \lambda-theory, ${\cal S}(\mathbb{T})$, is given by
 
  * the types of the theory as objects; and
- * the terms in context $x : A \mid t :B$
+ * the terms in context $x : A \vdash t :B$ as morphisms between $A$ and $B$.
 
+Two morphisms $x:A \vdash u : B$ and $x:A \vdash v : B$ are equal if $x : A \vdash u = v : B$
+can be proved inside $\mathbb{T}$. The composition of two morphisms $a : A \vdash b : B$ and
+$b' : B \vdash c : C$ is given by $a : A \vdash c[b/b'] : C$.
 #+END_definition
 
+**** Syntactic categories of lambda theories are cartesian closed :ignore:
 #+ATTR_LATEX: :options [Syntactic categories are cartesian closed]
 #+BEGIN_proposition
 The syntactic category of a \lambda-theory is cartesian closed.
 #+END_proposition
 #+BEGIN_proof
-# TODO
+We will prove that it has terminal, product and exponential objects.
+The terminal object is the unit type $\top$; it has a morphism
+$x : A \mid \ast : \top$ from any other type, and it is unique by virtue of
+the equality $\Gamma \vdash t = \ast : \top$.
+
+Given two types $A,B$, its product is $A \times B$ with projections
+$m : A \times B \vdash \fst\ m : A$ and $m : A \times B \vdash \snd\ m : b$. Its
+universal property holds because for any other pair of morphisms
+$z : C \vdash a : A$ and $z : C \vdash b : B$, there exists a morphism
+\[
+z : C \vdash \pair{a,b} : A \times B
+\]
+satisfying that
+
+ * $z : C \vdash \fst\ \pair{a,b} = a : A$,
+ * $z : C \vdash \snd\ \pair{a,b} = b : B$,
+
+and if any other morphism $z : C \vdash d : A \times B$ exists satisfying
+these same conditions, then
+\[
+d = \pair{\fst\ d, \snd\ d} = \pair{a,b}.
+\]
+
+Finally, given two types $A,B$, its exponential is $A \to B$ with
+the evaluation morphism
+\[
+m : (A \to B) \times A \vdash (\fst\ m)\ (\snd\ m) : B.
+\]
+Given any $p : C \times A \vdash q : B$, there exists a morphism
+\[
+z : C \vdash \lambda x. q[\pair{z,x}/p] : A \to B
+\]
+such that when we evaluate over any pair $p$ we get
+\[
+(\lambda x.q[\pair{\fst\ p,x}/p]) (\snd\ p) =
+q[\pair{\fst\ p, \snd\ p}/p] = q[p/p] = q;
+\]
+and if any other morphism $z : C \vdash d : A \to B$ exists satisfying
+this same condition, then $(d[ \fst\ p /z] (\snd\ p))$ would equal $q$ and
+\[\begin{aligned}
+\lambda x. q[\pair{z,x}/p] &= 
+\lambda x. (d[\fst\ p/z]\ (\snd\ p))[\pair{z,x}/p] \\ &=
+\lambda x. (d[z/z]\ x) \\&= d. & \qedhere
+\end{aligned}\]
 #+END_proof
 
-
-#+ATTR_LATEX: :options [Model of a \lambda-theory]
+**** Models of a lambda-theory                                    :ignore:
+#+ATTR_LATEX: :options [Model of a lambda-theory]
 #+BEGIN_definition
 A *model* of a \lambda-theory $\mathbb{T}$ is a functor $M \colon {\cal S}(\mathbb{T}) \to {\cal C}$ preserving
 finite products and exponentials.
 #+END_definition
 
 # TODO: Canonical interpretation
+As we did with Lawvere theories, we can prove that categorical
+semantics for simply typed \lambda-theories is complete. By construction,
+given any theory $\mathbb{T}$,
+\[
+\mathbb{T} \mbox{ proves } \Gamma \vdash x = y : A
+\quad\iff\quad
+{\cal S}(\mathbb{T}) \mbox{ satisfies } \Gamma \vdash x = y : A.
+\]
 
 *** Translations, category of lambda-theories
 #+ATTR_LATEX: :options [Translation]
@@ -7233,7 +7290,7 @@ is a \lambda-theory given by
 
  4. the /composition/ axiom
     \[
-    x : \intl{A} \mid \intl{g \circ f}\ x = \intl{g}(\intl{f} x) : \intl{C}
+    x : \intl{A} \mid \intl{g \circ f}\ x = \intl{g}\ (\intl{f}\ x) : \intl{C}
     \]
     for every pair of composable morphisms $f : A \to B$ 
     and $g : B \to C$;
@@ -7246,7 +7303,7 @@ is a \lambda-theory given by
     \end{aligned}\]
     for any $A,B \in {\cal C}$.
 
-Satisfying that
+Satisfying the following axioms
 \[\begin{aligned}
 u : \intl{1}                 &\mid \mathtt{T}\ast = u : \intl{1} \\
 z : \intl{A \times B}        &\mid \mathtt{P}_{A,B}\pair{\intl{\pi_0} z, \intl{\pi_1} z} = z : \intl{A \times B} \\
@@ -7269,6 +7326,8 @@ exponential types of the category and the language; that is,
 ** Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
 # Contar ML aquí y luego contarlo solo desde Agda
+# Leer: Awodey - Type theory and homotopy
+# Leer: nLab - https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory#DependentTypeTheory
 
 In the same way that cartesian closed categories provide a
 categorical interpretation of the simply typed \lambda-calculus,
@@ -7352,17 +7411,64 @@ elimination rules
 \end{prooftree}
 
 ** Topoi
+Follows [Leinster] and [Moerdijk]
+
 *** Subobject classifier
+**** Definition of subobject classifier                           :ignore:
 #+attr_latex: :options [Subobject classifier]
 #+begin_definition
 A *subobject classifier* is an object $\Omega$ with a monomorphism $\mathrm{true} \colon 1 \to \Omega$
-such that, for every monomorphism $S \to X$, there exists a unique $\phi$ such that
+such that, for every monomorphism $m : S \to X$, there exists a unique $\chi$ such that
 \[\begin{tikzcd}
-S\rar{} \dar[swap]{} & 1 \dar{\mathrm{true}} \\
-X\rar[dashed]{\phi} & \Omega
+S\rar{} \dar[swap, hook]{m} & 
+1 \dar{\mathrm{true}} \\
+X\rar[dashed]{\chi} & \Omega
 \end{tikzcd}\]
 forms a pullback square.
 #+end_definition
+
+The function $\chi$ is called the *characteristic function* of the
+monomorphism $m$.
+
+# TODO: The pullback of a mono is a mono.
+# TODO: Every map from 1 is a mono.
+
+**** Subobjects                                                   :ignore:
+#+ATTR_LATEX: :options [Subobjects]
+#+BEGIN_definition
+A *subobject* of an object $X$ is a monomorphism under the equivalence class
+given by isomorphism in the slice category ${\cal E}/X$.
+#+END_definition
+
+Under this interpretation, each monomorphism represents a subobject, and
+two different monomorphisms $m : S \to X$ and $m' : S' \to X$ represent the
+same subobject if there exists an isomorphism $\varphi : m \cong m'$ in the slice category
+\[\begin{tikzcd}[column sep=tiny]
+S\drar[swap]{m}\ar{rr}{\varphi} && S'\dlar{m'} \\
+& X &
+\end{tikzcd}\]
+For instance, subobjects in the category of sets correspond to subsets.
+
+If we call $\Sub( X)$ to the class of subobjects of $X$, every map $f \colon X \to Y$ could
+induce a map $f^{\ast} \colon \Sub(Y) \to \Sub(X)$ given by pullback. For example, given any
+subobject represented by a monomorphism, $m : S' \to Y$, $f^{\ast}(m) : S \to X$ would be
+a monomorphism
+\[\begin{tikzcd}
+S \rar[dashed]{} \dar[swap,dashed]{f^{\ast}(m)} & 
+S' \dar{m} \\
+X \rar[swap]{f} &
+Y
+\end{tikzcd}\]
+such that this diagram is a pullback square.
+# Two representatives of the same subobject give isomorphic images
+# Universal property
+
+When the base category ${\cal E}$ has all pullbacks and each $\Sub( X)$ is in fact a set,
+we can define the functor $\Sub : {\cal E}^{op} \to \Set$.
+# Representation with the subobject classifier
+
+
+# Examples of subobject classifier
 
 *** Definition of a topos
 #+attr_latex: :options [Topos]
