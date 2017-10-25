@@ -4504,10 +4504,56 @@ This provides a convenient notion of graph homomorphism: a pair of morphisms
 preserving the incidence of edges. We can call $\mathtt{Graph}$ to this functor category.
 #+END_exampleth
 
-**** TODO Examples
+**** Dynamical systems and continuous dynamical systems           :ignore:
+#+ATTR_LATEX: :options [Dynamical systems as functors]
+#+BEGIN_exampleth
+A set endowed with an endomorphism $(S,\alpha)$ can be regarded as a /dynamical/
+/system/ in an informal way. Each state of the system is represented
+by an element of the set and and the transition function is represented
+by the endomorphism. That is, if we start at an initial state $s \in S$ and
+the transition function is given by $\alpha \colon S \to S$, the evolution of the
+system will be given by
+\[
+s,\ \alpha(s),\ \alpha(\alpha(s)),\ \dots
+\]
+and we could say that it evolves discretely over time, being $\alpha^t(s)$ the
+state of the system at the instant $t$.
+
+This structure can be described as a functor from the monoid of natural
+numbers under addition. Note that any functor $D\colon\mathbb{N} \to \Set$ has to choose a
+set, and an image for the $1 : \mathbb{N} \to \mathbb{N}$, the only generator of the monoid.
+The image of any natural number $n$ is determined by the image of $1$; if
+$D(1) = \alpha$, it follows that $D(t) = \alpha^t$, where $\alpha^0 = \id$.
+
+Once the structure has been described as a functor, the homomorphisms
+preserving this kind of structure can be described as natural
+transformations. A natural transformation between two functors
+$D,D' \colon \mathbb{N} \to \Set$ describing two dynamic systems $(S,\alpha), (T,\beta)$ is given
+by a function $f \colon S \to T$ such that the following diagram commutes
+\[\begin{tikzcd}
+S\rar{f} \dar[swap]{\alpha^n} & 
+T\dar{\beta^n} \\
+S\rar{f} &
+T
+\end{tikzcd}\]
+that is, $f \circ \alpha = \beta \circ f$. A natural notion of homomorphism has arisen from
+the categorical interpretation of the structure.
+
+A further generalization is now possible, if we want to consider
+continuously-evolving dynamical systems, we can define functors from the
+monoid of real numbers under adition instead of naturals, that is, considering
+functors $\mathbb{R} \to \Set$. Note that these functors are given by a set $S$ and a family
+of morphisms $\{\alpha_r\}_{r \in \mathbb{R}}$ such that
+\[
+\alpha_r \circ \alpha_s = \alpha_{r+s} \qquad \forall r,s \in \mathbb{R}.
+\]
+This example is described in cite:lawvere09.
+#+END_exampleth
+
 **** TODO Pointed Sets (?)
 **** TODO The category of all categories
 **** TODO Sheaves!
+# Gluing
 *** Comma categories
 #+ATTR_LATEX: :options [Comma category]
 #+BEGIN_definition
@@ -4607,6 +4653,7 @@ category are commutative squares in ${\cal C}$. Diagramatically,
 .
 
 ** Universality and limits
+# TODO: Example: quotients
 *** Universal arrows
 # Every arrow to the given functor S factors uniquely through the
 # universal arrow.
@@ -5030,6 +5077,7 @@ The square in this diagram is usually called a
 **** TODO Powers                                                  :ignore:
 **** TODO Posets
 *** Colimits
+**** Cocones                                                      :ignore:
 A colimit is the dual notion of a limit. We could consider 
 cocones to be the dual of cones and pick the universal one.
 Once an index category ${\cal J}$ and a base category ${\cal C}$ are fixed,
@@ -5078,6 +5126,7 @@ and naturality implies that each triangle
 \end{tikzcd}\]
 commutes.
 
+**** Definition of colimits                                       :ignore:
 #+attr_latex: :options [Colimits]
 #+begin_definition
 The *colimit* of a functor $F \colon J \to {\cal C}$ is an object $r \in {\cal C}$ such that there exists
