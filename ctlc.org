@@ -5571,7 +5571,7 @@ is precisely $T$.
 #+BEGIN_theorem
 
 #+END_theorem
-** TODO Spans
+*** TODO Spans
 # This implies that the category of spans of finite sets is equivalent
 # to the Lawvere theory of commutative monoids, that is, to the category
 # of finitely generated free commutative monoids.
@@ -5785,12 +5785,74 @@ transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
 **** Heteromorphisms
 **** https://ncatlab.org/nlab/show/anafunctor
 *** Kan extensions
-** TODO Monoidal categories
+** TODO Monoidal and enriched categories
+# Linear logic = Monoidal categories = Quantum computation
+# Proof net = String diagram = Quantum circuit
 *** TODO String diagrams
 # Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
-** n-categories
+*** Enriched categories
+# https://www.youtube.com/watch?v=be7rx29eMr4
+
+**** Motivation                                                   :ignore:
+When we defined categories for the first time, we implicitly assumed
+a set of morphisms between every two objects, that is, for every two
+$a,b \in {\cal C}$, there exists a set $\hom(a,b)$. Composition is
+then a function
+\[
+\circ : \hom(b,c) \times \hom(a,b) \to \hom(a,c),
+\]
+and the identity morphism can be represented as a function from the
+terminal object into the morphisms from an object to itself,
+\[
+\id : 1 \to \hom(a,a).
+\]
+Associativity and identity axioms can be expressed as commutative
+diagrams,
+# TODO: Diagrams
+
+In this definition, we are only using the monoidal structure of the
+category $\Set$; thus, we could generalize the notion of a category into
+that of an *enriched category* over a monoidal category ${\cal V}$, a category
+whose hom-sets would be objects of ${\cal V}$, and the composition and identities
+would be morphisms in that category.
+
+**** Definition                                                   :ignore:
+**** Example: metric spaces                                       :ignore:
+#+ATTR_LATEX: :options [Metric spaces]
+#+BEGIN_exampleth
+If we consider the ordered set $(\mathbb{R}^{+}, \geq)$ as a category, it
+can be given a monoidal structure with the addition of numbers.
+Note that, in this category, objects are real numbers $r \in \mathbb{R}$ and
+\[
+\hom(r,r') = \left\{ \begin{array}{ll}
+  \{\ast\} & \mbox{ if } r \geq r', \\
+  \varnothing & \mbox{ otherwise; }
+\end{array}\right.
+\]
+thus, morphisms are usually written as $r \leq r'$.
+
+A *metric space* endowed with a distance function $d$ can be defined
+as a category enriched over $(\mathbb{R}^+,\geq)$. Note that the composition
+must be a morphism of the form
+\[
+\circ : d(b,c) + d(a,b) \geq d(a,c),
+\]
+which is the exact statement of the triangle inequality; while,
+knowing that $0$ is the initial object of the category, the identity
+is of the form
+\[
+\id : 0 \geq d(a,a),
+\]
+which is the statement of indiscernibility of identical elements.
+The rest of the axioms of the category hold trivially due to the
+fact that there is, at most, a unique morphism between any two
+objects.
+#+END_exampleth
+
+** Higher categories
 # TODO: Bicategories are weak 2-categories
 # TODO: 2-categories are strict 2-categories
+
 *** Strict 2-categories
 **** 2-categories: introduction                                   :ignore:
 # TODO: The category of two categories
