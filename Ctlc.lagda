@@ -2,7 +2,7 @@
 module Ctlc where
 \end{code}
 
-Primer ejemplo de agda
+First Agda examples
 
 %<*example>
 \begin{code}
@@ -22,7 +22,7 @@ Primer ejemplo de agda
 
 
 
-Descripción de los tipos básicos de la teoría.
+Basic types of MLTT
 
 %<*mltt>
 \begin{code}
@@ -162,3 +162,24 @@ Descripción de los tipos básicos de la teoría.
   ap-funct-id refl = refl
 \end{code}
 %</groupoid-functors>
+
+
+%<*eckmann-hilton>
+\begin{code}
+  -- Loop space
+  Ω : ∀{l} (A : Set l) → (a : A) → Set l
+  Ω A a = (a == a)
+
+  -- Second loop space
+  Ω² : ∀{l} (A : Set l) → (a : A) → Set l
+  Ω² A a = (_==_) {_} {Ω A a} refl refl
+
+  -- Horizontal composition
+  _★_ : ∀{l} {A : Set l} → {a : A} → Ω² A a → Ω² A a → Ω² A a
+  α ★ β = refl
+
+  -- TODO: Why is it not necessary to use the proof of the book?
+  eckmannhilton : {A : Set} → {a : A} → (α β : Ω² A a) → (trans α β) == (trans β α)
+  eckmannhilton refl refl = refl
+\end{code}
+%</eckmann-hilton>
