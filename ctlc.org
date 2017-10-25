@@ -4091,8 +4091,10 @@ such that
 #+end_definition
 
 **** Composition of functors                                      :ignore:
-Functors can be composed as we did with morphisms. In fact, a category of
-categories can be defined; having functors as morphisms.
+Functors can be composed as we did with morphisms. In fact, a category
+of categories can be defined, having functors as morphisms. In order to
+avoid paradoxes, we will only define the category of all small categories
+as a non-small category so it will not contain itself.
 
 #+attr_latex: :options [Composition of functors]
 #+begin_definition
@@ -4107,24 +4109,34 @@ The identity functor on a category $I_{{\cal C}}\colon {\cal C} \to {\cal C}$ is
 and arrow functions. It is trivially neutral with respect to composition.
 #+end_definition
 
+#+ATTR_LATEX: :options [The category of categories]
+#+BEGIN_definition
+The category $\Cats$ is defined as the category of (small) categories as
+objects and functors as morphisms.
+#+END_definition
+
 **** Full and faithfull functors                                  :ignore:
 #+attr_latex: :options [Full functor]
 #+begin_definition
-A functor $F$ is *full* if the arrow map is surjective. That is, if every
-$g : FA \to FB$ is of the form $Ff$ for some morphism $f \colon A \to B$.
+A functor $F$ is *full* if the arrow map between any pair of objects
+is surjective. That is, if every $g : FA \to FB$ is of the form $Ff$
+for some morphism $f \colon A \to B$.
 #+end_definition
+
 #+attr_latex: :options [Faithful functor]
 #+begin_definition
-A functor $F$ is *faithful* if the arrow map is injective. That is,
-if, for every two arrows $f_1,f_2 : A \to B$, $Ff_1 = Ff_2$ implies
-$f_1 = f_2$.
+A functor $F$ is *faithful* if the arrow map between any pair of objects
+is injective. That is, if, for every two arrows $f_1,f_2 : A \to B$, $Ff_1 = Ff_2$
+implies $f_1 = f_2$.
 #+end_definition
 
 It is easy to notice that the composition of faithful (respectively,
 full) functors is again a faithful functor (respectively, full).
-# TODO:
-# Note that a faithful functor has not to be injective on morphisms
-# or objects.
+
+Note that a faithful functor needs not to be injective on objects nor
+on morphisms. In particular, if $A,A',B,B'$ are four different objects,
+it could be the case that $FA = FA'$ and $FB = FB'$; and, if $f : A \to B$ and
+$f' : A' \to B'$ were two morphisms, it could be the case that $Ff = Ff'$.
 
 **** Isomorphisms of categories                                   :ignore:
 #+attr_latex: :options [Isomorphism of categories]
@@ -4134,8 +4146,13 @@ are bijections. Equivalently, it is a functor $T$ such that there exists an /inv
 functor $S$ such that $T \circ S$ and $S \circ T$ are identity functors.
 #+end_definition
 
-# Subcategories
-# Category of categories
+However, the notion of isomorphism of categories may be too strict.
+Sometimes, it will suffice if the two compositions $T \circ S$ and $S \circ T$
+are not exactly the identity functor, but isomorphic in some sense
+to it. We will develop these weaker notions in the next section.
+
+**** TODO Subcategories                                           :ignore:
+
 *** Natural transformations
 #+attr_latex: :options [Natural transformation]
 #+begin_definition
@@ -4143,19 +4160,16 @@ A *natural transformation* between two functors with the same domain
 and codomain, $\alpha\colon F \todot G$, is a family of morphisms parameterized by 
 the objects of the domain category, $\alpha_C\colon FC \to GC$ such that the
 following diagram commutes
-
 \[\begin{tikzcd}
-C \dar{f} & & SC \rar{\tau_C}\dar{Sf} & TC \dar{Tf} \\
+C \dar{f} & & SC \rar{\tau_C}\dar[swap]{Sf} & TC \dar{Tf} \\
 C' & & SC' \rar{\tau_{C'}} & TC'
 \end{tikzcd}\]
-
 for every arrow $f : C \to C'$.
 #+end_definition
 
 It is also said that the family of morphisms is /natural/ in its
 parameter. This naturality property is what allows us to translate a
 commutative diagram from a functor to another.
-
 \[\begin{tikzcd}
 A\arrow{dd}{h}\drar{f} &   & & F A\arrow{dd}{F h}\drar{F f} \arrow{rrr}{\tau A} &     & & G A\arrow{dd}{}\drar{G f} &     \\
   & B \dlar{g} & &     & F B \dlar{F g} \arrow{rrr}{\tau B} & &     & G B \dlar{G g} \\
@@ -4172,7 +4186,7 @@ The inverses of a natural transformation form another natural
 transformation, whose naturality follows from the naturality of the
 original transformation.
 
-**** TODO Equivalence of categories
+**** TODO [#A] Equivalence of categories                          :ignore:
 *** Composition of natural transformations
 **** Vertical composition                                         :ignore:
 #+attr_latex: :options [Vertical composition of natural transformations]
@@ -4248,7 +4262,7 @@ T'Tb
 defined respectively by the naturality of $S'\tau$ and $\tau'$.
 #+end_proof
 
-**** TODO Interchange law                                         :ignore:
+**** TODO [#A] Interchange law                                    :ignore:
 #+ATTR_LATEX: :options [Interchange law]
 #+BEGIN_proposition
 <<prop-interchangelaw>>
@@ -4279,6 +4293,7 @@ on arrows as $P\pair{f,g} = f$ and $Q\pair{f,g} = g$. Note that this definition 
 product, using these projections, would be the product of two categories on a
 category of categories with functors as morphisms.
 
+**** Product of functors                                          :ignore:
 #+attr_latex: :options [Product of functors]
 #+begin_definition
 The *product functor* of two functors $F\colon {\cal C} \to {\cal C}'$ and $G \colon {\cal D} \to {\cal D}'$ is a
@@ -4303,7 +4318,7 @@ commute
 In this sense, the $\times$ operation is itself a functor acting on objects
 and morphisms of the $\mathtt{Cat}$ category of all categories.
 
-**** Bifunctors                                                   :ignore:
+**** Bifunctors                                                   :ignore: 
 # Definition of Bifunctors
 A *bifunctor* is a functor from a product category; and it also can be
 seen as a functor on two variables. As we will show in the following
@@ -4385,6 +4400,7 @@ of $\alpha$.
 
 **** TODO [#C] Examples of product categories
 *** Opposite categories and contravariant functors
+**** Opposite category                                            :ignore:
 #+attr_latex: :options [Opposite category]
 #+begin_definition
 The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
@@ -4404,6 +4420,7 @@ in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse become
 inverse on the opposite category. This process is also an /involution/,
 where $(f^{op})^{op}$ can be seen as $f$ and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
 
+**** Contravariant functors                                       :ignore:
 #+attr_latex: :options [Contravariant functor]
 #+begin_definition
 A *contravariant* functor from ${\cal C}$ to ${\cal D}$ is a functor from the opposite category,
