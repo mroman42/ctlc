@@ -3974,14 +3974,57 @@ in which every object $p$ has an identity arrow and a unique arrow
 to every $q$ such that $p \leq q$. Note how the composition of arrows can
 be only defined in a single way.
 
+In a partially ordered set, the product of two objects would be its
+join, the coproduct would be its meet and the initial and terminal
+objects would be the greatest and the least element, respectively.
+
 **** TODO Concrete categories                                     :ignore:
 **** Category of Sets                                             :ignore:
 #+attr_latex: :options [The category of sets]
 #+begin_exampleth
-The category $\Sets$ is defined as the category with all the
+The category $\Set$ is defined as the category with all the
 possible sets as objects and functions between them as morphisms. It
 is trivial to check associativity of composition and the existence of
 the identity function for any set.
+
+In this category, the product is given by the usual cartesian product
+\[
+A \times B = \big\{ (a,b) \mid a \in A,\ b \in B \big\},
+\]
+with the projections $\pi_A(a,b) = a$ and $\pi_B(a,b) = b$. We can easily
+check that, if we have $f : C \to A$ and $g : C \to B$, there is a unique
+function given by $h(c) = (f(c),g(c))$ such that $\pi_A \circ h = f$ and
+$\pi_B \circ h = g$.
+
+The initial object in $\Set$ is given by the empty set $\varnothing$: given any set $A$,
+the only function of the form $f : \varnothing \to A$ is the empty one. The final
+object, however, is only defined up to isomorphism: given any set with
+a single object $\{\ast\}$, there exists a unique function of the form $f : A \to \varnothing$
+for any set $A$; namely, the one defined as $\forall a \in A: f(a) = \ast$. Every
+two sets with one objects are terminal objects and they are trivially
+isomorphic.
+
+Similarly, the coproduct is defined only to isomorphism. The coproduct
+of two sets $A,B$ is given by its disjoint union $A \sqcup B$; but this union
+can be defined in many different (but equivalent) ways. For instance,
+we can add a label to the elements of each sets before joining them in
+order to ensure that this will be a disjoint union; that is,
+\[
+A \sqcup B = \left\{ (a,0) \mid a \in A \right\} \cup \left\{ (b,1) \mid b \in B \right\}
+\]
+with the inclusions $i_A(a) = (a,0)$ and $i_B(b) = (b,1)$, is a possible
+coproduct. Given any two functions $f : A \to C$ and $g : A \to C$, there
+exists a unique function $h : A \sqcup B \to C$, given by
+\[ h(x,n) = 
+\left\{ \begin{array}{ll}
+   f(x) & \mbox{if } n = 0, \\
+   g(x) & \mbox{if } n = 1,
+\end{array}\right.
+\]
+such that $f = h \circ i_A$ and $g = h \circ i_B$.
+
+The category of sets is a very special category, whose properties we
+will study in detail later.
 #+end_exampleth
 
 **** Category of Groups                                           :ignore:
@@ -4005,16 +4048,19 @@ In particular, abelian groups form a category as $\mathbb{Z}\text{-modules}$.
 **** Category of Topological spaces                               :ignore:
 #+attr_latex: :options [The category of topological spaces]
 #+begin_exampleth
-The category $\mathsf{Top}$ is defined as the category with topologicaal spaces as
-objects and continuous functions between them as morphisms.
+The category $\mathsf{Top}$ is defined as the category with
+topological spaces as objects and continuous functions between them as
+morphisms.
 #+end_exampleth
+
+# Product topology
 
 ** Functors and natural transformations
 #+begin_quote
 "Category" has been defined in order to define "functor" and "functor"
 has been defined in order to define "natural transformation".
 
-      -- *Saunders MacLane*, /Categories for the working mathematician/.
+   -- *Saunders MacLane*, /Categories for the working mathematician/, cite:maclane42.
 #+end_quote
 
 Functors and natural transformations were defined for the first time
@@ -4024,7 +4070,9 @@ studying homology, they have proven its foundational value with the
 passage of time.
 
 *** Functors
-A */functor/* will be interpreted as a homomorphism of categories.
+A */functor/* will be interpreted as a homomorphism of categories
+preserving their structure. As we discussed in the previous section,
+the structure of a category is given by the composition of morphisms.
 
 **** Definition of functor                                        :ignore:
 #+attr_latex: :options [Functor]
