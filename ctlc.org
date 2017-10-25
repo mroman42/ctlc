@@ -3695,6 +3695,7 @@ hom-set is actually a set.
 #+end_definition
 
 *** Morphisms
+**** Morphisms: introduction                                      :ignore:
 Objects in category theory are an atomic concept and can be only
 studied by their morphisms; that is, by how they are related to all
 the objects of the category. Thus, the essence of a category is given
@@ -3707,13 +3708,14 @@ to other objects in the exact same way; that is, whenever an
 invertible morphism between them exists. This will constitute an
 equivalence relation on the category.
 
-In a sense, morphisms are an abstraction of the notion of the
+In a certain sense, morphisms are an abstraction of the notion of the
 structure-preserving homomorphisms that are defined between algebraic
-structures. Taking this perspective, /*monomorphisms*/ and /*epimorphisms*/
-can be thought as abstractions of the usual injective and surjective
-homomorphisms. We will see, however, how some properties that we take
-for granted, such as ''isomorphism'' meaning exactly the same as
-''both injective and surjective'' are not true in general.
+structures. From this perspective, /*monomorphisms*/ and
+/*epimorphisms*/ can be thought as abstractions of the usual injective
+and surjective homomorphisms. We will see, however, how some
+properties that we take for granted, such as ''isomorphism'' meaning
+exactly the same as ''both injective and surjective'' are not true in
+general.
 
 **** Isomorphisms                                                 :ignore:
 #+attr_latex: :options [Isomorphisms]
@@ -3785,7 +3787,7 @@ An *epimorphism* is a right-cancellable morphism, that is, $f : A \to B$ is
 an epimorphism if, for every $g,h : B \to A$,
 \[ g \circ f = h \circ f \implies g = h.
 \]
-A morphism which is a monomorphism and an epimorphism at the same time is
+A morphism that is a monomorphism and an epimorphism at the same time is
 called a *bimorphism*.
 #+end_definition
 
@@ -3797,12 +3799,13 @@ cover [[*Examples of categories][examples]] of this fact later.
 **** Retractions and sections                                     :ignore:
 #+attr_latex: :options [Retractions and sections]
 #+begin_definition
-A *retraction* is a left inverse, that is, a morphism which has a right inverse;
-conversely, a *section* is a right inverse, a morphism which has a left inverse.
+A *retraction* is a left inverse, that is, a morphism that has a right inverse;
+conversely, a *section* is a right inverse, a morphism that has a left inverse.
 #+end_definition
 
-By virtue of Proposition [[prop-unicityinverse]], a morphism which is both a
-retraction and a section is an isomorphism.
+By virtue of Proposition [[prop-unicityinverse]], a morphism that is both
+a retraction and a section is an isomorphism. Thus, not every
+epimorphism is a section and not every monomorphism is a retraction.
 
 *** Terminal objects, products and coproducts
 /*Products and coproducts*/ are very widespread notions in mathematics.
@@ -3817,16 +3820,17 @@ We will abstract categorically these notions in terms of /universal/
 respect to how these properties are usually defined. We will not
 define the product of two objects in terms of its internal structure
 (categorically, objects are atomic and do not have any); but in terms
-of all the other objects, in terms of the complete structure of the
+of all the other objects, that is, in terms of the complete structure of the
 category. This turns inside-out the focus of definitions.  Moreover,
 objects defined in terms of universal properties are usually not
 uniquely determined, but only determined up to isomorphism. This
 reinforces our previous idea of considering two isomorphic objects in
-a category as essentialy the same object.
+a category as /essentialy/ the same object.
 
 Initial and terminal objects will be a first example of this viewpoint
 based on universal properties.
 
+**** Terminal objects                                             :ignore:
 #+attr_latex: :options [Initial object]
 #+begin_definition
 An object $I$ is an *initial object* if every object is the domain of exactly
@@ -3836,8 +3840,9 @@ $i_A \colon I \to A$.
 
 #+attr_latex: :options [Terminal object]
 #+begin_definition
-An object $T$ is a *terminal object* if every object is the codomain of exactly
-one morphism to it. That is, for every object $A$ exists an unique $t_A \colon A \to T$.
+An object $T$ is a *terminal object* (also called /final object/) if every object
+is the codomain of exactly one morphism to it. That is, for every object $A$
+exists an unique $t_A \colon A \to T$.
 #+end_definition
 
 #+attr_latex: :options [Zero object]
