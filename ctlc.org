@@ -7604,7 +7604,6 @@ A type declaration is not part of the language.
 
 This section follows [Course on Hott, Harper] and [Hott].
 
-
 We introduce ITT with Naturals, Sigma, Pi, Identity types and Universes.
 [Martin-Löf 73]
 
@@ -8526,6 +8525,8 @@ identicals.
 
 #+latex: \ExecuteMetaData[latex/Russell.tex]{russell}
 
+*** TODO Programming in extensional Martin-Löf type theory
+# Following Conor's course
 ** Homotopy Type Theory I: Univalence
 # HoTT is the internal language of (infty,1)-toposes
 
@@ -8544,7 +8545,7 @@ inductive types to intensional type theory (ITT).
 
 This presentation of Homotopy Type Theory will follow cite:hottbook.
 
-*** Types as \infty-groupoids
+*** Types as groupoids
 **** Types as groupoids                                           :ignore:
 Types and identity types between their elements are groupoids.
 # Higher Identity types give them a structure of higher groupoids.
@@ -8556,28 +8557,188 @@ Functions can be seen as functors between groupoids.
 
 #+latex: \ExecuteMetaData[latex/Ctlc.tex]{groupoid-functors}
 
-*** Univalence axiom
-*** Naturals and Naturals'
-*** Transport
+**** TODO Eckmann-Hilton                                          :ignore:
+Given any point $a : A$, we can define its *loop space* $\Omega(A,a)$
+as the type of the paths from the point to itself, that is,
+\[
+\Omega(A,a) :\equiv (a =_A a).
+\]
+Concatenation of paths provides this type with a structure of
+group $\Omega(A,a) \times \Omega(A,a) \to \Omega(A,a)$.
+
+This construction can be generalized to higher dimensions. The
+loop space of the loop space is the type of 2-dimensional paths
+from the identity path to itself, that is,
+\[
+\Omega^2(A,a) :\equiv (\refl_a = \refl_a).
+\]
+
+#+ATTR_LATEX: :options [Eckmann-Hilton]
+#+BEGIN_theorem
+Composition in $\Omega^2(A,a) \times \Omega^2(A,a) \to \Omega^2(A,a)$ is commutative.
+#+END_theorem
+#+BEGIN_proof
+
+#+END_proof
+
+
+**** Transport                                                    :ignore:
 #+begin_quote
 Finding a type-theoretic description of
 this behavior (that is, introduction, elimination and computation rules which comport
 with Gentzen’s Inversion Principle) is an open problem.
 #+end_quote
+
+***** Lemma: transport                                           :ignore:
+# Indiscernability of identicals
+#+ATTR_LATEX: :options [Transport]
+#+BEGIN_lemma
+Given a parametrized type family $P : A \to {\cal U}$, for every $p : x =_A y$,
+there exists a function $p_{\ast} : P(x) \to P(y)$.
+#+END_lemma
+
+**** Dependent paths                                              :ignore:
+
+*** Homotopies and quasi-inverses
+**** Homotopies                                                   :ignore:
+#+ATTR_LATEX: :options [Homotopy]
+#+BEGIN_definition
+A *homotopy* between two sections of a fibration $f,g \colon \prod_{x:A}P(x)$
+is defined as
+\[
+(f \sim g) :\equiv \prod_{x:A} (f(x) = g(x)).
+\]
+#+END_definition
+
+**** Quasi-inverses                                               :ignore:
+#+ATTR_LATEX: :options [Quasi-inverse]
+#+BEGIN_definition
+A *quasi-inverse* of a function $f : A \to B$ is a function $g : B \to A$
+and two homotopies $\alpha : f \circ g \sim \id$ and $\beta : g \circ f \sim \id$. More formally,
+the type of quasi-inverses of $f$ can be described as
+\[
+\sum_{g : B \to A} (f \circ g \sim \id) \times (g \circ f \sim \id)
+\]
+#+END_definition
+
+**** Equivalences
+***** Type of equivalences
+***** Equivalence of types
+The type of /equivalences between two types/ is defined as
+\[
+(A \simeq B) :\equiv \sum_{f : A \to B} \mathrm{isequiv}(f)
+\]
+***** Equivalence is an equivalence relation
+
+*** Higher-groupoid structure of types
+# how type constructors deal with the groupoid structure
+# Characterizations in this section are theorems
+# except for function extensionality and univalence axiom
+
+The higher-groupoid structure of types manifests itself also in type
+constructors and how them relate to equality types. In general, we will
+be able to prove that equalities between type constructors can be
+characterized by equalities between the arguments of their constructors;
+but there are two exceptions
+
+ * the axiom of *function extensionality* will be needed to prove the
+   desired theorem for $\Pi\mhyphen\mbox{Types}$, and
+ * the *univalence* axiom will be needed to prove the desired theorem
+   for ${\cal U}\mhyphen\mbox{Types}$.
+
+
+
+**** Function extensionality
+#+ATTR_LATEX: :options [Function extensionality]
+#+BEGIN_definition
+*Function extensionality* states that the function
+\[
+(f = g) \to \prod_{x:A}\left(f(x) =_{B(x)} g(x)\right)
+\]
+is an equivalence. In particular, the following function is its
+quasi-inverse
+\[
+\mathrm{funext} : \left( \prod_{x:A} f(x) = g(x) \right) \to (f = g).
+\]
+#+END_definition
+
+*** Univalence axiom
+# cite Voevodsky
+
+We know that, for any pair of types $A,B : {\cal U}$, there exists a function
+of type $\mathrm{idtoeqv} : (A =_{\cal U} B) \to (A \sim B)$, defined
+# TODO
+
+#+ATTR_LATEX: :options [Univalence]
+#+BEGIN_definition
+For any pair of types $A,B : {\cal U}$, $\mathrm{ideqv} : (A =_U B) \to (A \sim B)$ is
+an equivalence. In particular, $A = B$ is equivalent to $A \sim B$.
+#+END_definition
+
+**** Univalent universes
+**** TODO [#C] Naturals and Naturals'
+*** n-types
+A /type-theoretical set/ will be a type with no associated higher
+groupoid structure. That is, it is a discrete groupoid, and any
+two parallel paths are equal.
+
+#+ATTR_LATEX: :options [Sets]
+#+BEGIN_definition
+A type $A$ is a *set* (or *0-type*) when the following type is
+inhabited
+\[
+\mathtt{isSet}(A) :\equiv \prod_{x,y : A} \prod_{p,q : x=y} (p=q).
+\]
+#+END_definition
+
+We can generalize this definition to higher dimensions
+ 
+ * a *0-type* is a type with no non-trivial paths
+
+ * a *1-type* is a type with no non-trivial paths between paths,
+   every two paths $r,s : p = q$ between types $p,q : x = y$ must
+   be equal, $r = s$;
+
+ * a *2-type* is a type with no non-trivial paths between paths
+   between paths;
+ 
+ * ... and so on.
+
+In particular, it can be proved that every *n-type* is an
+*(n+1)-type*.
+
+**** Mere propositions                                            :ignore:
+**** Contractible types                                           :ignore:
+**** Propositional truncation                                     :ignore:
 *** Higher inductive types
 # as free \infty-groupoids
 
 ** Homotopy Type Theory II: Mathematics
-*** TODO Categories
 *** TODO Homotopy theory
+
 \begin{tikzcd}[column sep=large]
   \tikz\draw[{[-]},yshift=0.5ex] (0,0)node[below]{$0$} -- (2,0)node[below]{$1$};
   \arrow[r, "\textrm{gluing}"]
 & \tikz\draw (0,0) circle (1cm)  (0.8,0) -- (1.2,0) node[right]{$\mathbb Z$};
 \end{tikzcd}
+
+*** TODO Fundamental group of the circle
+Fundamental groups can be defined as truncations
+\[
+\pi_n(A,a) :\equiv \Big\|\Omega^n(A,a)\Big\|_0.
+\]
+
+We will show that the loop space of the sphere is equivalent to the
+integers; that is $\Omega(\mathbb{S}^1) \simeq \mathbb{Z}$, and, consequently, $\pi_1(\mathbb{S}^1)$ will be also
+$\mathbb{Z}$, as it is a type-theoretical set.
+
+
+*** TODO Categories
 ** TODO Constructive mathematics
 *** TODO Axiom of choice implies excluded middle
 # In Agda or Coq!?
+# Diaconescu's theorem
+# https://en.wikipedia.org/wiki/Diaconescu%27s_theorem
 
 *** TODO Type theory as a foundation of mathematics
 
