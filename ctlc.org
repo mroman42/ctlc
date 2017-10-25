@@ -7477,7 +7477,71 @@ An *elementary topos* (plural /topoi/) is a cartesian closed category
 with all finite limits and a subobject classifier.
 #+end_definition
 
-*** Reasoning in a topos
+# Examples of topoi
+
+#+ATTR_LATEX: :options [Logical morphism]
+#+BEGIN_definition
+A *logical morphism* between two topoi, $F : {\cal E} \to {\cal E}'$ is a functor
+preserving finite limits, exponentials and the subobject classifier,
+up to isomorphism.
+#+END_definition
+
+**** Examples of topoi :ignore:
+The category of finite sets and morphisms between them, $\FinSet$,
+
+
+# https://ncatlab.org/nlab/show/Beck-Chevalley+condition
+
+*** TODO Paré: every topos has colimits
+*** Elementary theory of the category of sets
+# 1. Well-pointed
+# 2. Natural numbers object (definition from initial algebras)
+# 3. Axiom of choice
+
+In cite:lawvere64, Lawvere proposed an elementary theory of sets based
+on category theory by adjoining a set of axioms to the usual category
+theory axioms.
+
+**** Generators                                                   :ignore:
+In $\Set$, the terminal object $\{\ast\}$ is a generator. That is, given two
+functions $f,g : X \to Y$, if $f \circ x = g \circ x$ for all $x : \{\ast\} \to X$,
+then $f = g$. In other words, if $f(x) = g(x)$ for all $x \in X$, then
+both functions must be the same.
+
+\\
+
+**** Well-pointed
+Moreover, the terminal and the initial objects in $\Set$ are not
+isomorphic. A category where the terminal object is a generator
+and is not a zero object is a *well-pointed* category.
+
+**** TODO Natural numbers                                         :ignore:
+
+**** Choice in a category                                         :ignore:
+A category is said to satisfy the *Axiom of choice* if every
+epimorphism has a right-side inverse. If we define sets using
+ZFC, the category $\Set$ satisfies the axiom of choice, that is,
+given any surjective function $f : A \to B$, there exists a 
+function $k : B \to A$ such that $f \circ k = \id_B$.
+
+
+**** ETCS
+#+ATTR_LATEX: :options [Category of sets]
+#+BEGIN_definition
+A *category of sets* is a well-pointed topos with natural numbers
+satisfying the Axiom of Choice.
+#+END_definition
+
+**** Relation to ZFC                                              :ignore:
+# We could take ETCS as our axioms.
+
+ZFC is stronger than ETCS: every provable theorem in ETCS is provable
+in ZFC, but the converse is not true. In particular, ETCS is equivalent
+to a fragment of ZFC, called /restricted ZFC/. This relation is detailed
+in cite:maclane94.
+
+*** TODO The Continuum Hypothesis
+*** TODO Reasoning in a topos
 # From the nLab: topos
 #
 # Any result in ordinary mathematics whose proof is finitist and
@@ -7495,6 +7559,10 @@ with all finite limits and a subobject classifier.
 ** TODO Table of correspondences
 [[https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory][relation between type theory and category theory in nLab]]
 
+More complex and more sophisticated languages can express a wider
+range of theories, but the class of categories in which it makes sense
+to take models for these languages is narrower.
+
 |------------------------------------+------------------------------------------------|
 | Type theory                        | Category theory                                |
 |------------------------------------+------------------------------------------------|
@@ -7504,7 +7572,8 @@ with all finite limits and a subobject classifier.
 | Homotopy type theory               | Elementary (\infty,1)-topos                    |
 |------------------------------------+------------------------------------------------|
 
-* Type theory (abstract)                                             :ignore: 
+
+* Type theory (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is mainly based on cite:hottbook and [Course on Hott, Harper].
 #+LATEX: \end{center}}
@@ -7513,19 +7582,18 @@ This section is mainly based on cite:hottbook and [Course on Hott, Harper].
 ** Martin-Löf Type Theory
 Type theory can be seen as an intuitionistic foundation of mathematics.
 
-*Martin-Löf Type Theory* (MLTT) can be used as a constructive and computational
-foundation of mathematics. It is not directly based on first-order predicate
-logic, but only interpreted in it via the Curry-Howard isomorphism. It comes
-in two flavours, intensional and extensional.
-
-*Intensional type theory* (ITT) is an intuitionistic type theory serving as
-the core to many other type theories.
-
-*Extensional type theory* (ETT) extends Intensional Type Theory with
-equality of reflection and uniqueness of identity proofs. Types behave
-like sets when we interpret them in this setting, and therefore, it
-can be seen as an intuitionistic theory of sets.
-
+ * *Martin-Löf Type Theory* (MLTT) can be used as a constructive and computational
+   foundation of mathematics. It is not directly based on first-order predicate
+   logic, but only interpreted in it via the Curry-Howard isomorphism. It comes
+   in two flavours, intensional and extensional.
+   
+ * *Intensional type theory* (ITT) is an intuitionistic type theory serving as
+   the core to many other type theories.
+   
+ * *Extensional type theory* (ETT) extends Intensional Type Theory with
+   equality of reflection and uniqueness of identity proofs. Types behave
+   like sets when we interpret them in this setting, and therefore, it
+   can be seen as an intuitionistic theory of sets.
 
 The principal difference between types and sets is that 
 In Type theory, membership of an element to a type, as in $a : A$, is a
