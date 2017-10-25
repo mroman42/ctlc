@@ -3871,7 +3871,10 @@ As a consequence, $A \cong B$. A similar proof can be written for the terminal
 object.
 #+end_proof
 
-# The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
+Note, however, that these objects may not exist in any given category.
+
+**** Products                                                     :ignore:
+# TODO: The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
 
 #+attr_latex: :options [Product object]
 #+begin_definition
@@ -3897,7 +3900,7 @@ to construct a category in which the product object is the final object of
 the category and Proposition [[prop-initialfinalunique]] can be applied. We will
 write /the/ product object of $A,B$ as $A \times B$.
 
-
+**** Coproducts                                                   :ignore:
 #+attr_latex: :options [Coproduct object]
 #+begin_definition
 An object $C$ is the *coproduct* of two objects $A,B$ on a category if there
