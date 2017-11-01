@@ -2,10 +2,10 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: %\input{titlepage}
+#+LATEX_HEADER_EXTRA: \input{titlepage}
 
 # Evitar notas al pie de página
-# Quitar abreviaturas
+# Quitar abreviaturas: STLC
 # Usar 1 y 0 para objetos inicial y final
 
 ** Abstract
@@ -867,7 +867,7 @@ Once types are added, a deep connection between \lambda-calculus and
 logic arises. This connection will be discussed in the [[*The Curry-Howard correspondence][next chapter]].
 
 In programming languages, types indicate how the programmer intends to
-use the data, prevent errors, and enforce certain invariants and
+use the data, prevent errors and enforce certain invariants and
 levels of abstraction in programs. The role of types in
 \lambda-calculus when interpreted as a programming language closely
 matches what we would expect of types in any common programming
@@ -1075,10 +1075,11 @@ identity terms $I_A = \lambda x.x : A \to A$. Curry-style typing allows us to co
 parametric types with type variables, and to type the identity as 
 $I = \lambda x.x : \sigma \to \sigma$ where $\sigma$ would a free type variable.
 
+**** Parametric types                                             :ignore:
 #+attr_latex: :options [Parametric types]
 #+begin_definition
 Given a infinite numerable set of /type variables/, we define *parametric types*
-or /type templates/ inductively as
+or *type templates* inductively as
 \[\mathtt{PType} ::= 
 \iota \mid
 \mathtt{Tvar} \mid 
@@ -1089,6 +1090,7 @@ That is, all basic types and type variables are atomic parametric types; and we 
 consider the arrow type between two parametric types.
 #+end_definition
 
+**** Type substitution                                            :ignore:
 The difference between the two typing styles is then not a mere notational
 convention, but a difference on the expressive power that we assign to each
 term. The interesting property of type variables is that they can act as
@@ -1116,6 +1118,7 @@ $(C \to D) \to B$, where $A$ has been substituted by $C \to D$. An
 crucial property of simply typed \lambda-calculus is that every type has a most
 general type, called its /principal type/; this will be proved in Theorem [[thm-typeinfer]].
 
+**** Principal type                                               :ignore:
 #+attr_latex: :options [Principal type]
 #+begin_definition
 A closed \lambda-term $M$ has a *principal type* $\pi$ if $M : \pi$ and given any
@@ -1137,6 +1140,7 @@ is the *most general unifier* if given any other unifier $\phi$ exists a substit
 $\varphi$ such that $\phi = \overline{\varphi} \circ \psi$.
 #+end_definition
 
+#+attr_latex: :options [Unification]
 #+begin_lemma
 <<lemma-unification>>
 If an unifier of $\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ exists, the most general unifier
@@ -1149,13 +1153,13 @@ can be found using the following recursive definition of $\mathtt{unify}(A_1,\do
   4) $\mathtt{unify}(A \to A'; B \to B') = \mathtt{unify}(A,A';B,B')$;
   5) $\mathtt{unify}(A,A_1,\dots; B,B_1,\dots) = \overline{\psi} \circ \rho$ where $\rho = \mathtt{unify}(A_1,\dots;B_1,\dots)$ 
      and $\psi = \mathtt{unify}(\overline{\rho}A; \overline{\rho}B)$;
-  6) $\mathtt{unify}$ fails in any other case.
+  6) $\mathtt{unify}$ fails in any other case;
 
-Where $x$ is any type variable. The two sequences of types have no unifier if and only
-if $\mathtt{unify}(A,B)$ fails.
+where $x$ is any type variable. The two sequences $\{A_i\},\{B_i\}$ of types have no unifier
+if and only if $\mathtt{unify}(\{A_i\};\{B_i\})$ fails.
 #+end_lemma
 #+begin_proof
-It is easy to notice that, by structural induction, if
+It is easy to notice by structural induction that, if
 $\mathtt{unify}(A;B)$ exists, it is in fact an unifier.
 
 If the unifier fails in clause 2, there is obviously no possible unifier: the number
@@ -1241,7 +1245,7 @@ The type is preserved on \beta-reductions; that is, if $\Gamma \vdash M : A$ and
 and $M \tto_{\beta} M'$, then $\Gamma \vdash M' : A$.
 #+end_theorem
 #+begin_proof
-If $M$ has been derived by \beta-reduction, $M = (\lambda x.P)$
+If $M'$ has been derived by \beta-reduction, $M = (\lambda x.P)$
 and $M' = P[Q/x]$. $\Gamma \vdash M:A$ implies $\Gamma,x:B \vdash P : A$ and
 $\Gamma \vdash Q : B$. Again by structural induction on $P$ (where the only crucial
 case uses that $x$ and $Q$ have the same type) we can prove
@@ -1288,9 +1292,9 @@ The following three properties hold;
 #+BEGIN_proof
 For basic types,
 
-  1. holds trivially.
+  1. holds trivially;
 
-  2. holds by the definition of strong normalization.
+  2. holds by the definition of strong normalization;
 
   3. if any one-step \beta-reduction leads to a strongly normalizing term,
      the term itself must be strongly normalizing.
@@ -1356,7 +1360,7 @@ We call $\tilde{t} = t[u_1 / x_1][u_2 / x_{2}]\dots[u_n / x_n]$ and apply struct
 
 #+attr_latex: :options [Strong Normalization Theorem]
 #+begin_theorem
-In the STLC, all terms are strongly normalizing.
+In simply typed \lambda-calculus, all terms are strongly normalizing.
 #+end_theorem
 #+BEGIN_proof
 It is the particular case of Lemma [[lemma-strongnormalization]] where we
@@ -1364,9 +1368,10 @@ take $u_i = x_i$.
 #+END_proof
 
 # [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
-Every term normalizes in the STLC and every computation ends.  We
-know, however, that the Halting Problem is unsolvable, so the STLC
-must be not Turing complete.
+Every term normalizes in simply typed \lambda-calculus and every
+computation ends.  We know, however, that the Halting Problem is
+unsolvable, so simply typed \lambda-calculus must be not Turing
+complete.
 
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
@@ -1501,6 +1506,8 @@ of typing rules.
     \AXC{$\Gamma, b:B \vdash p : C$}
     \TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].n;\ [b].p) : C$}
     \end{prooftree}
+    Note that we write $[a].n$ and $[b].p$ to indicate that $n$ and $p$ depend on $a$ and $b$
+    respectively.
 
  10) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
      of the unit type.
@@ -1540,12 +1547,13 @@ On the other side, new \eta-rules are defined, each for every new construction r
 
 *** Natural deduction
 The natural deduction is a logical system due to Gentzen. We introduce
-it here following cite:selinger13 and cite:wadler15. It relationship
-with the STLC will be made explicit on the [[*Propositions as types][next section]].
+it here following cite:selinger13 and cite:wadler15. Its relationship
+with the STLC will be made explicit in the [[*Propositions as types][next section]].
 
 We will use the logical binary connectives $\to,\land,\lor$, and two
-given propositions, $\top,\bot$ representing truth and falsity. The
-rules defining natural deduction come in pairs; there are introductors
+given propositions, $\top,\bot$ representing the trivially true and false
+propostiions, respectively.
+The rules defining natural deduction come in pairs; there are introductors
 and eliminators for every connective. Every introductor uses a set of
 assumptions to generate a formula and every eliminator gives a way to
 extract precisely that set of assumptions.
@@ -1559,7 +1567,8 @@ extract precisely that set of assumptions.
     \end{prooftree}
 
  2) Introduction and elimination of the $\to$ connective. Note that the
-    elimination rule corresponds to /modus ponens/.
+    elimination rule corresponds to /modus ponens/ and the introduction
+    rule corresponds to the /deduction theorem/.
 
     \begin{prooftree}
     \RightLabel{($I_{\to}$)}
@@ -1707,7 +1716,7 @@ of dots represents any given part of the deduction tree.
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$A$}
-    \UIC{$A+B$}
+    \UIC{$A \vee B$}
     \AXC{$[A]$}\noLine
     \UIC{$\vdots^2$}\noLine
     \UIC{$C$}
@@ -1734,7 +1743,7 @@ of dots represents any given part of the deduction tree.
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$B$}
-    \UIC{$A+B$}
+    \UIC{$A \vee B$}
     \AXC{$[A]$}\noLine
     \UIC{$\vdots^2$}\noLine
     \UIC{$C$}
@@ -1771,8 +1780,9 @@ natural deduction at three levels
   2) proofs are programs.
   3) simplification of proofs is the evaluation of programs.
 
-In the case of STLC and natural deduction, the correspondence starts when
-we describe the following isomorphism between types and propositions.
+In the case of simply typed \lambda-calculus and natural deduction,
+the correspondence starts when we describe the following one-to-one
+relation between types and propositions.
 
 \begin{center}\begin{tabular}{c|c}
 Types & Propositions \\
@@ -1791,15 +1801,37 @@ results on the construction of a particular kind of \lambda-term, they can
 be interpreted as encodings of proof in the form of derivation trees. That is,
 terms are proofs of the propositions represented by their types.
 
-Under this interpretation, 
-*/simplification rules are precisely the \beta-reduction rules/*.
+#+ATTR_LATEX: :options [Curry-Howard correspondence example]
+#+BEGIN_exampleth
+In particular, the typing derivation of the term
+\[
+\lambda a. \lambda b. \pair{a,b}
+\]
+can be seen as a deduction tree proving $A \to B \to A \wedge B$; as
+the following diagram shows, in which terms are colored in
+$\cterms{red}$ and types are colored in $\ctypes{blue}$.
+\begin{prooftree}
+\EnableBpAbbreviations
+\AXC{$\cterms{a }\ctypes{:: A}$}
+\AXC{$\cterms{b }\ctypes{:: B}$}
+\RightLabel{$(pair)$}
+\BIC{$\cterms{<a,b> }\ctypes{:: A \times B}$}
+\RightLabel{$(abs)$}
+\UIC{$\cterms{λb.<a,b> }\ctypes{:: B \to A \times B}$}
+\RightLabel{$(abs)$}
+\UIC{$\cterms{λa.λb.<a,b> }\ctypes{:: A \to B \to A \times B}$}
+\end{prooftree}
+#+END_exampleth
+
+Furthermore, under this interpretation, 
+*/simplification rules are precisely \beta-reduction rules/*.
 This makes execution of \lambda-calculus
 programs correspond to proof simplification on natural deduction.
 The Curry-Howard correspondence is then not only a simple bijection
 between types and propositions, but a deeper isomorphism regarding the
 way they are constructed, used in derivations, and simplified.
 
-#+attr_latex: :options [Curry-Howard example]
+#+attr_latex: :options [Curry-Howard simplification example]
 #+begin_exampleth
 As an example of this duality, we will write a proof/term of the proposition/type =A → B + A=
 and we are going to simplify/compute it using proof simplification rules/\beta-rules.
@@ -1994,7 +2026,7 @@ functional programming.  A comitee was created in 1987 with the
 mission of designing a common lazy functional language. Several
 versions of the language were developed, and the first standarized
 reference of the language was published in the *Haskell 98 Report*,
-whose revised version can be read on cite:haskell98. Its more popular
+whose revised version can be read in cite:haskell98. Its more popular
 implementation is the *Glasgow Haskell Compiler (GHC)*; an open source
 compiler written in Haskell and C. The complete history of Haskell and
 its design decisions is detailed on cite:hudak07_haskell.
@@ -5848,7 +5880,7 @@ The rest of the axioms of the category hold trivially due to the
 fact that there is, at most, a unique morphism between any two
 objects.
 #+END_exampleth
-
+*** TODO Abelian categories
 ** Higher categories
 # TODO: Bicategories are weak 2-categories
 # TODO: 2-categories are strict 2-categories
