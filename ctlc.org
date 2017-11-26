@@ -2002,7 +2002,9 @@ and the relation between logic and types.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
-** Programming environment
+# 
+
+** Implementation of \lambda-expressions
 *** The Haskell programming language
 **** Haskell as a programming choice                              :ignore:
 *Haskell* is the purely functional programming language of our choice
@@ -2168,101 +2170,6 @@ categorical monads, see the chapter on Category Theory and the chapter
 on Type Theory, where we will program with monads in Agda.
 
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
-*** Cabal, Stack and Haddock
-The Mikrokosmos documentation as a Haskell library is included
-in its own code. It uses *Haddock*, a tool that generates documentation
-from annotated Haskell code; it is the /de facto/ standard in for Haskell
-software.
-
-Dependencies and packaging details for Mikrokosmos are specified in
-a file distributed with the source code called =mikrokosmos.cabal=.
-It is used by the package managers *stack* and *cabal* to provide the
-necessary libraries even if they are not available system-wide. The
-*stack* tool is also used to package the software, which is uploaded
-to /*Hackage*/.
-
-*** Testing
-*Tasty* is the Haskell testing framework of our choice for this
-project. It allows the user to create a comprehensive test suite
-combining multiple types of tests. The Mikrokosmos code is testing
-using the following techniques
-
-  * *unit tests*, in which individual core functions are tested
-    independently of the rest of the application;
-
-  * *property-based testing*, in which multiple test cases are
-    created automatically in order to verfiy that a specified
-    property always holds.
-
-  * *golden tests*, a special case of unit tests in which the expected
-    results of an IO action, as described on a file, are checked to
-    match the actual ones.
-    
-We are using the *HUnit* library for unit tests. It tests particular
-cases of type inference, unification and parsing. The following is an
-example of unit test, as found in =tests.hs=. It checks that the type
-inference of the identity term is correct.
-
-#+BEGIN_SRC haskell
--- Checks that the type of λx.x is exactly A → A
-testCase "Identity type inference" $
-  typeinference (Lambda (Var 1)) @?= Just (Arrow (Tvar 0) (Tvar 0))
-#+END_SRC
-
-We are using the *QuickCheck* library for property-based tests. It
-tests transformation properties of lambda expressions. In the following
-example, it tests that any deBruijn expression keeps is meaning when
-is translated into a \lambda-term.
-
-#+BEGIN_SRC haskell
--- Tests that naming lambda expressions does not alter their meaning
-QC.testProperty "Expression -> named -> expression" $
-  \expr -> toBruijn emptyContext (nameExp expr) == expr
-#+END_SRC
-
-We are using the *tasty-golden* package for golden tests.  Mikrokosmos
-can be passed a file as an argument to interpret it and show only the
-results. This feature is used to create a golden test in which the
-correct interpretation of a file.  This file is called =testing.mkr=,
-and contains library definitions and multiple tests. Its expected
-output is =testing.golden=. For example, the following Mikrokosmos
-code can be found on the file
-
-#+BEGIN_SRC haskell
-:types on
-caseof (inr 3) (plus 2) (mult 2)
-#+END_SRC
-
-and the expected output is
-
-#+BEGIN_SRC haskell
--- types: on
--- λa.λb.(a (a (a (a (a (a b)))))) ⇒ 6 :: (A → A) → A → A
-#+END_SRC
-
-*** Version control and continuous integration
-Mikrokosmos uses *git* as its version control system and the code,
-which is licensed under GPLv3, can be publicly accessed on the
-following GitHub repository:
-
-#+begin_center
-https://github.com/M42/mikrokosmos
-#+end_center
-
-Development takes place on the =development= git branch and permanent
-changes are released into the =master= branch. Some more minor
-repositories have been used in the development; they directly
-depend on the main one
-
- * https://github.com/m42/mikrokosmos-js
- * https://github.com/M42/jupyter-mikrokosmos
- * https://github.com/M42/mikrokosmos-lib
-
-The code uses the *Travis CI* continuous integration system to run
-tests and check that the software builds correctly after each change
-and in a reproducible way on a fresh Linux installation provided by
-the service.
-** Implementation of \lambda-expressions
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
 \alpha-conversion based on indices.  The main idea of De Bruijn
@@ -2416,7 +2323,7 @@ nameIndexes used new (App f g) =
 
 *** Evaluation
 As we proved on Corollary [[cor-leftmosttheorem]], the leftmost reduction
-strategy will find the leftmost reduction strategy if it
+strategy will find the normal form if it
 exists. Consequently, we will implement it using a function that
 simply applies the leftmost possible reductions at each step. This
 will allow us to show how the interpreter performs step-by-step
@@ -2445,7 +2352,7 @@ From the code we can see that the evaluation finishes whenever the
 expression stabilizes. This can happen in two different cases
 
   * there are no more possible \beta-reductions, and the algorithm
-    stops.
+    stops;
   * \beta-reductions do not change the expression. The computation
     would lead to an infinite loop, so it is immediately stopped.
     An common example of this is the \lambda-term $(\lambda x.x x)(\lambda x.x x)$.
@@ -2603,9 +2510,9 @@ exhibit a monad algebraic structure, which can be used to simplify
 the combination of parsers. A technical report on *monadic parser combinators*
 can be found on cite:hutton96.
 
-The use of monads for parsing is discussed firstly in cite:Wadler85,
+The use of monads for parsing was firstly discussed in cite:Wadler85,
 and later in cite:Wadler90 and cite:hutton98. The parser type is
-defined as a function taking a =String= and returning a list of pairs,
+defined as a function taking an input =String= and returning a list of pairs,
 representing a successful parse each. The first component of the pair
 is the parsed value and the second component is the remaining
 input. The Haskell code for this definition is
@@ -2618,8 +2525,7 @@ parse (Parser p) = p
 
 instance Monad Parser where
   return x = Parser (\s -> [(x,s)])
-  p >>= q  = Parser (\s -> 
-               concat [parse (q x) s' | (x,s') <- parse p s ])
+  p >>= q  = Parser (\s -> concat [parse (q x) s' | (x,s') <- parse p s ])
 #+END_SRC
 
 where the monadic structure is defined by =bind= and =return=. Given a
@@ -2709,7 +2615,7 @@ SKI combinator expressions can be defined as a binary tree having
 S, K, and I as possible leafs.
 
 #+BEGIN_SRC haskell
-data Ski = S | K | I | Comb Ski Ski
+data Ski = S | K | I | Comb Ski Ski | Cte String
 #+END_SRC
 
 The SKI-abstraction and bracket abstraction algorithms are implemented
@@ -2750,7 +2656,9 @@ skiabs (LambdaVariable x)      = Cte x
 skiabs (LambdaApplication m n) = Comb (skiabs m) (skiabs n)
 skiabs (LambdaAbstraction x m) = bracketabs x (skiabs m)
 #+END_SRC
- 
+
+# Mencionar que en la práctica se usan algoritmos C,B...
+
 ** Usage
 *** Installation
 The complete Mikrokosmos suite is divided in multiple parts:
@@ -2778,7 +2686,7 @@ git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
 The *Mikrokosmos interpreter* is listed in the central Haskell
 package archive, /Hackage/ [fn:hackage]. The packaging of Mikrokosmos
 has been done using the *cabal* tool; and the configuration of the
-package can be read on the file =mikrokosmos.cabal= on the Mikrokosmos
+package can be read in the file =mikrokosmos.cabal= on the Mikrokosmos
 code. As a result, Mikrokosmos can be installed using the *cabal* and
 *stack* Haskell package managers. That is,
 
@@ -3040,6 +2948,101 @@ tutorials are an example of this feature and can be seen on Figure [[mikrokosmos
 
 [fn:ghcjs]: The GHCjs documentation is available on its web page https://github.com/ghcjs/ghcjs
 
+** Programming environment
+*** Cabal, Stack and Haddock
+The Mikrokosmos documentation as a Haskell library is included
+in its own code. It uses *Haddock*, a tool that generates documentation
+from annotated Haskell code; it is the /de facto/ standard for Haskell
+software.
+
+Dependencies and packaging details for Mikrokosmos are specified in
+a file distributed with the source code called =mikrokosmos.cabal=.
+It is used by the package managers *stack* and *cabal* to provide the
+necessary libraries even if they are not available system-wide. The
+*stack* tool is also used to package the software, which is uploaded
+to /*Hackage*/.
+
+*** Testing
+*Tasty* is the Haskell testing framework of our choice for this
+project. It allows the user to create a comprehensive test suite
+combining multiple types of tests. The Mikrokosmos code is tested
+using the following techniques
+
+  * *unit tests*, in which individual core functions are tested
+    independently of the rest of the application;
+
+  * *property-based testing*, in which multiple test cases are
+    created automatically in order to verfiy that a specified
+    property always holds.
+
+  * *golden tests*, a special case of unit tests in which the expected
+    results of an IO action, as described on a file, are checked to
+    match the actual ones.
+    
+We are using the *HUnit* library for unit tests. It tests particular
+cases of type inference, unification and parsing. The following is an
+example of unit test, as found in =tests.hs=. It checks that the type
+inference of the identity term is correct.
+
+#+BEGIN_SRC haskell
+-- Checks that the type of λx.x is exactly A → A
+testCase "Identity type inference" $
+  typeinference (Lambda (Var 1)) @?= Just (Arrow (Tvar 0) (Tvar 0))
+#+END_SRC
+
+We are using the *QuickCheck* library for property-based tests. It
+tests transformation properties of lambda expressions. In the following
+example, it tests that any De Bruijn expression keeps is meaning when
+is translated into a \lambda-term.
+
+#+BEGIN_SRC haskell
+-- Tests that naming lambda expressions does not alter their meaning
+QC.testProperty "Expression -> named -> expression" $
+  \expr -> toBruijn emptyContext (nameExp expr) == expr
+#+END_SRC
+
+We are using the *tasty-golden* package for golden tests.  Mikrokosmos
+can be passed a file as an argument to interpret it and show only the
+results. This feature is used to create a golden test in which the
+correct interpretation of a file.  This file is called =testing.mkr=,
+and contains library definitions and multiple tests. Its expected
+output is =testing.golden=. For example, the following Mikrokosmos
+code can be found on the file
+
+#+BEGIN_SRC haskell
+:types on
+caseof (inr 3) (plus 2) (mult 2)
+#+END_SRC
+
+and the expected output is
+
+#+BEGIN_SRC haskell
+-- types: on
+-- λa.λb.(a (a (a (a (a (a b)))))) ⇒ 6 :: (A → A) → A → A
+#+END_SRC
+
+*** Version control and continuous integration
+Mikrokosmos uses *git* as its version control system and the code,
+which is licensed under GPLv3, can be publicly accessed on the
+following GitHub repository:
+
+#+begin_center
+https://github.com/M42/mikrokosmos
+#+end_center
+
+Development takes place on the =development= git branch and permanent
+changes are released into the =master= branch. Some more minor
+repositories have been used in the development; they directly
+depend on the main one
+
+ * https://github.com/m42/mikrokosmos-js
+ * https://github.com/M42/jupyter-mikrokosmos
+ * https://github.com/M42/mikrokosmos-lib
+
+The code uses the *Travis CI* continuous integration system to run
+tests and check that the software builds correctly after each change
+and in a reproducible way on a fresh Linux installation provided by
+the service.
 ** Programming in the untyped \lambda-calculus
 # Untyped \lambda-calculus in programming languages
 
@@ -7360,6 +7363,7 @@ exponential types of the category and the language; that is,
 # Contar ML aquí y luego contarlo solo desde Agda
 # Leer: Awodey - Type theory and homotopy
 # Leer: nLab - https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory#DependentTypeTheory
+# Leer: http://www1.maths.leeds.ac.uk/%7Epmtng/Research/Lectures/lecture3.pdf
 
 In the same way that cartesian closed categories provide a
 categorical interpretation of the simply typed \lambda-calculus,
@@ -7381,8 +7385,8 @@ is a pullback square. The functor is defined on any morphism
 $\alpha \colon y \to y'$ between two objects $y \colon Y \to B$, $y' \colon Y' \to B$ as
 the only morphism making the following diagram commute
 \[\begin{tikzcd}
-f^{\ast}Y \ar{rr}\ar[dashed]{dr}{\exists! f^{\ast}\alpha} \ar[bend right,swap]{ddr}{f^{\ast}y} &&
-Y \dar{\alpha}\ar[bend left=60]{dd}{y} \\
+f^{\ast}Y \ar{rrr}\ar[dashed]{dr}{\exists! f^{\ast}\alpha} \ar[bend right,swap]{ddr}{f^{\ast}y} &&&
+Y \ar{dl}{\alpha}\ar[bend left=60]{ddl}{y} \\
 & f^{\ast}Y' \dar[swap]{f^{\ast}y'} \rar & Y' \dar{y'} \\
 & A \rar[swap]{f} & B \\
 \end{tikzcd}\]
