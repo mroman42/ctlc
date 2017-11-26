@@ -1056,11 +1056,11 @@ and we will make precise these intuitions.
 *** Curry-style types
 Two different approaches to typing in \lambda-calculus are commonly used.
 
- * *Church-style* typing, also known as /explicit typing/, originated from
-   the work of Alonzo Church in cite:church40, where he described a STLC
-   with two basic types. The term's type is defined as an intrinsic property
-   of the term; and the same term has to be always interpreted with the same
-   type.
+ * *Church-style* typing, also known as /explicit typing/, originated
+   from the work of Alonzo Church in cite:church40, where he described
+   a simply-typed lambda calculus with two basic types. The term's
+   type is defined as an intrinsic property of the term; and the same
+   term has to be always interpreted with the same type.
 
  * *Curry-style* typing, also known as /implicit typing/; which
    creates a formalism where every single term can be given an
@@ -3548,10 +3548,11 @@ still non typeable.
 #+end_exampleth
 
 *** Product, union, unit and void types
-Until this point, we have only used the function type. We are working on the
-implicational fragment of the STLC we described on the first [[*Typing rules for the simply typed \lambda-calculus][typing rules]].
-We are now going to extend the type system in the same sense we [[*Extending the simply typed \lambda-calculus][extended]] the
-STLC. The following types are added to the type system
+Until this point, we have only used the function type. We are working
+on the implicational fragment of the simply-typed lambda calculus we
+described on the first [[*Typing rules for the simply typed \lambda-calculus][typing rules]].  We are now going to extend the
+type system in the same sense we [[*Extending the simply typed \lambda-calculus][extended]] the simply-typed lambda
+calculus. The following types are added to the type system
 
 | Type | Name          | Description                       |
 |------+---------------+-----------------------------------|
@@ -7734,7 +7735,7 @@ into negative and positive types.
 *** Dependent function types
 **** Dependent function types: introduction                       :ignore:
 *Dependent function types*, or *\Pi-types*, are the generalized version
-of the function types in STLC. The elements of $\prod_{x:A} B(x)$ are functions
+of the function types in simply-typed lambda calculus. The elements of $\prod_{x:A} B(x)$ are functions
 with the type $A$ as domain and a changing codomain $B(x)$, depending on
 the specific element to which the function is applied. This type is often
 written also as $\Pi(x:A), B(x)$ to resemble the universal quantifier; under
@@ -7770,7 +7771,7 @@ The following rules apply for the dependent function type:
 \BIC{$\Gamma \vdash f(a) : B[a/x]$}
 \end{prooftree}
 
-  * its \beta-rule is similar to STLC's \beta-rule, with the difference that
+  * its \beta-rule is similar to simply typed lambda calculus' \beta-rule, with the difference that
     it has to specify a substitution on the type of the codomain
     \begin{prooftree}
     \RightLabel{$\Pi$\textsc{-comp}}
@@ -7779,7 +7780,7 @@ The following rules apply for the dependent function type:
     \BIC{$\Gamma \vdash (\lambda x.b)\ a \equiv b[a/x] : B[a/x]$}
     \end{prooftree}
 
-  * and its \eta-rule is also similar to STLC's one
+  * and its \eta-rule is also similar to simply typed lambda calculus' one
     \begin{prooftree}
     \RightLabel{$\Pi$\textsc{-uniq}}
     \AXC{$\Gamma \vdash f : \prod_{x:A} B$}
