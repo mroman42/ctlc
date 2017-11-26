@@ -1791,8 +1791,12 @@ Unit type ($1$) & Truth ($\top$) \\
 Product type ($\times$) & Conjunction ($\land$) \\
 Union type ($+$) & Disjunction ($\lor$) \\
 Function type ($\to$) & Implication ($\to$) \\
-Empty type ($0$) & False ($\bot$)
+Empty type ($0$) & False ($\bot$) \\
 \end{tabular}\end{center}
+
+Where, in particular, the negation of a proposition $\neg A$ is interpreted
+as the fact that that proposition implies falsehood, $A \to \bot$; and its
+corresponding type is a function from the type $A$ to the empty type, $A \to 0$.
 
 Now it is easy to notice that every [[*Natural deduction][deduction rule]] for a proposition has a
 correspondence with a [[*Extending the simply typed \lambda-calculus][typing rule]]. The only distinction between them is the
@@ -2038,31 +2042,31 @@ Haskell is
 
  1. *strongly and statically typed*, meaning that it only compiles
     well-typed programs and it does not allow implicit type
-    casting. The compiler will generate an error if a term is
-    non-typeable.
+    casting; the compiler will generate an error if a term is
+    non-typeable;
 
  2. *lazy*, with /non-strict semantics/, meaning that it will not
-    evaluate a term or the argument of a function until it is needed.
-    In cite:hughes89, John Hughes, codesigner of the language, argues
+    evaluate a term or the argument of a function until it is needed;
+    in cite:hughes89, John Hughes, codesigner of the language, argues
     for the benefits of a lazy functional language, which could solve
-    the traditional efficiency problems on functional programming.
+    the traditional efficiency problems on functional programming;
 
- 3. *purely functional*. As the evaluation order is demand-driven and
+ 3. *purely functional*; as the evaluation order is demand-driven and
     not explicitly known, it is not possible in practice to perform
     ordered input/output actions or any other side-effects by relying
-    on the evaluation order. This helps modularity of the code,
-    testing and verfication.
+    on the evaluation order; this helps modularity of the code,
+    testing, and verfication;
 
- 4. *referentially transparent*. As a consequence of its purity, every
+ 4. *referentially transparent*; as a consequence of its purity, every
     term on the code could be replaced by its definition without
-    changing the global meaning of the program. This allows equational
-    reasoning with rules that are directly derived from \lambda-calculus.
+    changing the global meaning of the program; this allows equational
+    reasoning with rules that are directly derived from \lambda-calculus;
 
- 5. based on *System F\omega* with some restrictions. Crucially, it
+ 5. based on *System F\omega* with some restrictions; crucially, it
     implements *System F* adding quantification over type operators
-    even if it does not allow abstraction on type operators. The GHC
-    Haskell compiler, however, allows the user the ability to activate
-    extensions that implement dependent types.
+    even if it does not allow abstraction on type operators; the GHC
+    Haskell compiler, however, allows the user to activate extensions
+    that implement dependent types.
     # https://stackoverflow.com/a/21220357/2552681
 
 #+ATTR_LATEX: :options [A first example in Haskell]
@@ -2072,19 +2076,16 @@ its implicit laziness can be used.
 
 #+BEGIN_SRC haskell
 -- The type of the term can be declared.
--- Polymorphic type variables are allowed.
-id :: a -> a
--- Functions are defined equationally
-id x = x
+id :: a -> a  -- Polymorphic type variables are allowed,
+id x = x      -- and the function is defined equationally.
 -- This definition performs short circuit evaluation thanks
 -- to laziness. The unused argument can be omitted.
 (&&) :: Bool -> Bool -> Bool
-True  && x = x
-False && _ = False
+True  && x = x                -- (true and x) is always x
+False && _ = False            -- (false and y) is always false
 -- Laziness also allows infinite data structures.
--- We can define the list of all natural numbers.
-nats :: [Integer]
-nats = 1 : map (+1) nats
+nats :: [Integer]         -- List of all natural numbers,
+nats = 1 : map (+1) nats  -- defined recursively.
 #+END_SRC
 #+END_exampleth
 
@@ -2165,6 +2166,31 @@ pythagorean = do
 Note that this list is infinite. As the language is lazy, this does not
 represent a problem: the list will be evaluated only on demand.
 
+Another common example of an instance of the =Monad= typeclass is the
+/Maybe monad/ used to deal with error propagation. A =Maybe a= type can
+consist of a term of type =a=, written as =Just a=; or as a =Nothing=
+constant, signalling an error. The monad is then defined as
+
+#+BEGIN_SRC haskell
+instance Monad Maybe where
+  return x = Just x
+  xs >>= f = case xs of Nothing -> Nothing | Just a -> Just (f a)
+#+END_SRC
+
+and can be used as in the following example to use /exception-like/
+error treatment in a pure declarative language
+
+#+BEGIN_SRC haskell
+roots :: (Float,Float,Float) -> Maybe Int
+roots (a,b,c) = do
+  -- Some errors can occur during this computation
+  discriminant <- sqroot (b*b - 4*c*a)         -- roots of negative numbers?
+  root1 <- safeDiv ((-b) + discriminant) (2*a) -- division by zero?
+  root2 <- safeDiv ((-b) - discriminant) (2*a)
+  -- The monad ensures that we return a number only if no error has been raised
+  return (root1,root2)
+#+END_SRC
+
 For a more detailed treatment of monads, and their relation to
 categorical monads, see the chapter on Category Theory and the chapter
 on Type Theory, where we will program with monads in Agda.
@@ -2172,13 +2198,14 @@ on Type Theory, where we will program with monads in Agda.
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
 *** De Bruijn indexes
 Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
-\alpha-conversion based on indices.  The main idea of De Bruijn
+\alpha-conversion based on indices.  The main goal of De Bruijn
 indices is to remove all variables from binders and replace every
 variable on the body of an expression with a number, called /index/,
 representing the number of \lambda-abstractions in scope between the
 ocurrence and its binder.
 
-Consider the following example, the \lambda-term
+# TODO: Explicar esto con colores y diagramas
+Consider the following example: the \lambda-term
 \[ \lambda x.(\lambda y.\ y (\lambda z.\ y z)) (\lambda t.\lambda z.\ t x)
 \]
 can be written with de Bruijn indices as
@@ -2190,7 +2217,7 @@ De Bruijn also proposed a notation for the \lambda-calculus
 changing the order of binders and \lambda-applications.  A review on
 the syntax of this notation, its advantages and De Bruijn indexes, can be found in
 cite:kamareddine01. In this section, we are going to describe De Bruijn
-indexes but preserve the usual notation of \lambda-terms; that is, the /De Bruijn/
+indexes while preserving the usual notation of \lambda-terms; that is, the /De Bruijn/
 /indexes/ and the /De Bruijn notation/ are different concepts and we are going to
 use only the former.
 
@@ -2198,10 +2225,15 @@ use only the former.
 #+begin_definition
 We define recursively the set of \lambda-terms using de Bruijn notation
 following this BNF
-\[ \mathtt{Exp} ::= \mathbb{N}
- \mid (\lambda\ \mathtt{Exp})
- \mid (\mathtt{Exp}\ \mathtt{Exp})
-\]
+\[\begin{aligned}
+\mathtt{Exp} &::= 
+ \underbrace{\mathbb{N}}_{\textit{variable}}
+ \mid
+ \underbrace{(\lambda\ \mathtt{Exp})}_{\textit{abstraction}}
+ \mid
+ \underbrace{(\mathtt{Exp}\ \mathtt{Exp})}_{\textit{application}} \\
+\mathbb{N} &::= 0 \mid 1 \mid 2 \mid \dots \\
+\end{aligned}\]
 #+end_definition
 
 Our internal definition closely matches the formal one. The names of
@@ -2226,10 +2258,10 @@ variable by a \lambda-term $P$ on a given term, we must
 
  * find all the ocurrences of the variable. At each level of scope
    we are looking for the successor of the number we were looking
-   for before.
+   for before;
 
  * decrease the higher variables to reflect the disappearance of
-   a lambda.
+   a lambda;
 
  * replace the ocurrences of the variables by the new term, taking
    into account that free variables must be increased to avoid them
@@ -2323,11 +2355,12 @@ nameIndexes used new (App f g) =
 
 *** Evaluation
 As we proved on Corollary [[cor-leftmosttheorem]], the leftmost reduction
-strategy will find the normal form if it
-exists. Consequently, we will implement it using a function that
-simply applies the leftmost possible reductions at each step. This
-will allow us to show how the interpreter performs step-by-step
-evaluations to the final user, as discussed in the [[*Verbose mode][verbose mode]] section.
+strategy will find the normal form of any given term provided that it
+exists. Consequently, we will implement reduction in our interpreter
+using a function that simply applies the leftmost possible reductions
+at each step. As a side benefit, this will allow us to show how the
+interpreter performs step-by-step evaluations to the final user, as
+discussed in the [[*Verbose mode][verbose mode]] section.
 
 #+BEGIN_SRC haskell
 -- | Simplifies the expression recursively.
@@ -2352,10 +2385,12 @@ From the code we can see that the evaluation finishes whenever the
 expression stabilizes. This can happen in two different cases
 
   * there are no more possible \beta-reductions, and the algorithm
-    stops;
+    stops; or
+
   * \beta-reductions do not change the expression. The computation
     would lead to an infinite loop, so it is immediately stopped.
-    An common example of this is the \lambda-term $(\lambda x.x x)(\lambda x.x x)$.
+    An common example of this is the \lambda-term
+    $(\lambda x.x x)(\lambda x.x x)$.
 
 *** Principal type inference
 The interpreter implements the [[*Unification and type inference][unification and type inference]] algorithms
@@ -2510,7 +2545,7 @@ exhibit a monad algebraic structure, which can be used to simplify
 the combination of parsers. A technical report on *monadic parser combinators*
 can be found on cite:hutton96.
 
-The use of monads for parsing was firstly discussed in cite:Wadler85,
+The use of monads for parsing was discussed for the first time in cite:Wadler85,
 and later in cite:Wadler90 and cite:hutton98. The parser type is
 defined as a function taking an input =String= and returning a list of pairs,
 representing a successful parse each. The first component of the pair
@@ -2518,14 +2553,16 @@ is the parsed value and the second component is the remaining
 input. The Haskell code for this definition is
 
 #+BEGIN_SRC haskell
-newtype Parser a = Parser (String -> [(a,String)])
-
-parse :: Parser a -> String -> [(a,String)]
-parse (Parser p) = p
-
-instance Monad Parser where
-  return x = Parser (\s -> [(x,s)])
-  p >>= q  = Parser (\s -> concat [parse (q x) s' | (x,s') <- parse p s ])
+  -- A parser takes a string an returns a list of possible parsings with
+  -- their remaining string.
+  newtype Parser a = Parser (String -> [(a,String)])
+  parse :: Parser a -> String -> [(a,String)]
+  parse (Parser p) = p
+  -- A parser can be composed monadically, the composed parser (p >>= q)
+  -- applies q to every possible parsing of p. A trivial one is defined.
+  instance Monad Parser where
+    return x = Parser (\s -> [(x,s)]) -- Trivial parser, directly returns x.
+    p >>= q  = Parser (\s -> concat [parse (q x) s' | (x,s') <- parse p s ])
 #+END_SRC
 
 where the monadic structure is defined by =bind= and =return=. Given a
@@ -2536,13 +2573,12 @@ over the remaining inputs of the first one, using the parsed values on
 the first parsing as arguments.
 
 An example of primitive *parser* is the =item= parser, which consumes a
-character from a non-empty string. It is written in Haskell code as
+character from a non-empty string. It is written in Haskell code using
+pattern matching on the string as
 
 #+BEGIN_SRC haskell
 item :: Parser Char
-item = Parser (\s -> case s of 
-                       "" -> []
-                       (c:s') -> [(c,s')])
+item = Parser (\s -> case s of "" -> []; (c:s') -> [(c,s')])
 #+END_SRC
 
 and an example of *parser combinator* is the =many= function, which
@@ -2568,12 +2604,14 @@ input, which will tend to be short, performance is not a critical
 concern. A high-performace library supporting incremental parsing,
 such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
 *** Verbose mode
-As we explained previously on the Evaluation section, the simplification
+As we explained previously on the [[*Evaluation][evaluation]] section, the simplification
 can be analyzed step-by-step. The interpreter allows us to see the
 complete evaluation when the =verbose= mode is activated. To activate
 it, we can execute =:verbose on= in the interpreter.
 
-The difference can be seen on the following example.
+The difference can be seen on the following example, which shows the execution
+of $1+2$, first without intermediate results, and later, showing every intermediate
+step.
 
 #+BEGIN_EXAMPLE
 mikro> plus 1 2
@@ -2729,6 +2767,8 @@ The following script installs the complete Mikrokosmos suite on a
 fresh system. It has been tested under =Ubuntu 16.04.3 LTS (Xenial
 Xerus)=.
 
+# TODO: Usa virtualenv en vez de sudo -H pip
+
 #+BEGIN_SRC sh
 # 1. Installs Stack, the Haskell package manager
 wget -qO- https://get.haskellstack.org | sh
@@ -2780,7 +2820,7 @@ accepts the following commands
   * =:color= deactivates colored output;
   * =:load= loads a library.
 
-The Figure [[mikrosession]] is an example session on the mikrokosmos interpreter.
+Figure [[mikrosession]] is an example session on the mikrokosmos interpreter.
 
 #+caption: Mikrokosmos interpreter session.
 #+name: mikrosession
@@ -2973,7 +3013,7 @@ using the following techniques
 
   * *property-based testing*, in which multiple test cases are
     created automatically in order to verfiy that a specified
-    property always holds.
+    property always holds;
 
   * *golden tests*, a special case of unit tests in which the expected
     results of an IO action, as described on a file, are checked to
@@ -2992,11 +3032,11 @@ testCase "Identity type inference" $
 
 We are using the *QuickCheck* library for property-based tests. It
 tests transformation properties of lambda expressions. In the following
-example, it tests that any De Bruijn expression keeps is meaning when
-is translated into a \lambda-term.
+example, it tests that any De Bruijn expression keeps its meaning when
+translated into a \lambda-term.
 
 #+BEGIN_SRC haskell
--- Tests that naming lambda expressions does not alter their meaning
+-- Tests if translation preserves meaning
 QC.testProperty "Expression -> named -> expression" $
   \expr -> toBruijn emptyContext (nameExp expr) == expr
 #+END_SRC
@@ -3004,10 +3044,11 @@ QC.testProperty "Expression -> named -> expression" $
 We are using the *tasty-golden* package for golden tests.  Mikrokosmos
 can be passed a file as an argument to interpret it and show only the
 results. This feature is used to create a golden test in which the
-correct interpretation of a file.  This file is called =testing.mkr=,
-and contains library definitions and multiple tests. Its expected
-output is =testing.golden=. For example, the following Mikrokosmos
-code can be found on the file
+interpreter is asked to provide the correct interpretation of a given
+file.  This file is called =testing.mkr=, and contains library
+definitions and multiple tests. Its expected output is
+=testing.golden=. For example, the following Mikrokosmos code can be
+found on the file
 
 #+BEGIN_SRC haskell
 :types on
@@ -3043,10 +3084,10 @@ The code uses the *Travis CI* continuous integration system to run
 tests and check that the software builds correctly after each change
 and in a reproducible way on a fresh Linux installation provided by
 the service.
-** Programming in the untyped \lambda-calculus
+** Programming in untyped \lambda-calculus
 # Untyped \lambda-calculus in programming languages
 
-This section explains how to use the untyped \lambda-calculus to
+This section explains how to use untyped \lambda-calculus to
 encode data structures and useful data, such as booleans, linked lists,
 natural numbers or binary trees. All this is done on pure \lambda-calculus
 avoiding the addition of new syntax or axioms.
@@ -3075,8 +3116,7 @@ compose = \f.\g.\x.f (g x)
 const = \x.\y.x
 #+END_SRC
 
-Evaluation of terms will be denoted with presented as comments to the
-code,
+Evaluation of terms will be presented as comments to the code,
 
 #+BEGIN_SRC haskell
 compose id id
@@ -3084,7 +3124,7 @@ compose id id
 #+END_SRC
 
 It is important to notice that multiple argument functions are defined as
-higher one-argument functions which return another functions as arguments.
+higher one-argument functions that return another functions as arguments.
 These intermediate functions are also valid \lambda-terms. For example
 
 #+BEGIN_SRC haskell
@@ -3101,11 +3141,11 @@ by the following adjunction
 \]
 
 *** A technique on inductive data encoding
-Over this presentation, we will implicitly use a technique on the
-majority of our data encodings which allows us to write an encoding
-for any algebraically inductive generated data. This technique is used
-without comment on cite:selinger13 and represents the basis of what is
-called the *Church encoding* of data in \lambda-calculus.
+We will implicitly use a technique on the majority of our data
+encodings that allows us to write an encoding for any algebraically
+inductive generated data. This technique is used without comment on
+cite:selinger13 and represents the basis of what is called the *Church
+encoding* of data in \lambda-calculus.
 
 We start considering the usual inductive representation of
 a data type with constructors, as we do when representing a
@@ -3141,9 +3181,9 @@ In general, any instance of the data structure $\mathtt{D}$ would be encoded as 
 \]
 
 This acts as the definition of an initial algebra over the
-constructors and lets us compute by instantiating this algebra on
-particular cases. Particular examples are described on the following
-sections.
+constructors and lets us to compute over instances of that algebra by
+instantiating it on particular cases. Particular examples
+are described on the following sections.
 # Link to categories
 
 *** Booleans
@@ -3167,8 +3207,8 @@ between these two uses of the same \lambda-term. Another side-effect
 of this definition is that our =true= and =false= terms can be interpreted
 as binary functions choosing between two arguments, that is,
 
-  * $\mathtt{true}(a,b) = a$
-  * $\mathtt{false}(a,b) = b$
+  * $\mathtt{true}(a,b) = a$,
+  * $\mathtt{false}(a,b) = b$.
 
 We can test this interpretation on the interpreter to get
 
@@ -3437,16 +3477,18 @@ f ( f ( f (\mathtt{fix}\ f))) =
 
 Such a combinator actually exists; it can be defined and used as
 #+BEGIN_SRC haskell
-fix != (\f.(\x.f (x x)) (\x.f (x x)))
+fix := (\f.(\x.f (x x)) (\x.f (x x)))
 fix (const id)
 --- [1]: id
 #+END_SRC
 
-Examples of its applications are a /factorial/ function or a
-/fibonacci/ function, as in
+Where =:== defines a function without trying to evaluate it to a
+normal form; this is useful in cases like the previous one, where the
+function has no normal form. Examples of its applications are a
+/factorial/ function or a /fibonacci/ function, as in
 #+BEGIN_SRC haskell
-fact != fix (\f.\n.iszero n 1 (mult n (f (pred n))))
-fib  != fix (\f.\n.iszero n 1 (plus (f (pred n)) (f (pred (pred n)))))
+fact := fix (\f.\n.iszero n 1 (mult n (f (pred n))))
+fib  := fix (\f.\n.iszero n 1 (plus (f (pred n)) (f (pred (pred n)))))
 fact 3
 fib 3
 --- [1]: 6
@@ -3500,7 +3542,7 @@ All the code on this section is valid Mikrokosmos code.
 
 *** Function types and typeable terms
 Types can be activated with the commmand =:types on=. If types are activated,
-the interpreter will [[*Principal type inference][infer]] the principal type every term before its evaluation.
+the interpreter will [[*Principal type inference][infer]] the principal type of every term before its evaluation.
 The type will then be displayed after the result of the computation.
 
 #+attr_latex: :options [Typed terms on Mikrokosmos]
@@ -3525,7 +3567,7 @@ K     --- [8]: λa.λb.a ⇒ K, true :: A → B → A
 
 If a term is found to be non-typeable, Mikrokosmos will output an error
 message signaling the fact. In this way, the evaluation of \lambda-terms
-which could potentially not terminate is prevented. Only typed \lambda-terms
+that could potentially not terminate is prevented. Only typed \lambda-terms
 will be evaluated while the option =:types= is on; this ensures the termination
 of every computation on typed terms.
 
@@ -3548,19 +3590,19 @@ still non typeable.
 #+end_exampleth
 
 *** Product, union, unit and void types
-Until this point, we have only used the function type. We are working
-on the implicational fragment of the simply-typed lambda calculus we
-described on the first [[*Typing rules for the simply typed \lambda-calculus][typing rules]].  We are now going to extend the
-type system in the same sense we [[*Extending the simply typed \lambda-calculus][extended]] the simply-typed lambda
-calculus. The following types are added to the type system
+Until now, we have only used the function type. That is to say that we
+are working on the implicational fragment of the simply-typed lambda
+calculus we described on the first [[*Typing rules for the simply typed \lambda-calculus][typing rules]].  We are now going to
+extend our type system in the same sense we [[*Extending the simply typed \lambda-calculus][extended]] that simply-typed
+lambda calculus. The following types are added to the system
 
 | Type | Name          | Description                       |
 |------+---------------+-----------------------------------|
-| =→=  | Function type | Functions from a type to another. |
-| =×=  | Product type  | Cartesian product of types.       |
-| =+=  | Union type    | Disjoint union of types.          |
-| =⊤=  | Unit type     | A type with exactly one element.  |
-| =⊥=  | Void type     | A type with no elements.          |
+| =→=  | Function type | Functions from a type to another  |
+| =×=  | Product type  | Cartesian product of types        |
+| =+=  | Union type    | Disjoint union of types           |
+| =⊤=  | Unit type     | A type with exactly one element   |
+| =⊥=  | Void type     | A type with no elements           |
 
 And the following typed constructors are added to the language,
 
@@ -3577,8 +3619,8 @@ And the following typed constructors are added to the language,
 | =absurd=    | =⊥ → ⊥=                           | Particular empty function |
 
 which correspond to the constructors we described on previous
-sections. The only new addition is the =absurd= function, which is
-only a particular case of =abort= useful when we want to make explicit
+sections. The only new term is the =absurd= function, which is
+only a particular case of =abort=, useful when we want to make explicit
 that we are deriving an instance of the empty type. This addition will
 only make the logical interpretation on the following sections
 clearer.
@@ -3588,10 +3630,10 @@ clearer.
 The following are examples of typed terms and functions on Mikrokosmos
 using the extended typed constructors. The following terms are presented
 
-  * a function swapping pairs, as an example of pair types.
+  * a function swapping pairs, as an example of pair types;
   * two-case analysis of a number, deciding whether to multiply it by two
-    or to compute its predecessor.
-  * difference between =abort= and =absurd=.
+    or to compute its predecessor;
+  * difference between =abort= and =absurd=;
   * example term containing the unit type.
 
 #+BEGIN_SRC haskell
@@ -3627,12 +3669,15 @@ first-order intuitionistic logic by virtue of the Curry-Howard
 correspondence.
 
 *** A proof in intuitionistic logic
-Under the logical interpretation of Mikrokosmos, we can transcribe proofs in
-intuitionistic logic to \lambda-terms and check them on the interpreter.
+Under the logical interpretation of Mikrokosmos, we can transcribe
+proofs in intuitionistic logic to \lambda-terms and check them on the
+interpreter. The translation between logical propositions and types is
+straightforward, except for the *negation* of a proposition $\neg A$, that
+must be written as $(A \to \bot)$, a function to the empty type.
 
 #+begin_theorem
-In intuitionistic logic, the double negation of the LEM holds for every
-proposition, that is,
+In intuitionistic logic, the double negation of the Law of Excluded
+Middle holds for every proposition, that is,
 \[
 \forall A\colon \neg \neg (A \lor \neg A)
 \]
@@ -3675,12 +3720,28 @@ of objects linked by composable arrows; to which associativity and
 identity laws will apply.
 
 Thus, a category has to rely in some notion of /*collection*/. When
-interpreted inside set-theory, it is common to use the term to denote
+interpreted inside set-theory, it is common to use this term to denote
 some unspecified formal notion of compilation of entities that could
 be given by sets or proper classes. We will want to define categories
 whose objects are all the possible sets and we will need the objects
 to form a proper class in order to avoid inconsistent results such as
-the Russell's paradox.
+the Russell's paradox. This is why we will consider, from this
+approach, a particular class of categories of small set-theoretical
+size to be specially well-behaved.
+
+#+attr_latex: :options [Small and locally small categories]
+#+begin_definition
+A category will be said to be *small* if the collection of its objects
+can be given by a set (instead of a proper class). It will be said to
+be *locally small* if the collection of arrows between any two objects can
+be given by a set.
+#+end_definition
+
+A different approach, however, would be to simply take the /objects/
+and the /arrows/ as fundamental concepts of our theory. These
+foundational concerns will not cause any explicit problem in this
+presentation of category theory, so we will keep them deliberately
+open to both interpretations.
 
 *** Definition of category
 **** Categories, objects and morphisms                            :ignore:
@@ -3700,10 +3761,10 @@ notation for such morphism is
 f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
 \]
 
-Given two morphisms $f \colon A \to B$ and $g \colon B \to C$, there
-exists a *composition morphism*, written as $g \circ f \colon A \to C$.
-Morphism composition is a binary associative operation with
-identity elements $\id_{A}\colon A \to A$, that is
+Given two morphisms $f \colon A \to B$ and $g \colon B \to C$, there exists a 
+*composition morphism*, written as $g \circ f \colon A \to C$.
+Morphism composition is a binary associative operation with an
+identity element $\id_{A}\colon A \to A$ for every object $A$, that is,
 \[
 h \circ (g \circ f) = (h \circ g) \circ f
 \quad\text{ and }\quad
@@ -3712,7 +3773,7 @@ f \circ \id_A = f = \id_B \circ f,
 for any $f,g,h$, composable morphisms.
 #+end_definition
 
-**** Definition of hom-sets and small categories                  :ignore:
+**** Definition of hom-sets                                       :ignore:
 #+attr_latex: :options [Hom-sets]
 #+begin_definition
 The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
@@ -3723,20 +3784,13 @@ of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
 We can use a subscript, as in $\hom_{{\cal C}}(A,B)$ to explicitly
 specify the category we are working in when necessary.
 
-#+attr_latex: :options [Small and locally small categories]
-#+begin_definition
-A category is said to be *small* if the collections ${\cal C}_0,{\cal C}_1$ of objects and morphisms
-are both sets (instead of proper classes). It is said to be *locally small* if every
-hom-set is actually a set.
-#+end_definition
-
 *** Morphisms
 **** Morphisms: introduction                                      :ignore:
 Objects in category theory are an atomic concept and can be only
 studied by their morphisms; that is, by how they are related to all
 the objects of the category. Thus, the essence of a category is given
-not by its objects, but by its morphisms and how composition is
-defined.
+not by its objects, but by the morphisms between them and how
+composition is defined.
 
 It is so much so, that we will consider two objects essentially
 equivalent (and we will call them /*isomorphic*/) whenever they relate
@@ -3750,7 +3804,7 @@ structures. From this perspective, /*monomorphisms*/ and
 /*epimorphisms*/ can be thought as abstractions of the usual injective
 and surjective homomorphisms. We will see, however, how some
 properties that we take for granted, such as ''isomorphism'' meaning
-exactly the same as ''both injective and surjective'' are not true in
+exactly the same as ''both injective and surjective'', are not true in
 general.
 
 **** Isomorphisms                                                 :ignore:
@@ -4037,7 +4091,7 @@ the only function of the form $f : \varnothing \to A$ is the empty one. The fina
 object, however, is only defined up to isomorphism: given any set with
 a single object $\{\ast\}$, there exists a unique function of the form $f : A \to \varnothing$
 for any set $A$; namely, the one defined as $\forall a \in A: f(a) = \ast$. Every
-two sets with one objects are terminal objects and they are trivially
+two sets with exactly one object are terminal objects and they are trivially
 isomorphic.
 
 Similarly, the coproduct is defined only to isomorphism. The coproduct
