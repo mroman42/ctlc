@@ -2,10 +2,10 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:mark toc:t tasks:nil num:3
 #+SETUPFILE: ctlc.setup
-#+LATEX_HEADER_EXTRA: \input{titlepage}
+#+LATEX_HEADER_EXTRA: %\input{titlepage}
 
-# Evitar notas al pie de página
-# Quitar abreviaturas: STLC
+# Usar + para la suma
+# Usar adyacencia para la composición
 # Usar 1 y 0 para objetos inicial y final
 
 ** Abstract
@@ -1548,7 +1548,7 @@ On the other side, new \eta-rules are defined, each for every new construction r
 *** Natural deduction
 The natural deduction is a logical system due to Gentzen. We introduce
 it here following cite:selinger13 and cite:wadler15. Its relationship
-with the STLC will be made explicit in the [[*Propositions as types][next section]].
+with the simply-typed lambda calculus will be made explicit in the [[*Propositions as types][next section]].
 
 We will use the logical binary connectives $\to,\land,\lor$, and two
 given propositions, $\top,\bot$ representing the trivially true and false
@@ -3762,7 +3762,8 @@ f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
 \]
 
 Given two morphisms $f \colon A \to B$ and $g \colon B \to C$, there exists a 
-*composition morphism*, written as $g \circ f \colon A \to C$.
+*composition morphism*, written as $g \circ f \colon A \to C$; or
+simply by yuxtaposition, as $gf$.
 Morphism composition is a binary associative operation with an
 identity element $\id_{A}\colon A \to A$ for every object $A$, that is,
 \[
@@ -3810,16 +3811,16 @@ general.
 **** Isomorphisms                                                 :ignore:
 #+attr_latex: :options [Isomorphisms]
 #+begin_definition
-A morphism $f : A \to B$ is an *isomorphism* if an inverse morphism $f^{-1} : B \to A$
-such that
+A morphism $f : A \to B$ is an *isomorphism* if there exist a morphism
+$f^{-1} : B \to A$ such that
 
   * $f^{-1} \circ f = \id_{A}$,
-  * $f \circ f^{-1} = \id_{B}$;
+  * $f \circ f^{-1} = \id_{B}$.
 
-exists.
+This morphism is called an /inverse morphism/.
 #+end_definition
 
-We call *automorphisms* to these morphisms which are both endomorphisms
+We call *automorphisms* to the morphisms which are both endomorphisms
 and isomorphisms.
 
 #+attr_latex: :options [Unicity of inverses]
@@ -3827,7 +3828,7 @@ and isomorphisms.
 <<prop-unicityinverse>>
 If the inverse of a morphism exists, it is unique. In fact, if a
 morphism has a left-side inverse and a right-side inverse, they are
-both-side inverses and they are equal.
+both-sided inverses and they are equal.
 #+end_proposition
 #+begin_proof
 Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
@@ -3900,7 +3901,7 @@ epimorphism is a section and not every monomorphism is a retraction.
 *** Terminal objects, products and coproducts
 /*Products and coproducts*/ are very widespread notions in mathematics.
 Whenever a new structure is defined, it is common to wonder what the
-product or union of two of these structures would be. Examples of
+product or sum of two of these structures would be. Examples of
 products are the cartesian product of sets, the product topology or
 the product of abelian groups; examples of coproducts are the disjoint
 union of sets, topological sum or the free product of groups.
@@ -4157,7 +4158,8 @@ Functors and natural transformations were defined for the first time
 by Eilenberg and MacLane in cite:maclane42 while studying Čech
 cohomology. While initially they were devised mainly as a language for
 studying homology, they have proven its foundational value with the
-passage of time.
+passage of time. The notion of naturality will be a key element of our
+presentation of algebraic theories and categorical logic.
 
 *** Functors
 A */functor/* will be interpreted as a homomorphism of categories
@@ -4171,12 +4173,12 @@ Given two categories ${\cal C}$ and ${\cal D}$, a *functor* between
 them, $F : {\cal C} \to {\cal D}$, is given by
 
   * an *object function*, $F : \mathrm{obj}({\cal C}) \to \mathrm{obj}({\cal D})$;
-  * and an *arrow function*, $F : (A \to B) \to (FA \to FB)$ for any two
+  * and an *arrow function*, $F : \hom(A, B) \to \hom(FA, FB)$ for any two
     objects $A,B$ of the category;
 
 such that
 
-  * $F(\id_A) = \id_{FA}$, identities are preserved;
+  * $F(\id_A) = \id_{FA}$, identities are preserved; and
   * $F(f \circ g) = Ff \circ Fg$, the functor respects composition.
 #+end_definition
 
@@ -4186,23 +4188,17 @@ of categories can be defined, having functors as morphisms. In order to
 avoid paradoxes, we will only define the category of all small categories
 as a non-small category so it will not contain itself.
 
-#+attr_latex: :options [Composition of functors]
-#+begin_definition
-Given two functors $F \colon {\cal C} \to {\cal B}$ and $G \colon {\cal B} \to {\cal A}$, their composite functor
-$G \circ F : {\cal C} \to {\cal A}$ is given by the composition of object and arrow functions
-of the functors. This composition is trivially associative.
-#+end_definition
-
-#+attr_latex: :options [Identity functor]
-#+begin_definition
-The identity functor on a category $I_{{\cal C}}\colon {\cal C} \to {\cal C}$ is given by identity object
-and arrow functions. It is trivially neutral with respect to composition.
-#+end_definition
-
 #+ATTR_LATEX: :options [The category of categories]
 #+BEGIN_definition
 The category $\Cats$ is defined as the category of (small) categories as
 objects and functors as morphisms.
+
+ * Given two functors $F \colon {\cal C} \to {\cal B}$ and $G \colon {\cal B} \to {\cal A}$, their composite functor
+   $G \circ F : {\cal C} \to {\cal A}$ is given by the composition of the object and arrow functions
+   of the functors. This composition is trivially associative.
+
+ * The identity functor on a category $I_{{\cal C}}\colon {\cal C} \to {\cal C}$ is given by identity object
+   and arrow functions. It is trivially neutral with respect to composition.
 #+END_definition
 
 **** Full and faithfull functors                                  :ignore:
@@ -4257,8 +4253,8 @@ C' & & SC' \rar{\tau_{C'}} & TC'
 for every arrow $f : C \to C'$.
 #+end_definition
 
-It is also said that the family of morphisms is /natural/ in its
-parameter. This naturality property is what allows us to translate a
+Sometimes, it is also said that the family of morphisms $\tau$ is /natural/ in its
+argument. This naturality property is what allows us to "translate" a
 commutative diagram from a functor to another.
 \[\begin{tikzcd}
 A\arrow{dd}{h}\drar{f} &   & & F A\arrow{dd}{F h}\drar{F f} \arrow{rrr}{\tau A} &     & & G A\arrow{dd}{}\drar{G f} &     \\
@@ -4274,17 +4270,90 @@ every morphism of the parameterized family, is invertible.
 
 The inverses of a natural transformation form another natural
 transformation, whose naturality follows from the naturality of the
-original transformation.
+original transformation. We say that two functors $T,S$ are *naturally*
+*isomorphic*, and we write this as $T \cong S$, if there is a natural
+isomorphism between them.
 
-**** TODO [#A] Equivalence of categories                          :ignore:
+**** Equivalence of categories                                    :ignore:
+The notion of a natural isomorphism between functors allows us to
+weaken the condition of strict equality that we imposed when talking
+about isomorphisms of categories. The generally more useful notion of
+/equivalence of categories/ only needs the composition of the two
+functors to be naturally isomorphic to the identity.
+
+#+ATTR_LATEX: :options [Equivalence of categories]
+#+BEGIN_definition
+An *equivalence of categories* is given by two functors $T$ and $S$
+such that its two compositions are naturally isomorphic to the identity
+functor, $T \circ S \cong \id$ and $S \circ T \cong \id$.
+#+END_definition
+
 *** Composition of natural transformations
+There is an obvious way in which two natural transformations $\sigma : R \to S$
+and $\tau : S \to T$ can be composed into a new natural transformation $R \to T$;
+this will be used later to define categories whose objects are functors and
+whose morphisms are natural transformations. But there is also a different
+notion of composition of natural transformations, which applies two natural
+transformations, in parallel, to the composition of two functors.
+
+That is, if we draw a natural transformation between two functors as a double
+arrow
+\[\begin{tikzcd}
+A 
+\arrow[bend left=50]{r}[name=U,below]{}{S}
+\arrow[bend right=50]{r}[name=D]{}[swap]{T}
+& 
+B \arrow[Rightarrow,from=U,to=D]{}{\tau}
+\end{tikzcd}\]
+
+ * we have a /vertical/ composition of natural transformations, which,
+   diagramatically, composes the two natural transformations of the
+   left diagram into a transformation like in the right one
+   \[\begin{tikzcd}[column sep=large]
+   A 
+   \arrow[bend left=80]{r}[name=U,below]{}{R}
+   \arrow[bend right=80]{r}[name=D]{}[swap]{S}
+   \arrow[]{r}[name=C]{}[swap,xshift=-1.5ex]{T}
+   \arrow[]{r}[name=C2,below]{}[]{}
+   & 
+   B
+   \arrow[Rightarrow,from=U,to=C]{}{\tau}
+   \arrow[Rightarrow,from=C2,to=D]{}{\sigma}
+   &
+   A
+   \arrow[bend left=50]{r}[name=U,below]{}{R}
+   \arrow[bend right=50]{r}[name=D]{}[swap]{T}
+   & 
+   B \arrow[Rightarrow,from=U,to=D]{}{\tau\cdot\sigma}
+   \end{tikzcd}\]
+
+ * and we have a /horizontal/ composition of natural transformations, which
+   composes the two natural transformations of the first diagram into the
+   second one
+   \[\begin{tikzcd}[column sep=large]
+   A 
+   \arrow[bend left=50]{r}[name=U,below]{}{S}
+   \arrow[bend right=50]{r}[name=D]{}[swap]{T}
+   & 
+   B \arrow[Rightarrow,from=U,to=D]{}{\tau}
+   \arrow[bend left=50]{r}[name=UU,below]{}{S'}
+   \arrow[bend right=50]{r}[name=DD]{}[swap]{T'}
+   &
+   C \arrow[Rightarrow,from=UU,to=DD]{}{\sigma}
+   &
+   A
+   \arrow[bend left=50]{r}[name=U,below]{}{S \circ S'}
+   \arrow[bend right=50]{r}[name=D]{}[swap]{T \circ T'}
+   & 
+   C \arrow[Rightarrow,from=U,to=D]{}{\tau\circ\sigma}
+   \end{tikzcd}\]
+
 **** Vertical composition                                         :ignore:
 #+attr_latex: :options [Vertical composition of natural transformations]
 #+begin_definition
 The *vertical composition* of two natural transformations $\tau : S\to T$
 and $\sigma : R \to S$, denoted by $\tau \cdot \sigma$ is the family of morphisms defined by the objectwise
 composition of the components of the two natural transformations, that is
-
 \[\begin{tikzcd}
 Rc \rar{Rf}\dar{\sigma_c}\arrow[swap,bend right=90]{dd}{(\tau \circ \sigma)_c} &
 Rc' \dar{\sigma_{c'}} \arrow[bend left=90]{dd}{(\tau \circ \sigma)_{c'}} \\
@@ -4311,8 +4380,8 @@ squares.
 #+begin_definition
 The *horizontal composition* of two natural transformations $\tau \colon S \to T$ and
 $\tau' \colon S' \to T'$, with domains and codomains as in the following diagram
-\[\begin{tikzcd}
-C 
+\[\begin{tikzcd}[column sep=large]
+A 
 \arrow[bend left=50]{r}[name=U,below]{}{S}
 \arrow[bend right=50]{r}[name=D]{}[swap]{T}
 & 
@@ -4645,6 +4714,12 @@ This example is described in cite:lawvere09.
 **** TODO Sheaves!
 # Gluing
 *** Comma categories
+The idea of functor categories leads us to think about categories
+whose objects are themselves diagrams on a category. The most relevant
+examples, which will be useful in our development of categorical logic,
+are the *comma categories*, and specially the particular case of a
+*slice category*.
+
 #+ATTR_LATEX: :options [Comma category]
 #+BEGIN_definition
 Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $T \colon {\cal E} \to {\cal C}$ and $S \colon {\cal D} \to {\cal C}$.
@@ -4745,8 +4820,14 @@ category are commutative squares in ${\cal C}$. Diagramatically,
 ** Universality and limits
 # TODO: Example: quotients
 *** Universal arrows
-# Every arrow to the given functor S factors uniquely through the
-# universal arrow.
+A *universal property* is commonly given in mathematics by some
+conditions of existence and uniqueness on morphisms, representing some
+sort of natural isomorphism. They can be used to define certain
+constructions up to isomorphism and to operate with them in an
+abstract setting. We will formally introduce universal properties
+using /universal arrows/ from an object $c$ to a functor $S$; the
+property of these arrows is that every arrow of the form $c \to Sd$
+will factor uniquely through the universal arrow.
 
 #+attr_latex: :options [Universal arrow]
 #+begin_definition
@@ -4765,16 +4846,17 @@ to isomorphism.
 
 #+attr_latex: :options [Universality in terms of hom-sets]
 #+begin_proposition
-The arrow $u \colon c \to Sr$ is universal iff $f \mapsto Sf \circ u$ is a bijection
+The arrow $u \colon c \to Sr$ is universal if and only if $f \mapsto Sf \circ u$ is a bijection
 $\hom(r,d) \cong \hom(c,Sd)$ natural in $d$. Any natural bijection of this
 kind is determined by a unique universal arrow.
 #+end_proposition
 #+begin_proof
-Bijection follows from the definition of universal arrow, and
-naturality follows from $S(gf)\circ u = Sg \circ Sf \circ u$.
+On the one hand, given an universal arrow, bijectivity follows
+from the definition of universal arrow; and naturality follows from
+the fact that $S(gf)\circ u = Sg \circ Sf \circ u$.
 
-Given a bijection $\varphi$, we define $u = \varphi(\id_r)$.
-By naturality we have the bijection $\varphi(f) = Sf \circ u$, every arrow
+On the other hand, given a bijection $\varphi$, we define $u = \varphi(\id_r)$.
+By naturality, we have the bijection $\varphi(f) = Sf \circ u$, and every arrow
 is written in this way.
 #+end_proof
 
@@ -4800,13 +4882,16 @@ r & Sr \rar[swap]{v} & c
 *** Representability
 #+attr_latex: :options [Representation of a functor]
 #+begin_definition
-A *representation* of $K \colon D \to \Sets$ is a natural isomorphism
+A *representation* of a functor from an arbitrary category to the category of
+sets, $K \colon D \to \Sets$, is a natural isomorphism making it isomorphic to a
+partially applied hom-functor,
 \[
 \psi\colon \hom_{D}(r,-) \cong K.
 \]
 
-A functor is /representable/ if it has a representation. An object $r$ is
-called a /representing object/. $D$ must have small hom-sets.
+A functor is /representable/ if it has a representation. The object $r$ is
+called a /representing object/. Note that, for this definition to work,
+$D$ must have small hom-sets.
 #+end_definition
 
 #+attr_latex: :options [Representations in terms of universal arrows]
@@ -4818,11 +4903,11 @@ in this way.
 #+begin_proof
 We know that $\hom(\ast, X) \xrightarrow{.} X$ is a natural isomorphism in $X$; in particular
 $\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
-
 \[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
 
 for every natural isomorphism $D(r,-) \cong \Sets(\ast,K-)$. But every natural
-isomorphism of this kind is a [[*Universal arrows as natural bijections][universal arrow]].
+isomorphism of this kind is universal arrow.
+# TODO: In which sense?
 #+end_proof
 
 *** Yoneda Lemma
@@ -4863,6 +4948,7 @@ sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to 
 rest of the natural transformation is determined as $- \circ h$ by naturality.
 #+end_proof
 
+**** Naturality of the Yoneda Lemma                               :ignore:
 #+attr_latex: :options [Naturality of the Yoneda Lemma]
 #+begin_proposition
 The bijection on the [[lemma-yoneda][Yoneda Lemma]] (Lemma [[lemma-yoneda]]),
@@ -4892,9 +4978,7 @@ F(Kf(a)) = K'f(Fa) \in
 K'r',
 \]
 where $a \in Kr$, and the equality holds because of the naturality
-of $F$.
-
-The naturality of $y$ is equivalent to the commutativity of the
+of $F$. The naturality of $y$ is equivalent to the commutativity of the
 following diagram
 \[\begin{tikzcd}[column sep=huge]
 \Nat(\hom(r,-),K) \rar{y}\dar[swap]{N\pair{f,F}}&
@@ -4917,7 +5001,7 @@ y\big(N\pair{f,F}(\alpha)\big)
 #+end_proof
 
 #+begin_definition
-In the conditions of the [[lemma-yoneda][Yoneda Lemma]] the *Yoneda functor*,
+In the conditions of the [[lemma-yoneda][Yoneda Lemma]] (Lemma [[lemma-yoneda]]) the *Yoneda functor*,
 $Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
 \[
 \left(f \colon s \to r\right) \mapsto 
@@ -5665,7 +5749,71 @@ is precisely $T$.
 # This implies that the category of spans of finite sets is equivalent
 # to the Lawvere theory of commutative monoids, that is, to the category
 # of finitely generated free commutative monoids.
-** Kan extensions
+** TODO Monoidal and enriched categories
+# Linear logic = Monoidal categories = Quantum computation
+# Proof net = String diagram = Quantum circuit
+*** TODO String diagrams
+# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
+*** Enriched categories
+# https://www.youtube.com/watch?v=be7rx29eMr4
+
+**** Motivation                                                   :ignore:
+When we defined categories for the first time, we implicitly assumed
+a set of morphisms between every two objects, that is, for every two
+$a,b \in {\cal C}$, there exists a set $\hom(a,b)$. Composition is
+then a function
+\[
+\circ : \hom(b,c) \times \hom(a,b) \to \hom(a,c),
+\]
+and the identity morphism can be represented as a function from the
+terminal object into the morphisms from an object to itself,
+\[
+\id : 1 \to \hom(a,a).
+\]
+Associativity and identity axioms can be expressed as commutative
+diagrams,
+# TODO: Diagrams
+
+In this definition, we are only using the monoidal structure of the
+category $\Set$; thus, we could generalize the notion of a category into
+that of an *enriched category* over a monoidal category ${\cal V}$, a category
+whose hom-sets would be objects of ${\cal V}$, and the composition and identities
+would be morphisms in that category.
+
+**** Definition                                                   :ignore:
+**** Example: metric spaces                                       :ignore:
+#+ATTR_LATEX: :options [Metric spaces]
+#+BEGIN_exampleth
+If we consider the ordered set $(\mathbb{R}^{+}, \geq)$ as a category, it
+can be given a monoidal structure with the addition of numbers.
+Note that, in this category, objects are real numbers $r \in \mathbb{R}$ and
+\[
+\hom(r,r') = \left\{ \begin{array}{ll}
+  \{\ast\} & \mbox{ if } r \geq r', \\
+  \varnothing & \mbox{ otherwise; }
+\end{array}\right.
+\]
+thus, morphisms are usually written as $r \leq r'$.
+
+A *metric space* endowed with a distance function $d$ can be defined
+as a category enriched over $(\mathbb{R}^+,\geq)$. Note that the composition
+must be a morphism of the form
+\[
+\circ : d(b,c) + d(a,b) \geq d(a,c),
+\]
+which is the exact statement of the triangle inequality; while,
+knowing that $0$ is the initial object of the category, the identity
+is of the form
+\[
+\id : 0 \geq d(a,a),
+\]
+which is the statement of indiscernibility of identical elements.
+The rest of the axioms of the category hold trivially due to the
+fact that there is, at most, a unique morphism between any two
+objects.
+#+END_exampleth
+*** TODO Abelian categories
+** TODO Kan extensions
 *** Dinatural transformations
 # Extension of the concept of naturality to a special type of
 # bifunctors.
@@ -5875,71 +6023,7 @@ transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
 **** Heteromorphisms
 **** https://ncatlab.org/nlab/show/anafunctor
 *** Kan extensions
-** TODO Monoidal and enriched categories
-# Linear logic = Monoidal categories = Quantum computation
-# Proof net = String diagram = Quantum circuit
-*** TODO String diagrams
-# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
-*** Enriched categories
-# https://www.youtube.com/watch?v=be7rx29eMr4
-
-**** Motivation                                                   :ignore:
-When we defined categories for the first time, we implicitly assumed
-a set of morphisms between every two objects, that is, for every two
-$a,b \in {\cal C}$, there exists a set $\hom(a,b)$. Composition is
-then a function
-\[
-\circ : \hom(b,c) \times \hom(a,b) \to \hom(a,c),
-\]
-and the identity morphism can be represented as a function from the
-terminal object into the morphisms from an object to itself,
-\[
-\id : 1 \to \hom(a,a).
-\]
-Associativity and identity axioms can be expressed as commutative
-diagrams,
-# TODO: Diagrams
-
-In this definition, we are only using the monoidal structure of the
-category $\Set$; thus, we could generalize the notion of a category into
-that of an *enriched category* over a monoidal category ${\cal V}$, a category
-whose hom-sets would be objects of ${\cal V}$, and the composition and identities
-would be morphisms in that category.
-
-**** Definition                                                   :ignore:
-**** Example: metric spaces                                       :ignore:
-#+ATTR_LATEX: :options [Metric spaces]
-#+BEGIN_exampleth
-If we consider the ordered set $(\mathbb{R}^{+}, \geq)$ as a category, it
-can be given a monoidal structure with the addition of numbers.
-Note that, in this category, objects are real numbers $r \in \mathbb{R}$ and
-\[
-\hom(r,r') = \left\{ \begin{array}{ll}
-  \{\ast\} & \mbox{ if } r \geq r', \\
-  \varnothing & \mbox{ otherwise; }
-\end{array}\right.
-\]
-thus, morphisms are usually written as $r \leq r'$.
-
-A *metric space* endowed with a distance function $d$ can be defined
-as a category enriched over $(\mathbb{R}^+,\geq)$. Note that the composition
-must be a morphism of the form
-\[
-\circ : d(b,c) + d(a,b) \geq d(a,c),
-\]
-which is the exact statement of the triangle inequality; while,
-knowing that $0$ is the initial object of the category, the identity
-is of the form
-\[
-\id : 0 \geq d(a,a),
-\]
-which is the statement of indiscernibility of identical elements.
-The rest of the axioms of the category hold trivially due to the
-fact that there is, at most, a unique morphism between any two
-objects.
-#+END_exampleth
-*** TODO Abelian categories
-** Higher categories
+** TODO Higher categories
 # TODO: Bicategories are weak 2-categories
 # TODO: 2-categories are strict 2-categories
 
@@ -6686,6 +6770,7 @@ and exponentials.
 The definition of cartesian closed category can be written in terms of
 existence of adjoints.
 
+**** Cartesian closed categories by adjoints                      :ignore:
 #+ATTR_LATEX: :options [Cartesian closed categories and adjoints]
 #+BEGIN_proposition
 Any category ${\cal C}$ is cartesian closed if and only if there exist
@@ -6701,9 +6786,29 @@ We know that the product functor of an object has a right adjoint if and
 only if the object is exponentiable, as we saw in Proposition [[prop-exponentialadjoints]].
 #+END_proof
 
+***** TODO Adjoint diagrams                                      :ignore:
+Knowing that $!x = \ast$ and $\Delta(x) = (x,x)$, we write these conditions
+as
+
+\begin{prooftree}
+\AX$\ast\ \fCenter\to \ast$
+\doubleLine
+\UI$x\ \fCenter\to \top$
+\AX$(x,x)\ \fCenter\to (y,z)$
+\doubleLine
+\UI$x\ \fCenter\to y \times z$
+\AX$x \times a\ \fCenter\to y$
+\doubleLine
+\UI$x\ \fCenter\to y^a$
+\noLine
+\TIC{}
+\end{prooftree}
+
+
+**** Category of cartesian closed categories                      :ignore:
 #+ATTR_LATEX: :options [Category of small cartesian closed categories]
 #+BEGIN_definition
-We call $\mathtt{Ccc}$ to the category of small cartesian closed
+We call $\mathtt{Ccc}$ to the category of (small) cartesian closed
 categories with functors preserving finite products and
 exponentials as morphisms. These functors are called
 *cartesian closed functors*.
@@ -7412,6 +7517,9 @@ exponential types of the category and the language; that is,
 
 **** TODO Equivalence of CC categories
 *** TODO Bicartesian closed categories
+# https://ncatlab.org/nlab/show/bicartesian+closed+category
+# https://ncatlab.org/nlab/show/cocartesian+closed+category
+# Theorem. Any cocartesian closed category is equivalent to the terminal category.
 ** TODO First-order logic (?)
 ** Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
@@ -7433,7 +7541,7 @@ Given a function $f \colon A \to B$ in any category ${\cal C}$ with all pullback
 *pullback functor* $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ is defined for any object $y \colon Y \to B$
 as the object $f^{\ast}y \colon (f^{\ast}Y) \to A$ such that
 \[\begin{tikzcd}
-(f^{\ast}Y) \rar{} \dar[swap]{f^{\ast}y} & Y \dar{y} \\
+(f^{\ast}Y) \rar{}\drar[phantom, near start, "\ulcorner"] \dar[swap]{f^{\ast}y} & Y \dar{y} \\
 A\rar{f} & B
 \end{tikzcd}\]
 is a pullback square. The functor is defined on any morphism
@@ -7601,7 +7709,7 @@ both functions must be the same.
 
 \\
 
-**** Well-pointed
+**** Well-pointed                                                 :ignore:
 Moreover, the terminal and the initial objects in $\Set$ are not
 isomorphic. A category where the terminal object is a generator
 and is not a zero object is a *well-pointed* category.
@@ -7616,7 +7724,7 @@ given any surjective function $f : A \to B$, there exists a
 function $k : B \to A$ such that $f \circ k = \id_B$.
 
 
-**** ETCS
+**** ETCS                                                         :ignore:
 #+ATTR_LATEX: :options [Category of sets]
 #+BEGIN_definition
 A *category of sets* is a well-pointed topos with natural numbers
@@ -7662,7 +7770,6 @@ to take models for these languages is narrower.
 | Martin-Löf intensional type theory | Locally cartesian closed (\infty,1)-categories |
 | Homotopy type theory               | Elementary (\infty,1)-topos                    |
 |------------------------------------+------------------------------------------------|
-
 
 * Type theory (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
