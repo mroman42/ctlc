@@ -1,4 +1,4 @@
-all: chapter1.pdf chapter2.pdf chapter3.pdf chapter5.pdf chapter6.pdf chapter7.pdf chapter8.pdf chapter9.pdf chapter10.pdf chapter11.pdf
+all: chapter1.pdf chapter2.pdf chapter3.pdf chapter5.pdf chapter6.pdf chapter7.pdf chapter8.pdf chapter9.pdf chapter10.pdf chapter11.pdf chapter12.pdf chapter13.pdf chapter14.pdf
 
 clean:
 	rm chapter*.pdf
@@ -25,3 +25,9 @@ chapter10.pdf: ctlc.pdf
 	pdftk ctlc.pdf cat 76-80 output chapter10.pdf
 chapter11.pdf: ctlc.pdf
 	pdftk ctlc.pdf cat 82-88 output chapter11.pdf
+chapter12.pdf: ctlc.pdf
+	pdftk ctlc.pdf cat 89-93 output chapter12.pdf
+chapter13.pdf: ctlc.pdf
+	pdftk ctlc.pdf cat 94-100 output chapter13.pdf
+chapter14.pdf: ctlc.pdf
+	pdftk ctlc.pdf cat 101-110 output chapter14.pdf
