@@ -5665,15 +5665,15 @@ by any of the following data,
     functoriality of $G$ that $Gh\circ Gg \circ \eta = G(h \circ g) \circ \eta$.
 
  2) We can define a functor $F$ on objects as $Fx = F_0x$. Given any
-    $h \colon x \to x'$, we can use the naturality of $\eta$ to define
+    $h \colon x \to x'$, we can use the universality of $\eta$ to define
     $Fh$ as the unique arrow making this diagram commute
     \[\begin{tikzcd}
     & GFx' & Fx' \\
     x \rar[swap]{\eta_x}\urar{\eta_{x'} \circ h} & GFx \uar[swap,dashed]{GFh} & Fx \uar[dashed,swap]{\exists! Fh}
     \end{tikzcd}\]
-    and this choice makes $F$ a functor, as it can be checked in the
-    following diagrams using the existence and uniqueness given by
-    the universality of $\eta$ in both cases
+    and this choice makes $F$ a functor and $\eta$ a natural transformation,
+    as it can be checked in the following diagrams using the existence
+    and uniqueness given by the universality of $\eta$ in both cases
     \[\begin{tikzcd}
     &     &    & x'' \rar{\eta_{x''}}  & GFx''  & Fx'' \\
     & GFx & Fx & x'  \uar{h'} \rar{\eta_{x'}}  & GFx'  \uar[swap]{GFh'}  & Fx' \uar[dashed]{\exists! Fh'} \\
@@ -5688,25 +5688,37 @@ by any of the following data,
     We checked in 1 (and 3) that these functions are natural in both arguments;
     now we will see that they are inverses of each other using naturality
     and the triangle identities
-    \[\begin{aligned}
-    \varphi(\theta(g)) &=
-    G\varepsilon_a \circ GFg \circ \eta_x =
-    G\varepsilon_a \circ \eta_x \circ g = g; \\
-    \theta(\varphi(f)) &=
-    \varepsilon \circ FGf \circ F\eta =
-    f \circ \varepsilon \circ F\eta = f.
-    \end{aligned}\]
+
+     * $\varphi(\theta(g)) &= G\varepsilon_a \circ GFg \circ \eta_x = G\varepsilon_a \circ \eta_x \circ g = g$;
+     * $\theta(\varphi(f)) = \varepsilon \circ FGf \circ F\eta = f \circ \varepsilon \circ F\eta = f$.
 #+end_proof
 
-*** Properties of adjoints
 **** Uniqueness                                                   :ignore:
 #+ATTR_LATEX: :options [Essential uniqueness of adjoints]
 #+BEGIN_proposition
 Two adjoints to the same functor $F,F' \dashv G$ are naturally isomorphic.
 #+END_proposition
 #+BEGIN_proof
-# TODO
+Note that the two different adjunctions give two units $\eta, \eta'$, and for
+each $x$ both $\eta_x \colon x \to GFx$ and $\eta'_x \colon x \to GF'x$ are universal arrows
+from $x$ to $G$. As universal arrows are unique up to isomorphism, we
+have a unique isomorphism $\theta_x \colon Fx \to F'x$ such that $G\theta_x \circ \eta_x = \eta'_x$.
+
+We know that $\theta$ is natural because there are two arrows, $\theta \circ Ff$ and 
+$F'f \circ \theta$, making this universal diagram commute
+\[\begin{tikzcd}
+y \rar{\eta'} & GF'y & F'y\\
+x \rar{\eta}\uar{f} & GFx \uar[dashed,swap]{} & Fx \uar[dashed]{\exists!}
+\end{tikzcd}\]
+because
+
+ * $G(\theta \circ Ff) \circ \eta = G\theta \circ GFf \circ \eta = G\theta \circ \eta \circ f = \eta' \circ f$;
+ * $G(F'f \circ \theta) \circ \eta = GF'f \circ G\theta \circ \eta = GF'f \circ \eta' = \eta' \circ f$;
+
+thus, they must be equal, $\theta \circ Ff = F'f \circ \theta$.
 #+END_proof
+
+# Proof using Yoneda
 
 **** Composition of adjoints                                      :ignore:
 # Theorem 1 pag 103
@@ -5717,24 +5729,176 @@ respectively,
 \[
 \varphi \colon \hom(Fx,y) \cong \hom(x,Gy)
 \qquad
-\theta \colon \hom(F'y,z) \cong \hom(G'y,z)
+\theta \colon \hom(F'y,z) \cong \hom(y,G'z)
 \]
 the composite functors yield a composite adjunction
 \[
-\theta \cdot \varphi \colon \hom(F'Fx,y) \cong \hom(x,GG'z).
+\varphi \cdot \theta \colon \hom(F'Fx,z) \cong \hom(x,GG'z).
 \]
 If the unit and counit of $\varphi$ are $\pair{\eta,\varepsilon}$ and the unit and counit
 of $\theta$ are $\pair{\eta',\varepsilon'}$; the unit and counit of the composite adjunction
 are $\pair{G \eta' F \circ \eta,\ \varepsilon' \circ F' \varepsilon G'}$.
 #+END_theorem
 #+BEGIN_proof
-# TODO
+We saw previously that the componentwise composition of two natural
+isomorphisms is itself an natural isomorphism. Diagramatically, we
+compose
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+F'Fx \rar{f}\& y\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+Fx \rar{\theta(f)}\& G'y\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \rar{\varphi\theta(f)}\& GG'y\end{tikzcd}}
+\end{prooftree}
+
+If we apply the two natural isomorphisms to the identity, we find the unit
+and the counit of the adjunction.
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+\phantom{Fx}\&
+F'Fx \rar{\id}\& 
+F'Fx 
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+Fx \rar{\id}\& 
+Fx \rar{\eta'_{Fx}}\& 
+G'F'Fx
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \rar[swap]{\eta}\& 
+GFx \rar[swap]{G\eta'_{Fx}}\&
+GG'F'Fx
+\end{tikzcd}}
+
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+GG'z \rar{\id} \&
+GG'z \& 
+\phantom{FFGy}
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+FGG'z \rar{\varepsilon_{G'z}}\&
+G'z \rar{\id}\&
+G'z \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+F'FGG'z  \rar[swap]{F'\varepsilon_{G'z}}\&
+F'G'z \rar[swap]{\varepsilon'}\&
+z \end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
 #+END_proof
 
 **** TODO Bicategory of adjoints
-*** TODO Examples of adjoints
-*** TODO Equivalence of categories
-*** TODO Adjoints for preorders (Galois connections)
+*** Examples of adjoints
+**** Product and coproduct                                        :ignore:
+#+ATTR_LATEX: :options [Product and coproduct as adjoints]
+#+BEGIN_exampleth
+Given any category ${\cal C}$, we define a *diagonal functor* to a product
+category $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, sending every object $x$ to a pair $(x,x)$,
+and each morphism $f : x \to y$ to the pair $\pair{f,f} \colon (x,x) \to (y,y)$.
+
+The right adjoint to this functor will be the categorical product
+$\times \colon {\cal C} \times {\cal C} \to {\cal C}$, sending each pair of objects to their product and
+each pair of morphisms to their unique product. The left adjoint to
+this functor will be the categorical sum, $+ \colon {\cal C}\times {\cal C} \to {\cal C}$, sending
+each pair of objects to their sum and each pair of morphisms to their
+unique sum. That is, we have the following chain of adjoints,
+\[+ \dashv \Delta \dashv \times.\]
+More precisely, knowing that a morphism $(x,x') \to (y,z)$ is actually
+pair of morphisms $x \to y$ and $x' \to z$, the adjoint properties for the
+diagonal functor
+#+latex: \\[-40pt]
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+\Delta x \rar\& (y,z) \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \rar\& \times(y,z) \end{tikzcd}}
+
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
++(x,y) \rar\& z \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+(x,y) \rar\& \Delta z \end{tikzcd}}
+
+\noLine
+\BIC{}
+\end{prooftree}
+can be rewritten as bidirectional inference rules with two premises
+#+latex: \\[-40pt]
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \to y \& x \to z \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \rar\& y \times z \end{tikzcd}}
+
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x + y \rar\& z \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \to z \& y \to z \end{tikzcd}}
+
+\noLine
+\BIC{}
+\end{prooftree}
+which are exactly the universal properties of the product and the sum.
+The necessary natural isomorphism is given by the existence and uniqueness
+provided by the inference rule.
+#+END_exampleth
+# Naturality?
+# Product: What's the unit? Diagonal. What's the counit? Projections.
+# Sum: What's the unit? Diagonal. What's the counit? Projections.
+
+**** Free and forgetful functors                                  :ignore:
+#+ATTR_LATEX: :options [Free and forgetful functors]
+#+BEGIN_exampleth
+Let $\mathsf{Mon}$ be the category of monoids with monoid homomorphisms.
+A functor $U \colon \mathsf{Mon} \to \Set$ can be defined by sending each morphism to
+its underlying set and each monoid homomorphism to its underlying
+function between sets. Funtors of this kind are called *forgetful*
+*functors*, as they simply /forget/ part of the algebraic structure.
+
+Left adjoints to forgetful functors are called *free functors*. In
+this case, the functor $F \colon \mathsf{Set} \to \mathsf{Mon}$ taking each set to the free
+monoid over it and each function to its unique extension to the free
+monoid. Note how it preserves identities and composition.
+The adjunction can be seen diagramatically as
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FA \rar{\overline{f}}\& M \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] A \rar{f}\& UM \end{tikzcd}}
+\end{prooftree}
+where each monoid homormorphism from the free monoid, $FA \to M$ can
+be seen as the unique possible extension of a function from the set
+of generators $f \colon A \to UM$ to a full monoid homomorphism, $\overline{f}$.
+
+Note how, while this characterizes the notion of free monoid, it does
+not provide an explicit construction of it. Indeed, given $f \colon A \to UM$,
+if we take the free monoid $FA$ to consist on words over the elements of
+$A$ endowed with the concatenation operator; the only way to extend $f$ to
+an homomorphism is to define
+\[
+\overline{f}(a_1a_2\dots a_n) = f(a_1)f(a_2)\dots f(a_n);
+\]
+and note how every homomorphism from the free monoid is determined by how
+it acts on the generator set.
+
+The notion of forgetful and free functors can be generalized to
+algebraic structures other than monoids.
+#+END_exampleth
+
+**** TODO Hom-tensor                                              :ignore:
+**** TODO Limits in general?                                      :ignore:
+**** TODO Equivalence of categories                               :ignore:
+**** TODO Adjoints for preorders (Galois connections)             :ignore:
 *** Monads
 **** Definition of Monads                                         :ignore:
 #+attr_latex: :options [Monad]
@@ -5952,6 +6116,7 @@ The rest of the axioms of the category hold trivially due to the
 fact that there is, at most, a unique morphism between any two
 objects.
 #+END_exampleth
+
 *** TODO Abelian categories
 ** TODO Kan extensions
 *** Dinatural transformations
