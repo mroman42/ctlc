@@ -4239,6 +4239,9 @@ to it. We will develop these weaker notions in the next section.
 
 **** TODO Subcategories                                           :ignore:
 
+*** TODO Examples of functors
+**** TODO Forgetful functors
+**** TODO Fundamental group
 *** Natural transformations
 #+attr_latex: :options [Natural transformation]
 #+begin_definition
@@ -4918,8 +4921,8 @@ For any $K\colon D \to \Sets$ and $r \in D$, there is a bijection
 \[
 y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
 \]
-sending the natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
-to the image of the identity, $\alpha_r(\id_r)$.
+sending any natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
+to its image on the identity, $\alpha_r(\id_r)$.
 #+end_lemma
 #+begin_proof
 The complete natural transformation $\alpha$ is determined by $\alpha_r(\id_r)$.
@@ -5000,6 +5003,7 @@ y\big(N\pair{f,F}(\alpha)\big)
 \end{aligned}\]
 #+end_proof
 
+**** Yoneda functor                                               :ignore:
 #+begin_definition
 In the conditions of the [[lemma-yoneda][Yoneda Lemma]] (Lemma [[lemma-yoneda]]) the *Yoneda functor*,
 $Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
@@ -5423,11 +5427,12 @@ The square in this diagram is usually called a
 #+attr_latex: :options [Adjunction]
 #+begin_definition
 An *adjunction* from categories ${\cal X}$ to ${\cal Y}$ is a pair of functors
-$F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a natural bijection
+$F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a bijection
 \[
 \varphi \colon \hom(Fx,y) \cong \hom(x,Gy),
 \]
-natural in both $x\in {\cal X}$ and $y \in {\cal Y}$. We write it as $F \dashv G$.
+natural in both $x\in {\cal X}$ and $y \in {\cal Y}$. We say that $F$ is /left-adjoint/ to
+$G$ and that $G$ is /right-adjoint/ to $F$. We write this as $F \dashv G$.
 #+end_definition
 
 Naturality of $\varphi$ means that both
@@ -5454,61 +5459,196 @@ $\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k 
 and that means that, for every $g \colon x \to Gy$, $k \circ \varphi^{-1}(g) = \varphi^{-1}(Gk \circ g)$ and
 $\varphi^{-1}(g) \circ Fh = \varphi^{-1}(g \circ h)$.
 
+**** Lawvere's notation                                           :ignore:
+A different and more intuitive way to write adjunctions is used by
+William Lawvere on his notes on logical operators (see cite:lawvere309).
+An adjunction $F\dashv G$ can be written as
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] Fx \rar{f}\& y \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] x \rar{\varphi{(f)}}\& Gy \end{tikzcd}}
+\end{prooftree}
+
+to emphasize that, for each morphism $f : Fx \to y$, there exists a unique
+morphism $\varphi(f) :x \to Gy$; written in a way that resembles bidirectional
+logical inference rules.
+
+Naturality, in this setting, means that the precomposition and the
+postcomposition of arrows are preserved by the /inference rule/. Given
+morphisms $h \colon x' \to x$ and $k \colon y \to y'$, we have that the composition arrows
+of the following diagrams are adjoint to one another
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+Fx' \ar[bend left=45]{rr}{f \circ Fh} \rar{Fh}\& 
+Fx \rar{f}\& 
+y 
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x' \ar[bend right=45]{rr}[swap]{\varphi(f) \circ h} \rar[swap]{h}\& 
+x \rar[swap]{\varphi(f)}\&
+Gy 
+\end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+Fx \ar[bend left=45]{rr}{k \circ f} \rar{f}\&
+y \rar{k}\&
+y' \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \ar[bend right=45]{rr}[swap]{Gk \circ \varphi(f)} \rar[swap]{\varphi(f)}\&
+Gy \rar[swap]{Gk}\&
+Gy'\end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
+In other words, that $\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k \circ f)$,
+as we wrote earlier.
+
+**** Unit and counit of an adjunction                             :ignore:
 In the following two propositions, we will characterize all this
 information in terms of natural transformations made up of universal
 arrows.
 
-**** Unit and counit of an adjunction                             :ignore:
-#+attr_latex: :options [Unit and counit of an adjunction]
+#+ATTR_LATEX: :options [Unit and counit of an adjunction]
+#+BEGIN_definition
+Given an adjunction $F \dashv G$, we define
+
+ * the *unit* $\eta$ as the family of morphisms $\eta_x = \varphi(\id_{Fx}) \colon x \to GFx$,
+   for each $x$;
+ * the *counit* $\varepsilon$ as the family of morphisms $\varepsilon_y = \varphi^{-1}(\id_{Gy}) \colon FGy \to y$,
+   for each $y$.
+#+END_definition
+
+Diagramatically, they can be obtained by taking $y$ to be $Fx$ and $x$ to be $Gy$,
+respectively in the definition of adjunction
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] Fx \rar{\id}\& Fx \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] x \rar{\eta_{x}}\& GFx \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FGy \rar{\varepsilon_{y}}\& y \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] Gy \rar{\id}\& Gy \end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
+
+#+attr_latex: :options [Units and counits are natural transformations]
 #+begin_proposition
-An adjunction determines a *unit* and a *counit*;
+The *unit* and the *counit* are natural transformations such that
 
- 1) the *unit* is natural transformation made with universal arrows $\eta\colon \Id \todot GF$, where
-    the right adjunct of each $f \colon Fx \to y$ is
-    \[
-    \varphi f = Gf \circ \eta_x \colon x \to Gy;
-    \]
- 2) the *counit* is natural transformation made with universal arrows $\varepsilon \colon FG \todot \Id$, where
-    the left adjunct of each $g \colon x \to Gy$ is
-    \[
-    \varphi^{-1}g = \varepsilon \circ Fg \colon Fx \to y;
-    \]
+ 1) for each $f \colon Fx \to y$, $\varphi(f) = Gf \circ \eta_x$;
+ 2) for each $g \colon x \to Gy$, $\varphi^{-1}(g) = \varepsilon_y \circ Fg$;
 
-that follow the *triangle identities* $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
-# TODO: draw the triangle idenntities
-# TODO: Write adjunctions as logical deductions (Lawvere's notation)
+that follow the *triangle identities*, $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
+\[\begin{tikzcd}
+G \drar[equal] \rar{\eta G} & GFG \dar{G \varepsilon} &
+FGF \dar[swap]{\varepsilon F} & F \lar[swap]{F\eta} \dlar[equal] \\
+& G & F &
+\end{tikzcd}\]
 #+end_proposition
 #+BEGIN_proof
-We define $\eta_x = \varphi(\id_{Fx})$ and $\varepsilon_x = \varphi^{-1}(\id_{Gx})$. The right and left adjunct formulas
-and the naturality of $\eta$ and $\varepsilon$ can be deduced from the naturality of $\varphi$,
-\[\begin{aligned}
-GFh \circ \eta_x &=
-GFh \circ \varphi(\id_{Fx}) =
-\varphi(Fh) =
-\varphi(\id_{Fx}) \circ h =
-\eta_x \circ h;\\
-\varepsilon_x \circ FGk &=
-\varphi^{-1}(\id_{Fx}) \circ FGk =
-\varphi^{-1}(Gk) =
-k \circ \varphi^{-1}(\id_{Gx}) =
-k \circ \varepsilon_{x}.
-\end{aligned}\]
-Finally, the triangle identities also follow from naturality of $\varphi$,
-\[\begin{aligned}
-\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta; \\
-\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta.
-\end{aligned}\]
+The right and left adjunct formulas are particular instances of the naturality
+equations we gave in the definition of $\varphi$;
+
+ * $Gf \circ \eta = Gf \circ \varphi(\id) = \varphi(f \circ \id) = \varphi(f)$;
+ * $\varepsilon_y \circ Fg = \varphi^{-1}(\id) \circ Fg = \varphi^{-1}(\id \circ g) = \varphi^{-1}(g)$;
+
+diagramatically,
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+Fx \ar[bend left=45]{rr}{\varepsilon \circ Fg} \rar{Fg}\& 
+FGy \rar{\varepsilon_y}\& 
+y 
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \ar[bend right=45]{rr}[swap]{g} \rar[swap]{g}\& 
+Gy \rar[swap]{\id}\&
+Gy 
+\end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+Fx \ar[bend left=45]{rr}{f} \rar{\id}\&
+Fx \rar{f}\&
+y \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \ar[bend right=45]{rr}[swap]{Gf \circ \eta_{x}} \rar[swap]{\eta_{x}}\&
+GFx \rar[swap]{Gf}\&
+Gy \end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
+
+The naturality of $\eta$ and $\varepsilon$ can be deduced again from the naturality of $\varphi$;
+given any two functions $h \colon x \to y$ and $k \colon x \to y$,
+# TODO: note they are in different categories, maybe x x' y y' is a better option
+
+ * $GFh \circ \eta_x = GFh \circ \varphi(\id_{Fx}) = \varphi(Fh) = \varphi(\id_{Fx}) \circ h = \eta_x \circ h$;
+ * $\varepsilon_x \circ FGk = \varphi^{-1}(\id_{Fx}) \circ FGk = \varphi^{-1}(Gk) = k \circ \varphi^{-1}(\id_{Gx}) = k \circ \varepsilon_{x}$;
+
+diagramatically, we can prove that the adjunct of $Fh$ is $GFh \circ \eta_x$ and $\eta_x \circ h$
+at the same time; while the adjunct of $Gk$ is $k \circ \varepsilon_x$ and $\varepsilon_x \circ FGk$,
+#+latex: \\[-40pt]
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+\phantom{Fx}\&
+x \rar{h}\& 
+y \rar{\eta_{y}}\& 
+GFy 
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+Fx \rar{\id}\& 
+Fx \rar{Fh}\& 
+Fy \rar{\id}\& 
+Fy 
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+x \rar[swap]{\eta_x}\& 
+GFx \rar[swap]{GFh}\&
+GFy \&
+\phantom{Gy}
+\end{tikzcd}}
+
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+FGx \rar{\varepsilon_x} \&
+x \rar{k}\& 
+y \& 
+\phantom{GFy}
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+Gx \rar{\id}\&
+Gx \rar{Gk}\&
+Gy \rar{\id} \&
+Gy\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+\phantom{Gx}\&
+FGx  \rar[swap]{FGk}\&
+FGy \rar[swap]{\varepsilon_{x}}\&
+y \end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
+
+Finally, the triangle identities follow directly from the previous ones,
+
+ * $\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta$;
+ * $\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$. \qedhere
 #+END_proof
 
 **** Characterization of adjunctions                              :ignore:
 #+attr_latex: :options [Characterization of adjunctions]
 #+begin_proposition
-Each adjunction is completely determined by any of the following data,
+Each adjunction is $F \dashv G$ between categories ${\cal X}$ and ${\cal Y}$ is completely determined
+by any of the following data,
 
  1) functors $F,G$ and $\eta\colon 1 \todot GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
- 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, where $F_0x \in {\cal Y}$.
+ 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, where $F_0x \in {\cal Y}$, creating a functor $F$.
  3) functors $F,G$ and $\varepsilon\colon FG \todot 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
- 4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$, creating a functor $G$.
+ 4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$,  where $G_0x \in {\cal X}$, creating a functor $G$.
  5) functors $F,G$, with natural transformations satisfiying the triangle
     identities $G\varepsilon \circ \eta G = \id$ and $\varepsilon F \circ F\eta = \id$.
 #+end_proposition
