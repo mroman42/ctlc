@@ -4221,14 +4221,14 @@ objects and functors as morphisms.
 #+attr_latex: :options [Full functor]
 #+begin_definition
 A functor $F$ is *full* if the arrow map between any pair of objects
-is surjective. That is, if every $g : FA \to FB$ is of the form $Ff$
+is surjective. That is, if every $g\colon FA \to FB$ is of the form $Ff$
 for some morphism $f \colon A \to B$.
 #+end_definition
 
 #+attr_latex: :options [Faithful functor]
 #+begin_definition
 A functor $F$ is *faithful* if the arrow map between any pair of objects
-is injective. That is, if, for every two arrows $f_1,f_2 : A \to B$, $Ff_1 = Ff_2$
+is injective. That is, if, for every two arrows $f_1,f_2\colon A \to B$, $Ff_1 = Ff_2$
 implies $f_1 = f_2$.
 #+end_definition
 
@@ -4836,6 +4836,8 @@ category are commutative squares in ${\cal C}$. Diagramatically,
 \end{tikzcd}\]
 .
 
+*** TODO Examples of comma categories
+**** TODO Pointed sets
 ** Universality and limits
 # TODO: Example: quotients
 *** Universal arrows
@@ -4952,6 +4954,7 @@ By naturality, given any $f \colon r \to s$,
 \end{tikzcd}\]
 it must be the case that $\alpha_s(f) = Kf(\alpha_r(\id_r))$.
 #+end_proof
+# TODO: Check proof
 
 #+attr_latex: :options [Characterization of natural transformations between representable functors]
 #+begin_corollary
@@ -4978,24 +4981,22 @@ is a natural isomorphism between two functors from $\Sets^D \times D$
 to $\Sets$.
 #+end_proposition
 #+begin_proof
-We define $N \colon \Sets^D \times D \to \Sets$ on objects as
-$N\pair{r,K} = \Nat(\hom(r,-),K)$.
-Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on 
-morphisms as
+We define $N \colon \Sets^D \times D \to \Sets$ on objects as $N\pair{r,K} = \Nat(\hom(r,-),K)$.
+Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on morphisms as
 \[
 N\pair{f,F}(\alpha) =
 F \circ \alpha \circ (- \circ f) \in
 \Nat(\hom(r',-),K),
 \]
-where $\alpha \in \Nat(\hom(r,-),K)$.
-We define $E \colon \Sets^D \times D \to \Sets$  on objects as
-$E\pair{r,K} = Kr$.
+
+where $\alpha \in \Nat(\hom(r,-),K)$. We define $E \colon \Sets^D \times D \to \Sets$ on objects as $E\pair{r,K} = Kr$.
 Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on morphisms as
 \[
 E\pair{f,F}(a) =
 F(Kf(a)) = K'f(Fa) \in
 K'r',
 \]
+
 where $a \in Kr$, and the equality holds because of the naturality
 of $F$. The naturality of $y$ is equivalent to the commutativity of the
 following diagram
@@ -5005,6 +5006,7 @@ Kr \dar{E\pair{f,F}} \\
 \Nat(\hom(r',-),K') \rar{y} &
 K'r'
 \end{tikzcd}\]
+
 where, given any $\alpha \in \Nat(\hom(r,-),K)$, it follows from naturality
 of $\alpha$ that
 \[\begin{aligned}
@@ -5658,6 +5660,7 @@ Finally, the triangle identities follow directly from the previous ones,
 **** Characterization of adjunctions                              :ignore:
 #+attr_latex: :options [Characterization of adjunctions]
 #+begin_proposition
+<<prop-characterize-adjunctions>>
 Each adjunction is $F \dashv G$ between categories ${\cal X}$ and ${\cal Y}$ is completely determined
 by any of the following data,
 
