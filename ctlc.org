@@ -7074,8 +7074,15 @@ it is a model. As it is a faithful functor, we know that any equation
 proved in the model is an eqation proved by the theory.
 #+END_proof
 
-** Cartesian closed categories
+*** TODO Examples
+**** Monoids on the category of endofunctors
+
+** OLD Cartesian closed categories [Old]                          :noexport:
+# Definition of cartesian closed by adjoints
+
 *** Exponential
+# Exponential as adjoint
+
 #+ATTR_LATEX: :options [Exponential]
 #+BEGIN_definition
 An *exponential* of $A$ and $B$ in a category with binary products is an
@@ -7150,7 +7157,6 @@ as
 \TIC{}
 \end{prooftree}
 
-
 **** Category of cartesian closed categories                      :ignore:
 #+ATTR_LATEX: :options [Category of small cartesian closed categories]
 #+BEGIN_definition
@@ -7186,6 +7192,340 @@ infima and arbitrary suprema.
 
 # TODO: Locales as non-pointed topological spaces, from An informal
 # introduction to topos theory
+
+** Cartesian closed categories and lambda calculus
+*** Lawvere theories
+#+ATTR_LATEX: :options [Lawvere algebraic theory]
+#+BEGIN_definition
+An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products whose objects
+forming a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$ for
+any $m,n$.
+#+END_definition
+# From this definition, it follows that $A^0$ must be the terminal object.
+
+**** Signature to category                                        :ignore:
+The usual notion of algebraic theory is given by a set of /k-ary operations/
+for each $k \in \mathbb{N}$ and certain axioms between the terms that can be constructed
+inductively from free veriables and our operations. For instance, the theory
+of groups is given by a binary operation $(\cdot)$, a unary operation $(^{-1})$, and a 
+constant or 0-ary operation $e$; satisfying the following axioms
+\[
+x \cdot x^{-1} = e, \quad
+x^{-1} \cdot x = e, \quad
+(x \cdot y) \cdot z = x \cdot (y \cdot z), \quad
+x \cdot e = x, \quad
+e \cdot x = x,
+\]
+for any free variables $x,y,z$. The problem with this notion of algebraic theory
+is that it is not independent from its representation: there may be multiple
+formulations fo the same theory, with different but equivalent axioms. For
+example, cite:mccune91 discusses many single-equation axiomatizations of groups,
+such as
+\[
+x\ /\
+\big(((x/x)/y)/z)\ /\ ((x/x)/x)/z\big)
+= y
+\]
+with the binary operation $/$, related to the usual multiplication as $x / y = x \cdot y^{-1}$.
+Our solution to this problem will be to capture all the algebraic
+information of a theory -- all operations, constants and axioms --
+into a category. Differently presented but equivalent signatures and
+axioms will give rise to the same category.
+
+An algebraic theory can be built from a signature as follows: objects represent
+natural numbers, $A^0,A^1,A^2,\dots$, and morphisms from $A^n$ to $A^m$ are given by a tuple
+of $m$ terms $t_1,\dots,t_m$ depending on $n$ free variables $x_1,\dots,x_n$, written as
+\[
+(x_1\dots x_n \vdash \pair{t_1,\dots,t_k}) \colon
+A^n \to A^m.
+\]
+Composition is defined componentwise as the substitution of the terms of the first
+morphism into the variables of the second one; that is, given $(x_1\dots x_k \vdash \pair{t_1,\dots,t_m}) \colon A^k \to A^{m}$
+and $(x_1\dots x_m \vdash\pair{u_1,\dots,u_n}) \colon A^m \to A^n$, composition is defined as
+$(x_1\dots x_k\vdash \pair{s_1,\dots,s_n})$, where $s_i = u_i[t_1,\dots,t_m / x_1,\dots,x_m]$. Two
+morphisms are considered equal, $(x_1\dots x_n \vdash \pair{t_1,\dots,t_k}) = (x_1\dots x_n \vdash \pair{t'_1,\dots,t'_k})$
+if componentwise equality of terms $t_i = t'_i$ follows from the axioms of the theory.
+The identity is the morphism $(x_1\dots x_n \vdash \pair{x_1,\dots, x_n})$. The kth-projection from $A^n$ is the
+term $(x_1\dots x_n \vdash x_k)$, and it is easy to check that these projections make it the n-fold
+product of $A$.
+
+**** Models                                                       :ignore:
+#+ATTR_LATEX: :options [Model]
+#+BEGIN_definition
+A *model* of an algebraic theory $\mathbb{A}$ in a category ${\cal C}$ is a functor
+$M \colon \mathbb{A} \to {\cal C}$ preserving all finite products.
+#+END_definition
+
+The *category of models*, $\Mod_{{\cal C}}(\mathbb{A})$, is the subcategory of the functor
+category ${\cal C}^{\mathbb{A}}$ given by the functors preserving all finite products, with natural
+transformations between them. We say that a category is *algebraic* if it is equivalent
+to a category of the form $\Mod_{{\cal C}}(\mathbb{A})$.
+
+**** Examples                                                     :ignore:
+#+ATTR_LATEX: :options [The algebraic theory of groups]
+#+BEGIN_exampleth
+Let $\mathbb{G}$ be the algebraic theory of groups built from its signature; we
+have all the tuples of terms that can be inductively built with
+\[(x,y \vdash x \cdot y) \colon G^2 \to G, \qquad
+(x \vdash x^{-1}) \colon G \to G, \qquad
+(\vdash e) \colon G,\]
+and the projections $(x_1\dots x_n \vdash x_k) \colon G^n\to G$, where the usual group axioms hold.
+A model $H \colon \mathbb{G} \to {\cal C}$ is be determined by an object of ${\cal C}$ and /morphisms of the catgeory/
+with the above signature for which the axioms hold; for instance,
+
+ * a model of $\mathbb{G}$ in $\Set$ is a classical *group*,
+   a set with multiplication and inverse functions for which the axioms hold;
+ * a model of $\mathbb{G}$ in $\Top{}$ is a *topological group*, a topological space with continuous
+   multiplication and inverse functions;
+ * a model of $\mathbb{G}$ in $\mathsf{Mfd}$, the category of differentiable manifolds with smooth functions
+   between them, is a *Lie group*;
+ * a model of $\mathbb{G}$ in $\mathsf{Grp}$ is an *abelian group*;
+ * a model of $\mathbb{G}$ in $\mathsf{CRing}$, the category of commutative rings with homomorphisms, is
+   a *Hopf algebra*.
+   # The last one by Eckmann-Hilton.
+
+The category of models $\Mod_{\Set}(\mathbb{A})$ is the usual category of groups; note that the natural
+transformations are precisely the group homomorphisms, as they have to preserve the unit,
+product and inverse of the group in order to be natural.
+#+END_exampleth
+
+# a model would be the
+# set of integers with the addition $(+)$, opposite $(-)$ and zero $(0)$ as operations. The
+# term $(x,y,z \vdash (x \cdot y^{-1}) \cdot (z^{-1} \cdot e))$ would be interpreted as
+
+
+\\
+
+**** Completeness of algebraic theories                           :ignore:
+By construction we know that if an equation can be proved from the
+axioms, it will be valid in all models (our semantics are /sound/); but
+we will also like to prove that, if every model of the theory
+satisfies a particular equation, it can actually be proved from the
+axioms of the theory (our semantics are /complete/). In general, we
+can actually prove a stronger result.
+
+#+ATTR_LATEX: :options [Universal model]
+#+BEGIN_theorem
+Given $\mathbb{A}$ an algebraic theory, there exists a category ${\cal A}$ with
+a model $U \in \mathtt{Mod}_{{\cal A}}(\mathbb{A})$ such that, for every terms $u,v$,
+\[
+u = v \text{ is satisfied under } U
+\iff
+\mathbb{A} \text{ proves } u = v.
+\]
+A category with this property is called a *universal model*.
+#+END_theorem
+#+BEGIN_proof
+Indeed, taking ${\cal A} = \mathbb{A}$ as a model of itself with the identity functor
+$U = \Id$, $u = v$ is satisfied under the identity functor if and only if
+it is satisfied in the original category.
+# TODO: Is this category really a representation of the equations?
+# Yes by construction (x,y \vdash x.y) is a representation
+#+END_proof
+
+This proof feels rather disappointing because this model is not even
+set-theoretic in general; but we can go further and assert the
+existence of a universal model in a presheaf category via the Yoneda
+embedding.
+
+# TODO: Escribir esta frase cuando hable de presheaves siguiendo Moerdijk
+# Presheaves can be thought as sets parametrized by a category.
+
+#+ATTR_LATEX: :options [Completeness on presheaves]
+#+BEGIN_corollary 
+The Yoneda embedding $y \colon \mathbb{A} \to \Set^{\mathbb{A}^{op}}$ is a universal model for $\mathbb{A}$.
+#+END_corollary
+#+BEGIN_proof 
+It preserves finite products because it preserves all limits, hence
+it is a model. As it is a faithful functor, we know that any equation
+proved in the model is an equation proved by the theory.
+#+END_proof
+
+**** Universal group                                              :ignore:
+# TODO: Universal group
+#+ATTR_LATEX: :options [Universal group]
+#+BEGIN_exampleth
+For instance, a universal model of the group would be the Yoneda embedding
+of $\mathbb{G}$ in $\Set^{\mathbb{G}^{op}}$. The group object would be the functor
+\[
+U = \hom_{\mathbb{G}}(-,A^1);
+\]
+which can be thought as a family of sets parametrized over the naturals:
+for each $n$ we have $U_n = \hom_{\mathbb{G}}(A^n,A^1)$, which is the set of terms on
+$n$ variables under the axioms of a group. In other words, the universal model
+for the theory of groups would be the free group on $n$ generators, parametrized
+over $n$.
+#+END_exampleth
+
+*** Cartesian closed categories
+#+ATTR_LATEX: :options [Cartesian closed category]
+#+BEGIN_definition
+A *cartesian closed category* is a category ${\cal C}$ in which the terminal,
+diagonal and product functors have right adjoints
+\[
+! \colon {\cal C} \to 1, \qquad
+\Delta \colon {\cal C}\times{\cal C} \to {\cal C}, \qquad
+(- \times A) \colon {\cal C} \to {\cal C}.
+\]
+#+END_definition
+
+These adjoints are given by terminal, product and exponential objects,
+written as
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] \ast \rar{}\& \ast \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] C \rar{!}\& 1 \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] C,C \rar{f,g}\& A,B \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] C \rar{\pair{f,g}}\& A \times B \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] C \times A \rar{f}\& B \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] C \rar{\widetilde{f}}\& B^A \end{tikzcd}}
+\noLine
+\TIC{}
+\end{prooftree}
+Exponentials are characterized by the *evaluation morphism* $\varepsilon \colon B^A \times A \to B$
+which is the counit of the adjunction
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+C \times A \ar[bend left=45]{rr}{f} \rar{\widetilde{f} \times \id}\& 
+B^A \times A \rar{\varepsilon}\& 
+B
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+C \ar[bend right=45]{rr}[swap]{\widetilde{f}} \rar[swap]{\widetilde{f}}\& 
+B^A \rar[swap]{\id}\&
+B^A 
+\end{tikzcd}}
+\end{prooftree}
+
+**** Presheaves and sets are cartesian closed                     :ignore:
+#+ATTR_LATEX: :options [Preseaf categories are cartesian closed]
+#+BEGIN_exampleth
+$\Set$ is cartesian closed, with exponentials given by function sets. In
+general, any presheaf category $\Set^{{\cal C}^{op}}$ from a small ${\cal C}$ is cartesian closed.
+Given any two presheaves $Q,P$, if the exponential exists, its component
+in any $A$ should be
+\[
+Q^PA \cong \Nat(\hom(-,A), Q^P) \cong \Nat(\hom(-,A) \times P, Q)
+\]
+by the Yoneda lemma, which is a set when ${\cal C}$ is small.
+A family of evaluation functions $\varepsilon_A \colon \Nat(\hom(-,A) \times P,Q) \times PA \to QA$ can be defined as
+$\varepsilon_A(\eta, p) = \eta(\id_A,p)$. We show that each is a universal arrow: given any $n \colon R\times P \todot Q$,
+we can show that there exists a unique $\phi$ making the diagram
+\[\begin{tikzcd}
+R \times P \dar[dashed,swap]{\phi \times \Id}\drar{n} & \\
+\Nat(\hom(-,A)\times P, Q) \times P \rar[swap]{\varepsilon} & Q
+\end{tikzcd}\]
+commute. In fact, we know that, by commutativity $\phi_r(\id,p) = \varepsilon_A(\phi_r,p) = n(r,p)$
+must hold; and then by naturality, for every $f \colon B \to A$,
+\[\begin{tikzcd}
+RA\rar{\phi_A} \dar[swap]{Rf} & 
+\Nat(\hom(-,A)\times P,Q)\dar{-\circ ((f \circ -) \times \id)} \\
+RB\rar{\phi_B} &
+\Nat(\hom(-,B)\times P,Q)
+\end{tikzcd}\]
+Thus, the complete natural transformation is completely determined
+for any $r \in RA$, $p \in PA$ as 
+\[
+\phi(r)(f,p) = \phi(Rf(r))(\id,p) = n(Rfr,p).
+\]
+The existence of a universal family of evaluations characterizes
+the adjunction by Proposition [[prop-characterize-adjunctions]].
+#+END_exampleth
+
+# Example 2.2.10 from Bauer, Awodey
+# This is Proposition I.6.1 in "Sheaves in geometry and logic." https://mathoverflow.net/questions/10406/general-construction-for-internal-hom-in-a-presheaf-category
+
+*** Simply-typed \lambda-theories
+If we read $\Gamma \vdash a : A$ as a morphism from the context $\Gamma$ to the output
+type $A$, the rules of simply-typed lambda calculus with product and
+unit types match the adjoints that determine a cartesian closed category
+\begin{prooftree}
+\AXC{}
+\UIC{$\Gamma \vdash \ast : 1$}
+\AXC{$\Gamma \vdash a : A$}
+\AXC{$\Gamma \vdash b : B$}
+\BIC{$\Gamma \vdash \pair{a,b} : A \times B$}
+\AXC{$\Gamma, a : A \vdash b : B$}
+\UIC{$\Gamma \vdash (\lambda a.b) : A \to B$}
+\noLine
+\TIC{}
+\end{prooftree}
+# where the projections are what we called $\fst$ and $\snd$, and
+# evaluation is function application
+
+**** Lambda theories :ignore:
+A *\lambda-theory* $\mathbb{T}$ is the analog of a Lawvere theory for cartesian
+closed categories. It is given by a set of basic types and constants
+over the simply-typed lambda calculus and a set of equality axioms,
+determining a *definitional equality* $\equiv$, an equivalence relation
+preserving the structure of the simply-typed lambda calculus;
+that is
+\begin{center}\begin{array}{ll}
+t \equiv \ast, & \mbox{ for each } t : 1; \\
+\pair{a,b} \equiv \pair{a',b'}, & \mbox{ for each } a \equiv a',\ b \equiv b' \\
+\fst\pair{a,b} \equiv a,\ \snd\pair{a,b}\equiv b, & \mbox{ for each } a : A, b : B; \\
+\fst\ m \equiv \fst\ m',\ \snd\ m \equiv \snd\ m', & \mbox{ for each } m \equiv m'; \\
+m \equiv \pair{\fst\ m,\snd\ m}, & \mbox{ for each } m : A \times B; \\
+f\ x \equiv f'\ x', & \mbox{ for each } f \equiv f', x \equiv x'; \\
+(\lambda x.f\ x) \equiv f,  & \mbox{ for each } f : A \to B; \\
+(\lambda x.m) \equiv (\lambda x.m'),  & \mbox{ for each } m \equiv m'; \\
+(\lambda x.m)\ n \equiv m[n/x] & \mbox{ for each } m : B, n : A; \\
+\end{array}\end{center}
+# TODO: isomorphism of types. monos and epis of types?
+
+#+ATTR_LATEX: :options [System T]
+#+BEGIN_exampleth
+Gödel's *System T* cite:girard89 is defined as a \lambda-theory with the basic types =nat=
+and =bool=; the constants $0 : \mathtt{nat}$, $S : \mathtt{nat}\to \mathtt{nat}$, $\mathrm{true} : \mathtt{bool}$, $\mathrm{false} : \mathtt{bool}$,
+$\mathrm{ifelse} : \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} : C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$; and the
+axioms
+\begin{center}\arraycolsep=30pt\begin{array}{ll}
+\textrm{ifelse}\ \textrm{true}\ a\ b \equiv a & \textrm{rec}\ c_0\ c_s\ 0 \equiv c_0 \\
+\textrm{ifelse}\ \textrm{false}\ a\ b \equiv b & \textrm{rec}\ c_0\ c_s\ (S n) \equiv c_s\ n\ (\textrm{rec}\ c_0\ c_s\ n) \\
+\end{array}\end{center}
+#+END_exampleth
+
+**** Translations                                                 :ignore:
+#+ATTR_LATEX: :options [Translation]
+#+BEGIN_definition
+The reasonable notion of homomorphism between lambda theories is called
+a *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$, and it given by
+a function on types and terms
+
+  1. preserving type constructors
+     \[
+     \tau 1 = 1,\qquad
+     \tau(A \times B) = \tau A \times \tau B,\qquad
+     \tau(A \to B) = \tau A \to \tau B;
+     \]
+
+  2. preserving the term structure
+     \begin{center}\begin{array}{lll}
+     \tau(\texttt{fst}\ m) \equiv \texttt{fst}\ (\tau m), &
+     \tau(\texttt{snd}\ m) \equiv \texttt{snd}\ (\tau m), &
+     \tau\pair{a,b} \equiv \pair{\tau a, \tau b}, \\
+     \tau (f\ x) \equiv (\tau f)\ (\tau x), &
+     \tau (\lambda x. m) \equiv \lambda x. (\tau m);
+     \end{array}\end{center}
+     
+  3. and preserving all equations, $t \equiv u$ implies $\tau t \equiv \tau u$.
+#+END_definition
+
+We consider the category $\lambda\mhyphen\mathtt{Thr}$ of \lambda-theories with translations,
+note that the identity and composition of translations are translations.
+
+**** TODO Sintactic category                                      :ignore:
+# Models are functors from the sintactic category
+
+**** TODO Internal language                                       :ignore:
+*** Internal languages
+*** Bicartesian closed categories
+# https://ncatlab.org/nlab/show/bicartesian+closed+category
+# https://ncatlab.org/nlab/show/cocartesian+closed+category
+# Theorem. Any cocartesian closed category is equivalent to the terminal category.
 
 ** Heyting algebras
 # Tarski-Stone representation theorem
