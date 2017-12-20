@@ -5918,16 +5918,31 @@ algebraic structures other than monoids.
 **** TODO Limits in general?                                      :ignore:
 **** TODO Equivalence of categories                               :ignore:
 **** TODO Adjoints for preorders (Galois connections)             :ignore:
+*** TODO Adjoints and limits
+**** Freyd adjoint functor theorem                                :ignore:
+#+ATTR_LATEX: :options [Freyd adjoint functor theorem]
+#+BEGIN_theorem
+A functor $G \colon {\cal C} \to {\cal D}$ from a small and locally small complete category ${\cal C}$
+has a left adjoint if and only if it preserves small limits and satisfies
+the solution set condition.
+#+END_theorem
+
 *** Monads
-**** Definition of Monads                                         :ignore:
+The notion of *monads* is pervasive in category theory. A monad is
+a certain type of endofunctor that arises naturally when considering
+adjoints. They will be useful to model algebraic notions inside
+category theory and to model a variety of effects and contextual
+computations in functional programming languages.
+ 
+**** Definition of monads                                         :ignore:
 #+attr_latex: :options [Monad]
 #+begin_definition
 A *monad* is a functor $T\colon X \to X$ with natural transformations
 
- * $\eta\colon I \todot T$, called /unit/
- * $\mu \colon T^2 \todot T$, called /multiplication/
+ * $\eta\colon I \todot T$, called /unit/; and
+ * $\mu \colon T^2 \todot T$, called /multiplication/;
 
-such that
+such that the following two diagrams commute
 \[\begin{tikzcd}
 T^3 \rar{T\mu}\dar{\mu T} & T^2\dar{\mu} \\
 T^2 \rar{\mu} & T
@@ -5939,10 +5954,16 @@ IT \rar{\eta T}\drar[swap]{\cong} & T^2\dar{\mu} & \lar[swap]{T\eta}\dlar{\cong}
 \end{tikzcd}\]
 #+end_definition
 
+The first diagram is encoding some form of associativity of the
+multiplication, while the second one is encoding the fact that
+$\eta$ creates a neutral element with respect to this multiplication.
+These statements will be made precise when we talk about algebraic
+theories.
+
 **** Each adjunction gives rise to a monad                        :ignore:
 #+attr_latex: :options [Each adjunction gives rise to a monad]
 #+begin_proposition
-Given $F \dashv G$, $GF$ is a monad.
+Given $F \dashv G$, the composition $GF$ is a monad.
 #+end_proposition
 #+begin_proof
 We take the unit of the adjunction as the monad unit. We define the
@@ -6027,7 +6048,7 @@ x''
 commutes.
 #+end_proof
 
-*** Free algebras for a monad
+*** TODO Free algebras for a monad
 *** Kleisli categories
 #+ATTR_LATEX: :options [Kleisli category]
 #+BEGIN_definition
@@ -6072,6 +6093,7 @@ is precisely $T$.
 # This implies that the category of spans of finite sets is equivalent
 # to the Lawvere theory of commutative monoids, that is, to the category
 # of finitely generated free commutative monoids.
+*** TODO Continuity
 ** TODO Monoidal and enriched categories
 # Linear logic = Monoidal categories = Quantum computation
 # Proof net = String diagram = Quantum circuit
@@ -6801,7 +6823,7 @@ forcing techniques with allowed to construct new models of ZFC.
 * Categorical logic
 # [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
-** Lawvere theories
+** OLD Lawvere theories [Old]                                     :noexport:
 This section follows cite:bauer17.
 
 *** Motivation for algebraic theories
@@ -6819,7 +6841,7 @@ Our *algebraic theories* are usually given by
   * and a set of /axioms/, which are equations between terms.
 
 **** Examples: theory of groups, theory of fields                 :ignore:
-For example, the theory of groups is given by a signature conaining
+For example, the theory of groups is given by a signature containing
 
  * a /binary operation/ called $\cdot$,
  * a /unary operation/ written as $^{-1}$, and
