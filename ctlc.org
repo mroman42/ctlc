@@ -1,12 +1,27 @@
 #+TITLE: Category Theory and Lambda Calculus
 #+AUTHOR: Mario Román
-#+OPTIONS: broken-links:mark toc:t tasks:nil num:3
+#+OPTIONS: broken-links:ignore toc:t tasks:nil num:3
+#+TODO: TODO(t) OLD(o) | DONE(d)
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
+
+#+latex_header_extra: %\usepackage{libertine}
+#+latex_header_extra: %\usepackage{libertinust1math}
+#+latex_header_extra: %\usepackage{inconsolata}
+#+latex_header_extra: %\usepackage[scale=MatchLowercase]{FiraMono}
+#+latex_header_extra: %\usepackage[T1]{fontenc}
+
+# Escribir mucho menos, usar muchos menos teoremas, tener una versión
+# larga con todos los teoremas y recomendaciones y una versión corta
 
 # Usar + para la suma
 # Usar adyacencia para la composición
 # Usar 1 y 0 para objetos inicial y final
+# Tener un cuerpo común de código en Agda que exportar a HTML como documentación
+
+** Macros                                                           :ignore:
+#+latex_header: \newcommand\Mod{\mathrm{Mod}}
+#+latex_header: \newcommand\Top{\mathsf{Top}}
 
 ** Abstract
 :PROPERTIES:
@@ -1372,6 +1387,7 @@ Every term normalizes in simply typed \lambda-calculus and every
 computation ends.  We know, however, that the Halting Problem is
 unsolvable, so simply typed \lambda-calculus must be not Turing
 complete.
+# !!!! Detail and check this proof
 
 ** The Curry-Howard correspondence
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
