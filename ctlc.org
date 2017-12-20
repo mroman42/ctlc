@@ -9647,3 +9647,5 @@ http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Mikrokosmos user's guide
 ** TODO Quotes
 # These quotes can be placed on the partial abstracts or in the general one.
+** TODO Notes
+This text defines $\mathbb{N}$ with a zero.
