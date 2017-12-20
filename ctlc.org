@@ -8144,7 +8144,7 @@ are provable in $\mathbb{T}$.
 Two \lambda-theories $\mathbb{T},\mathbb{U}$ are equivalent if there are a pair of translations
 $\tau : \mathbb{T} \to \mathbb{U}$ and $\sigma : \mathbb{U} \to \mathbb{T}$ such that
 \[
-\sigma(\tau A) \cong A, \quad\text{ and }\quad \tau(\sigma B) = B;
+\sigma(\tau A) \cong A, \quad\text{ and }\quad \tau(\sigma B) \simeq B;
 \]
 for any given types $A,B$.
 #+END_definition
@@ -8198,10 +8198,12 @@ exponential types of the category and the language; that is,
  * $\intl{B^A} \cong \intl{A} \to \intl{B}$.
 
 **** TODO Equivalence of CC categories
-*** TODO Bicartesian closed categories
-# https://ncatlab.org/nlab/show/bicartesian+closed+category
-# https://ncatlab.org/nlab/show/cocartesian+closed+category
-# Theorem. Any cocartesian closed category is equivalent to the terminal category.
+** TODO Diagonal arguments
+# Probar diagonal de Lawvere en cálculo lambda y usarla en múltiples
+# casos como ejemplo de semántica funcionando.
+http://tac.mta.ca/tac/reprints/articles/15/tr15abs.html
+http://math.andrej.com/2007/04/08/on-a-proof-of-cantors-theorem/
+
 ** TODO First-order logic (?)
 ** Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
@@ -8486,6 +8488,10 @@ This section follows [Course on Hott, Harper] and [Hott].
 
 We introduce ITT with Naturals, Sigma, Pi, Identity types and Universes.
 [Martin-Löf 73]
+
+# Sets and logic
+# Constructivism
+# Topos logic vs Curry-Howard logic
 
 *** Contexts and judgments
 As we did when we described simply typed \lambda-calculus; we will present
@@ -9201,6 +9207,8 @@ and the fact that $f(x,x, \mathtt{refl}_x) :\equiv \mathtt{id}_{C(x)}$ follows f
 
 # We will later prove that this function is an equivalence
 
+**** TODO Axiom K and Axiom J                                     :ignore:
+**** TODO Axiom J from Yoneda Lemma                               :ignore:
 *** Inductive types
 Inductive types provide the intuitive notion of a free type generated
 by a finite set of constructors. That is, the only elements of an
@@ -9270,143 +9278,18 @@ In fact, this functor is an F-algebra with the function
 \]
 # It is an equivalence and this is an homotopy-initial algebra.
 
+**** Wellfounded trees in categories
+http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.44.6700
 **** TODO Two equivalently defined inductive functions are in fact equal
-** Programming in Martin-Löf Type theory
-# Cite Connor's course in Agda
-# Cite Altenkirch's notes on HoTT
+** TODO Constructive mathematics
+*** TODO Axiom of choice implies excluded middle
+# In Agda or Coq!?
+# Diaconescu's theorem
+# https://en.wikipedia.org/wiki/Diaconescu%27s_theorem
 
-Martin-Löf type theory can also be regarded as a programming language in
-which is possible to formally specify and prove theorems about the
-code itself. It is similar to the Calculus of Constructions that we 
-mentioned earlier.
+*** TODO Type theory as a foundation of mathematics
 
-Formal proofs in MLTT can be written in this programming language and
-checked by a machine. Some programming languages offering this complex
-type system are
-
- * *Agda* implements a variant of MLTT and can be used as a programming
-   language or a proof assistant;
-
- * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements Calculus of
-   Constructions and was used, for example, to check a proof of the
-   Four Color Theorem;
-   # http://www.ams.org/notices/200811/tx081101382p.pdf
-   # https://coq.inria.fr/about-coq
-
- * *Idris* implements a different version of identity types than that in
-   MLTT and aims to be a useful programming language instead of a proof
-   assistant;
-
- * *NuPRL* cite:nuprl86 implements Extensional Type Theory;
-
- * *Cubical* cite:cohen16 provides an implementation of Cubical Type
-   Theory;
-
- * *RedPRL* is still in beta and provides an implementation of Cubical
-   Type Theory in the NuPRL style.
-
-In this text, we will use Agda as our proof assistant and we will mechanize
-proofs in Martin-Löf type theory using it. We will introduce Agda using
-ideas from cite:Conor17.
-
-*** Martin-Löf type theory in Agda
-In this chapter, we will describe how to program in MLTT using Agda as
-proof assistant. An Agda file consists of type declarations and
-definitions stated with ~=~, as in the following example.
-
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{example}
-
-This code exemplifies multiple idiosyncratic features of Agda when compared
-to our previous presentation of MLTT.
-
- * The type of types, ${\cal U}$, is written as =Set=; however, it has nothing
-   to do with our usual /set-theoretical sets/. The hierarchy of universes
-   in Agda is written as
-   \[
-   \mathtt{Set} :
-   \mathtt{Set}_1 :
-   \mathtt{Set}_{2} :
-   \dots
-   \]
-   We will see later that it is possible to use compiler flags to
-   postulate the collapse of this hierarchy into a single
-   $\mathtt{Set} : \mathtt{Set}$ and derive a contradiction from this
-   assumption.
-
-   If we want a definition to work at all levels of the universe
-   hierarchy, we need to explicitly write =∀{l}...Set l= instead
-   of simply write =Set=.
-
- * Dependent function are implicitly built into the language.  In
-   general, the dependent function type $\prod_{a:A} B$ is written as
-   ~(a : A) → B~. In particular, we write the type
-   $\mathtt{id} : \prod_{A : {\cal U}} A \to A$ as =(A : Set) → A → A=.
-
- * Agda allows a shorthand for nested dependent function types of
-   the form $\prod_{a:A} \prod_{a':A} B$. We can write them as =(a a' : A) → B=,
-   instead of having to write =(a : A) → (a' : A) → B=.
-
- * Implicit arguments are declared between curly braces, ={ ... }=.
-   Whenever we call a function with implicit arguments, the type
-   checker will infer them from the context if we decide not to
-   overwrite them explicitely.
-
- * Infix operators can be defined using underscores ~_~.
-
-**** Data and records                                             :ignore:
-We have seen that Agda directly provides function types, but
-it also provides two mechanisms to define new types:
-/*data declarations*/ and /*record types*/.
-
- * *Data declarations* can be thought as inductive types. They build the
-   free type (the initial algebra) over a set of constructors; and
-   they are better suited for defining positive types such as the void
-   type, coproducts or natural numbers.
-
- * *Record types* can be thought as generalized dependent n-tuples in
-   which every element of the tuple is labeled and depends on the
-   previous ones. They are better suited for defining negative
-   types such as the unit type or product types. A constructor can
-   be provided for them.
-
-The complete type constructors of MLTT and the majority of types that
-we will use in this text can be defined in terms of these.
-
-**** Code: types and proofs                                       :ignore:
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{mltt}
-
-Once we have defined these types, we can start profiting from the
-propositions as types interpretation to write and check mathematical
-proofs in Agda.
-
-Functions can be defined by a (possibly empty) list of declarations
-that exhaustively pattern match on all the possible constructors of
-the type.
-
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{mlttproof}
-
-In particular, we can check our previous proof of the Theorem of
-Choice defining the two projections from a dependent pair type.
-
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{theoremchoice}
-
-The path induction principle follows from the definition of equality
-as an inductive type and can be used to prove indiscernability of
-identicals.
-
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{indiscernability}
-
-*** Type in type
-# Russell's paradox code
-# Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
-# Hurkens' paradox: https://github.com/agda/agda/blob/master/test/Succeed/Hurkens.agda
-# Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
-# Burali-Forti paradox
-
-#+latex: \ExecuteMetaData[latex/Russell.tex]{russell}
-
-*** TODO Programming in extensional Martin-Löf type theory
-# Following Conor's course
+** TODO Univalent foundations
 ** Homotopy Type Theory I: Univalence
 # HoTT is the internal language of (infty,1)-toposes
 
@@ -9614,16 +9497,145 @@ $\mathbb{Z}$, as it is a type-theoretical set.
 
 
 *** TODO Categories
-** TODO Constructive mathematics
-*** TODO Axiom of choice implies excluded middle
-# In Agda or Coq!?
-# Diaconescu's theorem
-# https://en.wikipedia.org/wiki/Diaconescu%27s_theorem
-
-*** TODO Type theory as a foundation of mathematics
 
 ** TODO Cubical type theory
 # A hands-on introduction to cubical type theory
+** Programming in Martin-Löf Type theory
+# Cite Connor's course in Agda
+# Cite Altenkirch's notes on HoTT
+
+Martin-Löf type theory can also be regarded as a programming language in
+which is possible to formally specify and prove theorems about the
+code itself. It is similar to the Calculus of Constructions that we 
+mentioned earlier.
+
+Formal proofs in MLTT can be written in this programming language and
+checked by a machine. Some programming languages offering this complex
+type system are
+
+ * *Agda* implements a variant of MLTT and can be used as a programming
+   language or a proof assistant;
+
+ * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements Calculus of
+   Constructions and was used, for example, to check a proof of the
+   Four Color Theorem;
+   # http://www.ams.org/notices/200811/tx081101382p.pdf
+   # https://coq.inria.fr/about-coq
+
+ * *Idris* implements a different version of identity types than that in
+   MLTT and aims to be a useful programming language instead of a proof
+   assistant;
+
+ * *NuPRL* cite:nuprl86 implements Extensional Type Theory;
+
+ * *Cubical* cite:cohen16 provides an implementation of Cubical Type
+   Theory;
+
+ * *RedPRL* is still in beta and provides an implementation of Cubical
+   Type Theory in the NuPRL style.
+
+In this text, we will use Agda as our proof assistant and we will mechanize
+proofs in Martin-Löf type theory using it. We will introduce Agda using
+ideas from cite:Conor17.
+
+*** Martin-Löf type theory in Agda
+In this chapter, we will describe how to program in MLTT using Agda as
+proof assistant. An Agda file consists of type declarations and
+definitions stated with ~=~, as in the following example.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{example}
+
+This code exemplifies multiple idiosyncratic features of Agda when compared
+to our previous presentation of MLTT.
+
+ * The type of types, ${\cal U}$, is written as =Set=; however, it has nothing
+   to do with our usual /set-theoretical sets/. The hierarchy of universes
+   in Agda is written as
+   \[
+   \mathtt{Set} :
+   \mathtt{Set}_1 :
+   \mathtt{Set}_{2} :
+   \dots
+   \]
+   We will see later that it is possible to use compiler flags to
+   postulate the collapse of this hierarchy into a single
+   $\mathtt{Set} : \mathtt{Set}$ and derive a contradiction from this
+   assumption.
+
+   If we want a definition to work at all levels of the universe
+   hierarchy, we need to explicitly write =∀{l}...Set l= instead
+   of simply write =Set=.
+
+ * Dependent function are implicitly built into the language.  In
+   general, the dependent function type $\prod_{a:A} B$ is written as
+   ~(a : A) → B~. In particular, we write the type
+   $\mathtt{id} : \prod_{A : {\cal U}} A \to A$ as =(A : Set) → A → A=.
+
+ * Agda allows a shorthand for nested dependent function types of
+   the form $\prod_{a:A} \prod_{a':A} B$. We can write them as =(a a' : A) → B=,
+   instead of having to write =(a : A) → (a' : A) → B=.
+
+ * Implicit arguments are declared between curly braces, ={ ... }=.
+   Whenever we call a function with implicit arguments, the type
+   checker will infer them from the context if we decide not to
+   overwrite them explicitely.
+
+ * Infix operators can be defined using underscores ~_~.
+
+**** Data and records                                             :ignore:
+We have seen that Agda directly provides function types, but
+it also provides two mechanisms to define new types:
+/*data declarations*/ and /*record types*/.
+
+ * *Data declarations* can be thought as inductive types. They build the
+   free type (the initial algebra) over a set of constructors; and
+   they are better suited for defining positive types such as the void
+   type, coproducts or natural numbers.
+
+ * *Record types* can be thought as generalized dependent n-tuples in
+   which every element of the tuple is labeled and depends on the
+   previous ones. They are better suited for defining negative
+   types such as the unit type or product types. A constructor can
+   be provided for them.
+
+The complete type constructors of MLTT and the majority of types that
+we will use in this text can be defined in terms of these.
+
+**** Code: types and proofs                                       :ignore:
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{mltt}
+
+Once we have defined these types, we can start profiting from the
+propositions as types interpretation to write and check mathematical
+proofs in Agda.
+
+Functions can be defined by a (possibly empty) list of declarations
+that exhaustively pattern match on all the possible constructors of
+the type.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{mlttproof}
+
+In particular, we can check our previous proof of the Theorem of
+Choice defining the two projections from a dependent pair type.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{theoremchoice}
+
+The path induction principle follows from the definition of equality
+as an inductive type and can be used to prove indiscernability of
+identicals.
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{indiscernability}
+
+*** Type in type
+# Russell's paradox code
+# Girard paradox in agda: https://github.com/nzl-nott/PhD-of-nzl/blob/master/Exercise/Ex4/girard.agda
+# Hurkens' paradox: https://github.com/agda/agda/blob/master/test/Succeed/Hurkens.agda
+# Hurkens: https://www.cs.cmu.edu/~kw/scans/hurkens95tlca.pdf
+# Burali-Forti paradox
+
+#+latex: \ExecuteMetaData[latex/Russell.tex]{russell}
+
+*** TODO Programming in extensional Martin-Löf type theory
+# Following Conor's course
 * Conclusions
 * Appendices
 bibliographystyle:alpha
