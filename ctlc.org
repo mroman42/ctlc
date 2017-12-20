@@ -7566,7 +7566,7 @@ $P \to Q$ & implication & interior of complement and consequent & $\mathrm{int}(
 
 where $\mathrm{int}$ is the topological interior of a set.
 # TODO: This definition of the implication does not match with the used
-# on Moerdijk. It is equivalent but different.
+# on Moerdijk. It is equivalent (?) but different.
 
 *** Lattices and Boolean algebras
 **** Lattices, definition                                         :ignore:
@@ -7866,7 +7866,7 @@ Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\as
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
 
-** Simply-typed \lambda-theories
+** OLD Simply-typed \lambda-theories
 *** Simply-typed \lambda-theories
 We will consider again the previously defined simply typed
 \lambda-calculus, but this time, as a theory instead of as a
@@ -7891,15 +7891,14 @@ Equality must now be defined over these typed terms. We have the
 following set of rules for it, clearly inspired by the usual properties
 of equivalence relations, \beta-reductions and \eta-reductions.
 
- 1) The assumptions needed to prove an equality can be weakened
+ 1) Any set of assumptions can be weakened
     \begin{prooftree}
     \RightLabel{\textsc{weak}}
     \AXC{$\Gamma \vdash u = v : A$}
     \UIC{$\Gamma, w:B \vdash u = v : A$}
     \end{prooftree}
 
- 2) Equality is reflexive, transitive and symmetric; that is, it is an
-    equivalence relation
+ 2) Equality is an equivalence relation
     \begin{prooftree}
     \RightLabel{\textsc{refl}}
     \AXC{$$}
@@ -7921,8 +7920,7 @@ of equivalence relations, \beta-reductions and \eta-reductions.
     \UIC{$\Gamma \vdash t = \ast : \top$}
     \end{prooftree}
 
- 4) Reduction rules for products define the following equalities
-    for pair constructors
+ 4) Product reduction rules define the following equalities on constructors
     \begin{prooftree}
     \AXC{$\Gamma \vdash u = w : A$}
     \AXC{$\Gamma \vdash v = t : B$}
@@ -7934,7 +7932,7 @@ of equivalence relations, \beta-reductions and \eta-reductions.
     \noLine
     \TIC{$$}
     \end{prooftree}
-    and the following ones for projections
+    and the following ones on projections
     \begin{prooftree}
     \AXC{$\Gamma \vdash m = n : A \times B$}
     \UIC{$\Gamma \vdash \fst\ m = \fst\ n : A$}
@@ -7946,29 +7944,29 @@ of equivalence relations, \beta-reductions and \eta-reductions.
     \TIC{$$}
     \end{prooftree}
 
- 5) Reduction rules for functions translate into the following equations,
-    where the second one is directly derived from the \beta-rule
+ 5) Reduction rules for functions define the following equalities for applications
     \begin{prooftree}
     \AXC{$\Gamma \vdash f = g : A \to B$}
     \AXC{$\Gamma \vdash u = v : A$}
     \BIC{$\Gamma \vdash f\ u = g\ v : B$}
     \AXC{$$}
+    \RightLabel{$\beta$-\textsc{rule}}
     \UIC{$\Gamma \vdash (\lambda x. w)\ u = w[u/x] : A$}
     \noLine
     \BIC{$$}
     \end{prooftree}
-    and the following ones, where the second one is directly derived from
-    the \eta-rule
+    and the following ones for abstractions
     \begin{prooftree}
     \AXC{$\Gamma, x:A \vdash w = t : B$}
     \UIC{$\Gamma \vdash (\lambda x.w) = (\lambda x.t) : A \to B$}
     \AXC{$$}
+    \RightLabel{$\eta$-\textsc{rule}}
     \UIC{$\Gamma \vdash (\lambda x.f\ x) = f : A \to B$}
     \noLine
     \BIC{$$}
     \end{prooftree}
 
-**** Lambda theories
+**** Lambda theories                                              :ignore:
 In a \lambda-theory we may want to add a set of additional equations
 apart from those defined in the previous set of rules.
 
@@ -7989,7 +7987,7 @@ A simply-typed \lambda-theory is given by
 # The difference here is that we can now write equalities between
 # functions.
 
-*** Interpretation of \lambda-theories
+*** OLD Interpretation of \lambda-theories
 #+ATTR_LATEX: :options [Interpretation of a lambda theory]
 #+BEGIN_definition
 An *interpretation* of a \lambda-calculus $\mathbb{T}$ in a cartesian
@@ -8102,34 +8100,32 @@ in the syntactic category ${\cal S}(U)$.
 
 #+ATTR_LATEX: :options [Translation]
 #+BEGIN_definition
-A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is given by
+A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is a function on
+types and terms
 
-  1. a type $\tau A$ in $\mathbb{U}$ for each type $A$ in $\mathbb{T}$; in such a way that
+  1. preserving type constructors
      \[
      \tau 1 = 1,\qquad
      \tau(A \times B) = \tau A \times \tau B,\qquad
-     \tau(A \to B) = \tau A \to \tau B.
+     \tau(A \to B) = \tau A \to \tau B;
      \]
 
-  2. a term $\tau c : \tau A$ in $\mathbb{T}$ for each term $c : A$ in $\mathbb{T}$; in such a way that
-     \[\begin{aligned}
-     \tau(\texttt{fst}\ t) = \texttt{fst}\ (\tau t), &&
-     \tau(\texttt{snd}\ t) = \texttt{snd}\ (\tau t), &&
-     \tau\pair{u,v} = \pair{\tau u, \tau v}, \\
-     \tau (tu) = (\tau t)(\tau u), &&
-     \tau (\lambda x:A. t) = \lambda x:\tau A. \tau t,
-     \end{aligned}\]
+  2. preserving the term structure
+     \begin{center}\begin{array}{lll}
+     \tau(\texttt{fst}\ m) = \texttt{fst}\ (\tau m), &
+     \tau(\texttt{snd}\ m) = \texttt{snd}\ (\tau m), &
+     \tau\pair{a,b} = \pair{\tau a, \tau b}, \\
+     \tau (f\ x) = (\tau f)\ (\tau x), &
+     \tau (\lambda x. m) = \lambda x. (\tau m);
+     \end{array}\end{center}
 
-A translation is also required to preserve all equations. That is, if
-$\Gamma \mid t = u : A$ can be proved in $\mathbb{T}$, $\tau \Gamma \mid \tau t = \tau u : \tau A$ should be provable
-in $\mathbb{U}$.
+  3. and preserving all equations, $t \equiv u$ implies $\tau t \equiv \tau u$.
 #+END_definition
 
 
 #+ATTR_LATEX: :options [Category of lambda-theories]
 #+BEGIN_definition
-The category $\lambda\mhyphen\mathtt{Thr}$ has \lambda-theories as objects and translations
-between them as morphisms.
+
 #+END_definition
 
 
