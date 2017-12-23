@@ -1,7 +1,0 @@
-#+latex_class: scrreprt
-#+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+latex_header_extra: \usepackage[T1]{fontenc}
-#+latex_header_extra: \usepackage[beramono,eulerchapternumbers,linedheaders,parts,a5paper,dottedtoc,manychapters]{classicthesis}
-
-#+latex_header_extra: \input{setup}
-#+latex_header_extra: \input{classicthesis-config}

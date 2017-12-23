@@ -2,7 +2,8 @@
 #+AUTHOR: Mario Román
 #+OPTIONS: broken-links:ignore toc:t tasks:nil num:3
 #+TODO: TODO(t) OLD(o) | DONE(d)
-#+SETUPFILE: ctlc.setup
+#+latex_class: scrreprt
+#+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
 # Escribir mucho menos, usar muchos menos teoremas, tener una versión
@@ -14,6 +15,33 @@
 # Tener un cuerpo común de código en Agda que exportar a HTML como documentación
 
 ** Macros and libraries                                             :ignore:
+*** Classic thesis setup                                           :ignore:
+#+latex_header_extra: \usepackage[T1]{fontenc}
+#+latex_header_extra: \usepackage[beramono,eulerchapternumbers,linedheaders,parts,a5paper,dottedtoc,manychapters]{classicthesis}
+
+#+latex_header_extra: \setcounter{secnumdepth}{0}
+#+latex_header_extra: \usepackage{enumitem}
+#+latex_header_extra: \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+#+latex_header_extra: \setlist[enumerate]{topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex}
+#+latex_header_extra: \usepackage[top=1in, bottom=1.5in, left=1in, right=1in]{geometry}
+#+latex_header_extra: \setlength\itemsep{0em}
+#+latex_header_extra: \setlength{\parindent}{0pt}
+#+latex_header_extra: \usepackage{parskip}
+
+#+latex_header_extra: \usepackage{minted} \usemintedstyle{colorful}
+#+latex_header_extra: \setminted{fontsize=\small}
+#+latex_header_extra: \setminted[haskell]{linenos=false,fontsize=\small}
+#+latex_header_extra: \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,1.0}{\oldstylenums{\arabic{FancyVerbLine}}}}
+
+#+latex_header_extra: \usepackage{tcolorbox}
+#+latex_header_extra: \tcbuselibrary{theorems}
+#+latex_header_extra: \newtcbtheorem[number within=section]{examplebox}{Example}{colback=cyan!2,colframe=cyan!10!black!40,fonttitle=\bfseries}{th}
+
+#+latex_header_extra: \usepackage[conor]{agda}
+#+latex_header_extra: \usepackage{catchfilebetweentags}
+
+#+latex_header_extra: \input{classicthesis-config}
+
 *** Fonts                                                          :ignore:
 #+latex_header_extra: \usepackage{libertine}
 #+latex_header_extra: \usepackage{libertinust1math}
