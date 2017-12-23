@@ -5,11 +5,14 @@
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
-#+latex_header_extra: %\usepackage{libertine}
-#+latex_header_extra: %\usepackage{libertinust1math}
-#+latex_header_extra: %\usepackage{inconsolata}
-#+latex_header_extra: %\usepackage[scale=MatchLowercase]{FiraMono}
-#+latex_header_extra: %\usepackage[T1]{fontenc}
+#+latex_header_extra: \usepackage{libertine}
+#+latex_header_extra: \usepackage{libertinust1math}
+#+latex_header_extra: \usepackage{inconsolata}
+#+latex_header_extra: \usepackage[scale=MatchLowercase]{FiraMono}
+#+latex_header_extra: \usepackage[T1]{fontenc}
+
+# http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
+# http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
 # Escribir mucho menos, usar muchos menos teoremas, tener una versión
 # larga con todos los teoremas y recomendaciones y una versión corta
