@@ -97,7 +97,7 @@
 #+latex_header: % \DeclarePairedDelimiter\intl{\llbracket}{\rrbracket} % Internal language brackets
 
 *** Categories                                                     :ignore:
-#+latex_header: \newcommand\hom{\mathrm{hom}}
+#+latex_header: % \newcommand\hom{\mathrm{hom}}
 #+latex_header: \newcommand\id{\mathrm{id}}
 #+latex_header: \newcommand\Id{\mathrm{Id}}
 #+latex_header: \newcommand\todot{\xrightarrow{.}}
@@ -1970,14 +1970,14 @@ the following diagram shows, in which terms are colored in
 $\cterms{red}$ and types are colored in $\ctypes{blue}$.
 \begin{prooftree}
 \EnableBpAbbreviations
-\AXC{$\cterms{a }\ctypes{:: A}$}
-\AXC{$\cterms{b }\ctypes{:: B}$}
+\AXC{$\cterms{a }\ctypes{: A}$}
+\AXC{$\cterms{b }\ctypes{: B}$}
 \RightLabel{$(pair)$}
-\BIC{$\cterms{<a,b> }\ctypes{:: A \times B}$}
+\BIC{$\cterms{<a,b> }\ctypes{: A \times B}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λb.<a,b> }\ctypes{:: B \to A \times B}$}
+\UIC{$\cterms{λb.<a,b> }\ctypes{: B \to A \times B}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λa.λb.<a,b> }\ctypes{:: A \to B \to A \times B}$}
+\UIC{$\cterms{λa.λb.<a,b> }\ctypes{: A \to B \to A \times B}$}
 \end{prooftree}
 #+END_exampleth
 
@@ -1998,25 +1998,25 @@ Similar examples can be found in cite:wadler15.
 We start with the following derivation tree; in which terms are colored in
 $\cterms{red}$ and types are colored in $\ctypes{blue}$
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{b }\ctypes{:: [A+B]}$}
-\AXC{$\cterms{c }\ctypes{:: A}$}
+\AXC{$\cterms{b }\ctypes{: [A+B]}$}
+\AXC{$\cterms{c }\ctypes{: A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr c }\ctypes{:: B+A}$}
-\AXC{$\cterms{c }\ctypes{:: B}$}
+\UIC{$\cterms{inr c }\ctypes{: B+A}$}
+\AXC{$\cterms{c }\ctypes{: B}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl c }\ctypes{:: B+A}$}
+\UIC{$\cterms{inl c }\ctypes{: B+A}$}
 \RightLabel{$(case)$}
-\TIC{$\cterms{case b of [c].inr c; [c].inl c }\ctypes{:: B+A}$}
+\TIC{$\cterms{case b of [c].inr c; [c].inl c }\ctypes{: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λb.case b of [c].inr c; [c].inl c }\ctypes{:: A+B \to B+A}$}
+\UIC{$\cterms{λb.case b of [c].inr c; [c].inl c }\ctypes{: A+B \to B+A}$}
 
-\AXC{$\cterms{a }\ctypes{:: A}$}
+\AXC{$\cterms{a }\ctypes{: A}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl a }\ctypes{:: A+B}$}
+\UIC{$\cterms{inl a }\ctypes{: A+B}$}
 \RightLabel{$(app)$}
-\BIC{$\cterms{(λb.case b of [c].inr c; [c].inl c)(inl a) }\ctypes{:: B+A}$}
+\BIC{$\cterms{(λb.case b of [c].inr c; [c].inl c)(inl a) }\ctypes{: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λa.(λb.case b of [c].inr c; [c].inl c) (inl a) }\ctypes{:: A \to B + A}$}
+\UIC{$\cterms{λa.(λb.case b of [c].inr c; [c].inl c) (inl a) }\ctypes{: A \to B + A}$}
 \end{prooftree}
 
 which is encoded by the term =λa.(λc.case c of [a].inr a; [b].inl b) (λz.inl z)=.
@@ -2024,30 +2024,30 @@ We apply the simplification rule/\beta-rule of the implication/function applicat
 to get
 
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{z }\ctypes{:: A}$}
+\AXC{$\cterms{z }\ctypes{: A}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl z }\ctypes{:: A+B}$}
-\AXC{$\cterms{a }\ctypes{:: A}$}
+\UIC{$\cterms{inl z }\ctypes{: A+B}$}
+\AXC{$\cterms{a }\ctypes{: A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr a }\ctypes{:: B+A}$}
-\AXC{$\cterms{b }\ctypes{:: B}$}
+\UIC{$\cterms{inr a }\ctypes{: B+A}$}
+\AXC{$\cterms{b }\ctypes{: B}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl b }\ctypes{:: B+A}$}
+\UIC{$\cterms{inl b }\ctypes{: B+A}$}
 \RightLabel{$(case)$}
-\TIC{$\cterms{case (inl z) of [a].inr a; [b].inl b }\ctypes{:: B+A}$}
+\TIC{$\cterms{case (inl z) of [a].inr a; [b].inl b }\ctypes{: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λ z.case (inl z) of [a].inr a; [b].inl b }\ctypes{:: A \to B +A}$}
+\UIC{$\cterms{λ z.case (inl z) of [a].inr a; [b].inl b }\ctypes{: A \to B +A}$}
 \end{prooftree}
 
 which is encoded by the term =λa.case (inl a) of (inr) (inl)=. We finally
 apply the =case= simplification/reduction rule to get
 
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{a }\ctypes{:: A}$}
+\AXC{$\cterms{a }\ctypes{: A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr a }\ctypes{:: B+A}$}
+\UIC{$\cterms{inr a }\ctypes{: B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λ a.inr a }\ctypes{:: A \to B + A}$}
+\UIC{$\cterms{λ a.inr a }\ctypes{: A \to B + A}$}
 \end{prooftree}
 
 which is encoded by =λa.(inr a)=.
