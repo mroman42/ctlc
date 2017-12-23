@@ -7482,20 +7482,32 @@ m \equiv \pair{\fst\ m,\snd\ m}, & \mbox{ for each } m : A \times B; \\
 f\ x \equiv f'\ x', & \mbox{ for each } f \equiv f', x \equiv x'; \\
 (\lambda x.f\ x) \equiv f,  & \mbox{ for each } f : A \to B; \\
 (\lambda x.m) \equiv (\lambda x.m'),  & \mbox{ for each } m \equiv m'; \\
-(\lambda x.m)\ n \equiv m[n/x] & \mbox{ for each } m : B, n : A; \\
+(\lambda x.m)\ n \equiv m[n/x] & \mbox{ for each } m : B, n : A. \\
 \end{array}\end{center}
-# TODO: isomorphism of types. monos and epis of types?
+Two types are /isomorphic/, $A \cong A'$ if there exist terms $f \colon A \to A'$
+and $g \colon A' \to A$ such that $f\ (g\ a) \equiv a$ for each $a {:} A$, and $g\ (f\ a') \equiv a'$
+for each $a'{:}A'$.
 
 #+ATTR_LATEX: :options [System T]
 #+BEGIN_exampleth
 Gödel's *System T* cite:girard89 is defined as a \lambda-theory with the basic types =nat=
-and =bool=; the constants $0 : \mathtt{nat}$, $S : \mathtt{nat}\to \mathtt{nat}$, $\mathrm{true} : \mathtt{bool}$, $\mathrm{false} : \mathtt{bool}$,
-$\mathrm{ifelse} : \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} : C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$; and the
-axioms
+and =bool=; the constants $0 {:} \mathtt{nat}$, $S {:} \mathtt{nat}\to \mathtt{nat}$, $\mathrm{true} {:} \mathtt{bool}$, $\mathrm{false} {:} \mathtt{bool}$,
+$\mathrm{ifelse} {:} \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} {:} C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$;
+and the axioms
 \begin{center}\arraycolsep=30pt\begin{array}{ll}
-\textrm{ifelse}\ \textrm{true}\ a\ b \equiv a & \textrm{rec}\ c_0\ c_s\ 0 \equiv c_0 \\
-\textrm{ifelse}\ \textrm{false}\ a\ b \equiv b & \textrm{rec}\ c_0\ c_s\ (S n) \equiv c_s\ n\ (\textrm{rec}\ c_0\ c_s\ n) \\
+\textrm{ifelse}\ \textrm{true}\ a\ b \equiv a, & \textrm{rec}\ c_0\ c_s\ 0 \equiv c_0, \\
+\textrm{ifelse}\ \textrm{false}\ a\ b \equiv b, & \textrm{rec}\ c_0\ c_s\ (S n) \equiv c_s\ n\ (\textrm{rec}\ c_0\ c_s\ n). \\
 \end{array}\end{center}
+#+END_exampleth
+
+#+ATTR_LATEX: :options [Untyped \lambda-calculus]
+#+BEGIN_exampleth
+Untyped \lambda calculus can be recovered as a \lambda theory with a single
+basic type $\mathtt{D}$ and a type isomorphism $\mathtt{D} \cong \mathtt{D}\to \mathtt{D}$ given by two constants
+$r \colon \mathtt{D}\to (\mathtt{D} \to \mathtt{D})$ and $s \colon (\mathtt{D}\to \mathtt{D})\to \mathtt{D}$ such that $r\ (s\ f) \equiv f$ for each
+$f \colon \mathtt{D}\to \mathtt{D}$ and $s\ (r\ x) \equiv x$ for each $x {:} \mathtt{D}$. We assume that each term of the
+untyped calculus is of type $\mathtt{D}$ and apply $r,s$ as needed to construct well-typed
+terms.
 #+END_exampleth
 
 **** Translations                                                 :ignore:
@@ -7524,15 +7536,220 @@ a function on types and terms
   3. and preserving all equations, $t \equiv u$ implies $\tau t \equiv \tau u$.
 #+END_definition
 
-We consider the category $\lambda\mhyphen\mathtt{Thr}$ of \lambda-theories with translations,
-note that the identity and composition of translations are translations.
+We consider the category $\lambda\mathsf{Thr}$ of \lambda-theories with
+translations, note that the identity and composition of translations
+are translations.  Our goal is to prove that this category is
+equivalent to that of cartesian closed categories with functors
+preserving products and exponentials.
 
-**** TODO Sintactic category                                      :ignore:
+Apart from the natural definition of isomorphism, we consider the
+weaker notion of *equivalence of theories*. Two theories with translations $\tau \colon \mathbb{T} \to \mathbb{U}$
+and $\sigma \colon \mathbb{U} \to \mathbb{T}$ are equivalent $\mathbb{T} \simeq \mathbb{U}$ if there exist two families of
+/type isomorphisms/ $\tau\sigma A \cong A$ and $\sigma\tau B \cong B$.
+
+**** Syntactic category                                           :ignore:
 # Models are functors from the sintactic category
+#+ATTR_LATEX: :options [Syntactic category]
+#+BEGIN_proposition
+Given a \lambda-theory $\mathbb{T}$, its *syntactic category* ${\cal S}(\mathbb{T})$, has an object
+for each type of the theory and a morphism $A \to B$ for each term
+$a : A \vdash b : B$. The composition of two morphisms $a : A \vdash b : B$ and
+$b' : B \vdash c : C$ is given by $a {:} A \vdash c[b/b'] {:} C$; and any two morphisms
+$\Gamma \vdash b : B$ and $\Gamma \vdash b' : A$ are equal if $b \equiv b'$.
 
-**** TODO Internal language                                       :ignore:
-*** Internal languages
-*** Bicartesian closed categories
+The syntactic category is cartesian closed and this induces a functor
+${\cal S} \colon \lambda\mathsf{Thr} \to \mathsf{Ccc}$.
+#+END_proposition
+#+BEGIN_proof
+The type $1$ is terminal because every morphism $\Gamma \vdash t {:} 1$ is $t \equiv\, \ast$.
+The type $A \times B$ is the product of $A$ and $B$; projections from
+a pair morphism are given by $\fst\ \pair{a,b} \equiv a$ and $\snd\ \pair{a,b} \equiv b$.
+Any other morphism under the same conditions must be again the
+pair morphism because $d \equiv \pair{\fst\ d, \snd\ d} \equiv \pair{a,b}$.
+
+Finally, given two types $A,B$, its exponential is $A \to B$ with
+the evaluation morphism
+\[
+m : (A \to B) \times A \vdash (\fst\ m)\ (\snd\ m) : B.
+\]
+It is universal: for any $p {:} C \times A \vdash q {:} B$, there exists a morphism
+$z {:} C \vdash \lambda x. q[\pair{z,x}/p] : A \to B$ such that
+\[
+(\lambda x.q[\pair{\fst\ p,x}/p]) (\snd\ p) \equiv
+q[\pair{\fst\ p, \snd\ p}/p] \equiv q[p/p] \equiv q;
+\]
+and if any other morphism $z {:} C \vdash d {:} A \to B$ satisfies
+$(d[ \fst\ p /z] (\snd\ p)) \equiv q$ then
+\[
+\lambda x. q[\pair{z,x}/p] \equiv 
+\lambda x. (d[\fst\ p/z]\ (\snd\ p))[\pair{z,x}/p] \equiv
+\lambda x. (d[z/z]\ x) &\equiv d.
+\]
+
+Given a translation $\tau \colon \mathbb{T} \to \mathbb{U}$, we define a functor ${\cal S}(\tau) \colon {\cal S}(\mathbb{T}) \to {\cal S}(\mathbb{U})$
+mapping the object $A \in {\cal S}(\mathbb{T)$ to $\tau A \in {\cal S}(\mathbb{U})$ and any morphism $\vdash b : B$ to
+$\vdash \tau b : \tau B$. The complete structure of the functor is then determined because
+it must preserve products and exponentials.
+#+END_proof
+
+**** Internal language                                            :ignore:
+#+ATTR_LATEX: :options [Internal language]
+#+BEGIN_proposition
+Given a cartesian closed category ${\cal C}$, its *internal language* $\mathbb{L}({\cal C})$
+is a \lambda-theory with a type $\intl{A}$ for each object $A \in {\cal C}$, a constant
+$\intl{f} \colon \intl{A} \to \intl{B}$ for each morphism $f \colon A \to B$, axioms
+\begin{center}\arraycolsep=30pt\begin{array}{ll}
+\intl{\id}\ x \equiv x, &
+\intl{g \circ f}\ x \equiv \intl{g}\ (\intl{f}\ x),
+\end{array}\end{center}
+and three families of constants
+\begin{center}\begin{array}{lll}
+\mathtt{T} : 1 \to \intl{1}, &
+\mathtt{P}_{AB} : \intl{A}\times \intl{B} \to \intl{A \times B}, &
+\mathtt{E}_{AB} : (\intl{A} \to \intl{B}) \to \intl{B^A}, &
+\end{array}\end{center}
+that act as /type isomorphisms/, which means that they create the following 
+pairs of two-side inverses relating the categorical and type-theoretical structures
+\begin{center}\begin{array}{ll}
+t \equiv \mathtt{T}\ \ast\; & \mbox{ for each } u : \intl{1}, \\
+m \equiv \mathtt{P}\ \pair{\intl{\pi_1}\ m, \intl{\pi_2}\ m} & \mbox{ for each } z : \intl{A \times B}, \\
+n \equiv \pair{\intl{\pi_0}\ (\mathtt{P}\ n), \intl{\pi_1}\ (\mathtt{P}\ n)} & \mbox{ for each } n : \intl{A} \times \intl{B}, \\
+f \equiv \mathtt{E}\ (\lambda x. \intl{e}\ (\mathtt{P}\ \pair{f,x})) & \mbox{ for each } f : \intl{B^A}, \\
+g \equiv \lambda x. \intl{e}\ (\mathtt{P}\ \pair{\mathtt{E}\ g, x}) & \mbox{ for each } g : \intl{A} \to \intl{B}. \\
+\end{array}\end{center}
+This extends to a functor $\mathbb{L} \colon \mathsf{Ccc} \to \lambda\mathsf{Thr}$.
+#+END_proposition
+#+BEGIN_proof
+Given any functor preserving products and exponentials $F \colon {\cal C} \to {\cal D}$, we define
+a translation $\mathbb{L}(F) \colon \mathbb{L}({\cal C}) \to \mathbb{L}({\cal D})$ taking each basic type $\intl{A}$ to $\intl{FA}$ and
+each constant $\intl{f}$ to $\intl{Ff}$; equations are preserved because $F$ is a functor
+and types are preserved up to isomorphism because $F$ preserves products and
+exponentials.
+#+END_proof
+
+**** Equivalence between CCC and STLC                             :ignore:
+#+ATTR_LATEX: :options [Equivalence between cartesian closed categories and lambda calculus]
+#+BEGIN_theorem
+There exists a equivalence of categories ${\cal C} \simeq {\cal S}(\mathbb{L}({\cal C}))$ for any ${\cal C} \in \Ccc$
+and an equivalence of theories $\mathbb{T} \simeq \mathbb{L}({\cal S}(\mathbb{T}))$ for any $\mathbb{T} \in \lambda\mathsf{Thr}$.
+#+END_theorem
+#+BEGIN_proof
+On the one hand, we define $\eta \colon {\cal C} \to {\cal S}(\mathbb{L}({\cal C}))$ as $\eta A = \intl{A}$ in objects and $\eta f = (a : \intl{A} \vdash f\ a : \intl{B})$
+for any morphism $f \colon A \to B$. It is a functor because $\intl{\id}\ a \equiv a$ and $\intl{g \circ f}\ a \equiv g\ (f\ a)$.
+We define $\theta : {\cal S}(\mathbb{L}({\cal C})) \to {\cal C}$ on types inductively as $\theta(1) = 1$, $\theta(\intl{A}) = A$,
+$\theta(B \times C) = \theta(A) \times \theta(C)$ and $\theta(B \to C) = \theta(C)^{\theta(B)}$. Now there is a natural 
+isomorphism $\eta\theta \todot \Id$, using the isomorphisms induced by the constants $\mathtt{T}, \mathtt{P}, \mathtt{E}$,
+\begin{center}\begin{array}{ll}
+\eta(\theta \intl{A}) = \eta A = \intl{A}, \\
+\eta(\theta 1) = \eta 1 = \intl{1} \cong 1, \\
+\eta(\theta (A \times B)) = \intl{\theta(A) \times \theta(B)} \cong \intl{\theta A} \times \intl{\theta B} = \eta\theta A \times \eta\theta B \cong A \times B. \\
+\eta(\theta (A \to B)) = \intl{\theta(A) \to \theta(B)} = \intl{\theta B}^{\intl{\theta A}} = (\eta\theta B)^{(\eta \theta A)} = B^A;
+\end{array}\end{center}
+and a natural isomorphism $\Id \todot \theta\eta$ which is in fact an identity, $A = \theta\intl{A} = \theta\eta(A)$.
+# TODO: Check that \eta is natural
+
+On the other hand, we define a translation $\tau \colon \mathbb{T} \to \mathbb{L}({\cal S}(\mathbb{T}))$ as $\tau A = \intl{A}$ in types
+and $\tau(a) = \intl{(\vdash a : \tau A)}$ in constants. We define $\sigma \colon \mathbb{L}({\cal S}(\mathbb{T})) \to \mathbb{T}$ as $\sigma\intl{A} = A$
+in types and as
+\begin{center}\begin{array}{llll}
+\sigma(\intl{a : A \vdash b : B}) = \lambda a.b, &
+\sigma \mathtt{T} = \lambda x.x, &
+\sigma \mathtt{P} = \lambda x.x, &
+\sigma \mathtt{E} = \lambda x.x,
+\end{array}\end{center}
+in the constants of the internal language.
+We have $\sigma(\tau(A)) = A$, so we will check that $\tau(\sigma(A)) \cong A$ by structural induction
+on the constructors of the type:
+
+ * if $A = \intl{B}$ is a basic type, we apply structural induction over the type $B$ to get
+   
+   * if $B$ is a basic type, $\tau\sigma(\intl{B}) = \intl{B}$;
+
+   * if $B = 1$, then $\tau\sigma(\intl{1}) = 1$ and $\intl{1} \cong 1$ thanks to the constant $\mathtt{T}$;
+
+   * if $B = C \times D$, then $\tau\sigma(\intl{C \times D}) = \intl{C} \times \intl{D}$ and $\intl{C \times D} \cong \intl{C} \times \intl{D}$
+     thanks to the constant $\mathtt{P}$;
+
+   * if $B = D^C$, then $\tau\sigma(\intl{D^C}) = \intl{C} \to \intl{D}$ and $\intl{D^C} \cong \intl{C}\to\intl{D}$ thanks
+     to the constant $\mathtt{E}$.
+
+ * if $A = 1$, then $\tau\sigma 1 = 1$;
+
+ * if $A = C \times D$, then $\tau\sigma(C \times D) = \tau\sigma(C) \times \tau\sigma(D) \cong C \times D$ by induction hypothesis;
+
+ * if $A = C \to D$, then $\tau\sigma(C \to D) = \tau\sigma(C) \to \tau\sigma(D) \cong C \to D$ by induction hypothesis.
+#+END_proof
+
+\\
+
+**** Semantics                                                    :ignore:
+Thus, we can say that the simply-typed lambda calculus is the language
+of cartesian closed categories; each theory is a model inside a
+cartesian closed category. 
+
+*** Working in cartesian closed categories
+We can now talk internally about cartesian closed categories using
+lambda calculus. Note each closed \lambda term $\vdash a : A$ can also be
+seen as a morphism from the terminal object $1 \to A$.
+
+**** Diagonal arguments                                           :ignore:
+# https://golem.ph.utexas.edu/category/2006/12/classical_vs_quantum_computati_8.html
+
+# Cantor's theorem
+# Russell's paradox
+# Surjectivity from naturals to lists
+# No surjection from R to the Banach space C(R,R)
+# Gödel's first incompleteness theorem
+# Fixed points in untyped lambda calculus
+
+We say that a morphism $f {:} A \to B$ in a cartesian closed category is
+*point-surjective* if, for every $b {:} B$, there exists an $a {:} A$ such that
+$f\ a \equiv b$.
+# Weak point-surjection suffices
+# Existence of products suffice
+
+#+ATTR_LATEX: :options [Lawvere's fixed point theorem]
+#+BEGIN_theorem
+In any cartesian closed category, if there exists a point-surjective
+$d {:} A \to B^A$, then each $f {:} B \to B$ has a fixed point, a $b {:} B$ such
+that $f\ b \equiv b$. cite:lawvere06
+#+END_theorem
+#+BEGIN_proof
+As $d$ is point-surjective, there exists $x {:} A$ such that $d\ x \equiv \lambda a. f\ (d\ a\ a)$,
+but then, $d\ x\ x \equiv (\lambda a.f\ (d\ a\ a))\ x \equiv f\ (d\ x\ x)$ is a fixed point.
+#+END_proof
+
+This theorem has nontrivial consequences when interpreted in different
+contexts:
+
+ * *Cantor's theorem* is a corollary in $\Sets$; as there exists a nontrivial
+   permutation of the two-element set, a point-surjective $A \to 2^A$ cannot
+   exist;
+
+ * *Russell's paradox* follows because $\in \colon \mathrm{Sets} \to 2^{\mathrm{Sets}}$ is point-surjective
+   if we assume that for any property on the class of sets $P \colon \mathrm{Sets} \to 2$ 
+   there exists a comprehension set $\left\{ y \in \mathrm{Sets} \mid P(y) \right\}$;
+
+ * the *existence of fixed points* for any term of *in untyped \lambda-calculus* 
+   follows from the fact that there exists a type isomorphism (in particular, a
+   point-surjection) $\mathtt{D} \to (\mathtt{D}\to \mathtt{D})$;
+
+# Turing halting problem from yanofsky follows in a category of computations
+
+ * *Gödel first incompleteness theorem* and *Tarski's theorem* follow a similar
+   reasoning (see cite:yanofsky03 for details). Let our category be an (algebraic)
+   theory $A^0,A^1,A^2,\dots$ with a supplementary object $2$; we say that the theory is
+   *consistent* if there exists a morphism $\mathrm{not} \colon 2 \to 2$ such that $\mathrm{not}\circ \varphi \neq \varphi$ for
+   every $\varphi \colon A \to 2$; we say that *satisfiability* is definable if there exists a 
+   map $\mathrm{sat}\colon A \times A \to 2$ such that for every "predicate" $\varphi \colon A \to 2$, there exists
+   a "Gödel number" $c {:} A$ such that $\mathrm{sat}(c,a) = \varphi(a)$. We get that, if satisfiability
+   is definible in a theory, then it is inconsistent.
+
+# Compactly generated Hausdorff spaces are cartesian closed
+# * there is no countinuous surjection from $\mathbb{R}$ to the Banach space ${\cal C}(\mathbb{R},\mathbb{R})$,
+#   as the function $(\lambda x, x+1) \colon \mathbb{R} \to \mathbb{R}$ has no fixed point;
+
+*** Bicartesian closed categories                                  :ignore:
 # https://ncatlab.org/nlab/show/bicartesian+closed+category
 # https://ncatlab.org/nlab/show/cocartesian+closed+category
 # Theorem. Any cocartesian closed category is equivalent to the terminal category.
