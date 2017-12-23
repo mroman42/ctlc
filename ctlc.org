@@ -5,15 +5,6 @@
 #+SETUPFILE: ctlc.setup
 #+LATEX_HEADER_EXTRA: %\input{titlepage}
 
-#+latex_header_extra: \usepackage{libertine}
-#+latex_header_extra: \usepackage{libertinust1math}
-#+latex_header_extra: \usepackage{inconsolata}
-#+latex_header_extra: \usepackage[scale=MatchLowercase]{FiraMono}
-#+latex_header_extra: \usepackage[T1]{fontenc}
-
-# http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
-# http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
-
 # Escribir mucho menos, usar muchos menos teoremas, tener una versión
 # larga con todos los teoremas y recomendaciones y una versión corta
 
@@ -22,11 +13,127 @@
 # Usar 1 y 0 para objetos inicial y final
 # Tener un cuerpo común de código en Agda que exportar a HTML como documentación
 
-** Macros                                                           :ignore:
+** Macros and libraries                                             :ignore:
+*** Fonts                                                          :ignore:
+#+latex_header_extra: \usepackage{libertine}
+#+latex_header_extra: \usepackage{libertinust1math}
+#+latex_header_extra: \usepackage{inconsolata}
+#+latex_header_extra: \usepackage[scale=MatchLowercase]{FiraMono}
+#+latex_header_extra: \usepackage[T1]{fontenc}
+
+*** Libraries                                                      :ignore:
+#+latex_header: \usepackage{amsthm}
+#+latex_header: \usepackage{amsmath}
+#+latex_header: \usepackage{tikz}
+#+latex_header: \usepackage{tikz-cd}
+#+latex_header: \usetikzlibrary{shapes,fit}
+#+latex_header: \usepackage{bussproofs}
+#+latex_header: \EnableBpAbbreviations{}
+#+latex_header: \usepackage{mathtools}
+#+latex_header: \usepackage{scalerel}
+#+latex_header: \usepackage{stmaryrd}
+
+*** Theorem styles                                                 :ignore:
+#+latex_header: \theoremstyle{plain}
+#+latex_header: \newtheorem{theorem}{Theorem}
+#+latex_header: \newtheorem{proposition}{Proposition}
+#+latex_header: \newtheorem{lemma}{Lemma}
+#+latex_header: \newtheorem{corollary}{Corollary}
+#+latex_header: \theoremstyle{definition}
+#+latex_header: \newtheorem{definition}{Definition}
+#+latex_header: \newtheorem{proofs}{Proof}
+#+latex_header: \theoremstyle{remark}
+#+latex_header: \newtheorem{remark}{Remark}
+#+latex_header: \newtheorem{exampleth}{Example}
+#+latex_header: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
+
+*** Math symbols and Unicode support                               :ignore:
+#+latex_header: \usepackage{amssymb}
+#+latex_header: \usepackage{bbm}
+#+latex_header: \usepackage[greek,english]{babel}
+#+latex_header: \DeclareUnicodeCharacter{22A5}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\bot}}}}
+#+latex_header: \DeclareUnicodeCharacter{22A4}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\top}}}}
+#+latex_header: \DeclareUnicodeCharacter{2192}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\to}}}}
+#+latex_header: \DeclareUnicodeCharacter{2200}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\forall}}}}
+#+latex_header: \DeclareUnicodeCharacter{21D2}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\Rightarrow}}}}
+#+latex_header: \DeclareUnicodeCharacter{2115}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\mathbb{N}}}}}
+#+latex_header: \DeclareUnicodeCharacter{2217}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\ast}}}}
+#+latex_header: \DeclareUnicodeCharacter{2218}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\circ}}}}
+#+latex_header: \DeclareUnicodeCharacter{2208}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\in}}}}
+#+latex_header: \DeclareUnicodeCharacter{2209}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\notin}}}}
+#+latex_header: % \mathchardef\mhyphen="2D % define a math hyphen
+
+#+latex_header: \newcommand{\impl}{\Rightarrow} % Implication
+#+latex_header: \DeclarePairedDelimiter\pair{\langle}{\rangle} % Pair notation
+#+latex_header: \DeclarePairedDelimiter\intr{\llbracket}{\rrbracket} % Interpretation brackets
+#+latex_header: % \DeclarePairedDelimiter\intl{\llbracket}{\rrbracket} % Internal language brackets
+
+*** Categories                                                     :ignore:
+#+latex_header: \newcommand\hom{\mathrm{hom}}
+#+latex_header: \newcommand\id{\mathrm{id}}
+#+latex_header: \newcommand\Id{\mathrm{Id}}
+#+latex_header: \newcommand\todot{\xrightarrow{.}}
+#+latex_header: \newcommand\toddot{\xrightarrow{..}}
+#+latex_header: \newcommand\Set{\mathsf{Set}}
+#+latex_header: \newcommand\Cats{\mathsf{Cat}}
+#+latex_header: \newcommand\Sets{\mathsf{Set}}
+#+latex_header: \newcommand\sSets{\mathsf{sSets}}
+#+latex_header: \newcommand\Nat{\operatorname{Nat}}
+#+latex_header: \newcommand\Limit{\varprojlim}
+#+latex_header: \newcommand\Colimit{\varinjlim}
+
 #+latex_header: \newcommand\Mod{\mathrm{Mod}}
 #+latex_header: \newcommand\Top{\mathsf{Top}}
-#+latex_header: \newcommand\lThr{\lambda\mathsf{Thr}}}
-#+latex_header: \newcommand\Ccc{\mathsf{Ccc}}}
+#+latex_header: \newcommand\lThr{\lambda\mathsf{Thr}}
+#+latex_header: \newcommand\Ccc{\mathsf{Ccc}}
+
+# Corner quotes from:
+# http://www.logicmatters.net/latex-for-logicians/symbols/corner-quotes-for-godel-numbers/
+#+latex_header: \newbox\gnBoxA\newdimen\gnCornerHgt\setbox\gnBoxA=\hbox{$\ulcorner$}
+#+latex_header: \global\gnCornerHgt=\ht\gnBoxA\newdimen\gnArgHgt\def\intl #1{%
+#+latex_header: \setbox\gnBoxA=\hbox{$#1$}%
+#+latex_header: \gnArgHgt=\ht\gnBoxA%
+#+latex_header: \ifnum \gnArgHgt<\gnCornerHgt \gnArgHgt=0pt%
+#+latex_header: \else \advance \gnArgHgt by -\gnCornerHgt\fi \raise\gnArgHgt\hbox{$\ulcorner$} \box\gnBoxA %
+#+latex_header: \raise\gnArgHgt\hbox{$\urcorner$}}
+
+#+latex_header: \colorlet{myred}{red!75!black}
+#+latex_header: \colorlet{myblue}{cyan!90!black}
+#+latex_header: \newcommand{\red}[1]{\color{myred}{#1}}
+#+latex_header: \newcommand{\blue}[1]{\color{myblue}{#1}}
+
+*** Topos                                                          :ignore:
+#+latex_header: \newcommand\Sub{\operatorname{Sub}}
+#+latex_header: \newcommand\FinSet{\mathsf{FinSet}}
+
+*** Type systems                                                   :ignore:
+#+latex_header: \newcommand{\ctypes}[1]{\color{blue!90!black}{#1}}
+#+latex_header: \newcommand{\cterms}[1]{\color{red!75!black}{\texttt{#1}}}
+#+latex_header: \newcommand{\lcred}{red!90!black}
+#+latex_header: \newcommand{\stlc}{\lambda_{\to}}
+#+latex_header: \newcommand{\systemf}{\lambda{2}}
+#+latex_header: \newcommand{\systemfo}{\lambda\omega}
+#+latex_header: \newcommand{\systemlp}{\lambda\Pi}
+#+latex_header: \newcommand{\systemfp}{\lambda{\Pi}2}
+#+latex_header: \newcommand{\systemlpo}{\lambda\Pi\underline{\omega}}
+#+latex_header: \newcommand{\systemo}{\lambda\underline{\omega}}
+#+latex_header: \newcommand{\systemcoc}{\lambda\Pi\omega}
+#+latex_header: \newcommand{\lcubett}[1]{\color{cyan!70}{\text{\scriptsize{#1}}}}
+
+*** Lambda calculus                                                :ignore:
+#+latex_header: \newcommand\skiabs{\mathfrak{H}} % SKI abstraction
+#+latex_header: \newcommand\lambdatrans{\mathfrak{L}} % Lambda transformation
+#+latex_header: \newcommand\tto{\twoheadrightarrow} % Reduction
+#+latex_header: \newcommand\redu{\mathtt{RED}} % Reducibility
+#+latex_header: \newcommand\fst{\mathtt{fst}} % first
+#+latex_header: \newcommand\snd{\mathtt{snd}} % second
+#+latex_header: \DeclareMathOperator{\freevars}{FV} % Free variables
+
+*** Type theory                                                    :ignore:
+#+latex_header: \newcommand{\wtype}{\mathop{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\huge{\textsf{W}}}}}{\vcenter{\hbox{\Large\textsf{W}}}}{\textsf{W}}{\textsf{W}}}\displaylimits}
+#+latex_header: \newcommand{\wt}{\textsf{W}}
+#+latex_header: \newcommand{\proj}{\mathtt{pr}}
+#+latex_header: \newcommand\refl{\mathtt{refl}}
 
 ** Abstract
 :PROPERTIES:
@@ -37,9 +144,7 @@ This is the abstract.
 # There is no claim of originality (?)
 
 ** Acknowlegments                                                 :noexport:
-# David Charte and Ignacio Cordón, testing the first versions of
-# Mikrokosmos.
-
+# David Charte and Ignacio Cordón, testing the first versions of Mikrokosmos.
 # Alejandro García, Adrián Ranea and David Charte, template usage.
 
 This document has been written with Emacs26 and org-mode 9, using the
@@ -7200,12 +7305,15 @@ infima and arbitrary suprema.
 # introduction to topos theory
 
 ** Cartesian closed categories and lambda calculus
+# http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
+# http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
+
 *** Lawvere theories
 #+ATTR_LATEX: :options [Lawvere algebraic theory]
 #+BEGIN_definition
 An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
-whose objects form a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$
-for any $m,n$.
+whose objects form a sequence $A^0,A^1,A^2, \dots$ such that $A^m \times A^n = A^{m+n}$
+for any $m, n$.
 #+END_definition
 # From this definition, it follows that $A^0$ must be the terminal object.
 
@@ -7749,10 +7857,28 @@ contexts:
 # * there is no countinuous surjection from $\mathbb{R}$ to the Banach space ${\cal C}(\mathbb{R},\mathbb{R})$,
 #   as the function $(\lambda x, x+1) \colon \mathbb{R} \to \mathbb{R}$ has no fixed point;
 
-*** Bicartesian closed categories                                  :ignore:
+*** Bicartesian closed categories
 # https://ncatlab.org/nlab/show/bicartesian+closed+category
 # https://ncatlab.org/nlab/show/cocartesian+closed+category
 # Theorem. Any cocartesian closed category is equivalent to the terminal category.
+
+#+ATTR_LATEX: :options [Bicartesian closed category]
+#+BEGIN_definition
+A *bicartesian closed category* is a cartesian closed category in which
+the terminal and diagonal functors have left adjoints.
+#+END_definition
+
+These adjoints are given by initial and coproduct objects, written as
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] \ast \rar{}\& \ast \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] 0 \rar{!}\& C \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] A,B \rar{f,g}\& C,C \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] A + B \rar{f + g}\& C \end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
 
 ** Heyting algebras
 # Tarski-Stone representation theorem
