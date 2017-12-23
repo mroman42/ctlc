@@ -5,4 +5,3 @@
 
 #+latex_header_extra: \input{setup}
 #+latex_header_extra: \input{classicthesis-config}
-#+latex_header: \input{macros}
