@@ -25,6 +25,8 @@
 ** Macros                                                           :ignore:
 #+latex_header: \newcommand\Mod{\mathrm{Mod}}
 #+latex_header: \newcommand\Top{\mathsf{Top}}
+#+latex_header: \newcommand\lThr{\lambda\mathsf{Thr}}}
+#+latex_header: \newcommand\Ccc{\mathsf{Ccc}}}
 
 ** Abstract
 :PROPERTIES:
@@ -6814,6 +6816,7 @@ complex.
 *** TODO Higher-order categories and homotopy
 # From chapter 2 of HoTT
 *** TODO Weak \infty-groupoids
+
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
@@ -7200,9 +7203,9 @@ infima and arbitrary suprema.
 *** Lawvere theories
 #+ATTR_LATEX: :options [Lawvere algebraic theory]
 #+BEGIN_definition
-An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products whose objects
-forming a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$ for
-any $m,n$.
+An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
+whose objects form a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$
+for any $m,n$.
 #+END_definition
 # From this definition, it follows that $A^0$ must be the terminal object.
 
@@ -7221,7 +7224,7 @@ e \cdot x = x,
 \]
 for any free variables $x,y,z$. The problem with this notion of algebraic theory
 is that it is not independent from its representation: there may be multiple
-formulations fo the same theory, with different but equivalent axioms. For
+formulations for the same theory, with different but equivalent axioms. For
 example, cite:mccune91 discusses many single-equation axiomatizations of groups,
 such as
 \[
@@ -7248,7 +7251,7 @@ and $(x_1\dots x_m \vdash\pair{u_1,\dots,u_n}) \colon A^m \to A^n$, composition 
 $(x_1\dots x_k\vdash \pair{s_1,\dots,s_n})$, where $s_i = u_i[t_1,\dots,t_m / x_1,\dots,x_m]$. Two
 morphisms are considered equal, $(x_1\dots x_n \vdash \pair{t_1,\dots,t_k}) = (x_1\dots x_n \vdash \pair{t'_1,\dots,t'_k})$
 if componentwise equality of terms $t_i = t'_i$ follows from the axioms of the theory.
-The identity is the morphism $(x_1\dots x_n \vdash \pair{x_1,\dots, x_n})$. The kth-projection from $A^n$ is the
+Identity is the morphism $(x_1\dots x_n \vdash \pair{x_1,\dots, x_n})$. The kth-projection from $A^n$ is the
 term $(x_1\dots x_n \vdash x_k)$, and it is easy to check that these projections make it the n-fold
 product of $A$.
 
@@ -7287,7 +7290,7 @@ with the above signature for which the axioms hold; for instance,
    a *Hopf algebra*.
    # The last one by Eckmann-Hilton.
 
-The category of models $\Mod_{\Set}(\mathbb{A})$ is the usual category of groups; note that the natural
+The category of models $\Mod_{\Set}(\mathbb{A})$ is the usual category of groups, $\mathsf{Grp}$; note that the natural
 transformations are precisely the group homomorphisms, as they have to preserve the unit,
 product and inverse of the group in order to be natural.
 #+END_exampleth
@@ -7300,7 +7303,7 @@ product and inverse of the group in order to be natural.
 \\
 
 **** Completeness of algebraic theories                           :ignore:
-By construction we know that if an equation can be proved from the
+By construction we know that, if an equation can be proved from the
 axioms, it will be valid in all models (our semantics are /sound/); but
 we will also like to prove that, if every model of the theory
 satisfies a particular equation, it can actually be proved from the
@@ -7441,6 +7444,10 @@ the adjunction by Proposition [[prop-characterize-adjunctions]].
 # Example 2.2.10 from Bauer, Awodey
 # This is Proposition I.6.1 in "Sheaves in geometry and logic." https://mathoverflow.net/questions/10406/general-construction-for-internal-hom-in-a-presheaf-category
 
+**** Category of cartesian-closed categories                      :ignore:
+In general, cartesian-closed categories with functors
+preserving products and exponentials form a category called $\mathsf{Ccc}$.
+
 *** Simply-typed \lambda-theories
 If we read $\Gamma \vdash a : A$ as a morphism from the context $\Gamma$ to the output
 type $A$, the rules of simply-typed lambda calculus with product and
@@ -7459,7 +7466,7 @@ unit types match the adjoints that determine a cartesian closed category
 # where the projections are what we called $\fst$ and $\snd$, and
 # evaluation is function application
 
-**** Lambda theories :ignore:
+**** Lambda theories                                              :ignore:
 A *\lambda-theory* $\mathbb{T}$ is the analog of a Lawvere theory for cartesian
 closed categories. It is given by a set of basic types and constants
 over the simply-typed lambda calculus and a set of equality axioms,
@@ -7467,7 +7474,7 @@ determining a *definitional equality* $\equiv$, an equivalence relation
 preserving the structure of the simply-typed lambda calculus;
 that is
 \begin{center}\begin{array}{ll}
-t \equiv \ast, & \mbox{ for each } t : 1; \\
+t \equiv {\ast}, & \mbox{ for each } t : 1; \\
 \pair{a,b} \equiv \pair{a',b'}, & \mbox{ for each } a \equiv a',\ b \equiv b' \\
 \fst\pair{a,b} \equiv a,\ \snd\pair{a,b}\equiv b, & \mbox{ for each } a : A, b : B; \\
 \fst\ m \equiv \fst\ m',\ \snd\ m \equiv \snd\ m', & \mbox{ for each } m \equiv m'; \\
