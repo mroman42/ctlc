@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Base</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Option">--without-K</a> <a id="25" class="Symbol">#-}</a>
+
+<a id="30" class="Keyword">module</a> <a id="37" href="Base.html" class="Module">Base</a> <a id="42" class="Keyword">where</a>
+
+  <a id="51" class="Keyword">open</a> <a id="56" class="Keyword">import</a> <a id="63" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>
+  
+  <a id="83" class="Keyword">module</a> <a id="Universes" href="Base.html#Universes" class="Module">Universes</a> <a id="100" class="Keyword">where</a>
+    <a id="110" class="Comment">-- Our Universe hierarchy. It is implemented over the primitive</a>
+    <a id="178" class="Comment">-- Agda universe hierarchy but it uses Type instead of Set, the</a>
+    <a id="246" class="Comment">-- usual name for the Universe in Agda.  </a>
+    <a id="Universes.Type" href="Base.html#Universes.Type" class="Function">Type</a> <a id="297" class="Symbol">:</a> <a id="299" class="Symbol">(</a><a id="300" href="Base.html#300" class="Bound">i</a> <a id="302" class="Symbol">:</a> <a id="304" href="Agda.Primitive.html#Level" class="Postulate">Level</a><a id="309" class="Symbol">)</a> <a id="311" class="Symbol">→</a> <a id="313" class="PrimitiveType">Set</a> <a id="317" class="Symbol">(</a><a id="318" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="323" href="Base.html#300" class="Bound">i</a><a id="324" class="Symbol">)</a>
+    <a id="330" href="Base.html#Universes.Type" class="Function">Type</a> <a id="335" href="Base.html#335" class="Bound">i</a> <a id="337" class="Symbol">=</a> <a id="339" class="PrimitiveType">Set</a> <a id="343" href="Base.html#335" class="Bound">i</a>
+
+    <a id="350" class="Comment">-- First level of the universe hierarchy</a>
+    <a id="Universes.Type0" href="Base.html#Universes.Type0" class="Function">Type0</a> <a id="401" class="Symbol">:</a> <a id="403" href="Base.html#Universes.Type" class="Function">Type</a> <a id="408" class="Symbol">(</a><a id="409" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="414" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a><a id="419" class="Symbol">)</a>
+    <a id="425" href="Base.html#Universes.Type0" class="Function">Type0</a> <a id="431" class="Symbol">=</a> <a id="433" href="Base.html#Universes.Type" class="Function">Type</a> <a id="438" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a>
+
+  <a id="447" class="Keyword">open</a> <a id="452" href="Base.html#Universes" class="Module">Universes</a> <a id="462" class="Keyword">public</a>
+
+  <a id="472" class="Keyword">module</a> <a id="Basic" href="Base.html#Basic" class="Module">Basic</a> <a id="485" class="Keyword">where</a>
+    <a id="495" class="Comment">-- Agda allows datatype declarations and record types.</a>
+    <a id="554" class="Comment">-- A datatype without constructors is the empty type.</a>
+    <a id="612" class="Keyword">data</a> <a id="Basic.⊥" href="Base.html#Basic.%E2%8A%A5" class="Datatype">⊥</a> <a id="619" class="Symbol">:</a> <a id="621" href="Base.html#Universes.Type0" class="Function">Type0</a> <a id="627" class="Keyword">where</a>
+  
+    <a id="640" class="Comment">-- A record without constructors is the unit type.</a>
+    <a id="695" class="Keyword">record</a> <a id="Basic.⊤" href="Base.html#Basic.%E2%8A%A4" class="Record">⊤</a> <a id="704" class="Symbol">:</a> <a id="706" href="Base.html#Universes.Type0" class="Function">Type0</a> <a id="712" class="Keyword">where</a>
+      <a id="724" class="Keyword">constructor</a> <a id="Basic.⊤.★" href="Base.html#Basic.%E2%8A%A4.%E2%98%85" class="InductiveConstructor">★</a>
+
+    <a id="743" class="Comment">-- Sigma types are a particular case of records, but records can be</a>
+    <a id="815" class="Comment">-- constructed using only sigma types. Note that l ⊔ q is the maximum</a>
+    <a id="889" class="Comment">-- of two hierarchy levels l and q. This way, we define sigma types in</a>
+    <a id="964" class="Comment">-- full generality, at each universe.</a>
+    <a id="1006" class="Keyword">record</a> <a id="Basic.Σ" href="Base.html#Basic.%CE%A3" class="Record">Σ</a> <a id="1015" class="Symbol">{</a><a id="1016" href="Base.html#1016" class="Bound">i</a> <a id="1018" href="Base.html#1018" class="Bound">j</a><a id="1019" class="Symbol">}</a> <a id="1021" class="Symbol">(</a><a id="1022" href="Base.html#1022" class="Bound">S</a> <a id="1024" class="Symbol">:</a> <a id="1026" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1031" href="Base.html#1016" class="Bound">i</a><a id="1032" class="Symbol">)(</a><a id="1034" href="Base.html#1034" class="Bound">T</a> <a id="1036" class="Symbol">:</a> <a id="1038" href="Base.html#1022" class="Bound">S</a> <a id="1040" class="Symbol">→</a> <a id="1042" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1047" href="Base.html#1018" class="Bound">j</a><a id="1048" class="Symbol">)</a> <a id="1050" class="Symbol">:</a> <a id="1052" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1057" class="Symbol">(</a><a id="1058" href="Base.html#1016" class="Bound">i</a> <a id="1060" href="Agda.Primitive.html#_%E2%8A%94_" class="Primitive Operator">⊔</a> <a id="1062" href="Base.html#1018" class="Bound">j</a><a id="1063" class="Symbol">)</a> <a id="1065" class="Keyword">where</a>
+      <a id="1077" class="Keyword">constructor</a> <a id="Basic.Σ._,_" href="Base.html#Basic.%CE%A3._%2C_" class="InductiveConstructor Operator">_,_</a>
+      <a id="1099" class="Keyword">field</a>
+        <a id="Basic.Σ.fst" href="Base.html#Basic.%CE%A3.fst" class="Field">fst</a> <a id="1117" class="Symbol">:</a> <a id="1119" href="Base.html#1022" class="Bound">S</a>
+        <a id="Basic.Σ.snd" href="Base.html#Basic.%CE%A3.snd" class="Field">snd</a> <a id="1133" class="Symbol">:</a> <a id="1135" href="Base.html#1034" class="Bound">T</a> <a id="1137" href="Base.html#Basic.%CE%A3.fst" class="Field">fst</a>
+    <a id="1145" class="Keyword">open</a> <a id="1150" href="Base.html#%CE%A3" class="Module">Σ</a> <a id="1152" class="Keyword">public</a>
+  
+    <a id="1166" class="Comment">-- Product type as a particular case of the sigma</a>
+    <a id="Basic._×_" href="Base.html#Basic._%C3%97_" class="Function Operator">_×_</a> <a id="1224" class="Symbol">:</a> <a id="1226" class="Symbol">∀{</a><a id="1228" href="Base.html#1228" class="Bound">ℓᵢ</a> <a id="1231" href="Base.html#1231" class="Bound">ℓⱼ</a><a id="1233" class="Symbol">}</a> <a id="1235" class="Symbol">(</a><a id="1236" href="Base.html#1236" class="Bound">S</a> <a id="1238" class="Symbol">:</a> <a id="1240" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1245" href="Base.html#1228" class="Bound">ℓᵢ</a><a id="1247" class="Symbol">)</a> <a id="1249" class="Symbol">(</a><a id="1250" href="Base.html#1250" class="Bound">T</a> <a id="1252" class="Symbol">:</a> <a id="1254" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1259" href="Base.html#1231" class="Bound">ℓⱼ</a><a id="1261" class="Symbol">)</a> <a id="1263" class="Symbol">→</a> <a id="1265" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1270" class="Symbol">(</a><a id="1271" href="Base.html#1228" class="Bound">ℓᵢ</a> <a id="1274" href="Agda.Primitive.html#_%E2%8A%94_" class="Primitive Operator">⊔</a> <a id="1276" href="Base.html#1231" class="Bound">ℓⱼ</a><a id="1278" class="Symbol">)</a>
+    <a id="1284" href="Base.html#1284" class="Bound">A</a> <a id="1286" href="Base.html#Basic._%C3%97_" class="Function Operator">×</a> <a id="1288" href="Base.html#1288" class="Bound">B</a> <a id="1290" class="Symbol">=</a> <a id="1292" href="Base.html#Basic.%CE%A3" class="Record">Σ</a> <a id="1294" href="Base.html#1284" class="Bound">A</a> <a id="1296" class="Symbol">(λ</a> <a id="1299" href="Base.html#1299" class="Bound">_</a> <a id="1301" class="Symbol">→</a> <a id="1303" href="Base.html#1288" class="Bound">B</a><a id="1304" class="Symbol">)</a>
+
+    <a id="1311" class="Comment">-- Sum types as inductive types</a>
+    <a id="1347" class="Keyword">data</a> <a id="Basic._+_" href="Base.html#Basic._%2B_" class="Datatype Operator">_+_</a> <a id="1356" class="Symbol">{</a><a id="1357" href="Base.html#1357" class="Bound">ℓᵢ</a> <a id="1360" href="Base.html#1360" class="Bound">ℓⱼ</a><a id="1362" class="Symbol">}</a> <a id="1364" class="Symbol">(</a><a id="1365" href="Base.html#1365" class="Bound">S</a> <a id="1367" class="Symbol">:</a> <a id="1369" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1374" href="Base.html#1357" class="Bound">ℓᵢ</a><a id="1376" class="Symbol">)</a> <a id="1378" class="Symbol">(</a><a id="1379" href="Base.html#1379" class="Bound">T</a> <a id="1381" class="Symbol">:</a> <a id="1383" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1388" href="Base.html#1360" class="Bound">ℓⱼ</a><a id="1390" class="Symbol">)</a> <a id="1392" class="Symbol">:</a> <a id="1394" href="Base.html#Universes.Type" class="Function">Type</a> <a id="1399" class="Symbol">(</a><a id="1400" href="Base.html#1357" class="Bound">ℓᵢ</a> <a id="1403" href="Agda.Primitive.html#_%E2%8A%94_" class="Primitive Operator">⊔</a> <a id="1405" href="Base.html#1360" class="Bound">ℓⱼ</a><a id="1407" class="Symbol">)</a> <a id="1409" class="Keyword">where</a>
+      <a id="Basic._+_.inl" href="Base.html#Basic._%2B_.inl" class="InductiveConstructor">inl</a> <a id="1425" class="Symbol">:</a> <a id="1427" href="Base.html#1365" class="Bound">S</a> <a id="1429" class="Symbol">→</a> <a id="1431" href="Base.html#1365" class="Bound">S</a> <a id="1433" href="Base.html#Basic._%2B_" class="Datatype Operator">+</a> <a id="1435" href="Base.html#1379" class="Bound">T</a>
+      <a id="Basic._+_.inr" href="Base.html#Basic._%2B_.inr" class="InductiveConstructor">inr</a> <a id="1447" class="Symbol">:</a> <a id="1449" href="Base.html#1379" class="Bound">T</a> <a id="1451" class="Symbol">→</a> <a id="1453" href="Base.html#1365" class="Bound">S</a> <a id="1455" href="Base.html#Basic._%2B_" class="Datatype Operator">+</a> <a id="1457" href="Base.html#1379" class="Bound">T</a>
+
+    <a id="1464" class="Comment">-- Boolean type, two constants true and false</a>
+    <a id="1514" class="Keyword">data</a> <a id="Basic.Bool" href="Base.html#Basic.Bool" class="Datatype">Bool</a> <a id="1524" class="Symbol">:</a> <a id="1526" href="Base.html#Universes.Type0" class="Function">Type0</a> <a id="1532" class="Keyword">where</a>
+      <a id="Basic.Bool.true" href="Base.html#Basic.Bool.true" class="InductiveConstructor">true</a> <a id="1549" class="Symbol">:</a> <a id="1551" href="Base.html#Basic.Bool" class="Datatype">Bool</a>
+      <a id="Basic.Bool.false" href="Base.html#Basic.Bool.false" class="InductiveConstructor">false</a> <a id="1568" class="Symbol">:</a> <a id="1570" href="Base.html#Basic.Bool" class="Datatype">Bool</a>
+
+    <a id="1580" class="Comment">-- Natural numbers are the initial algebra for a constant and a</a>
+    <a id="1648" class="Comment">-- successor function. The BUILTIN declaration allows us to use</a>
+    <a id="1716" class="Comment">-- natural numbers in arabic notation.</a>
+    <a id="1759" class="Keyword">data</a> <a id="Basic.ℕ" href="Base.html#Basic.%E2%84%95" class="Datatype">ℕ</a> <a id="1766" class="Symbol">:</a> <a id="1768" href="Base.html#Universes.Type0" class="Function">Type0</a> <a id="1774" class="Keyword">where</a>
+      <a id="Basic.ℕ.zero" href="Base.html#Basic.%E2%84%95.zero" class="InductiveConstructor">zero</a> <a id="1791" class="Symbol">:</a> <a id="1793" href="Base.html#Basic.%E2%84%95" class="Datatype">ℕ</a>
+      <a id="Basic.ℕ.succ" href="Base.html#Basic.%E2%84%95.succ" class="InductiveConstructor">succ</a> <a id="1806" class="Symbol">:</a> <a id="1808" href="Base.html#Basic.%E2%84%95" class="Datatype">ℕ</a> <a id="1810" class="Symbol">→</a> <a id="1812" href="Base.html#Basic.%E2%84%95" class="Datatype">ℕ</a>
+    <a id="1818" class="Symbol">{-#</a> <a id="1822" class="Keyword">BUILTIN</a> NATURAL <a id="1838" href="Base.html#Basic.%E2%84%95" class="Datatype">ℕ</a> <a id="1840" class="Symbol">#-}</a>
+    
+  <a id="1851" class="Keyword">open</a> <a id="1856" href="Base.html#Basic" class="Module">Basic</a> <a id="1862" class="Keyword">public</a>
+</pre></body></html>
