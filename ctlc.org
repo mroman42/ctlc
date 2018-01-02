@@ -115,8 +115,7 @@
 #+latex_header: \newcommand\lThr{\lambda\mathsf{Thr}}
 #+latex_header: \newcommand\Ccc{\mathsf{Ccc}}
 
-# Corner quotes from:
-# http://www.logicmatters.net/latex-for-logicians/symbols/corner-quotes-for-godel-numbers/
+# Corner quotes from: http://www.logicmatters.net/latex-for-logicians/symbols/corner-quotes-for-godel-numbers/
 #+latex_header: \newbox\gnBoxA\newdimen\gnCornerHgt\setbox\gnBoxA=\hbox{$\ulcorner$}
 #+latex_header: \global\gnCornerHgt=\ht\gnBoxA\newdimen\gnArgHgt\def\intl #1{%
 #+latex_header: \setbox\gnBoxA=\hbox{$#1$}%
@@ -6962,377 +6961,8 @@ forcing techniques with allowed to construct new models of ZFC.
 * Categorical logic
 # [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
-** OLD Lawvere theories [Old]                                     :noexport:
-This section follows cite:bauer17.
-
-*** Motivation for algebraic theories
-We will develop an unified approach to the study of algebraic
-structures based on constants, operations and equations; such as
-groups, modules or rings.
-
-**** First definition of algebraic theory                         :ignore:
-Our *algebraic theories* are usually given by
-
-  * a /signature/, a family of sets $\left\{ \Sigma_k \right\}_{k \in \mathbb{N}}$ whose elements are called
-    /k-ary operations/. The /terms/ of a signature are defined inductively,
-    being variables or k-ary operations applied to k-tuples of terms;
-
-  * and a set of /axioms/, which are equations between terms.
-
-**** Examples: theory of groups, theory of fields                 :ignore:
-For example, the theory of groups is given by a signature containing
-
- * a /binary operation/ called $\cdot$,
- * a /unary operation/ written as $^{-1}$, and
- * a /nullary operation/ or a /constant/ called $e$.
-
-Satisfiying the following axioms
-
- * $(x \cdot y) \cdot z = x \cdot (y \cdot z)$,
-
- * $x \cdot e = x$,
-
- * $e \cdot x = x$,
-
- * $x \cdot x^{-1} = e$, and
-
- * $x^{-1} \cdot x = e$.
-
-Note how quantifiers are not needed here, as we are interpreting
-each $x,y,z$ as free variables and the universal quantification is
-therefore implicit.
-Theories in which the operations are not defined for every possible
-term, cannot be expressed in this way. Fields, in which the inverse of
-$0$ is not defined, are not expressable in this form; this fact will
-be proved formally in Example [[example-fieldsarenotalgebraic]].
-
-\\
-
-**** Interpretations of algebraic theories                        :ignore:
-A theory can be *interpreted* on a suitable category ${\cal C}$ as
-
-  * an object of the category, $A \in {\cal C}$;
-  * with morphisms $If \colon A^k \to A$ for every k-ary operation $f$.
-
-Any interpretation of the theory induces an interpretation for every
-term on a context. That is, a term $t$ can be given in the
-variable context $x_1,\dots,x_n$ if all variables that
-appear in $t$ appear in $x_1,\dots,x_n$. We write that as
-\[
-x_1,x_2,\dots,x_n \mid t;
-\]
-and the *interpretation of the term* $x_1,\dots,x_n \mid t$ *on that context* is a morphism
-$I(x_1,\dots,x_n \mid t) \colon A^n \to A}$ defined inductively knowing that
-
-  * the interpretation of the i-th variable is the i-th
-    projection
-    \[I(x_1,\dots,x_n \mid x_i) = \pi_i : A^n \to A,\]
-
-  * the interpretation of an operation over a term is the
-    interpretation of the morphism componsed with the componentwise
-    interpretation of subterms
-    \[
-    I(f \pair{t_1,\dots,t_k}) =
-    If \circ \pair{It_1,\dots,It_k}
-    \colon A^n \to A.
-    \]
-    where we implicitely assume the context to be $x_1,\dots,x_n$.
-
-The interpretation of a particular variable depends therefore on the
-context. We say that an interpretation *satisfies* an equation $\Gamma \mid u=v$
-in a particular given context if the interpretation of both terms of
-the equation is the same on that context, $I(\Gamma \mid u) = I(\Gamma \mid v)$.
-
-We usually would like to find interpretations where all the axioms of the
-theory were satisfied. These are called *models of the algebraic theory*.
-
-***** TODO [#C] Example, groups                                  :ignore:
-# Maybe this example could be written once we have developed
-# the categorical definition.
-
-# For instance, the term $(x \cdot y) \cdot z$ in our previously discussed theory of
-# groups would be intepreted in a category with finite products and
-# a terminal object $1$ as the morphism
-# \[\begin{tikzcd}
-# A \cong A \times 1 \rar{\pair{\id,!}} & A \times A \rar & A
-# \end{tikzcd}\]
-# and the axiom $(x \cdot y) \cdot z = x \cdot (y \cdot z)$ would be represented by the following commutative
-# square:
-**** Notion of representation-free theories                       :ignore:
-The problem with this notion of algebraic theory is that it is not
-representation-free; it is not independent of the choice of constants,
-operations or axioms. There may be multiple formulations of the same
-theory, with different but equivalent axioms. For instance,
-cite:mccune91 discusses many single-equation axiomatizations of groups, 
-such as
-\[
-x\ /\
-\big(((x/x)/y)/z)\ /\ ((x/x)/x)/z\big)
-= y
-\]
-
-with the binary operation $/$, related to the usual multiplication as $x / y = x \cdot y^{-1}$.
-
-Our solution to this problem will be to capture all the algebraic
-information of a theory -- all operations, constants and axioms --
-into a category. Differently presented but equivalent theories will
-give rise to the same category. This category will have /contexts/
-$[x_1,\dots,x_n]$ as objects. A morphism from $[x_1,\dots,x_n]$ to
-$[x_1,\dots,x_m]$ will be a tuple of terms
-\[ 
-\pair{t_1,\dots,t_k}
-\colon [x_1,\dots,x_n] \to [x_1,\dots,x_m]
-\]
-such that every $t_k$ is given in the context $[x_1,\dots,x_n]$. 
-Composition is defined componentwise as substitution of the terms of the 
-first morphism into the variables of the second one, that is,
-\[
-\pair{s_1,\dots,s_n} = \pair{u_1,\dots,u_n} \circ \pair{t_1,\dots,t_m},
-\]
-where
-\[ 
-s_i = u_i[t_1,\dots,t_m / x_1,\dots,x_m].
-\]
-
-Two morphisms in this category $\pair{t_1,\dots,t_n}$ and $\pair{s_1,\dots,s_n}$ are equal if the axioms of
-the theory imply the componentwise equality of its terms, that is, $t_i = s_i$.
-
-This interpretation will lead us to our definition of *algebraic*
-*theory* as a category with finite products.
-
-Every model $M$ in the previous sense could be seen as a functor from
-this category to a given category ${\cal C}$ preserving finite products. Once the
-image of $M[x_1] = A$ is chosen, the functor is determined on objects by
-\[
-M[x_1,\dots,x_n] = A^{k}
-\]
-and once it is defined for the basic operations, it is inductively determined
-on morphisms as
-
-  * $M\pair{x_i} = \pi_i \colon A^k \to A$, for any morphism $\pair{x_i}$;
-  * $M\pair{t_1,\dots,t_m} = \pair{Mt_1,\dots,Mt_m} \colon A^m \to A$, the 
-    componentwise interpretation of subterms;
-  * $M\pair{f\pair{t_1,\dots,t_m}} = Mf \circ \pair{Mt_1,\dots,Mt_{m}} \colon (M\mathbb{A})^m\to M\mathbb{A}$.
-
-The fact that $M$ is a well-defined functor follows from the
-assumption that it is a model.
-
-*** Algebraic theories as categories
-**** Algebraic theory                                             :ignore:
-#+ATTR_LATEX: :options [Lawvere algebraic theory]
-#+BEGIN_definition
-An *algebraic theory* is a category $\mathbb{A}$ with finite products and objects
-forming a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$ for
-any $m,n$.
-#+END_definition
-
-From this definition, it follows that $A^0$ must be the terminal object.
-
-**** Models as functors                                           :ignore:
-#+ATTR_LATEX: :options [Model]
-#+BEGIN_definition
-A *model* of an algebraic theory $\mathbb{A}$ in a category ${\cal C}$ is a functor
-$M \colon \mathbb{A} \to {\cal C}$ preserving all finite products.
-#+END_definition
-
-#+ATTR_LATEX: :options [Category of models of a theory]
-#+BEGIN_definition
-The *category of models* $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$ is the full subcategory of functor
-category ${\cal C}^{\mathbb{A}}$ given by the functors preserving all finite products.
-Morphisms between models of a theory in a category are natural transformations.
-#+END_definition
-
-#+ATTR_LATEX: :options [Algebraic category]
-#+BEGIN_definition
-An *algebraic category* is category equivalent to a category of the form $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$,
-where $\mathbb{A}$ is an algebraic theory.
-#+END_definition
-
-**** TODO Example: groups                                         :ignore:
-#+ATTR_LATEX: :options [Theory of groups]
-#+BEGIN_exampleth
-# Groups as algebraic theory
-# Category of groups as category of models in Set
-# Abelian groups as models in the category Grp
-#+END_exampleth
-
-# Antipode in Hopf algebras
-# https://www.youtube.com/watch?v=p3kkm5dYH-w
-
-**** Example: fields                                              :ignore:
-#+ATTR_LATEX: :options [Fields have no algebraic theory]
-#+BEGIN_exampleth
-<<example-fieldsarenotalgebraic>>
-The category $\mathtt{Fields}$ is not an algebraic category.
-Any algebraic category $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$ has a terminal object given by the
-constant functor $\Delta_1 : \mathbb{A} \to {\cal C}$ to $1$, the terminal object of ${\cal C}$. Note that
-${\cal C}$ must have a terminal object for a model to it to exist, as
-models must preserve all finite products. We know that $\Delta_1$ is a
-terminal object because, in general, it is the terminal object of the
-category of functors ${\cal C}^{\mathbb{A}}$.
-However, $\mathtt{Fields}$ has no terminal object.
-#+END_exampleth
-
-**** TODO More examples
-*** Completeness for algebraic theories
-When defining interpretation of algebraic theories as categories we
-should ensure the property of */semantic completeness/*. We already
-know that, if an equation can be proved from the axioms, it will be
-valid in all models; but we will also like to prove that, if every
-model of the theory satisfies a particular equation, it can actually
-be proved from the axioms of the theory.
-
-#+ATTR_LATEX: :options [Completeness for algebraic theories]
-#+BEGIN_theorem
-Given $\mathbb{A}$ an algebraic theory, there exists a category ${\cal A}$ with
-a model $U \in \mathtt{Mod}_{{\cal A}}(\mathbb{A})$ such that, for every terms $u,v$,
-\[
-U \text{ satisfies } u = v 
-\iff
-\mathbb{A} \text{ proves } u = v.
-\] 
-This is called the *universal model* for $\mathbb{A}$. This theorem
-asserts that categorical semantics of algebraic theories are complete.
-#+END_theorem
-#+BEGIN_proof
-Simply taking $\mathbb{A}$ with the identity functor, we have an universal
-model for $\mathbb{A}$.
-#+END_proof
-
-Note that this universal model needs not to be set-theoretic; but,
-even in this situation, we can always find a universal model in a
-presheaf category via the Yoneda embedding.
-
-#+ATTR_LATEX: :options [Yoneda embedding as a universal model]
-#+BEGIN_proposition
-The Yoneda embedding $y \colon \mathbb{A} \to \widehat{\mathbb{A}}$ is a universal model for $\mathbb{A}$.
-#+END_proposition
-#+BEGIN_proof
-It preserves finite products because it preserves all limits, hence
-it is a model. As it is a faithful functor, we know that any equation
-proved in the model is an eqation proved by the theory.
-#+END_proof
-
-*** TODO Examples
-**** Monoids on the category of endofunctors
-
-** OLD Cartesian closed categories [Old]                          :noexport:
-# Definition of cartesian closed by adjoints
-
-*** Exponential
-# Exponential as adjoint
-
-#+ATTR_LATEX: :options [Exponential]
-#+BEGIN_definition
-An *exponential* of $A$ and $B$ in a category with binary products is an
-object $B^A$ with a morphism $e : B^A \times A \to B$ called /evaluation morphism/,
-such that, for any $f : C \times A \to B$ exists a unique $\widetilde{f} : C \to B^A$ such that
-the following diagram commutes
-\[\begin{tikzcd}
-B^A & B^A \times A \drar{e} & \\
-C \uar[dashed]{\exists! \widetilde f}  & C \times A \rar[swap]{f}\uar{\widetilde f \times id} & B 
-\end{tikzcd}\]
-#+END_definition
-
-An object $A$ for which the exponentiation $-^A$ is always defined is called
-*exponentiable*.
-
-#+ATTR_LATEX: :options [Exponentials as adjoints]
-#+BEGIN_proposition
-<<prop-exponentialadjoints>>
-An object $A$ in a category with binary products ${\cal C}$ is exponentiable if and only if
-the functor $(- \times A) : {\cal C} \to {\cal C}$ has a right adjoint.
-#+END_proposition
-#+BEGIN_proof
-# TODO
-# Given by the counit
-#+END_proof
-
-*** Cartesian category
-#+ATTR_LATEX: :options [Cartesian category]
-#+BEGIN_definition
-A *cartesian category* is a category with all finite products.
-#+END_definition
-#+ATTR_LATEX: :options [Cartesian closed category]
-#+BEGIN_definition
-A *cartesian closed category* is a category with all finite products
-and exponentials.
-#+END_definition
-
-The definition of cartesian closed category can be written in terms of
-existence of adjoints.
-
-**** Cartesian closed categories by adjoints                      :ignore:
-#+ATTR_LATEX: :options [Cartesian closed categories and adjoints]
-#+BEGIN_proposition
-Any category ${\cal C}$ is cartesian closed if and only if there exist
-right adjoints for the following functors
-
-  * $! \colon {\cal C} \to 1$, the unique functor to the terminal category;
-  * $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, the diagonal functor;
-  * $(- \times A) \colon {\cal C} \to {\cal C}$, the product functor, for each $A \in {\cal C}$.
-#+END_proposition
-#+BEGIN_proof
-# TODO
-We know that the product functor of an object has a right adjoint if and
-only if the object is exponentiable, as we saw in Proposition [[prop-exponentialadjoints]].
-#+END_proof
-
-***** TODO Adjoint diagrams                                      :ignore:
-Knowing that $!x = \ast$ and $\Delta(x) = (x,x)$, we write these conditions
-as
-
-\begin{prooftree}
-\AX$\ast\ \fCenter\to \ast$
-\doubleLine
-\UI$x\ \fCenter\to \top$
-\AX$(x,x)\ \fCenter\to (y,z)$
-\doubleLine
-\UI$x\ \fCenter\to y \times z$
-\AX$x \times a\ \fCenter\to y$
-\doubleLine
-\UI$x\ \fCenter\to y^a$
-\noLine
-\TIC{}
-\end{prooftree}
-
-**** Category of cartesian closed categories                      :ignore:
-#+ATTR_LATEX: :options [Category of small cartesian closed categories]
-#+BEGIN_definition
-We call $\mathtt{Ccc}$ to the category of (small) cartesian closed
-categories with functors preserving finite products and
-exponentials as morphisms. These functors are called
-*cartesian closed functors*.
-#+END_definition
-
-*** Frames and locales
-#+ATTR_LATEX: :options [Completeness for posets]
-#+BEGIN_proposition
-Complete posets are cocomplete. Cocomplete posets are complete.
-#+END_proposition
-#+BEGIN_proof
-# TODO
-#+END_proof
-
-#+ATTR_LATEX: :options [Frames]
-#+BEGIN_definition
-*Frames* are complete cartesian closed posets.
-#+END_definition
-
-# TODO: Equivalently A frame is a poset with distributive law.
-
-#+ATTR_LATEX: :options [Frame morphism]
-#+BEGIN_definition
-A *frame morphism* is a function between frames preserving finite
-infima and arbitrary suprema.
-#+END_definition
-
-# TODO: Locales
-
-# TODO: Locales as non-pointed topological spaces, from An informal
-# introduction to topos theory
-
-** Cartesian closed categories and lambda calculus
+** TODO Presheaves
+** Cartesian closed categories and lambda calc2ulus
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
@@ -7543,7 +7173,7 @@ B^A
 \end{prooftree}
 
 **** Presheaves and sets are cartesian closed                     :ignore:
-#+ATTR_LATEX: :options [Preseaf categories are cartesian closed]
+#+ATTR_LATEX: :options [Presheaf categories are cartesian closed]
 #+BEGIN_exampleth
 $\Set$ is cartesian closed, with exponentials given by function sets. In
 general, any presheaf category $\Set^{{\cal C}^{op}}$ from a small ${\cal C}$ is cartesian closed.
@@ -7723,7 +7353,7 @@ $(d[ \fst\ p /z] (\snd\ p)) \equiv q$ then
 \]
 
 Given a translation $\tau \colon \mathbb{T} \to \mathbb{U}$, we define a functor ${\cal S}(\tau) \colon {\cal S}(\mathbb{T}) \to {\cal S}(\mathbb{U})$
-mapping the object $A \in {\cal S}(\mathbb{T)$ to $\tau A \in {\cal S}(\mathbb{U})$ and any morphism $\vdash b : B$ to
+mapping the object $A \in {\cal S}(\mathbb{T})$ to $\tau A \in {\cal S}(\mathbb{U})$ and any morphism $\vdash b : B$ to
 $\vdash \tau b : \tau B$. The complete structure of the functor is then determined because
 it must preserve products and exponentials.
 #+END_proof
@@ -7830,6 +7460,8 @@ seen as a morphism from the terminal object $1 \to A$.
 
 **** Diagonal arguments                                           :ignore:
 # https://golem.ph.utexas.edu/category/2006/12/classical_vs_quantum_computati_8.html
+# http://tac.mta.ca/tac/reprints/articles/15/tr15abs.html
+# http://math.andrej.com/2007/04/08/on-a-proof-of-cantors-theorem/
 
 # Cantor's theorem
 # Russell's paradox
@@ -7907,8 +7539,27 @@ These adjoints are given by initial and coproduct objects, written as
 \noLine
 \BIC{}
 \end{prooftree}
+The rules of union and void types in simply-typed lambda calculus can
+be rewritten to match the structure of these adjoints
+\begin{prooftree}
+\AXC{$$}
+\UIC{$\Gamma, z:0 \vdash \mathrm{abort} : C$}
+\AXC{$\Gamma, a:A \vdash c : C$}
+\AXC{$\Gamma, b:B \vdash c' : C$}
+\BIC{$\Gamma, u : A+B \vdash \mathrm{case}\ u\ \mathrm{of}\ c;c'$}
+\noLine
+\BIC{}
+\end{prooftree}
+In a similar way to how our previous fragment of simply-typed lambda
+calculus was the internal language of cartesian closed categories, this
+extended version is the internal language of bicartesian closed categories.
 
-** Heyting algebras
+# Heyting algebras are bicartesian closed categories. This explains
+# the Curry-Howard correspondence we saw earlier.
+
+# Heyting algebras as bicartesian closed posets
+
+** OLD Heyting algebras
 # Tarski-Stone representation theorem
 In this section, we develop the notion of a *Heyting algebra* and show
 its differences with a Boolean algebra.
@@ -8247,344 +7898,6 @@ Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\as
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
 
-** OLD Simply-typed \lambda-theories
-*** Simply-typed \lambda-theories
-We will consider again the previously defined simply typed
-\lambda-calculus, but this time, as a theory instead of as a
-programming language. Recall that a /context/ was a sequence
-of typed variables $x_1,x_2,\dots,x_n$, of the form
-\[
-\Gamma = x_1:A_1, \dots, x_n:A_n.
-\]
-And any /typing judgment/ was of the form $\Gamma \vdash a : A$. This time,
-the theory will also introduce equations of the form $\Gamma \vdash a = b : A$
-as judgments.
-
-In particular, we will work only with a fragment of system that we
-defined in "[[*Extending the simply typed \lambda-calculus][Extending the simply typed \lambda-calculus]]", namely, the
-fragment containing only arrow types, an unit type and product
-types. 
-
-\\
-
-**** Equality in simply-typed \lambda-theories                    :ignore:
-Equality must now be defined over these typed terms. We have the
-following set of rules for it, clearly inspired by the usual properties
-of equivalence relations, \beta-reductions and \eta-reductions.
-
- 1) Any set of assumptions can be weakened
-    \begin{prooftree}
-    \RightLabel{\textsc{weak}}
-    \AXC{$\Gamma \vdash u = v : A$}
-    \UIC{$\Gamma, w:B \vdash u = v : A$}
-    \end{prooftree}
-
- 2) Equality is an equivalence relation
-    \begin{prooftree}
-    \RightLabel{\textsc{refl}}
-    \AXC{$$}
-    \UIC{$\Gamma \vdash u = u : A$}
-    \RightLabel{\textsc{symm}}
-    \AXC{$\Gamma \vdash u = v : A$}
-    \UIC{$\Gamma \vdash v = u : A$}
-    \RightLabel{\textsc{trans}}
-    \AXC{$\Gamma \vdash u = v : A$}
-    \AXC{$\Gamma \vdash v = w : A$}
-    \BIC{$\Gamma \vdash u = w : A$}
-    \noLine
-    \TIC{$$}
-    \end{prooftree}
-
- 3) The unit type has only one element
-    \begin{prooftree}
-    \AXC{$$}
-    \UIC{$\Gamma \vdash t = \ast : \top$}
-    \end{prooftree}
-
- 4) Product reduction rules define the following equalities on constructors
-    \begin{prooftree}
-    \AXC{$\Gamma \vdash u = w : A$}
-    \AXC{$\Gamma \vdash v = t : B$}
-    \BIC{$\Gamma \vdash \pair{u,v} = \pair{w,t} : A \times B$}
-    \AXC{$$}
-    \UIC{$\Gamma \vdash \fst \pair{u,v} = u : A$}
-    \AXC{$$}
-    \UIC{$\Gamma \vdash \snd \pair{u,v} = v : B$}
-    \noLine
-    \TIC{$$}
-    \end{prooftree}
-    and the following ones on projections
-    \begin{prooftree}
-    \AXC{$\Gamma \vdash m = n : A \times B$}
-    \UIC{$\Gamma \vdash \fst\ m = \fst\ n : A$}
-    \AXC{$\Gamma \vdash m = n : A \times B$}
-    \UIC{$\Gamma \vdash \snd\ m = \snd\ n : B$}
-    \AXC{$$}
-    \UIC{$\Gamma \vdash m = \pair{\fst\ m, \snd\ m} : A \times B$}
-    \noLine
-    \TIC{$$}
-    \end{prooftree}
-
- 5) Reduction rules for functions define the following equalities for applications
-    \begin{prooftree}
-    \AXC{$\Gamma \vdash f = g : A \to B$}
-    \AXC{$\Gamma \vdash u = v : A$}
-    \BIC{$\Gamma \vdash f\ u = g\ v : B$}
-    \AXC{$$}
-    \RightLabel{$\beta$-\textsc{rule}}
-    \UIC{$\Gamma \vdash (\lambda x. w)\ u = w[u/x] : A$}
-    \noLine
-    \BIC{$$}
-    \end{prooftree}
-    and the following ones for abstractions
-    \begin{prooftree}
-    \AXC{$\Gamma, x:A \vdash w = t : B$}
-    \UIC{$\Gamma \vdash (\lambda x.w) = (\lambda x.t) : A \to B$}
-    \AXC{$$}
-    \RightLabel{$\eta$-\textsc{rule}}
-    \UIC{$\Gamma \vdash (\lambda x.f\ x) = f : A \to B$}
-    \noLine
-    \BIC{$$}
-    \end{prooftree}
-
-**** Lambda theories                                              :ignore:
-In a \lambda-theory we may want to add a set of additional equations
-apart from those defined in the previous set of rules.
-
-#+ATTR_LATEX: :options [Simply typed lambda theory]
-#+BEGIN_definition
-A simply-typed \lambda-theory is given by
-
-  * a set of /basic types/;
-  * a set of /basic constants/ with their types; and
-  * a set of /equations/ on those terms, of the form $\Gamma \vdash a = b : A$,
-    where $\Gamma$ is the variable context.
-#+END_definition
-
-# TODO Any algebraic theory is a lambda theory
-# TODO Preorders
-# TODO Theory of a reflexive type
-
-# The difference here is that we can now write equalities between
-# functions.
-
-*** OLD Interpretation of \lambda-theories
-#+ATTR_LATEX: :options [Interpretation of a lambda theory]
-#+BEGIN_definition
-An *interpretation* of a \lambda-calculus $\mathbb{T}$ in a cartesian
-closed category ${\cal C}$ is given by
-
-  1. an object $\intr{A} \in \mathbb{C}$ for every basic type $A$ in $\mathbb{T}$.
-  2. a morphism $\intr{c} \colon 1 \to \intr{A}$ for every constant $c : A$.
-
-The interpretation can be extended to all types using the terminal
-object, binary products and exponentials
-
- * $\intr{1} = 1$;
- * $\intr{A \times B} = \intr{A} \times \intr{B}$;
- * $\intr{A \impl B} = \intr{B}^{\intr{A}}$.
-
-Every context $\Gamma = x_1:A_1, \dots,x_n:A_n$ can be interpreted as the
-object $\intr{A_1} \times \dots \times \intr{A_n}$.
-#+END_definition
-# TODO: check definition. Motivation.
-
-*** Syntactic categories
-**** Definition of the syntatic category for a lambda theory      :ignore:
-#+ATTR_LATEX: :options [Syntactic category]
-#+BEGIN_definition
-The *syntactic category* of a \lambda-theory, ${\cal S}(\mathbb{T})$, is given by
-
- * the types of the theory as objects; and
- * the terms in context $x : A \vdash t :B$ as morphisms between $A$ and $B$.
-
-Two morphisms $x:A \vdash u : B$ and $x:A \vdash v : B$ are equal if $x : A \vdash u = v : B$
-can be proved inside $\mathbb{T}$. The composition of two morphisms $a : A \vdash b : B$ and
-$b' : B \vdash c : C$ is given by $a : A \vdash c[b/b'] : C$.
-#+END_definition
-
-**** Syntactic categories of lambda theories are cartesian closed :ignore:
-#+ATTR_LATEX: :options [Syntactic categories are cartesian closed]
-#+BEGIN_proposition
-The syntactic category of a \lambda-theory is cartesian closed.
-#+END_proposition
-#+BEGIN_proof
-We will prove that it has terminal, product and exponential objects.
-The terminal object is the unit type $\top$; it has a morphism
-$x : A \mid \ast : \top$ from any other type, and it is unique by virtue of
-the equality $\Gamma \vdash t = \ast : \top$.
-
-Given two types $A,B$, its product is $A \times B$ with projections
-$m : A \times B \vdash \fst\ m : A$ and $m : A \times B \vdash \snd\ m : b$. Its
-universal property holds because for any other pair of morphisms
-$z : C \vdash a : A$ and $z : C \vdash b : B$, there exists a morphism
-\[
-z : C \vdash \pair{a,b} : A \times B
-\]
-satisfying that
-
- * $z : C \vdash \fst\ \pair{a,b} = a : A$,
- * $z : C \vdash \snd\ \pair{a,b} = b : B$,
-
-and if any other morphism $z : C \vdash d : A \times B$ exists satisfying
-these same conditions, then
-\[
-d = \pair{\fst\ d, \snd\ d} = \pair{a,b}.
-\]
-
-Finally, given two types $A,B$, its exponential is $A \to B$ with
-the evaluation morphism
-\[
-m : (A \to B) \times A \vdash (\fst\ m)\ (\snd\ m) : B.
-\]
-Given any $p : C \times A \vdash q : B$, there exists a morphism
-\[
-z : C \vdash \lambda x. q[\pair{z,x}/p] : A \to B
-\]
-such that when we evaluate over any pair $p$ we get
-\[
-(\lambda x.q[\pair{\fst\ p,x}/p]) (\snd\ p) =
-q[\pair{\fst\ p, \snd\ p}/p] = q[p/p] = q;
-\]
-and if any other morphism $z : C \vdash d : A \to B$ exists satisfying
-this same condition, then $(d[ \fst\ p /z] (\snd\ p))$ would equal $q$ and
-\[\begin{aligned}
-\lambda x. q[\pair{z,x}/p] &= 
-\lambda x. (d[\fst\ p/z]\ (\snd\ p))[\pair{z,x}/p] \\ &=
-\lambda x. (d[z/z]\ x) \\&= d. & \qedhere
-\end{aligned}\]
-#+END_proof
-
-**** Models of a lambda-theory                                    :ignore:
-#+ATTR_LATEX: :options [Model of a lambda-theory]
-#+BEGIN_definition
-A *model* of a \lambda-theory $\mathbb{T}$ is a functor $M \colon {\cal S}(\mathbb{T}) \to {\cal C}$ preserving
-finite products and exponentials.
-#+END_definition
-
-# TODO: Canonical interpretation
-As we did with Lawvere theories, we can prove that categorical
-semantics for simply typed \lambda-theories is complete. By construction,
-given any theory $\mathbb{T}$,
-\[
-\mathbb{T} \mbox{ proves } \Gamma \vdash x = y : A
-\quad\iff\quad
-{\cal S}(\mathbb{T}) \mbox{ satisfies } \Gamma \vdash x = y : A.
-\]
-
-*** Translations, category of lambda-theories
-#+ATTR_LATEX: :options [Translation]
-#+BEGIN_definition
-A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is a model of $\mathbb{T}$
-in the syntactic category ${\cal S}(U)$.
-#+END_definition
-
-#+ATTR_LATEX: :options [Translation]
-#+BEGIN_definition
-A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is a function on
-types and terms
-
-  1. preserving type constructors
-     \[
-     \tau 1 = 1,\qquad
-     \tau(A \times B) = \tau A \times \tau B,\qquad
-     \tau(A \to B) = \tau A \to \tau B;
-     \]
-
-  2. preserving the term structure
-     \begin{center}\begin{array}{lll}
-     \tau(\texttt{fst}\ m) = \texttt{fst}\ (\tau m), &
-     \tau(\texttt{snd}\ m) = \texttt{snd}\ (\tau m), &
-     \tau\pair{a,b} = \pair{\tau a, \tau b}, \\
-     \tau (f\ x) = (\tau f)\ (\tau x), &
-     \tau (\lambda x. m) = \lambda x. (\tau m);
-     \end{array}\end{center}
-
-  3. and preserving all equations, $t \equiv u$ implies $\tau t \equiv \tau u$.
-#+END_definition
-
-
-#+ATTR_LATEX: :options [Category of lambda-theories]
-#+BEGIN_definition
-
-#+END_definition
-
-
-#+ATTR_LATEX: :options [Isomorphism of types]
-#+BEGIN_definition
-Two types in a \lambda-theory $\mathbb{T}$ are isomorphic if there exist
-terms $x:A \mid t:B$ and $y:B \mid u:A$ such that
-\[
-x:A\mid u[t/y] = x : A, \quad\text{ and }\quad y : B \mid t[u/x] = y : B,
-\]
-are provable in $\mathbb{T}$.
-#+END_definition
-
-#+ATTR_LATEX: :options [Equivalence of theories]
-#+BEGIN_definition
-Two \lambda-theories $\mathbb{T},\mathbb{U}$ are equivalent if there are a pair of translations
-$\tau : \mathbb{T} \to \mathbb{U}$ and $\sigma : \mathbb{U} \to \mathbb{T}$ such that
-\[
-\sigma(\tau A) \cong A, \quad\text{ and }\quad \tau(\sigma B) \simeq B;
-\]
-for any given types $A,B$.
-#+END_definition
-
-*** Internal language of a category
-#+ATTR_LATEX: :options [Internal language]
-#+BEGIN_definition
-The *internal language* of a small cartesian closed category ${\cal C}$
-is a \lambda-theory given by
-
- 1. a /basic type/ $\intl{A }$ for every object $A \in {\cal C}$;
-
- 2. a /constant/ $\intl{f} \colon \intl{A} \to \intl{B}$ for every morphism $f : A \to B$;
-
- 3. the /identity/ axiom 
-    \[
-    x : \intl{A} \mid \intl{\id}\ x = x : \intl{A}
-    \] 
-    for every $A$;
-
- 4. the /composition/ axiom
-    \[
-    x : \intl{A} \mid \intl{g \circ f}\ x = \intl{g}\ (\intl{f}\ x) : \intl{C}
-    \]
-    for every pair of composable morphisms $f : A \to B$ 
-    and $g : B \to C$;
-
- 5. and /constants/
-    \[\begin{aligned}
-    \texttt{T} &: \texttt{1} \to \intl{1} \\
-    \texttt{P}_{A,B} &: \intl{A} \times \intl{B} \to \intl{A \times B} \\
-    \texttt{E}_{A,B} &: (\intl{A} \to \intl{B}) \to \intl{B^{A}}
-    \end{aligned}\]
-    for any $A,B \in {\cal C}$.
-
-Satisfying the following axioms
-\[\begin{aligned}
-u : \intl{1}                 &\mid \mathtt{T}\ast = u : \intl{1} \\
-z : \intl{A \times B}        &\mid \mathtt{P}_{A,B}\pair{\intl{\pi_0} z, \intl{\pi_1} z} = z : \intl{A \times B} \\
-w : \intl{A} \times \intl{B} &\mid \pair{\intl{\pi_0}(\mathtt{P}_{A,B}w), \intl{\pi_1}(\mathtt{P}_{A,B}w)} = w : \intl{A} \times \intl{B} \\
-f : \intl{B^A}               &\mid \mathtt{E}_{A,B}(\lambda x^{\scriptsize\intl{A}}. \intl{\mathtt{ev}_{A,B}}\ (\mathtt{P}_{A,B}\pair{f,x})) = f : \intl{B^A} \\
-g : \intl{A} \to \intl{B}    &\mid \lambda x^{\scriptsize\intl{A}}.\intl{\mathtt{ev_{A,B}}} (\mathtt{P}_{A,B}\pair{\mathtt{E}_{A,B}g,x}) = g : \intl{A} \to \intl{B} \\
-\end{aligned}\]
-#+END_definition
-
-These axioms ensure the isomorphism between the terminal, product and
-exponential types of the category and the language; that is,
-
- * $\intl{1} \cong 1$,
- * $\intl{A \times B} \cong \intl{A} \times \intl{B}$,
- * $\intl{B^A} \cong \intl{A} \to \intl{B}$.
-
-**** TODO Equivalence of CC categories
-** TODO Diagonal arguments
-# Probar diagonal de Lawvere en cálculo lambda y usarla en múltiples
-# casos como ejemplo de semántica funcionando.
-http://tac.mta.ca/tac/reprints/articles/15/tr15abs.html
-http://math.andrej.com/2007/04/08/on-a-proof-of-cantors-theorem/
-
 ** TODO First-order logic (?)
 ** Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
@@ -8592,6 +7905,7 @@ http://math.andrej.com/2007/04/08/on-a-proof-of-cantors-theorem/
 # Leer: Awodey - Type theory and homotopy
 # Leer: nLab - https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory#DependentTypeTheory
 # Leer: http://www1.maths.leeds.ac.uk/%7Epmtng/Research/Lectures/lecture3.pdf
+# Substitution is pullback http://math.andrej.com/2012/09/28/substitution-is-pullback/
 
 In the same way that cartesian closed categories provide a
 categorical interpretation of the simply typed \lambda-calculus,
@@ -10030,3 +9344,706 @@ http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 # These quotes can be placed on the partial abstracts or in the general one.
 ** TODO Notes
 This text defines $\mathbb{N}$ with a zero.
+* Removed                                                   :noexport:ignore:
+** OLD Lawvere theories [Old]                                     :noexport:
+This section follows cite:bauer17.
+
+*** Motivation for algebraic theories
+We will develop an unified approach to the study of algebraic
+structures based on constants, operations and equations; such as
+groups, modules or rings.
+
+**** First definition of algebraic theory                         :ignore:
+Our *algebraic theories* are usually given by
+
+  * a /signature/, a family of sets $\left\{ \Sigma_k \right\}_{k \in \mathbb{N}}$ whose elements are called
+    /k-ary operations/. The /terms/ of a signature are defined inductively,
+    being variables or k-ary operations applied to k-tuples of terms;
+
+  * and a set of /axioms/, which are equations between terms.
+
+**** Examples: theory of groups, theory of fields                 :ignore:
+For example, the theory of groups is given by a signature containing
+
+ * a /binary operation/ called $\cdot$,
+ * a /unary operation/ written as $^{-1}$, and
+ * a /nullary operation/ or a /constant/ called $e$.
+
+Satisfiying the following axioms
+
+ * $(x \cdot y) \cdot z = x \cdot (y \cdot z)$,
+
+ * $x \cdot e = x$,
+
+ * $e \cdot x = x$,
+
+ * $x \cdot x^{-1} = e$, and
+
+ * $x^{-1} \cdot x = e$.
+
+Note how quantifiers are not needed here, as we are interpreting
+each $x,y,z$ as free variables and the universal quantification is
+therefore implicit.
+Theories in which the operations are not defined for every possible
+term, cannot be expressed in this way. Fields, in which the inverse of
+$0$ is not defined, are not expressable in this form; this fact will
+be proved formally in Example [[example-fieldsarenotalgebraic]].
+
+\\
+
+**** Interpretations of algebraic theories                        :ignore:
+A theory can be *interpreted* on a suitable category ${\cal C}$ as
+
+  * an object of the category, $A \in {\cal C}$;
+  * with morphisms $If \colon A^k \to A$ for every k-ary operation $f$.
+
+Any interpretation of the theory induces an interpretation for every
+term on a context. That is, a term $t$ can be given in the
+variable context $x_1,\dots,x_n$ if all variables that
+appear in $t$ appear in $x_1,\dots,x_n$. We write that as
+\[
+x_1,x_2,\dots,x_n \mid t;
+\]
+and the *interpretation of the term* $x_1,\dots,x_n \mid t$ *on that context* is a morphism
+$I(x_1,\dots,x_n \mid t) \colon A^n \to A}$ defined inductively knowing that
+
+  * the interpretation of the i-th variable is the i-th
+    projection
+    \[I(x_1,\dots,x_n \mid x_i) = \pi_i : A^n \to A,\]
+
+  * the interpretation of an operation over a term is the
+    interpretation of the morphism componsed with the componentwise
+    interpretation of subterms
+    \[
+    I(f \pair{t_1,\dots,t_k}) =
+    If \circ \pair{It_1,\dots,It_k}
+    \colon A^n \to A.
+    \]
+    where we implicitely assume the context to be $x_1,\dots,x_n$.
+
+The interpretation of a particular variable depends therefore on the
+context. We say that an interpretation *satisfies* an equation $\Gamma \mid u=v$
+in a particular given context if the interpretation of both terms of
+the equation is the same on that context, $I(\Gamma \mid u) = I(\Gamma \mid v)$.
+
+We usually would like to find interpretations where all the axioms of the
+theory were satisfied. These are called *models of the algebraic theory*.
+
+***** TODO [#C] Example, groups                                  :ignore:
+# Maybe this example could be written once we have developed
+# the categorical definition.
+
+# For instance, the term $(x \cdot y) \cdot z$ in our previously discussed theory of
+# groups would be intepreted in a category with finite products and
+# a terminal object $1$ as the morphism
+# \[\begin{tikzcd}
+# A \cong A \times 1 \rar{\pair{\id,!}} & A \times A \rar & A
+# \end{tikzcd}\]
+# and the axiom $(x \cdot y) \cdot z = x \cdot (y \cdot z)$ would be represented by the following commutative
+# square:
+**** Notion of representation-free theories                       :ignore:
+The problem with this notion of algebraic theory is that it is not
+representation-free; it is not independent of the choice of constants,
+operations or axioms. There may be multiple formulations of the same
+theory, with different but equivalent axioms. For instance,
+cite:mccune91 discusses many single-equation axiomatizations of groups, 
+such as
+\[
+x\ /\
+\big(((x/x)/y)/z)\ /\ ((x/x)/x)/z\big)
+= y
+\]
+
+with the binary operation $/$, related to the usual multiplication as $x / y = x \cdot y^{-1}$.
+
+Our solution to this problem will be to capture all the algebraic
+information of a theory -- all operations, constants and axioms --
+into a category. Differently presented but equivalent theories will
+give rise to the same category. This category will have /contexts/
+$[x_1,\dots,x_n]$ as objects. A morphism from $[x_1,\dots,x_n]$ to
+$[x_1,\dots,x_m]$ will be a tuple of terms
+\[ 
+\pair{t_1,\dots,t_k}
+\colon [x_1,\dots,x_n] \to [x_1,\dots,x_m]
+\]
+such that every $t_k$ is given in the context $[x_1,\dots,x_n]$. 
+Composition is defined componentwise as substitution of the terms of the 
+first morphism into the variables of the second one, that is,
+\[
+\pair{s_1,\dots,s_n} = \pair{u_1,\dots,u_n} \circ \pair{t_1,\dots,t_m},
+\]
+where
+\[ 
+s_i = u_i[t_1,\dots,t_m / x_1,\dots,x_m].
+\]
+
+Two morphisms in this category $\pair{t_1,\dots,t_n}$ and $\pair{s_1,\dots,s_n}$ are equal if the axioms of
+the theory imply the componentwise equality of its terms, that is, $t_i = s_i$.
+
+This interpretation will lead us to our definition of *algebraic*
+*theory* as a category with finite products.
+
+Every model $M$ in the previous sense could be seen as a functor from
+this category to a given category ${\cal C}$ preserving finite products. Once the
+image of $M[x_1] = A$ is chosen, the functor is determined on objects by
+\[
+M[x_1,\dots,x_n] = A^{k}
+\]
+and once it is defined for the basic operations, it is inductively determined
+on morphisms as
+
+  * $M\pair{x_i} = \pi_i \colon A^k \to A$, for any morphism $\pair{x_i}$;
+  * $M\pair{t_1,\dots,t_m} = \pair{Mt_1,\dots,Mt_m} \colon A^m \to A$, the 
+    componentwise interpretation of subterms;
+  * $M\pair{f\pair{t_1,\dots,t_m}} = Mf \circ \pair{Mt_1,\dots,Mt_{m}} \colon (M\mathbb{A})^m\to M\mathbb{A}$.
+
+The fact that $M$ is a well-defined functor follows from the
+assumption that it is a model.
+
+*** Algebraic theories as categories
+**** Algebraic theory                                             :ignore:
+#+ATTR_LATEX: :options [Lawvere algebraic theory]
+#+BEGIN_definition
+An *algebraic theory* is a category $\mathbb{A}$ with finite products and objects
+forming a sequence $A^0,A^1,A^2,\dots$ such that $A^m \times A^n = A^{m+n}$ for
+any $m,n$.
+#+END_definition
+
+From this definition, it follows that $A^0$ must be the terminal object.
+
+**** Models as functors                                           :ignore:
+#+ATTR_LATEX: :options [Model]
+#+BEGIN_definition
+A *model* of an algebraic theory $\mathbb{A}$ in a category ${\cal C}$ is a functor
+$M \colon \mathbb{A} \to {\cal C}$ preserving all finite products.
+#+END_definition
+
+#+ATTR_LATEX: :options [Category of models of a theory]
+#+BEGIN_definition
+The *category of models* $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$ is the full subcategory of functor
+category ${\cal C}^{\mathbb{A}}$ given by the functors preserving all finite products.
+Morphisms between models of a theory in a category are natural transformations.
+#+END_definition
+
+#+ATTR_LATEX: :options [Algebraic category]
+#+BEGIN_definition
+An *algebraic category* is category equivalent to a category of the form $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$,
+where $\mathbb{A}$ is an algebraic theory.
+#+END_definition
+
+**** TODO Example: groups                                         :ignore:
+#+ATTR_LATEX: :options [Theory of groups]
+#+BEGIN_exampleth
+# Groups as algebraic theory
+# Category of groups as category of models in Set
+# Abelian groups as models in the category Grp
+#+END_exampleth
+
+# Antipode in Hopf algebras
+# https://www.youtube.com/watch?v=p3kkm5dYH-w
+
+**** Example: fields                                              :ignore:
+#+ATTR_LATEX: :options [Fields have no algebraic theory]
+#+BEGIN_exampleth
+<<example-fieldsarenotalgebraic>>
+The category $\mathtt{Fields}$ is not an algebraic category.
+Any algebraic category $\mathtt{Mod}_{{\cal C}}(\mathbb{A})$ has a terminal object given by the
+constant functor $\Delta_1 : \mathbb{A} \to {\cal C}$ to $1$, the terminal object of ${\cal C}$. Note that
+${\cal C}$ must have a terminal object for a model to it to exist, as
+models must preserve all finite products. We know that $\Delta_1$ is a
+terminal object because, in general, it is the terminal object of the
+category of functors ${\cal C}^{\mathbb{A}}$.
+However, $\mathtt{Fields}$ has no terminal object.
+#+END_exampleth
+
+**** TODO More examples
+*** Completeness for algebraic theories
+When defining interpretation of algebraic theories as categories we
+should ensure the property of */semantic completeness/*. We already
+know that, if an equation can be proved from the axioms, it will be
+valid in all models; but we will also like to prove that, if every
+model of the theory satisfies a particular equation, it can actually
+be proved from the axioms of the theory.
+
+#+ATTR_LATEX: :options [Completeness for algebraic theories]
+#+BEGIN_theorem
+Given $\mathbb{A}$ an algebraic theory, there exists a category ${\cal A}$ with
+a model $U \in \mathtt{Mod}_{{\cal A}}(\mathbb{A})$ such that, for every terms $u,v$,
+\[
+U \text{ satisfies } u = v 
+\iff
+\mathbb{A} \text{ proves } u = v.
+\] 
+This is called the *universal model* for $\mathbb{A}$. This theorem
+asserts that categorical semantics of algebraic theories are complete.
+#+END_theorem
+#+BEGIN_proof
+Simply taking $\mathbb{A}$ with the identity functor, we have an universal
+model for $\mathbb{A}$.
+#+END_proof
+
+Note that this universal model needs not to be set-theoretic; but,
+even in this situation, we can always find a universal model in a
+presheaf category via the Yoneda embedding.
+
+#+ATTR_LATEX: :options [Yoneda embedding as a universal model]
+#+BEGIN_proposition
+The Yoneda embedding $y \colon \mathbb{A} \to \widehat{\mathbb{A}}$ is a universal model for $\mathbb{A}$.
+#+END_proposition
+#+BEGIN_proof
+It preserves finite products because it preserves all limits, hence
+it is a model. As it is a faithful functor, we know that any equation
+proved in the model is an eqation proved by the theory.
+#+END_proof
+
+*** TODO Examples
+**** Monoids on the category of endofunctors
+
+** OLD Cartesian closed categories [Old]                          :noexport:
+# Definition of cartesian closed by adjoints
+
+*** Exponential
+# Exponential as adjoint
+
+#+ATTR_LATEX: :options [Exponential]
+#+BEGIN_definition
+An *exponential* of $A$ and $B$ in a category with binary products is an
+object $B^A$ with a morphism $e : B^A \times A \to B$ called /evaluation morphism/,
+such that, for any $f : C \times A \to B$ exists a unique $\widetilde{f} : C \to B^A$ such that
+the following diagram commutes
+\[\begin{tikzcd}
+B^A & B^A \times A \drar{e} & \\
+C \uar[dashed]{\exists! \widetilde f}  & C \times A \rar[swap]{f}\uar{\widetilde f \times id} & B 
+\end{tikzcd}\]
+#+END_definition
+
+An object $A$ for which the exponentiation $-^A$ is always defined is called
+*exponentiable*.
+
+#+ATTR_LATEX: :options [Exponentials as adjoints]
+#+BEGIN_proposition
+<<prop-exponentialadjoints>>
+An object $A$ in a category with binary products ${\cal C}$ is exponentiable if and only if
+the functor $(- \times A) : {\cal C} \to {\cal C}$ has a right adjoint.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+# Given by the counit
+#+END_proof
+
+*** Cartesian category
+#+ATTR_LATEX: :options [Cartesian category]
+#+BEGIN_definition
+A *cartesian category* is a category with all finite products.
+#+END_definition
+#+ATTR_LATEX: :options [Cartesian closed category]
+#+BEGIN_definition
+A *cartesian closed category* is a category with all finite products
+and exponentials.
+#+END_definition
+
+The definition of cartesian closed category can be written in terms of
+existence of adjoints.
+
+**** Cartesian closed categories by adjoints                      :ignore:
+#+ATTR_LATEX: :options [Cartesian closed categories and adjoints]
+#+BEGIN_proposition
+Any category ${\cal C}$ is cartesian closed if and only if there exist
+right adjoints for the following functors
+
+  * $! \colon {\cal C} \to 1$, the unique functor to the terminal category;
+  * $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, the diagonal functor;
+  * $(- \times A) \colon {\cal C} \to {\cal C}$, the product functor, for each $A \in {\cal C}$.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+We know that the product functor of an object has a right adjoint if and
+only if the object is exponentiable, as we saw in Proposition [[prop-exponentialadjoints]].
+#+END_proof
+
+***** TODO Adjoint diagrams                                      :ignore:
+Knowing that $!x = \ast$ and $\Delta(x) = (x,x)$, we write these conditions
+as
+
+\begin{prooftree}
+\AX$\ast\ \fCenter\to \ast$
+\doubleLine
+\UI$x\ \fCenter\to \top$
+\AX$(x,x)\ \fCenter\to (y,z)$
+\doubleLine
+\UI$x\ \fCenter\to y \times z$
+\AX$x \times a\ \fCenter\to y$
+\doubleLine
+\UI$x\ \fCenter\to y^a$
+\noLine
+\TIC{}
+\end{prooftree}
+
+**** Category of cartesian closed categories                      :ignore:
+#+ATTR_LATEX: :options [Category of small cartesian closed categories]
+#+BEGIN_definition
+We call $\mathtt{Ccc}$ to the category of (small) cartesian closed
+categories with functors preserving finite products and
+exponentials as morphisms. These functors are called
+*cartesian closed functors*.
+#+END_definition
+
+*** Frames and locales
+#+ATTR_LATEX: :options [Completeness for posets]
+#+BEGIN_proposition
+Complete posets are cocomplete. Cocomplete posets are complete.
+#+END_proposition
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+#+ATTR_LATEX: :options [Frames]
+#+BEGIN_definition
+*Frames* are complete cartesian closed posets.
+#+END_definition
+
+# TODO: Equivalently A frame is a poset with distributive law.
+
+#+ATTR_LATEX: :options [Frame morphism]
+#+BEGIN_definition
+A *frame morphism* is a function between frames preserving finite
+infima and arbitrary suprema.
+#+END_definition
+
+# TODO: Locales
+
+# TODO: Locales as non-pointed topological spaces, from An informal
+# introduction to topos theory
+
+** OLD Simply-typed \lambda-theories                              :noexport:
+*** Simply-typed \lambda-theories
+We will consider again the previously defined simply typed
+\lambda-calculus, but this time, as a theory instead of as a
+programming language. Recall that a /context/ was a sequence
+of typed variables $x_1,x_2,\dots,x_n$, of the form
+\[
+\Gamma = x_1:A_1, \dots, x_n:A_n.
+\]
+And any /typing judgment/ was of the form $\Gamma \vdash a : A$. This time,
+the theory will also introduce equations of the form $\Gamma \vdash a = b : A$
+as judgments.
+
+In particular, we will work only with a fragment of system that we
+defined in "[[*Extending the simply typed \lambda-calculus][Extending the simply typed \lambda-calculus]]", namely, the
+fragment containing only arrow types, an unit type and product
+types. 
+
+\\
+
+**** Equality in simply-typed \lambda-theories                    :ignore:
+Equality must now be defined over these typed terms. We have the
+following set of rules for it, clearly inspired by the usual properties
+of equivalence relations, \beta-reductions and \eta-reductions.
+
+ 1) Any set of assumptions can be weakened
+    \begin{prooftree}
+    \RightLabel{\textsc{weak}}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \UIC{$\Gamma, w:B \vdash u = v : A$}
+    \end{prooftree}
+
+ 2) Equality is an equivalence relation
+    \begin{prooftree}
+    \RightLabel{\textsc{refl}}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash u = u : A$}
+    \RightLabel{\textsc{symm}}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \UIC{$\Gamma \vdash v = u : A$}
+    \RightLabel{\textsc{trans}}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \AXC{$\Gamma \vdash v = w : A$}
+    \BIC{$\Gamma \vdash u = w : A$}
+    \noLine
+    \TIC{$$}
+    \end{prooftree}
+
+ 3) The unit type has only one element
+    \begin{prooftree}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash t = \ast : \top$}
+    \end{prooftree}
+
+ 4) Product reduction rules define the following equalities on constructors
+    \begin{prooftree}
+    \AXC{$\Gamma \vdash u = w : A$}
+    \AXC{$\Gamma \vdash v = t : B$}
+    \BIC{$\Gamma \vdash \pair{u,v} = \pair{w,t} : A \times B$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash \fst \pair{u,v} = u : A$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash \snd \pair{u,v} = v : B$}
+    \noLine
+    \TIC{$$}
+    \end{prooftree}
+    and the following ones on projections
+    \begin{prooftree}
+    \AXC{$\Gamma \vdash m = n : A \times B$}
+    \UIC{$\Gamma \vdash \fst\ m = \fst\ n : A$}
+    \AXC{$\Gamma \vdash m = n : A \times B$}
+    \UIC{$\Gamma \vdash \snd\ m = \snd\ n : B$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash m = \pair{\fst\ m, \snd\ m} : A \times B$}
+    \noLine
+    \TIC{$$}
+    \end{prooftree}
+
+ 5) Reduction rules for functions define the following equalities for applications
+    \begin{prooftree}
+    \AXC{$\Gamma \vdash f = g : A \to B$}
+    \AXC{$\Gamma \vdash u = v : A$}
+    \BIC{$\Gamma \vdash f\ u = g\ v : B$}
+    \AXC{$$}
+    \RightLabel{$\beta$-\textsc{rule}}
+    \UIC{$\Gamma \vdash (\lambda x. w)\ u = w[u/x] : A$}
+    \noLine
+    \BIC{$$}
+    \end{prooftree}
+    and the following ones for abstractions
+    \begin{prooftree}
+    \AXC{$\Gamma, x:A \vdash w = t : B$}
+    \UIC{$\Gamma \vdash (\lambda x.w) = (\lambda x.t) : A \to B$}
+    \AXC{$$}
+    \RightLabel{$\eta$-\textsc{rule}}
+    \UIC{$\Gamma \vdash (\lambda x.f\ x) = f : A \to B$}
+    \noLine
+    \BIC{$$}
+    \end{prooftree}
+
+**** Lambda theories                                              :ignore:
+In a \lambda-theory we may want to add a set of additional equations
+apart from those defined in the previous set of rules.
+
+#+ATTR_LATEX: :options [Simply typed lambda theory]
+#+BEGIN_definition
+A simply-typed \lambda-theory is given by
+
+  * a set of /basic types/;
+  * a set of /basic constants/ with their types; and
+  * a set of /equations/ on those terms, of the form $\Gamma \vdash a = b : A$,
+    where $\Gamma$ is the variable context.
+#+END_definition
+
+# TODO Any algebraic theory is a lambda theory
+# TODO Preorders
+# TODO Theory of a reflexive type
+
+# The difference here is that we can now write equalities between
+# functions.
+
+*** OLD Interpretation of \lambda-theories
+#+ATTR_LATEX: :options [Interpretation of a lambda theory]
+#+BEGIN_definition
+An *interpretation* of a \lambda-calculus $\mathbb{T}$ in a cartesian
+closed category ${\cal C}$ is given by
+
+  1. an object $\intr{A} \in \mathbb{C}$ for every basic type $A$ in $\mathbb{T}$.
+  2. a morphism $\intr{c} \colon 1 \to \intr{A}$ for every constant $c : A$.
+
+The interpretation can be extended to all types using the terminal
+object, binary products and exponentials
+
+ * $\intr{1} = 1$;
+ * $\intr{A \times B} = \intr{A} \times \intr{B}$;
+ * $\intr{A \impl B} = \intr{B}^{\intr{A}}$.
+
+Every context $\Gamma = x_1:A_1, \dots,x_n:A_n$ can be interpreted as the
+object $\intr{A_1} \times \dots \times \intr{A_n}$.
+#+END_definition
+# TODO: check definition. Motivation.
+
+*** Syntactic categories
+**** Definition of the syntatic category for a lambda theory      :ignore:
+#+ATTR_LATEX: :options [Syntactic category]
+#+BEGIN_definition
+The *syntactic category* of a \lambda-theory, ${\cal S}(\mathbb{T})$, is given by
+
+ * the types of the theory as objects; and
+ * the terms in context $x : A \vdash t :B$ as morphisms between $A$ and $B$.
+
+Two morphisms $x:A \vdash u : B$ and $x:A \vdash v : B$ are equal if $x : A \vdash u = v : B$
+can be proved inside $\mathbb{T}$. The composition of two morphisms $a : A \vdash b : B$ and
+$b' : B \vdash c : C$ is given by $a : A \vdash c[b/b'] : C$.
+#+END_definition
+
+**** Syntactic categories of lambda theories are cartesian closed :ignore:
+#+ATTR_LATEX: :options [Syntactic categories are cartesian closed]
+#+BEGIN_proposition
+The syntactic category of a \lambda-theory is cartesian closed.
+#+END_proposition
+#+BEGIN_proof
+We will prove that it has terminal, product and exponential objects.
+The terminal object is the unit type $\top$; it has a morphism
+$x : A \mid \ast : \top$ from any other type, and it is unique by virtue of
+the equality $\Gamma \vdash t = \ast : \top$.
+
+Given two types $A,B$, its product is $A \times B$ with projections
+$m : A \times B \vdash \fst\ m : A$ and $m : A \times B \vdash \snd\ m : b$. Its
+universal property holds because for any other pair of morphisms
+$z : C \vdash a : A$ and $z : C \vdash b : B$, there exists a morphism
+\[
+z : C \vdash \pair{a,b} : A \times B
+\]
+satisfying that
+
+ * $z : C \vdash \fst\ \pair{a,b} = a : A$,
+ * $z : C \vdash \snd\ \pair{a,b} = b : B$,
+
+and if any other morphism $z : C \vdash d : A \times B$ exists satisfying
+these same conditions, then
+\[
+d = \pair{\fst\ d, \snd\ d} = \pair{a,b}.
+\]
+
+Finally, given two types $A,B$, its exponential is $A \to B$ with
+the evaluation morphism
+\[
+m : (A \to B) \times A \vdash (\fst\ m)\ (\snd\ m) : B.
+\]
+Given any $p : C \times A \vdash q : B$, there exists a morphism
+\[
+z : C \vdash \lambda x. q[\pair{z,x}/p] : A \to B
+\]
+such that when we evaluate over any pair $p$ we get
+\[
+(\lambda x.q[\pair{\fst\ p,x}/p]) (\snd\ p) =
+q[\pair{\fst\ p, \snd\ p}/p] = q[p/p] = q;
+\]
+and if any other morphism $z : C \vdash d : A \to B$ exists satisfying
+this same condition, then $(d[ \fst\ p /z] (\snd\ p))$ would equal $q$ and
+\[\begin{aligned}
+\lambda x. q[\pair{z,x}/p] &= 
+\lambda x. (d[\fst\ p/z]\ (\snd\ p))[\pair{z,x}/p] \\ &=
+\lambda x. (d[z/z]\ x) \\&= d. & \qedhere
+\end{aligned}\]
+#+END_proof
+
+**** Models of a lambda-theory                                    :ignore:
+#+ATTR_LATEX: :options [Model of a lambda-theory]
+#+BEGIN_definition
+A *model* of a \lambda-theory $\mathbb{T}$ is a functor $M \colon {\cal S}(\mathbb{T}) \to {\cal C}$ preserving
+finite products and exponentials.
+#+END_definition
+
+# TODO: Canonical interpretation
+As we did with Lawvere theories, we can prove that categorical
+semantics for simply typed \lambda-theories is complete. By construction,
+given any theory $\mathbb{T}$,
+\[
+\mathbb{T} \mbox{ proves } \Gamma \vdash x = y : A
+\quad\iff\quad
+{\cal S}(\mathbb{T}) \mbox{ satisfies } \Gamma \vdash x = y : A.
+\]
+
+*** Translations, category of lambda-theories
+#+ATTR_LATEX: :options [Translation]
+#+BEGIN_definition
+A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is a model of $\mathbb{T}$
+in the syntactic category ${\cal S}(U)$.
+#+END_definition
+
+#+ATTR_LATEX: :options [Translation]
+#+BEGIN_definition
+A *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$ is a function on
+types and terms
+
+  1. preserving type constructors
+     \[
+     \tau 1 = 1,\qquad
+     \tau(A \times B) = \tau A \times \tau B,\qquad
+     \tau(A \to B) = \tau A \to \tau B;
+     \]
+
+  2. preserving the term structure
+     \begin{center}\begin{array}{lll}
+     \tau(\texttt{fst}\ m) = \texttt{fst}\ (\tau m), &
+     \tau(\texttt{snd}\ m) = \texttt{snd}\ (\tau m), &
+     \tau\pair{a,b} = \pair{\tau a, \tau b}, \\
+     \tau (f\ x) = (\tau f)\ (\tau x), &
+     \tau (\lambda x. m) = \lambda x. (\tau m);
+     \end{array}\end{center}
+
+  3. and preserving all equations, $t \equiv u$ implies $\tau t \equiv \tau u$.
+#+END_definition
+
+
+#+ATTR_LATEX: :options [Category of lambda-theories]
+#+BEGIN_definition
+
+#+END_definition
+
+
+#+ATTR_LATEX: :options [Isomorphism of types]
+#+BEGIN_definition
+Two types in a \lambda-theory $\mathbb{T}$ are isomorphic if there exist
+terms $x:A \mid t:B$ and $y:B \mid u:A$ such that
+\[
+x:A\mid u[t/y] = x : A, \quad\text{ and }\quad y : B \mid t[u/x] = y : B,
+\]
+are provable in $\mathbb{T}$.
+#+END_definition
+
+#+ATTR_LATEX: :options [Equivalence of theories]
+#+BEGIN_definition
+Two \lambda-theories $\mathbb{T},\mathbb{U}$ are equivalent if there are a pair of translations
+$\tau : \mathbb{T} \to \mathbb{U}$ and $\sigma : \mathbb{U} \to \mathbb{T}$ such that
+\[
+\sigma(\tau A) \cong A, \quad\text{ and }\quad \tau(\sigma B) \simeq B;
+\]
+for any given types $A,B$.
+#+END_definition
+
+*** Internal language of a category
+#+ATTR_LATEX: :options [Internal language]
+#+BEGIN_definition
+The *internal language* of a small cartesian closed category ${\cal C}$
+is a \lambda-theory given by
+
+ 1. a /basic type/ $\intl{A }$ for every object $A \in {\cal C}$;
+
+ 2. a /constant/ $\intl{f} \colon \intl{A} \to \intl{B}$ for every morphism $f : A \to B$;
+
+ 3. the /identity/ axiom 
+    \[
+    x : \intl{A} \mid \intl{\id}\ x = x : \intl{A}
+    \] 
+    for every $A$;
+
+ 4. the /composition/ axiom
+    \[
+    x : \intl{A} \mid \intl{g \circ f}\ x = \intl{g}\ (\intl{f}\ x) : \intl{C}
+    \]
+    for every pair of composable morphisms $f : A \to B$ 
+    and $g : B \to C$;
+
+ 5. and /constants/
+    \[\begin{aligned}
+    \texttt{T} &: \texttt{1} \to \intl{1} \\
+    \texttt{P}_{A,B} &: \intl{A} \times \intl{B} \to \intl{A \times B} \\
+    \texttt{E}_{A,B} &: (\intl{A} \to \intl{B}) \to \intl{B^{A}}
+    \end{aligned}\]
+    for any $A,B \in {\cal C}$.
+
+Satisfying the following axioms
+\[\begin{aligned}
+u : \intl{1}                 &\mid \mathtt{T}\ast = u : \intl{1} \\
+z : \intl{A \times B}        &\mid \mathtt{P}_{A,B}\pair{\intl{\pi_0} z, \intl{\pi_1} z} = z : \intl{A \times B} \\
+w : \intl{A} \times \intl{B} &\mid \pair{\intl{\pi_0}(\mathtt{P}_{A,B}w), \intl{\pi_1}(\mathtt{P}_{A,B}w)} = w : \intl{A} \times \intl{B} \\
+f : \intl{B^A}               &\mid \mathtt{E}_{A,B}(\lambda x^{\scriptsize\intl{A}}. \intl{\mathtt{ev}_{A,B}}\ (\mathtt{P}_{A,B}\pair{f,x})) = f : \intl{B^A} \\
+g : \intl{A} \to \intl{B}    &\mid \lambda x^{\scriptsize\intl{A}}.\intl{\mathtt{ev_{A,B}}} (\mathtt{P}_{A,B}\pair{\mathtt{E}_{A,B}g,x}) = g : \intl{A} \to \intl{B} \\
+\end{aligned}\]
+#+END_definition
+
+These axioms ensure the isomorphism between the terminal, product and
+exponential types of the category and the language; that is,
+
+ * $\intl{1} \cong 1$,
+ * $\intl{A \times B} \cong \intl{A} \times \intl{B}$,
+ * $\intl{B^A} \cong \intl{A} \to \intl{B}$.
+
+**** TODO Equivalence of CC categories

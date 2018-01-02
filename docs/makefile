@@ -34,7 +34,7 @@ chapter14.pdf: ctlc.pdf
 chapter15-draft.pdf: ctlc.pdf
 	pdftk ctlc.pdf cat 111-119 output chapter15-draft.pdf
 chapter16-draft.pdf: ctlc.pdf
-	pdftk ctlc.pdf cat 121-124 output chapter16-draft.pdf
+	pdftk ctlc.pdf cat 116-124 output chapter16-draft.pdf
 chapter22-draft.pdf: ctlc.pdf
 	pdftk ctlc.pdf cat 142-152 output chapter22-draft.pdf
 chapter23-draft.pdf: ctlc.pdf
