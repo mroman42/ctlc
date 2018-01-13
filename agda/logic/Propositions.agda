@@ -13,7 +13,7 @@ module logic.Propositions where
 
   -- The type of mere propositions
   hProp : ∀{ℓ} → Type (lsuc ℓ)
-  hProp {ℓ} = Σ (Type ℓ) id
+  hProp {ℓ} = Σ (Type ℓ) isProp
   
   -- TODO: Truth is the only true mere proposition, any other true
   -- proposition is equivalent to truth.
