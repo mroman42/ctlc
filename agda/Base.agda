@@ -64,6 +64,10 @@ module Base where
     
   open Basic public
 
+  -- Negation
+  ¬ : ∀{ℓ} → Type ℓ → Type ℓ
+  ¬ A = (A → ⊥)
+
   -- Identity function
   id : ∀{ℓ} {A : Type ℓ} → A → A
   id a = a
@@ -71,3 +75,7 @@ module Base where
   -- Composition of functions
   _∘_ : ∀{ℓ} {A B C : Type ℓ} → (B → C) → (A → B) → (A → C)
   (g ∘ f) z = g (f z)
+
+  -- Ex falso quodlibet
+  exfalso : ∀{ℓ} {A : Type ℓ} → ⊥ → A
+  exfalso ()

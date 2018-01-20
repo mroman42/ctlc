@@ -15,6 +15,7 @@ module Equality where
   inv (refl a) = refl a
 
   -- Composition of paths
+  infix 50 _·_
   _·_ : ∀{ℓ} {A : Type ℓ}  {a b c : A} → a == b → b == c → a == c
   refl a · q = q
 
@@ -31,3 +32,6 @@ module Equality where
   apd : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ}  {P : A → Type ℓⱼ} {a b : A} → (f : (a : A) → P a) →
         (p : a == b) → transport P p (f a) == f b 
   apd f (refl a) = refl (f a)
+
+  happly : ∀{ℓ} {A B : Type ℓ} {f g : A → B} → f == g → ((x : A) → f x == g x)
+  happly (refl f) x = refl (f x)

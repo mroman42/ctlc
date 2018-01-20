@@ -7,3 +7,4 @@ open import Equality
 -- inputs to equal outputs.
 postulate fext : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ}
                  (f g : A → B) (α : (a : A) → f a == g a) → f == g
+
