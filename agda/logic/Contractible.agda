@@ -11,4 +11,6 @@ module logic.Contractible where
   isContr A = Σ A (λ a → ((x : A) → a == x))
 
   
-  
+  -- The fiber of a map over a point is given by
+  fib : ∀{ℓ} {A B : Type ℓ}  (f : A → B) → B → Type ℓ
+  fib {A = A} f b = Σ A (λ a → f a == b)
