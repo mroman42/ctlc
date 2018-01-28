@@ -1098,7 +1098,7 @@ a term of type $A \to B$; it is expecting a term of type $A$.
 #+attr_latex: :options [Typing context]
 #+begin_definition
 A *typing context* is a sequence of type assumptions
-$x_1:A_1,\dots,x_n:A_n$, where no variable $x_{i}$ appears more than once.
+$\Gamma = (x_1:A_1,\dots,x_n:A_n)$, where no variable $x_{i}$ appears more than once.
 We will implicitely assume that the order in which these
 assumptions appear does not matter.
 #+end_definition
@@ -1138,7 +1138,7 @@ listed above and the conclusion is written below the line.
     \RightLabel{$(app)$}
     \AXC{$\Gamma \vdash f : A \to B$}
     \AXC{$\Gamma \vdash a : A$}
-    \BIC{$\Gamma \vdash f a : B$}
+    \BIC{$\Gamma \vdash f\ a : B$}
     \end{prooftree}
 
 #+begin_definition
@@ -1705,7 +1705,7 @@ with the simply-typed lambda calculus will be made explicit in the [[*Propositio
 
 We will use the logical binary connectives $\to,\land,\lor$, and two
 given propositions, $\top,\bot$ representing the trivially true and false
-propostiions, respectively.
+propostions, respectively.
 The rules defining natural deduction come in pairs; there are introductors
 and eliminators for every connective. Every introductor uses a set of
 assumptions to generate a formula and every eliminator gives a way to
@@ -6185,6 +6185,8 @@ x''
 commutes.
 #+end_proof
 
+# TODO: Initial algebras: Wellfounded trees in categories
+
 *** TODO Free algebras for a monad
 *** Kleisli categories
 #+ATTR_LATEX: :options [Kleisli category]
@@ -6962,7 +6964,11 @@ forcing techniques with allowed to construct new models of ZFC.
 # [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
 ** TODO Presheaves
-** Cartesian closed categories and lambda calc2ulus
+# TODO: Comma category is equivalent to a presheaf category
+# TODO: Pullbacks (in particular, products) always exist on presheaf cats
+# TODO: Terminal and pullbacks imply all finite limis
+
+** Cartesian closed categories and lambda calculus
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
@@ -7554,6 +7560,7 @@ In a similar way to how our previous fragment of simply-typed lambda
 calculus was the internal language of cartesian closed categories, this
 extended version is the internal language of bicartesian closed categories.
 
+*** TODO Heyting algebras
 # Heyting algebras are bicartesian closed categories. This explains
 # the Curry-Howard correspondence we saw earlier.
 
