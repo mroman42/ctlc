@@ -8243,6 +8243,7 @@ functor $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ has a right adjoint, called
 $\Pi_f \colon {\cal C}/A \to {\cal C}/B$.
 #+END_definition
 
+*** TODO Beck-Chevalley condition
 *** TODO Extensional Martin-Löf Type Theory
 # http://www.math.mcgill.ca/rags/LCCC/LCCC.pdf
 # The Biequivalence of Locally Cartesian Closed Categories and Martin-Löf Type Theories
@@ -8269,7 +8270,7 @@ elimination rules
 \BIC{$$}
 \end{prooftree}
 
-** Topoi
+** TODO Topoi
 Follows [Leinster] and [Moerdijk]
 
 *** Subobject classifier
@@ -8437,6 +8438,9 @@ This section is mainly based on cite:hottbook and [Course on Hott, Harper].
 #+LATEX: \end{center}}
 
 * Type theory
+# Bishop: Constructive analysis 1967
+# DeBruijn: Automath
+
 ** Martin-Löf Type Theory
 Type theory can be seen as an intuitionistic foundation of mathematics.
 
@@ -8456,7 +8460,7 @@ Type theory can be seen as an intuitionistic foundation of mathematics.
 The principal difference between types and sets is that 
 In Type theory, membership of an element to a type, as in $a : A$, is a
 /judgement/ of the theory instead of a /proposition/. In practice, this
-means that that we can write things like $\forall a. a \in A \to (a,a) \in A \times A$,
+means that that we can write things like $\forall a. \left(a \in A \to (a,a) \in A \times A\right)$,
 as $a \in A$ *is* a proposition; but we cannot write $\prod_{a : A} (a,a) : A \times A$.
 A type declaration is not part of the language.
 
@@ -8557,7 +8561,7 @@ into negative and positive types.
     the type is determined by some data. Coproducts are an example
     of positive types.
 
-*** Dependent function types
+*** OLD Dependent function types
 **** Dependent function types: introduction                       :ignore:
 *Dependent function types*, or *\Pi-types*, are the generalized version
 of the function types in simply-typed lambda calculus. The elements of $\prod_{x:A} B(x)$ are functions
@@ -8653,7 +8657,7 @@ Thus, we will write $f \circ g$ instead of $\circ (A,B,C,f,g)$.
 # Sometimes, when defining a function, it will be also useful to write
 # it not as a lambda expression but as a function with parentheses.
 
-*** Dependent pair types
+*** OLD Dependent pair types
 **** Dependent pair types: introduction                           :ignore:
 *Dependent pair types*, or *\Sigma-types*, can be seen as a
 generalized version of the product type, but they can be also
