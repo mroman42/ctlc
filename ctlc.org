@@ -43,8 +43,8 @@
 #+latex_header_extra: \input{classicthesis-config}
 
 *** Fonts                                                          :ignore:
-#+latex_header_extra: \usepackage{libertine}
-#+latex_header_extra: \usepackage{libertinust1math}
+#+latex_header_extra: % \usepackage{libertine}
+#+latex_header_extra: % \usepackage{libertinust1math}
 #+latex_header_extra: \usepackage{inconsolata}
 #+latex_header_extra: \usepackage[scale=MatchLowercase]{FiraMono}
 #+latex_header_extra: \usepackage[T1]{fontenc}
