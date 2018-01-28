@@ -7905,8 +7905,282 @@ Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\as
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
 
-** TODO First-order logic (?)
-** Locally closed cartesian categories
+** Locally cartesian closed categories
+*** Quantifiers and subsets
+**** Logical formulas as subsets                                  :ignore:
+**** Substitution                                                 :ignore:
+Substitution inside a formula
+
+\[\begin{tikzcd}
+\left\{a{:}A \mid P(f(a)) \right\} \rar{} \dar[swap,hook]{} &
+\left\{ b{:}B \mid P(b) \right\} \dar[hook]{} \\
+A \rar{f} & B \\
+\end{tikzcd}\]
+
+**** Weakening                                                    :ignore:
+A particular case is weakening
+
+\[\begin{tikzcd}
+\left\{(a,b) : A \times B \mid P(a) \right\} \rar{} \dar[swap,hook]{} &
+\left\{ a{:}A \mid P(a) \right\} \dar[hook]{} \\
+A \times B \rar{\pi} & A \\
+\end{tikzcd}\]
+
+**** The pullback functor                                         :ignore:
+**** Set example                                                  :ignore:
+**** Quantifiers as adjoints                                      :ignore:
+*** Locally cartesian closed categories
+**** Left adjoint                                                 :ignore:
+#+ATTR_LATEX: :options [Left adjoint of the pullback functor]
+#+BEGIN_proposition
+<<prop-leftadjointweak>>
+Given any category ${\cal C}$ with all finite limits and $f \colon A \to B$, the pullback
+functor $f^{\ast} \colon {\cal C}/A \to {\cal C}/B$ has a left adjoint $\Sigma_{f} \colon {\cal C}/B \to {\cal C}/A$ defined
+as $\Sigma_f x = f \circ x$ in objects and trivially in morphisms.
+#+END_proposition
+#+BEGIN_proof
+We must find a natural bijection $\hom(f \circ x, y) \cong \hom(x, f^{\ast}y)$; but,
+precisely by the universal property of the pullback, we have a natural
+bijection between arrows $k \colon X \to f^{\ast}Y$ such that $x = f^{\ast}y \circ k$ and arrows
+$\widetilde{k} \colon X \to Y$ such that $f \circ x = y \circ \widetilde{k}$.
+\[\begin{tikzcd}
+X \ar[bend right,swap]{ddr}{x} \ar[dashed]{dr}\ar[dashed, bend left]{drr} & & \\
+& f^{\ast}Y \rar\dar[swap]{f^{\ast}y} & Y \dar{y} \\
+& A \rar{f} & B
+\end{tikzcd}\]
+#+END_proof
+
+**** Locally cartesian closed category                            :ignore:
+We define a *locally cartesian closed category* as a category ${\cal C}$ where the
+pullback functor also has a right adjoint $\Pi_f \colon {\cal C}/A \to {\cal C}/B$. The rationale
+for this name becomes apparent in the following characterization.
+
+**** Characterization by slices                                   :ignore:
+#+ATTR_LATEX: :options [Characterization]
+#+BEGIN_theorem
+A category ${\cal C}$ with terminal object is locally cartesian closed if and only
+if ${\cal C}/A$ is cartesian closed for any object $A$.
+#+END_theorem
+#+BEGIN_proof
+$(\Rightarrow)$ Suppose ${\cal C}$ be locally cartesian closed. The terminal object of ${\cal C}/A$ is
+trivially $\mathrm{id}_A \colon A\to A$, and the product of $x \colon X \to A$ and $y \colon Y \to A$
+is given by universal property of the pullback
+\[\begin{tikzcd}
+Z \ar[bend right,swap]{ddr}{} \ar[dashed]{dr}{\exists!} \ar[bend left]{drr} & & \\
+& X \times_A Y \drar{x \times y}\rar\dar[swap]{} & X \dar{x} \\
+& Y \rar{y} & A
+\end{tikzcd}\]
+We can notice that multiplying by $- \times y$ is the same as composing
+$\Sigma_y \circ y^{\ast} \colon {\cal C}/A \to {\cal C}/A$; and, as we have $\Sigma_y \dashv y^{\ast} \dashv \Pi_y$, for any
+$a,b \colon Z \to A$,
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] \Sigma_y (y^{\ast} a) \rar{}\& b \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] y^{\ast} a \rar{}\& y^{\ast} b \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] a \rar{}\& \Pi_y (y^{\ast} b) \end{tikzcd}}
+\end{prooftree}
+
+and so, the product has a right adjoint and the exponential is given by
+$a^y = \Pi_y y^{\ast} a$.
+
+$(\Leftarrow)$ Suppose ${\cal C}$ such that ${\cal C}/A$ is always cartesian closed. In particular
+the slice on the terminal object is cartesian closed and so is ${\cal C} \cong {\cal C}/1$;
+we only need to prove the existence of pullbacks in ${\cal C}$ and a right adjoint
+for each pullback functor $f^{\ast}$.
+
+Again, if $f \colon X \to A$ and $g \colon Y \to A$ are objects in the slice category
+${\cal C}/A$, their product creates a morphism $X \times_A Y \to A$ in ${\cal C}$ and the
+universal property of the product in the slice category is exactly the
+universal property of the pullback in ${\cal C}$.
+
+# TODO: Build adjoints
+#+END_proof
+
+**** Presheaves are locally cartesian closed                      :ignore:
+*** Dependent types
+**** Dependent types                                              :ignore:
+In the same way that cartesian closed categories model the types of
+the simply typed lambda calculus, locally cartesian closed categories
+model *dependent types* that can depend on elements of another type.
+Each dependent type $B$ depending on values of type $A$ can be also
+seen as a family of types parametrized over the other type $\{B(a)\}_{a : A}$.
+This extension of type theory forces us to revisit the notion of
+typing context.
+
+# Cite Martin-Lof, Seely, Newstead
+
+**** Contexts                                                     :ignore:
+*Typing contexts* for dependent type theory are given as a list of
+variables
+\[
+\Gamma = (a_1 : A_1, a_2 : A_2, \dots, a_n : A_n) 
+\]
+where each type $A_i$ can depend on the variables $a_1,\dots,a_{i-1}$. The
+core syntax of dependent type theory can be expressed in terms of
+*substitutions* between contexts. A substitution from a context $\Delta$
+to $\Gamma$ is written as $\sigma \colon \Delta \to \Gamma$, and is given by a list of terms
+$(t_1,\dots,t_n)$ such that
+\[
+\Delta \vdash t_1 : A_1,\quad
+\Delta \vdash t_2 : A_2[t_1/a_1],\quad
+\dots,\quad
+\Delta \vdash t_n : A_n[t_1,\dots,t_{n-1}/a_1,\dots,a_{n-1}],
+\]
+that is, a context can be substituted into another if the list of
+terms of the second one can be built from the first one.
+
+**** Categorical interpretation                                   :ignore:
+The interpretation of a dependent type theory as a category takes
+contexts $\Gamma$ as objects $\intr{\Gamma}$ and substitutions as morphisms. Note how there
+exists an identity substitution $\sigma_{\mathrm{id}} \colon \Gamma \to \Gamma$ that simply lists the
+variables of the context and how any two substitutions $\tau \colon \Gamma \to \Phi$ 
+and $\sigma \colon \Delta \to \Gamma$ can be composed into $\tau \circ \sigma \colon \Delta \to \Phi$, which creates
+the terms of $\Gamma$ from $\Delta$ following $\tau$ and uses again these terms to
+create the terms of $\Phi$.
+
+# TODO: Explicit substitution
+
+**** Display maps and projections                                 :ignore:
+A particular kind of substitutions will be *display maps*. If a term
+can be constructed on a given context, $\Gamma \vdash a : A$, the context can be
+extended with that term to $\Gamma, a : A$. Display maps are substitutions
+of the form $\pi_A \colon (\Gamma, a{:}A) \to \Gamma$ that simply list the variables of $\Gamma$.
+
+This way, each type $A$ in a context $\Gamma$ is represented by the object
+$\pi_A \colon (\Gamma, a{:}A) \to \Gamma$ of the slice category $\Gamma/A$; and each term of the
+type, $\Gamma \vdash a : A$ is represented by a morphism from the terminal object
+of $\Gamma/A$, that is,
+\[\begin{tikzcd}
+\intr{\Gamma} \rar{a} \drar[equal] & \intr{\Gamma, a:A} \dar{\pi_A} \\
+& \intr{\Gamma}
+\end{tikzcd}\]
+
+*** Dependent pairs and dependent functions
+**** Types on a locally cartesian closed structure                :ignore:
+The locally cartesian closed structure of a category induces new
+type constructors in the type theory, dependent sums and dependent
+products. Their meaning under the Curry-Howard interpretation is that
+of the existential and universal quantifier, respectively.
+
+\\
+
+**** Dependent sum                                                :ignore:
+*Dependent pair types*, or *\Sigma-types*, can be seen as a
+generalized version of product types. Given a family of types parametrized
+by another type, $\{B(a)\}_{a : A}$, the elements of $\sum_{a:A}B(a)$
+are pairs $\pair{a,b}$ where the first element is $a : A$ and the
+second element is $b : B(a)$; that is, the type of the second
+component depends on the first component.  This type is often written
+as $\Sigma (a:A), B(a)$ and it corresponds to the intuitionistic
+existential quantifier under the /propositions as types/
+interpretation. That is, the proof of $\exists (a:A), B(a)$ must be
+seen as a pair given by an element $a$ and a proof of $B(a)$.
+
+In a locally closed cartesian category, given a type $A$ in a context $\Gamma$, as
+$\pi_A \colon \intr{\Gamma, a:A} \to \intr{\Gamma}$; and $B$ a type depending the context $\Gamma, a:A$, as
+$\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$, the type $\sum_{a:A}B$ is given by the
+object
+\[
+\Sigma_{\pi_A}\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma}.
+\]
+That is, the sigma type over a type is left adjoint to the
+weakening that determines that type; this left adjoint, as we proved
+in Proposition [[prop-leftadjointweak]], is given by postcomposition with
+$\pi_A$.
+
+Thus, categorically, the type $\sum_{a:A} B(a)$ is given in the empty context by the composition of
+the projections that give rise to the types $\vdash A \text{ type}$ and $a : A \vdash B \text{ type}$.
+\[\begin{tikzcd}
+\intr{x : A, y : B} \rar{\pi_B} & \intr{x : A} \rar{\pi_A} & 1
+\end{tikzcd}\]
+Thus, elements of this type can be built categorically with an element
+of $a : A$, using a pullback to create the context $\intr{B(a)}$ and then providing
+an element $b : B(a)$.
+\[\begin{tikzcd}
+\intr{\Gamma} \rar{b} \drar[equal] \ar[bend left]{rr}{\pair{a,b}} & 
+\intr{\Gamma,b : B(a)} \dar\rar &
+\intr{\Gamma,a:A,b:B} \dar{\pi_B} \ar[bend left=70]{dd}{\pi_{\Sigma}} \\
+& \intr{\Gamma} \rar{a}\drar[equal] & \intr{\Gamma, a : A} \dar{\pi_A} \\
+&& \intr{\Gamma}
+\end{tikzcd}\]
+
+The adjunction in the slice category,
+
+# adj
+
+can be rewritten as the introduction rule
+
+**** Dependent product                                            :ignore:
+*Dependent function types*, or *\Pi-types*, can be seen as a generalized
+version of function types. Given a family of types parametrized by another
+type, $\{B(a)\}_{a : A}$, the elements of $\prod_{x:A} B(x)$ are functions
+with the type $A$ as domain and a changing codomain $B(x)$, depending on
+the specific element $x$ to which the function is applied. This type is often
+written also as $\Pi(x:A), B(x)$ to resemble the universal quantifier; under
+the /propositions as types/ interpretation, it would correspond to the proof
+that a proposition $B$ holds for any $x : A$, that is, $\forall (x : A), B(x)$.
+
+In a locally closed cartesian category, given a type $A$ in a context $\Gamma$, as
+$\pi_A \colon \intr{\Gamma, a:A} \to \intr{\Gamma}$; and $B$ a type depending the context $\Gamma, a:A$, as
+$\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$, the type $\prod_{a:A}B$ is given by the object
+\[
+\Pi_{\pi_A} \pi_{B} \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma}.
+\]
+That is, the pi type over a type is right adjoint to the weakening that
+determines that type.
+
+Thus, categorically, the type $\prod_{a:A}B(a)$ is given in the empty context as the
+adjoint $\pi_A^{\ast} \dashv \Pi_{\pi_A}$ of the morphism representing the type $B$. Elements of this 
+type can be built applying the adjunction on the
+diagram of any term of type $B$ that assumes $a : A$ in the context.
+\[\begin{tikzcd}
+\intr{\Gamma, a : A} \rar{b} \drar[equal] &
+\intr{\Gamma, a : A, b : B} \dar{\pi_B} &
+\intr{\Gamma} \rar{(\lambda a.b)} \drar[equal] &
+\intr{\Gamma, z : \prod_{a:A} B} \dar{\pi_{\prod}} \\
+& \intr{\Gamma, a : A}
+&
+& \intr{\Gamma}
+\end{tikzcd}\]
+
+That is, we have the following adjunction and counit in the slice
+category
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\& \Gamma,A \& \\ \Gamma,A \ar{rr}{b} \urar[bend left] \&\& \Gamma,A,B \ular[bend right]
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\Gamma \ar{rr}{(\lambda a.b)} \drar[bend right] \&\& \Gamma, \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
+\end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\& \Gamma,A \& \\ \Gamma,A,\prod_{a:A}B \ar{rr}{app} \urar[bend left] \&\& \Gamma,A,B \ular[bend right]
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\Gamma, \prod_{a:A}B \ar{rr}{\mathrm{id}} \drar[bend right] \&\& \Gamma, \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
+\end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
+
+which can be rewritten as an introduction and elimination rules
+\begin{prooftree}
+\AXC{$\Gamma, a : A \vdash b : B$}
+\UIC{$\Gamma \vdash (\lambda a.b) : \prod_{a:A}B$}
+\AXC{$\Gamma \vdash a : A$}
+\AXC{$\Gamma \vdash f : \prod_{a:A}B$}
+\BIC{$\Gamma \vdash f\ a : B(a)$}
+\noLine
+\BIC{}
+\end{prooftree}
+
+with the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ given
+by naturality.
+
+*** Soundness up to isomorphism
+** OLD Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
 # Contar ML aquí y luego contarlo solo desde Agda
 # Leer: Awodey - Type theory and homotopy
