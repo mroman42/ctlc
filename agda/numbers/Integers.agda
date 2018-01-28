@@ -13,8 +13,8 @@ module numbers.Integers where
 
   z-QRel : QRel (ℕ × ℕ)
   z-QRel = record { R = z-QRelR
-                 ; Aset = {!!}
-                 ; Rprop = {!!} }
+                  ; Aset = {!nat-isSet!}
+                  ; Rprop = {!!} }
 
   ℤ : Type1
   ℤ = (ℕ × ℕ) / z-QRel

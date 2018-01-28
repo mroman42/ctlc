@@ -13,6 +13,3 @@ module logic.Sets where
   -- The type of sets
   hSet : ∀{ℓ} → Type (lsuc ℓ)
   hSet {ℓ} = Σ (Type ℓ) isSet
-
-
-

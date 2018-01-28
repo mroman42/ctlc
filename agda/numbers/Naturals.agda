@@ -3,6 +3,8 @@
 open import Agda.Primitive
 open import Base
 open import Equality
+open import logic.Sets
+open import logic.Hedberg
 
 module numbers.Naturals where
 
@@ -60,3 +62,6 @@ module numbers.Naturals where
   nat-decEq (succ n) (succ m) with (nat-decEq n m)
   nat-decEq (succ n) (succ m) | inl p = inl (ap succ p)
   nat-decEq (succ n) (succ m) | inr f = inr λ p → f (succ-inj n m p)
+
+  nat-isSet : isSet ℕ
+  nat-isSet = hedberg ℕ nat-decEq

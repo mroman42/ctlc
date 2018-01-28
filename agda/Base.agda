@@ -33,7 +33,7 @@ module Base where
     -- constructed using only sigma types. Note that l ⊔ q is the maximum
     -- of two hierarchy levels l and q. This way, we define sigma types in
     -- full generality, at each universe.
-    record Σ {i j} (S : Type i)(T : S → Type j) : Type (i ⊔ j) where
+    record Σ {ℓᵢ ℓⱼ} (S : Type ℓᵢ)(T : S → Type ℓⱼ) : Type (ℓᵢ ⊔ ℓⱼ) where
       constructor _,_
       field
         fst : S
@@ -71,10 +71,6 @@ module Base where
   -- Identity function
   id : ∀{ℓ} {A : Type ℓ} → A → A
   id a = a
-
-  -- Composition of functions
-  _∘_ : ∀{ℓ} {A B C : Type ℓ} → (B → C) → (A → B) → (A → C)
-  (g ∘ f) z = g (f z)
 
   -- Ex falso quodlibet
   exfalso : ∀{ℓ} {A : Type ℓ} → ⊥ → A
