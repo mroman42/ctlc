@@ -6,7 +6,7 @@ open import equivalence.Equivalence
 
 module equality.DependentProduct where
 
-  module FunctionExtensionality {ℓ} {A B : Type ℓ} {f g : A → B} where
+  module FunctionExtensionality {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} {f g : A → B} where
     -- Application of an homotopy
     happly : f == g → ((x : A) → f x == g x)
     happly (refl f) x = refl (f x)

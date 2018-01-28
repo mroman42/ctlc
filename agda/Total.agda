@@ -2,7 +2,6 @@
 
 open import Base
 open import Equality
-open import Axioms
 open import Composition
 open import Homotopies
 
@@ -23,6 +22,6 @@ open import homotopy.Circle
 open import homotopy.FundGroupCircle
 
 open import numbers.Naturals
--- open import numbers.Integers
+open import numbers.Integers
 open import numbers.Rationals
 

@@ -5,6 +5,7 @@ open import Base
 open import Equality
 open import logic.Sets
 open import logic.Hedberg
+open import equality.DecidableEquality
 
 module numbers.Naturals where
 
@@ -55,7 +56,7 @@ module numbers.Naturals where
   succ-inj : (n m : ℕ) → (succ n == succ m) → n == m
   succ-inj n m p = decode n m (encode (succ n) (succ m) p)
   
-  nat-decEq : (n m : ℕ) → (n == m) + ¬ (n == m)
+  nat-decEq : decEq ℕ
   nat-decEq zero zero = inl (refl zero)
   nat-decEq zero (succ m) = inr (λ ())
   nat-decEq (succ n) zero = inr (λ ())
@@ -64,4 +65,4 @@ module numbers.Naturals where
   nat-decEq (succ n) (succ m) | inr f = inr λ p → f (succ-inj n m p)
 
   nat-isSet : isSet ℕ
-  nat-isSet = hedberg ℕ nat-decEq
+  nat-isSet = hedberg nat-decEq

@@ -3,6 +3,8 @@
 open import Base
 open import Equality
 open import logic.Quotients
+open import logic.Hedberg
+open import equality.DecidableEquality
 open import numbers.Naturals renaming (plus to _N+_)
 
 module numbers.Integers where
@@ -13,8 +15,8 @@ module numbers.Integers where
 
   z-QRel : QRel (ℕ × ℕ)
   z-QRel = record { R = z-QRelR
-                  ; Aset = {!nat-isSet!}
-                  ; Rprop = {!!} }
+                  ; Aset = hedberg (decEqProd nat-decEq nat-decEq)
+                  ; Rprop = λ { (a , c) (b , d) → nat-isSet (a N+ d) (c N+ d) } }
 
   ℤ : Type1
   ℤ = (ℕ × ℕ) / z-QRel

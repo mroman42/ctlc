@@ -4,20 +4,20 @@ open import Agda.Primitive
 open import Base
 open import Equality
 open import equality.DependentProduct
-open import Axioms
+-- open import Axioms
 open import logic.Relation
 open import logic.Propositions
 open import logic.Sets
 
-module logic.Hedberg where
+module logic.Hedberg {ℓ} where
 
   -- A set is a type satisfiying axiom K
-  axiomKisSet : ∀{ℓ}  (A : Type ℓ) → ((a : A) → (p : a == a) → p == refl a) → isSet A
+  axiomKisSet : (A : Type ℓ) → ((a : A) → (p : a == a) → p == refl a) → isSet A
   axiomKisSet A k x _ p (refl _) = k x p
   
   -- A reflexive relation on X implying identity proves that X is a
   -- set.
-  reflRelIsSet : ∀{ℓ}  (A : Type ℓ) (r : Rel A) →
+  reflRelIsSet :  (A : Type ℓ) (r : Rel A) →
     ((x y : A) → R {{r}} x y → x == y) →
     (ρ : (a : A) → R {{r}} a a) →
     isSet A
@@ -37,12 +37,12 @@ module logic.Hedberg where
 
 
   -- Hedberg's theorem
-  lemDoubleNeg : ∀{ℓ}  (A : Type ℓ) → (A + ¬ A) → (¬ (¬ A) → A)
+  lemDoubleNeg : (A : Type ℓ) → (A + ¬ A) → (¬ (¬ A) → A)
   lemDoubleNeg A (inl x) _ = x
   lemDoubleNeg A (inr f) n = exfalso (n f)
 
-  hedberg : ∀{ℓ}  (A : Type ℓ) → ((a b : A) → (a == b) + ¬ (a == b)) → isSet A
-  hedberg A f = reflRelIsSet A
+  hedberg : {A : Type ℓ} → ((a b : A) → (a == b) + ¬ (a == b)) → isSet A
+  hedberg {A} f = reflRelIsSet A
                 (record { R = λ a b → ¬ (¬ (a == b)) ; Rprop = isPropNeg })
                 doubleNegEq (λ a z → z (refl a))
     where
@@ -50,4 +50,4 @@ module logic.Hedberg where
       doubleNegEq a b = lemDoubleNeg (a == b) (f a b)
 
       isPropNeg : (a b : A) → isProp (¬ (¬ (a == b)))
-      isPropNeg a b x y = fext x y λ u → exfalso (y u)
+      isPropNeg a b x y = funext λ u → exfalso (x u)
