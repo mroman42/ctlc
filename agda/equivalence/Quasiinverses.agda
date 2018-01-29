@@ -1,27 +1,30 @@
 {-# OPTIONS --without-K #-}
 
+open import Agda.Primitive
 open import Base
 open import Equality
 open import Homotopies
 open import Composition
+open import logic.Contractible
 open import logic.Propositions
+open import equality.Sigma
 open import equivalence.Equivalence
 
 module equivalence.Quasiinverses where
   
-  module Invertibles {ℓ} {A B : Type ℓ} where
+  module Invertibles {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
     -- Definitions for quasiinverses, left-inverses, right-inverses and
     -- biinverses.
-    qinv : (A → B) → Type ℓ
+    qinv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
     qinv f = Σ (B → A) (λ g → ((f ∘ g) ∼ id) × ((g ∘ f) ∼ id)) 
   
-    linv : (A → B) → Type ℓ
+    linv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
     linv f = Σ (B → A) (λ g → (g ∘ f) ∼ id)
   
-    rinv : (A → B) → Type ℓ
+    rinv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
     rinv f = Σ (B → A) λ g → (f ∘ g) ∼ id
   
-    biinv : (A → B) → Type ℓ
+    biinv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
     biinv f = linv f × rinv f
 
     qinv-biinv : (f : A → B) → qinv f → biinv f
@@ -42,16 +45,23 @@ module equivalence.Quasiinverses where
         δ : (g ∘ f) ∼ id
         δ = (rcomp-∼ f γ) ● α
 
-    -- Propositions
-    linvIsProp : (f : A → B) → isProp (linv f)
-    linvIsProp f = {!!}
+    -- TODO: Propositions
+    -- linvIsProp : (f : A → B) → isProp (linv f)
+    -- linvIsProp f = {!!}
   open Invertibles public
 
-  equiv-biinv : ∀{ℓ}  (A B : Type ℓ) → (f : A → B) → isContrMap f → biinv f
-  equiv-biinv A B f contrf = (remap eq , rlmap-inverse-h eq) , (remap eq , lrmap-inverse-h eq)
-    where
-      eq : A ≃ B
-      eq = f , contrf
-
-  biinv-equiv : ∀{ℓ}  (A B : Type ℓ) → (f : A → B) → biinv f → isContrMap f
-  biinv-equiv A B f biinvf = {!!}
+  module QuasiinversesAndEquivalences {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
+    equiv-biinv : (f : A → B) → isContrMap f → biinv f
+    equiv-biinv f contrf = (remap eq , rlmap-inverse-h eq) , (remap eq , lrmap-inverse-h eq)
+      where
+        eq : A ≃ B
+        eq = f , contrf
+  
+    qinv-equiv : ∀{ℓ}  {A B : Type ℓ} → (f : A → B) → qinv f → isContrMap f
+    qinv-equiv f (g , (α , β)) b = ((g b) , α b) , {!!}
+      where
+        uniq : (x : fib f b) → (g b , α b) == x
+        uniq (a , p) = Σ-bycomponents ((ap g (inv p) · β a) , {!!})
+  
+    biinv-equiv : ∀{ℓ}  {A B : Type ℓ} → (f : A → B) → biinv f → isContrMap f
+    biinv-equiv f ((gl , hgl) , (gr , hgr)) = λ b → {!!}

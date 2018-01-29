@@ -75,3 +75,17 @@ module Base where
   -- Ex falso quodlibet
   exfalso : ∀{ℓ} {A : Type ℓ} → ⊥ → A
   exfalso ()
+
+  -- Composition
+  _∘_ : ∀{ℓᵢ ℓⱼ ℓₖ} {A : Type ℓᵢ} {B : Type ℓⱼ} {C : Type ℓₖ}
+        → (B → C) → (A → B) → (A → C)
+  (g ∘ f) z = g (f z)
+
+  -- Equality is defined as an inductive type
+  data _==_ {ℓ} {A : Set ℓ} : A → A → Type ℓ where
+    refl : (a : A) → a == a
+
+  -- Composition of paths
+  infixl 50 _·_
+  _·_ : ∀{ℓ} {A : Type ℓ}  {a b c : A} → a == b → b == c → a == c
+  refl a · q = q

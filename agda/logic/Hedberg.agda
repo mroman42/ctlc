@@ -4,7 +4,6 @@ open import Agda.Primitive
 open import Base
 open import Equality
 open import equality.DependentProduct
--- open import Axioms
 open import logic.Relation
 open import logic.Propositions
 open import logic.Sets
@@ -29,7 +28,7 @@ module logic.Hedberg {ℓ} where
 
       lemma3 : {a : A} (p : a == a) →
         (f a a (ρ a)) · p == (f a a (ρ a))
-      lemma3 {a} p = inv (transport-concat p _) · lemma2 p (ρ a) ·
+      lemma3 {a} p = inv (transport-concat-r p _) · lemma2 p (ρ a) ·
                      ap (f a a) (Rprop {{r}} a a _ (ρ a))
 
       lemma : {a : A} (p : a == a) → p == refl a

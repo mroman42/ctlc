@@ -1,5 +1,6 @@
 {-# OPTIONS --without-K #-}
 
+open import Agda.Primitive
 open import Base
 open import Equality
 open import Composition
@@ -8,23 +9,25 @@ open import logic.Contractible
 
 module equivalence.Equivalence where
 
-  -- Contractible maps. A map is contractible if the fiber in any
-  -- point is contractible, that is, each element has a unique
-  -- preimage.
-  isContrMap : ∀{ℓ}  {A B : Type ℓ} → (f : A → B) → Type ℓ 
-  isContrMap {_} {A} {B} f = (b : B) → isContr (fib f b)
-
-  -- There exists an equivalence between two types if there exists a
-  -- contractible function between them.
-  isEquiv : ∀{ℓ}  {A B : Type ℓ} → (f : A → B) → Type ℓ
-  isEquiv = isContrMap
-
+  module DefinitionOfEquivalence {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
+    -- Contractible maps. A map is contractible if the fiber in any
+    -- point is contractible, that is, each element has a unique
+    -- preimage.
+    isContrMap : (f : A → B) → Type (ℓᵢ ⊔ ℓⱼ)
+    isContrMap f = (b : B) → isContr (fib f b)
+  
+    -- There exists an equivalence between two types if there exists a
+    -- contractible function between them.
+    isEquiv : (f : A → B) → Type (ℓᵢ ⊔ ℓⱼ)
+    isEquiv = isContrMap
+  open DefinitionOfEquivalence public
+  
   -- Equivalence of types.
-  _≃_ : ∀{ℓ}  (A B : Type ℓ) → Type ℓ
+  _≃_ : ∀{ℓᵢ ℓⱼ}  (A : Type ℓᵢ) (B : Type ℓⱼ) → Type (ℓᵢ ⊔ ℓⱼ)
   A ≃ B = Σ (A → B) isEquiv
 
 
-  module EquivalenceMaps {ℓ} {A B : Type ℓ} where
+  module EquivalenceMaps {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
     -- Maps of an equivalence
     lemap : A ≃ B → (A → B)
     lemap = fst

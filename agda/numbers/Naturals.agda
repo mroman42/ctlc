@@ -14,18 +14,33 @@ module numbers.Naturals where
   plus zero y = y
   plus (succ x) y = succ (plus x y)
 
+  infixl 60 _+ₙ_
+  _+ₙ_ : ℕ → ℕ → ℕ
+  _+ₙ_ = plus
+
   -- Lemmas about addition
-  plus-lunit : (n : ℕ) → plus zero n == n
+  plus-lunit : (n : ℕ) → zero +ₙ n == n
   plus-lunit n = refl n
 
-  plus-runit : (n : ℕ) → plus n zero == n
+  plus-runit : (n : ℕ) → n +ₙ zero == n
   plus-runit zero = refl zero
   plus-runit (succ n) = ap succ (plus-runit n)
 
+  plus-succ : (n m : ℕ) → succ (n +ₙ m) == (n +ₙ (succ m))
+  plus-succ zero     m = refl (succ m)
+  plus-succ (succ n) m = ap succ (plus-succ n m)
+
+  plus-succ-rs : (n m o p : ℕ) → n +ₙ m == o +ₙ p → n +ₙ (succ m) == o +ₙ (succ p)
+  plus-succ-rs n m o p α = inv (plus-succ n m) · ap succ α · (plus-succ o p)
+
+  -- Commutativity
+  plus-comm : (n m : ℕ) → n +ₙ m == m +ₙ n
+  plus-comm zero     m = inv (plus-runit m)
+  plus-comm (succ n) m = ap succ (plus-comm n m) · plus-succ m n
 
   -- Associativity
-  plus-assoc : (n m p : ℕ) → plus n (plus m p) == plus (plus n m) p
-  plus-assoc zero m p = refl (plus m p)
+  plus-assoc : (n m p : ℕ) → n +ₙ (m +ₙ p) == (n +ₙ m) +ₙ p
+  plus-assoc zero     m p = refl (m +ₙ p)
   plus-assoc (succ n) m p = ap succ (plus-assoc n m p)
 
 

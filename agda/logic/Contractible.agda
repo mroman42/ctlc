@@ -1,5 +1,6 @@
 {-# OPTIONS --without-K #-}
 
+open import Agda.Primitive
 open import Base
 open import Equality
 
@@ -10,9 +11,9 @@ module logic.Contractible where
   isContr : ∀{ℓ}  (A : Type ℓ) → Type ℓ
   isContr A = Σ A (λ a → ((x : A) → a == x))
 
-  module Fibers {ℓ} {A B : Type ℓ} where
+  module Fibers {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
     -- The fiber of a map over a point is given by
-    fib : (f : A → B) → B → Type ℓ
+    fib : (f : A → B) → B → Type (ℓᵢ ⊔ ℓⱼ)
     fib f b = Σ A (λ a → f a == b)
   
     -- A function applied over the fiber returns the original point
