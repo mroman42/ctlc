@@ -3,6 +3,7 @@
 open import Agda.Primitive
 open import Base
 open import Equality
+open import EquationalReasoning
 open import Composition
 
 module Homotopies where
@@ -49,3 +50,18 @@ module Homotopies where
                  → H x · ap g p == ap f p · H y
     h-naturality H (refl a) = inv (·-runit (H a))
   open Naturality public
+
+  h-naturality-id : ∀{ℓ} {A : Type ℓ} {f : A → A} (H : f ∼ id) → {x : A}
+                  → H (f x) == ap f (H x)
+  h-naturality-id {f = f} H {x = x} =
+    begin
+      H (f x)                            ==⟨ ·-runit (H (f x)) ⟩
+      H (f x) · (refl (f x))             ==⟨ ap (H (f x) ·_) (inv (·-rinv (H x))) ⟩
+      H (f x) · (H x · inv (H x))        ==⟨ inv (·-assoc (H (f x)) _ (inv (H x))) ⟩
+      H (f x) · H x · inv (H x)          ==⟨ ap (λ u → H (f x) · u · inv (H x)) (inv (ap-id _)) ⟩
+      H (f x) · ap id (H x) · inv (H x)  ==⟨ ap (_· inv (H x)) (h-naturality H (H x)) ⟩
+      ap f (H x) · H x · inv (H x)       ==⟨ ·-assoc (ap f (H x)) _ (inv (H x)) ⟩
+      ap f (H x) · (H x · inv (H x))     ==⟨ ap (ap f (H x) ·_) (·-rinv (H x)) ⟩
+      ap f (H x) · refl (f x)            ==⟨ inv (·-runit (ap f (H x))) ⟩
+      ap f (H x)
+    ∎
