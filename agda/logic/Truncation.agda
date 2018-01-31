@@ -19,7 +19,7 @@ module logic.Truncation where
   ∣ x ∣ = !∣ x ∣
 
   -- Any two elements of the truncated type are equal
-  postulate trunc : ∀{ℓ} {A : Type ℓ} → isProp (∥ A ∥)
+  postulate trunc : ∀{ℓ} {A : Type ℓ} → isProp ∥ A ∥
 
   -- Recursion principle
   trunc-rec : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {P : Type ℓⱼ} → isProp P → (A → P) → ∥ A ∥ → P
