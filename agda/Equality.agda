@@ -122,6 +122,14 @@ module Equality where
       (q · ap g p) 
     ∎
 
+  transport-inv-l : ∀{ℓ} {A B : Type ℓ} → (p : A == B) → (b : B)
+                → transport (λ v → v) p (transport (λ v → v) (inv p) b) == b
+  transport-inv-l (refl a) b = refl b
+
+  transport-inv-r : ∀{ℓ} {A B : Type ℓ} → (p : A == B) → (a : A)
+                → transport (λ v → v) (inv p) (transport (λ v → v) p a) == a
+  transport-inv-r (refl a) b = refl b
+
   apd : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ}  {P : A → Type ℓⱼ} {a b : A}
       → (f : (a : A) → P a) → (p : a == b)
       → transport P p (f a) == f b

@@ -141,4 +141,8 @@ module algebra.Groups {ℓ} where
           welldefined (a , b) (c , d) r = funext λ m → gnn-exp-rel m a b c d r
           
     open Z-Exponentiation public
+
   open GroupStructure {{...}} public
+
+  Group : Type (lsuc ℓ)
+  Group = Σ (Type ℓ) GroupStructure
