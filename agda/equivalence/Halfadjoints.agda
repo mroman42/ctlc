@@ -1,5 +1,6 @@
 {-# OPTIONS --without-K #-}
 
+open import Agda.Primitive
 open import Base
 open import Equality
 open import Homotopies
@@ -10,10 +11,11 @@ open import logic.Propositions
 open import equality.Sigma
 open import equivalence.Equivalence
 
-module equivalence.Halfadjoints {ℓ} {A B : Type ℓ} where
+module equivalence.Halfadjoints {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
 
   -- Half adjoint equivalence
-  record ishae (f : A → B) : Type ℓ where
+  record ishae (f : A → B) : Type (ℓᵢ ⊔ ℓⱼ) where
+    constructor hae
     field
       g : B → A
       η : (g ∘ f) ∼ id
@@ -22,7 +24,7 @@ module equivalence.Halfadjoints {ℓ} {A B : Type ℓ} where
     
   -- Half adjoint equivalences give contractible fibers
   ishae-contr : (f : A → B) → ishae f → isContrMap f
-  ishae-contr f record { g = g ; η = η ; ε = ε ; τ = τ } y = ((g y) , (ε y)) , contra
+  ishae-contr f (hae g η ε τ) y = ((g y) , (ε y)) , contra
     where
       lemma : (c c' : fib f y) → Σ (fst c == fst c') (λ γ → (ap f γ) · snd c' == snd c) → c == c'
       lemma c c' (p , q) = Σ-bycomponents (p , lemma2)
@@ -59,3 +61,7 @@ module equivalence.Halfadjoints {ℓ} {A B : Type ℓ} where
               (inv (ap (f ∘ g) p) · ap (f ∘ g) p) · ε y   ==⟨ ap (_· ε y) (·-linv (ap (λ z → f (g z)) p)) ⟩
               ε y
             ∎
+
+  ishae-≃ : {f : A → B} → ishae f → A ≃ B
+  ishae-≃ ishaef = _ , (ishae-contr _ ishaef)
+
