@@ -6,23 +6,31 @@ open import Composition
 open import logic.Quotients
 open import logic.Hedberg
 open import equivalence.Equivalence
+open import equivalence.Quasiinverses
 open import equality.DecidableEquality
 open import equality.DependentProduct
 open import numbers.Naturals
 
+
 module numbers.Integers where
 
   -- Definition of the integers as a quotient over the naturals
-  z-QRelR : ℕ × ℕ → ℕ × ℕ → Type0
-  z-QRelR (a , c) (b , d) = (a +ₙ d) == (b +ₙ c)
+  z-rel : ℕ × ℕ → ℕ × ℕ → Type0
+  z-rel (a , c) (b , d) = (a +ₙ d) == (b +ₙ c)
 
   z-QRel : QRel (ℕ × ℕ)
-  z-QRel = record { R = z-QRelR
+  z-QRel = record { R = z-rel
                   ; Aset = hedberg (decEqProd nat-decEq nat-decEq)
                   ; Rprop = λ { (a , c) (b , d) → nat-isSet (a +ₙ d) (b +ₙ c) } }
 
   ℤ : Type1
   ℤ = (ℕ × ℕ) / z-QRel
+
+  -- Properties of the relation
+  -- z-rel-plus-both : (o a b : ℕ) → z-rel (a , b) (o +ₙ a , o +ₙ b)
+  -- z-rel-plus-both zero     a b = refl (plus a b)
+  -- z-rel-plus-both (succ o) a b = {!!}
+
 
   -- Inclusion of the natural numbers into the integers
   ntoz : ℕ → ℤ
@@ -76,26 +84,4 @@ module numbers.Integers where
       welldefined u v o = Rtrunc (zpred (zsucc [ v ])) [ v ] _ _
 
   zequiv-succ : ℤ ≃ ℤ
-  zequiv-succ = zsucc , {!!}
-
-  -- Addition
-  infixl 60 _+ᶻ_
-  _+ᶻ_ : ℤ → ℤ → ℤ
-  _+ᶻ_ = QRel-rec f welldefined
-    where
-      f : (ℕ × ℕ) → (ℤ → ℤ)
-      f (zero , zero) = id
-      f (zero , succ b) = zpred
-      f (succ a , zero) = zsucc
-      f (succ a , succ b) = f (a , b)
-
-      welldefined : (u v : ℕ × ℕ) → R {{z-QRel}} u v → f u == f v
-      welldefined (zero , zero) (zero , zero) r = funext λ x → refl x
-      welldefined (zero , zero) (zero , succ d) ()
-      welldefined (zero , zero) (succ b , zero) ()
-      welldefined (zero , zero) (succ b , succ .(plus b 0)) (refl .(succ (plus b 0))) = {!!}
-      welldefined (zero , succ c) (zero , zero) ()
-      welldefined (zero , succ c) (zero , succ .c) (refl .(succ c)) = refl λ x → f (zero , succ c) x
-      welldefined (zero , succ c) (succ b , zero) r = {!!}
-      welldefined (zero , succ c) (succ b , succ d) r = {!!}
-      welldefined (succ a , c) (b , d) r = {!!}
+  zequiv-succ = qinv-≃ zsucc (zpred , (zsucc-pred-id , zpred-succ-id))
