@@ -3,34 +3,23 @@
 open import Agda.Primitive
 open import Base
 open import Equality
-open import numbers.Naturals
+open import logic.Sets
 
-module algebra.Monoids where
+module algebra.Monoids {ℓ} where
 
-  record Monoid : Type1 where
+  record Monoid : Type (lsuc ℓ) where
     field
       -- Operations of a monoid
-      G : Type0        -- Carrier, TODO: should be a set
-      _⋆_ : G → G → G  -- Multiplication function
-      e : G            -- Unit element
+      G : Type ℓ         
+      GisSet : isSet G
+      _<>_ : G → G → G  -- Multiplication function
+      e : G             -- Unit element
 
       -- Axioms of a monoid
-      lunit : (x : G) → (e ⋆ x) == x
-      runit : (x : G) → (x ⋆ e) == x
-      assoc : (x y z : G) → (x ⋆ (y ⋆ z)) == ((x ⋆ y) ⋆ z)
-
-
-  -- Naturals form a monoid with addition
-  ℕ-plus-monoid : Monoid
-  ℕ-plus-monoid = record
-    { G = ℕ
-    ; _⋆_ = plus
-    ; e = zero
-    ; lunit = plus-lunit
-    ; runit = plus-runit
-    ; assoc = plus-assoc
-    }
-  
+      lunit : (x : G) → (e <> x) == x
+      runit : (x : G) → (x <> e) == x
+      assoc : (x y z : G) → (x <> (y <> z)) == ((x <> y) <> z)
+  open Monoid {{...}} public
 
   -- TODO: Lists are free monoids
   -- TODO: Monoid homomorphisms

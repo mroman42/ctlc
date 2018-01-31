@@ -6,6 +6,7 @@ open import Equality
 open import logic.Sets
 open import logic.Hedberg
 open import equality.DecidableEquality
+open import algebra.Monoids
 
 module numbers.Naturals where
 
@@ -68,6 +69,7 @@ module numbers.Naturals where
   zero-not-succ : (n : ℕ) → ¬ (succ n == zero)
   zero-not-succ n = encode (succ n) 0
 
+  -- The successor function is injective
   succ-inj : (n m : ℕ) → (succ n == succ m) → n == m
   succ-inj n m p = decode n m (encode (succ n) (succ m) p)
   
@@ -81,3 +83,15 @@ module numbers.Naturals where
 
   nat-isSet : isSet ℕ
   nat-isSet = hedberg nat-decEq
+
+  -- Naturals form a monoid with addition
+  ℕ-plus-monoid : Monoid
+  ℕ-plus-monoid = record
+    { G = ℕ
+    ; GisSet = nat-isSet
+    ; _<>_ = plus
+    ; e = zero
+    ; lunit = plus-lunit
+    ; runit = plus-runit
+    ; assoc = plus-assoc
+    }
