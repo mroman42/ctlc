@@ -90,6 +90,9 @@ module equivalence.Quasiinverses {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ
   qinv-≃ : (f : A → B) → qinv f → A ≃ B
   qinv-≃ f = ishae-≃ ∘ qinv-ishae
 
+  ≃-qinv : A ≃ B → Σ (A → B) qinv
+  ≃-qinv eq = lemap eq , (remap eq , (lrmap-inverse-h eq , rlmap-inverse-h eq))
+
   ishae-qinv : {f : A → B} → ishae f → qinv f
   ishae-qinv {f} (hae g η ε τ) = g , (ε , η)
 

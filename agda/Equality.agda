@@ -68,6 +68,9 @@ module Equality where
                       → transport (λ z → f z == g z) p q == inv (ap f p) · q · (ap g p)
     transport-eq-fun f g (refl a) q = ·-runit q
 
+    transport-comp : ∀{ℓⱼ} {a b c : A} {P : A → Type ℓⱼ} (p : a == b) (q : b == c)
+                     → ((transport P q) ∘ (transport P p)) == transport P (p · q)
+    transport-comp {P = P} (refl a) q = refl (transport P q)
 
     -- Notation for transport
     _✶ : ∀{ℓⱼ} {P : A → Type ℓⱼ} {a b : A} → a == b → P a → P b
