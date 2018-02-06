@@ -85,3 +85,12 @@ module numbers.Integers where
 
   zequiv-succ : ℤ ≃ ℤ
   zequiv-succ = qinv-≃ zsucc (zpred , (zsucc-pred-id , zpred-succ-id))
+
+  -- zpaths : ∀{ℓ} {A : Type ℓ} {a : A} → (p : a == a) → (n : ℤ) → a == a
+  -- zpaths {a = a} p = {!!}
+  --   where
+  --     f : (u : ℕ × ℕ) → a == a
+  --     f (n , m) = {!!}
+
+  --     welldefined : (u v : ℕ × ℕ) → R {{z-QRel}} u v → f u == f v
+  --     welldefined (a , c) (b , d) r = {!!}

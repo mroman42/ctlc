@@ -4,6 +4,7 @@ open import Base
 open import Equality
 open import logic.Propositions
 open import logic.Sets
+open import equivalence.EquivalenceSet
 
 module logic.SetTruncation where
 
@@ -24,3 +25,8 @@ module logic.SetTruncation where
   -- Recursion principle
   strunc-rec : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {P : Type ℓⱼ} → isSet P → (A → P) → ∥ A ∥₀ → P
   strunc-rec _ f !∣ x ∣₀ = f x
+
+  -- Induction principle (?)
+  strunc-ind : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : ∥ A ∥₀ → Type ℓⱼ} → ((a : ∥ A ∥₀) → isSet (B a))
+             → (g : (a : A) → B ∣ a ∣₀) → (a : ∥ A ∥₀) → B a
+  strunc-ind _ g !∣ x ∣₀ = g x

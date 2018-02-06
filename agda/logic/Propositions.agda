@@ -21,7 +21,6 @@ module logic.Propositions where
   -- proposition is equivalent to truth.
 
   piProp : ∀{ℓᵢ ℓⱼ} → {A : Type ℓᵢ} → {B : A → Type ℓⱼ}
-         → ((a : A) → isProp (B a))
-         → isProp ((a : A) → B a)
+         → ((a : A) → isProp (B a)) → isProp ((a : A) → B a)
   piProp props f g = funext λ a → props a (f a) (g a)
        

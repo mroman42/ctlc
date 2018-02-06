@@ -4,6 +4,8 @@ open import Agda.Primitive
 open import Base
 open import Equality
 open import logic.Propositions
+open import equality.DependentProduct
+
 
 module logic.Sets where
 
