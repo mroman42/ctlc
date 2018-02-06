@@ -4,10 +4,13 @@
 #+TODO: TODO(t) OLD(o) | DONE(d)
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+LATEX_HEADER_EXTRA: %\input{titlepage}
+#+LATEX_HEADER_EXTRA: \input{titlepage}
+#+latex_header_extra: \usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
 
 # Escribir mucho menos, usar muchos menos teoremas, tener una versión
 # larga con todos los teoremas y recomendaciones y una versión corta
+
+# No usar definiciones en un entorno cuando no sea estrictamente necesario.
 
 # Usar + para la suma
 # Usar adyacencia para la composición
@@ -46,8 +49,13 @@
 #+latex_header_extra: % \usepackage{libertine}
 #+latex_header_extra: % \usepackage{libertinust1math}
 #+latex_header_extra: \usepackage{inconsolata}
-#+latex_header_extra: \usepackage[scale=MatchLowercase]{FiraMono}
+#+latex_header_extra: % \usepackage[scale=MatchLowercase]{FiraMono}
+#+latex_header_extra: \usepackage{FiraMono}
 #+latex_header_extra: \usepackage[T1]{fontenc}
+
+*** Colors                                                         :ignore:
+#+latex_header: \definecolor{ugrColor}{HTML}{c6474b} % Usado en el título
+#+latex_header: \definecolor{ugrColor2}{HTML}{c6474b} % Usado en secciones
 
 *** Libraries                                                      :ignore:
 #+latex_header: \usepackage{amsthm}
@@ -160,7 +168,8 @@
 #+latex_header: \newcommand{\wtype}{\mathop{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\huge{\textsf{W}}}}}{\vcenter{\hbox{\Large\textsf{W}}}}{\textsf{W}}{\textsf{W}}}\displaylimits}
 #+latex_header: \newcommand{\wt}{\textsf{W}}
 #+latex_header: \newcommand{\proj}{\mathtt{pr}}
-#+latex_header: \newcommand\refl{\mathtt{refl}}
+#+latex_header: \newcommand\refl{\mathsf{refl}}
+#+latex_header: \newcommand\transport{\mathsf{transport}}
 
 ** Abstract
 :PROPERTIES:
@@ -2159,8 +2168,6 @@ and the relation between logic and types.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
-# 
-
 ** Implementation of \lambda-expressions
 *** The Haskell programming language
 **** Haskell as a programming choice                              :ignore:
@@ -7904,8 +7911,8 @@ projection functor, $p^{\ast} \colon {\cal P}(Y) \to {\cal P}(X \times Y)$.
 Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\ast} \colon {\cal P}Y \to {\cal P}Z$
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
-
-** Locally cartesian closed categories
+** TODO Initial algebras and inductive types
+** Locally cartesian closed categories and dependent types
 *** Quantifiers and subsets
 **** Logical formulas as subsets                                  :ignore:
 **** Substitution                                                 :ignore:
@@ -7997,7 +8004,7 @@ universal property of the pullback in ${\cal C}$.
 # TODO: Build adjoints
 #+END_proof
 
-**** Presheaves are locally cartesian closed                      :ignore:
+**** Presheaf categories are locally cartesian closed             :ignore:
 *** Dependent types
 **** Dependent types                                              :ignore:
 In the same way that cartesian closed categories model the types of
@@ -8049,8 +8056,8 @@ of the form $\pi_A \colon (\Gamma, a{:}A) \to \Gamma$ that simply list the varia
 
 This way, each type $A$ in a context $\Gamma$ is represented by the object
 $\pi_A \colon (\Gamma, a{:}A) \to \Gamma$ of the slice category $\Gamma/A$; and each term of the
-type, $\Gamma \vdash a : A$ is represented by a morphism from the terminal object
-of $\Gamma/A$, that is,
+type, $\Gamma \vdash a : A$ is represented by a morphism from $\id \colon \Gamma \to \Gamma$, the 
+terminal object of $\Gamma/A$, as
 \[\begin{tikzcd}
 \intr{\Gamma} \rar{a} \drar[equal] & \intr{\Gamma, a:A} \dar{\pi_A} \\
 & \intr{\Gamma}
@@ -8077,9 +8084,8 @@ existential quantifier under the /propositions as types/
 interpretation. That is, the proof of $\exists (a:A), B(a)$ must be
 seen as a pair given by an element $a$ and a proof of $B(a)$.
 
-In a locally closed cartesian category, given a type $A$ in a context $\Gamma$, as
-$\pi_A \colon \intr{\Gamma, a:A} \to \intr{\Gamma}$; and $B$ a type depending the context $\Gamma, a:A$, as
-$\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$, the type $\sum_{a:A}B$ is given by the
+In a locally closed cartesian category, a type $B$ depending on $\Gamma, a:A$,
+as $\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$, the type $\sum_{a:A}B$ is given by the
 object
 \[
 \Sigma_{\pi_A}\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma}.
