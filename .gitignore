@@ -7,3 +7,6 @@
 _minted-ctlc/*
 *.agdai
 /ctlc.dvi
+/#ctlc.tex#
+/ctlc (copy).pdf
+/ctlc2.pdf
