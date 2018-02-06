@@ -8105,19 +8105,53 @@ of $a : A$, using a pullback to create the context $\intr{B(a)}$ and then provid
 an element $b : B(a)$.
 \[\begin{tikzcd}
 \intr{\Gamma} \rar{b} \drar[equal] \ar[bend left]{rr}{\pair{a,b}} & 
-\intr{\Gamma,b : B(a)} \dar\rar &
-\intr{\Gamma,a:A,b:B} \dar{\pi_B} \ar[bend left=70]{dd}{\pi_{\Sigma}} \\
-& \intr{\Gamma} \rar{a}\drar[equal] & \intr{\Gamma, a : A} \dar{\pi_A} \\
+\intr{\Gamma,y : B(a)} \dar\rar &
+\intr{\Gamma,x:A,y:B} \dar{\pi_B} \ar[bend left=70]{dd}{\pi_{\Sigma}} \\
+& \intr{\Gamma} \rar{a}\drar[equal] & \intr{\Gamma, x : A} \dar{\pi_A} \\
 && \intr{\Gamma}
 \end{tikzcd}\]
+This can be rewritten as the introduction rule
+\begin{prooftree}
+\AXC{$\Gamma \vdash a : A$}
+\AXC{$\Gamma \vdash b : B[a/x]$}
+\BIC{$\Gamma \vdash \pair{a,b} : \sum_{x:A}B$}
+\end{prooftree}
 
-The adjunction in the slice category,
+The adjunction in the slice category can be particularized in the following
+two cases
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\& \Gamma,A \& \\ C \ar{rr}{\pi_{A}} \urar[bend left] \&\& A \ular[bend right]
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\sum_{a:A}C \ar{rr}{\mathrm{fst}} \drar[bend right] \&\& A \dlar[bend left] \\ \& \Gamma \&
+\end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\& \Gamma,A \& \\ C \ar{rr}{id} \urar[bend left] \&\& C \ular[bend right]
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
+\sum_{a:A}C \ar{rr}{\mathrm{snd}} \drar[bend right] \&\& C \dlar[bend left] \\ \& \Gamma \&
+\end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}
 
-# adj
+that give the two elimination rules
+\begin{prooftree}
+\AXC{$\Gamma \vdash m : \sum_{x:A} C$}
+\UIC{$\Gamma \vdash \fst(m) : A$}
+\AXC{$\Gamma \vdash m : \sum_{x:A} C$}
+\UIC{$\Gamma \vdash \snd(m) : C[\pi_1(m)/a]$}
+\noLine
+\BIC{}
+\end{prooftree}
 
-can be rewritten as the introduction rule
+while we have two beta rules $\fst\pair{a,b} \equiv a$ and $\snd\pair{a,b} \equiv b$, and a uniqueness
+rule $m \equiv \pair{\fst(m), \snd(m)}$.
 
-**** Dependent product                                            :ignore:
+**** Dependent functions                                          :ignore:
 *Dependent function types*, or *\Pi-types*, can be seen as a generalized
 version of function types. Given a family of types parametrized by another
 type, $\{B(a)\}_{a : A}$, the elements of $\prod_{x:A} B(x)$ are functions
@@ -8182,9 +8216,24 @@ which can be rewritten as an introduction and elimination rules
 \BIC{}
 \end{prooftree}
 
-with the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ given
-by naturality.
+while the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ are consequences
+of naturality.
 
+***** Eta rule                                          :ignore:noexport:
+\[\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+\& \Gamma,A \& \\ C,A \ar{r}{a,f} \urar[bend left] \& \prod_{a:A}B(a), A \rar{app} \& B \ular[bend right]
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+\Gamma \ar{r}{f} \drar[bend right] \& \prod_{a:A}B(a) \rar{id}\& \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
+\end{tikzcd}}
+\end{prooftree}\]
+
+***** Beta rule                                         :noexport:ignore:
+*** Examples of dependent types
+**** Vectors                                                      :ignore:
+**** Theorem of choice                                            :ignore:
 *** Soundness up to isomorphism
 ** OLD Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
@@ -8437,13 +8486,277 @@ to take models for these languages is narrower.
 | Martin-Löf intensional type theory | Locally cartesian closed (\infty,1)-categories |
 | Homotopy type theory               | Elementary (\infty,1)-topos                    |
 |------------------------------------+------------------------------------------------|
+* Type theory
+In this chapter, we will exclusively work internally in dependent type
+theory and use it as a constructive foundation of mathematics. This
+will have the added benefit that every formal proof in the system will
+be a closed lambda term and checking that a proof is correct amounts to
+typechecking the term.
 
-* Type theory (abstract)                                             :ignore:
+*Martin-Löf type theory* was developed [...]
+Two variants can be considered.
+
+ * *Extensional type theory* is the internal language of locally
+   closed cartesian categories taking equalizers as identity types.
+
+ * *Intensional type theory* which defines identity types as a family
+   of freely generated inductive types.
+
+We will work in intensional type theory. Proofs will be formalized in
+the Agda proof assistant.
+
+** Universe hierarchy
+** Intensional equality and Equivalences
+*** Propositional equality
+Given any type $A : {\cal U}$ and two elements $x,y : A$, we can consider the
+type of proofs of equality between the two, $x = y$. Note that this
+*propositional equality* $x = y$ is conceptually different from the
+*definitional equality* $x \equiv y$ we have been considering so far.
+
+Definitional equality, $x \equiv y$, is a judgement that is part of
+the theory, and we cannot work internally with it; two terms are
+definitionally equal if and only if they are the same term up to
+reduction rules. On the other hand, $x = y$ is a type that could
+appear inside formulas of the theory, and we can build terms of that
+type, $p : x = y$, that would constitute proofs of the equality. These
+terms are called *paths*, for reasons that will become apparent as
+we study them.
+
+The equality type is freely generated by only one introduction rule,
+the *reflexivity* path
+\[
+\refl : \prod_{a:A} (a = a).
+\]
+
+That is, we can always construct a trivial path $a = a$. Consequently,
+the induction principle says that if we want to proof something for
+all equalities, it suffices to do that for the reflexivity case. 
+This induction principle is usually called *path induction*, and could
+be written in type theory as
+\[
+\prod_{(C : \prod_{(x,y : A)}(x=y) \to {\cal U})} \left(
+\left( \prod_{a:A} C(a,a,\mathsf{refl}) \right) \to
+\prod_{(x,y : A)}\prod_{(p:x=y)} C(x,y,p)
+\right)
+\]
+
+**** Symmetry                                                     :ignore:
+#+ATTR_LATEX: :options [Symmetry]
+#+BEGIN_exampleth
+The usual properties of equality can be proved from the principle of
+path induction; and each one of them will have a homotopical interpretation
+if we read equalities as paths. As a first example, we will prove that
+equality is symmetric: given a path $p : x = y$, we can create a
+new path $y = x$. This can be done by applying path induction over $p$
+and only providing a proof in the case that $p$ is reflexivity and $x$ and $y$ are
+actually the same element. In this case, $\refl : x = x$ is of type $y = x$
+and we are done.
+
+This way, we have created a function
+\[
+^{-1} : \prod_{x,y:A} (x = y) \to (y = x)
+\]
+that inverts paths. Given $p : x =y$, we can construct $p^{-1} : y = x$.
+#+END_exampleth
+
+**** Transitivity                                                 :ignore:
+#+ATTR_LATEX: :options [Transitivity]
+#+BEGIN_exampleth
+As a second example, we will prove *transitivity of equality*:
+given two paths $p : x = y$ and $q : y = z$, how can we build
+a new path $p \cdot q : x = z$? We can apply induction over the first equality and
+only provide a proof in the case where $x$ and $y$ are actually the same term.
+In this case, we only have to provide a term of type $x = z$ and
+$q : x = z$ is of exactly that type, so we are done.
+
+This way we have created a function
+\[
+\cdot : \prod_{x,y,z : A} (x = y) \to (y = z) \to (x = z)
+\]
+that given two paths $p : x = y$ and $q : y = z$, concatenates them into a
+new path $p \cdot q : x = z$.
+#+END_exampleth
+
+Using path induction, simple lemmas about path composition can be proved.
+In particular, it can be proved that, given any type $A$ with two elements
+$x,y : A$,
+
+ * $\prod_{x,y : A}\prod_{p : x = y}\ (p^{-1})^{-1} = p$,
+ * $\prod_{x,y : A}\prod_{p : x = y}\ p \cdot p^{-1} = \refl_{x}$,
+ * $\prod_{x,y : A}\prod_{p : x = y}\ p^{-1} \cdot p = \refl_y$,
+ * $\prod_{(x,y,z,w :A)}\prod_{(p:x=y)}\prod_{(q:y=z)}\prod_{(r:z=w)} (p \cdot q)\cdot r = p \cdot (q \cdot r)$.
+
+The details of these proofs are swept under the rug here, but they are
+fully available on the computer formalization.
+
+**** Transport                                                    :ignore:
+#+ATTR_LATEX: :options [Transport]
+#+BEGIN_exampleth
+We want a principle of /indiscernibility of identicals/, that is,
+if we have a path $p : x = y$ and a proof of a property $P(x)$, we want to conclude
+that $P(y)$. This is called *transport* over the path and notated as
+\[
+\transport^P(p,-) : P(x) \to  P(y).
+\]
+
+This is not a new axiom but a consequence of the path induction principle.
+Given the path $p : x = y$, we can apply induction and only worry about the
+case where $x$ and $y$ are equal. In this case, the identity function 
+$\id : P(x) \to P(x)$ is actually a function $P(x) \to P(y)$, as desired.
+We get a function
+\[
+\transport : \prod_{(P : A \to {\cal U})}\prod_{(x,y:A)}\prod_{(p : x = y)} 
+P(x) \to P(y).
+\]
+#+END_exampleth
+
+**** Uniqueness of identity proofs                                :ignore:
+From these examples, it would seem that the path induction principle
+is very strong and makes the identity type almost trivial. In particular,
+it would seem easy to prove by path induction that every path is equal to
+the reflexivity path, that is, given a type $A$,
+\[
+\prod_{(x : A)}\prod_{(p : x = x)} (p = \refl).
+\]
+This is called the principle of *uniqueness of identity proofs* and
+cannot be actually derived from path induction. The induction principle
+explicitely says that the two
+endpoints of a path must be independent variables in order to apply
+induction. We could still try to prove the more general theorem
+\[
+\prod_{(x, y : A)}\prod_{(p : x = y)} (p = \refl)
+\]
+by path induction, hoping to particularize it later; but that term
+is ill-typed, $p$ is of type $x = y$ while $\refl$ is of type $x = x$, and 
+equalities are only defined between terms of the same type.
+
+In conclusion, every path with two free endpoints can be reduced to
+a trivial one, but a path with two fixed equal endopoints cannot be
+reduced. This situation resembles homotopy theory in that a path
+with two free endpoints can be continuously deformed into a point,
+while a loop does not need to be trivial.
+
+# TODO: Image of two loops
+
+# Groupoid model of Hoffman
+Is the principle of /uniqueness of identity proof/ independent from
+our theory? In 1996, Hofmann and Streicher proposed a model of type
+theory in groupoids where this principle does not hold, thus showing
+that it is independent (see [Hofmann]). This way, types must be
+interpreted not only as disconnected sets where all paths are trivial
+but as spaces where there exist paths, paths between paths, paths
+between paths between paths, and so on. Types have a homotopical
+structure.
+
+*** h-Propositions
+In this section, we explore the homotopical structure a type may
+present and we will translate some notions from homotopy theory to
+type theory.
+
+**** h-Propositions                                               :ignore:
+A type $A$ is an *h-proposition* or simply a *proposition* if a path
+exists between any two elements of the type. That is,
+\[
+\mathsf{isProp}(A) :\equiv \prod_{(x,y : A)} x = y.
+\]
+
+Under the Curry-Howard interpretation we saw that propositions could
+be seen as types; now we see that some types can be seen as
+propositions in a more classical sense without proof relevance: any
+two proofs of a proposition are equal.
+
+**** Truncation                                                   :ignore:
+Once we have defined propositions, a natural notion to consider is
+*propositional truncations* that "truncate" each type into a
+proposition. Propositional truncations are left adjoints to the
+inclusion of propositions into types; that is, given any type $A$
+and any proposition $P$, the propositional truncation of $A$, written
+as $\|A\|$ is a type such that we have a natural bijection
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+A \rar\& P
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+\|A\| \rar\& P
+\end{tikzcd}}
+\end{prooftree}
+
+In practical terms, this means that $\|A\|$ is a type that is
+inhabited if and only if $A$ is; but where any two elements are
+equal. To provide a proof of $\|A\|$ is to provide a proof that $A$ is
+inhabited without constructing an explicit element of $A$. Thus,
+truncations help us to embed classical notions into constructive
+logic, as we show in the following example.
+
+#+ATTR_LATEX: :options [Existential quantifier and the axiom of choice]
+#+BEGIN_exampleth
+
+#+END_exampleth
+
+**** Diaconescu's theorem                                         :ignore:
+*** h-Sets
+**** h-Sets                                                       :ignore:
+A type $A$ is a *h-set* or simply a *set* if every two parallel paths
+are equal. That is,
+\[
+\mathsf{isSet}(A) :\equiv \prod_{(x,y : A)}\prod_{(p,q: x=y)} p=q.
+\]
+
+Sets can be seen as discrete spaces without any higher dimensional
+structure. In the following sections we give examples of sets but also
+of types that are not sets.
+
+The *set truncation* of a type can be defined analogously to the
+propositional truncation, that is, as the left adjoint to the
+inclusion of the sets into the types in general. Given any set $S$ and
+an arbitrary type $A$, its set truncation $\|A\|_0$ is defined with
+the following adjunction.
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+A \rar\& S
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+\|A\|_0 \rar\& S
+\end{tikzcd}}
+\end{prooftree}
+
+**** Hedberg's theorem                                            :ignore:
+What follows is a useful sufficient condition for a type to be a
+set.
+
+#+ATTR_LATEX: :options [Hedberg's theorem]
+#+BEGIN_theorem
+A type $A$ with *decidable equality*, that is, such that
+\[
+\prod_{x,y:A} (x = y) + \neg (x = y),
+\]
+is a set.
+#+END_theorem
+#+BEGIN_proof
+
+#+END_proof
+
+**** Relation to ETCS                                             :ignore:
+**** Groupoids and n-types                                        :ignore:
+We will classify types into levels parametrized by the
+natural numbers, where a n-type will be a type with no nontrivial
+equalities above dimension n.
+
+*** Equivalences
+*** Function extensionality and Univalence
+** Synthetic topology
+*** Higher inductive types
+*** The fundamental group of the circle
+** Constructive analysis
+** Computer verification
+* OLD Type theory (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is mainly based on cite:hottbook and [Course on Hott, Harper].
 #+LATEX: \end{center}}
 
-* Type theory
+* OLD Type theory
 # Bishop: Constructive analysis 1967
 # DeBruijn: Automath
 
@@ -9552,7 +9865,7 @@ to our previous presentation of MLTT.
    hierarchy, we need to explicitly write =∀{l}...Set l= instead
    of simply write =Set=.
 
- * Dependent function are implicitly built into the language.  In
+ * Dependent functions are implicitly built into the language.  In
    general, the dependent function type $\prod_{a:A} B$ is written as
    ~(a : A) → B~. In particular, we write the type
    $\mathtt{id} : \prod_{A : {\cal U}} A \to A$ as =(A : Set) → A → A=.
@@ -9631,6 +9944,7 @@ bibliography:Bibliography.bib
 http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Mikrokosmos complete code
 ** TODO Mikrokosmos user's guide
+** TODO Agda formalizations
 ** TODO Quotes
 # These quotes can be placed on the partial abstracts or in the general one.
 ** TODO Notes
