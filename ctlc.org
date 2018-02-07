@@ -8195,16 +8195,12 @@ terminal object of $\Gamma/A$, as
 & \intr{\Gamma}
 \end{tikzcd}\]
 
-*** Dependent pairs and dependent functions
-**** Types on a locally cartesian closed structure                :ignore:
+*** Dependent pairs
 The locally cartesian closed structure of a category induces new
 type constructors in the type theory, dependent sums and dependent
 products. Their meaning under the Curry-Howard interpretation is that
 of the existential and universal quantifier, respectively.
 
-\\
-
-**** Dependent sum                                                :ignore:
 *Dependent pair types*, or *\Sigma-types*, can be seen as a
 generalized version of product types. Given a family of types parametrized
 by another type, $\{B(a)\}_{a : A}$, the elements of $\sum_{a:A}B(a)$
@@ -8283,7 +8279,7 @@ that give the two elimination rules
 while we have two beta rules $\fst\pair{a,b} \equiv a$ and $\snd\pair{a,b} \equiv b$, and a uniqueness
 rule $m \equiv \pair{\fst(m), \snd(m)}$.
 
-**** Dependent functions                                          :ignore:
+*** Dependent functions
 *Dependent function types*, or *\Pi-types*, can be seen as a generalized
 version of function types. Given a family of types parametrized by another
 type, $\{B(a)\}_{a : A}$, the elements of $\prod_{x:A} B(x)$ are functions
@@ -8351,7 +8347,7 @@ which can be rewritten as an introduction and elimination rules
 while the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ are consequences
 of naturality.
 
-***** Eta rule                                          :ignore:noexport:
+**** Eta rule                                            :ignore:noexport:
 \[\begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
 \& \Gamma,A \& \\ C,A \ar{r}{a,f} \urar[bend left] \& \prod_{a:A}B(a), A \rar{app} \& B \ular[bend right]
@@ -8362,10 +8358,121 @@ of naturality.
 \end{tikzcd}}
 \end{prooftree}\]
 
-***** Beta rule                                         :noexport:ignore:
+**** Beta rule                                           :noexport:ignore:
 *** Examples of dependent types
 **** Vectors                                                      :ignore:
+#+ATTR_LATEX: :options [Vectors]
+#+BEGIN_exampleth
+A common example of dependent types are vectors of elements of
+a fixed type $A$ varying in length. They can be described as a
+family of types $\mathrm{Vect}(n)$ depending on a parameter $n \in \mathbb{N}$.
+For example, given $a_0,a_1,a_2 : A$, we can construct the element
+$(a_0,a_1,a_2) : \mathrm{Vect}(3)$. We will study what it means to give an
+element of the types
+\[
+\sum_{n : {\mathbb{N}}} \mathrm{Vect}(n) 
+\quad\text{ and }\quad
+\prod_{n : \mathbb{N}} \mathrm{Vect}(n).
+\]
+
+In the first case, we can build an element of $\sum_{n:\mathbb{N}} \mathrm{Vect}(n)$
+following the characterization of the adjunction.
+\[\begin{tikzcd}
+\intr{\ast} \rar{w} \drar[equal] \ar[bend left]{rr}{\pair{m,w}} & 
+\intr{v : \mathrm{Vect}(m)} \dar\rar &
+\intr{n:\mathbb{N}, v : \mathrm{Vect}(n)} \dar{\pi_B} \ar[bend left=70]{dd}{\pi_{\Sigma}} \\
+& \intr{\ast} \rar{m}\drar[equal] & \intr{n : \mathbb{N}} \dar{\pi_A} \\
+&& \intr{\ast}
+\end{tikzcd}\]
+That is, we have to provide a morphism from the empty context
+to the naturals $m : \intr{\ast} \to \intr{n : \mathbb{N}}$, or, in other words, an
+element of $\mathbb{N}$. Computing the pullback of the dependent type
+of vector over this element gives us the context $\intr{v : \mathrm{Vect}(m)}$
+of vectors of length $m$. Now, we only have to provide a
+morphism $w \colon \intr{\ast} \to \intr{v : \mathrm{Vect}(m)}$, or, in other words, a
+vector of $m$ elements. 
+
+In conclusion, elements of $\sum_{n : \mathbb{N}} \mathrm{Vect}(n)$ are of the form
+$\pair{m,w}$, where $m : \mathbb{N}$ and $w : \mathrm{Vect}(m)$. An example would be
+$\pair{2,(a_0,a_1)} : \sum_{n : \mathbb{N}} \mathrm{Vect}(n)$.
+
+In the second case, we can build an element of $\prod_{n:\mathbb{N}} \mathrm{Vect}(n)$
+following the adjunction.
+\[\begin{tikzcd}
+\intr{n : \mathbb{N}} \rar{t} \drar[equal] &
+\intr{n : \mathbb{N}, v : \mathrm{Vect}(n)} \dar{\pi_{\mathrm{Vect}}} &
+\intr{\ast} \rar{(\lambda n.t)} \drar[equal] &
+\intr{v : \prod_{n:\mathbb{N}} \mathrm{Vect}(m)} \dar{\pi_{\prod}} \\
+& \intr{n : \mathbb{N}}
+&
+& \intr{\ast}
+\end{tikzcd}\]
+
+That is, we have to provide a morphism $\intr{n : \mathbb{N}}\to \intr{n : \mathbb{N}, v : \mathrm{Vect}(n)}$
+making the first diagram commute. This is to build a term $t : \mathrm{Vect}(n)$
+assuming a given $n : \mathbb{N}$ in the context; in other words, a function 
+sending each $n$ to a vector of $n$ elements. Once it is built, the adjunction
+gives us a term $(\lambda n.t) : \prod_{n:\mathbb{N}} \mathrm{Vect}(n)$ in the empty context.
+
+In conclusion, elements of $\prod_{n:\mathbb{N}} \mathrm{Vect}(n)$ are functions sending each
+natural to a vector of that length. An example would be a function
+$(\lambda m. (a_0,\overset{m}{\dots},a_0))$ sending each $m$ to a vector of repeated $a_0\text{'s}$.
+#+END_exampleth
+
 **** Theorem of choice                                            :ignore:
+#+ATTR_LATEX: :options [The theorem of choice]
+#+BEGIN_exampleth
+A proposition $P$ could be given as a family of types parametrized
+over another type $A$, where $P(a)$ is inhabited if and only if
+the proposition holds for $a : A$.
+
+A proof of the existential quantifier $\sum_{a:A}P(a)$ would be given
+by a pair $\pair{a,p}$, where $a:A$ would be a fixed element and $p : P(a)$
+would be the proof that the proposition holds for $a$. A proof of
+the universal quantifier $\prod_{a:A}P(a)$ would be a function sending
+each $a:A$ to a proof $p : P(a)$.
+
+As an example, suppose a relation $R$, a family of types parametrized
+over two types $A,B$. We will prove the following theorem
+\[
+\left(\prod_{(a:A)} \sum_{(b : B)} R(a,b)\right) \to 
+\left( \sum_{(g : A \to B)}\prod_{(a:A)} R(a,g(a)) \right).
+\]
+
+#+BEGIN_proof
+In order to prove the implication, we assume that we have a term
+$f : \prod_{a:A}\sum_{b:B}R(a,b)$, and construct a term of type
+$\sum_{g:A\to B}\prod_{a:A}R(a,g(a))$. The first step is to provide a function
+of type $A \to B$, and $g :\equiv \lambda a.\fst(f(a))$ is exactly of this type. The
+second step is to provide a term $\prod_{a:A}R(a,\fst(f(a)))$, but now
+the function $\lambda a.\snd(f(a))$ is exactly of this type.
+#+END_proof
+# TODO: Annotate each term with its type
+
+Surprisingly, the theorem we have just proved reads clasically as
+#+begin_quote
+"If for all $a:A$ there exists a $b:B$ such that $R(a,b)$, then
+there exists a function $g : A \to B$ such that for each $a:A$,
+$R(a,g(a))$."
+#+end_quote
+and this is a form of the *axiom of choice*. Have we just proved
+the axiom of choice? The key insight here is that $\Sigma$ must not be
+read as the classical "there exists", but as a constructivist 
+existential quantifier that demands not only to merely prove that
+something exists but to explicitly construct it. A more accurate
+read would be
+#+begin_quote
+"If for all $a:A$ we have a rule to explicitly construct a $b:B$
+such that $R(a,b)$, then we can use that rule to define a function
+$g : A \to B$ such that for each $a:A$, $R(a,g(a))$."
+#+end_quote
+and this trivial-sounding theorem is known as the *theorem of choice*.
+The moral of this example is that when we work in type theory, we
+are working in constructivist mathematics. Later, we will see a
+technique that will allow us to recreate the classical existential
+quantifier.
+#+END_exampleth
+
 *** Soundness up to isomorphism
 ** OLD Locally closed cartesian categories
 # Clive Newstead - Locally closed cartesian categories and ML-type theory.
@@ -8669,7 +8776,7 @@ be written in type theory as
 \prod_{(C : \prod_{(x,y : A)}(x=y) \to {\cal U})} \left(
 \left( \prod_{a:A} C(a,a,\mathsf{refl}) \right) \to
 \prod_{(x,y : A)}\prod_{(p:x=y)} C(x,y,p)
-\right)
+\right).
 \]
 
 **** Symmetry                                                     :ignore:
