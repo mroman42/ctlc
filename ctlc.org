@@ -4,8 +4,7 @@
 #+TODO: TODO(t) OLD(o) | DONE(d)
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+LATEX_HEADER_EXTRA: \input{titlepage}
-#+latex_header_extra: \usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
+#+LATEX_HEADER_EXTRA: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
 
 # Escribir mucho menos, usar muchos menos teoremas, tener una versión
 # larga con todos los teoremas y recomendaciones y una versión corta
@@ -170,6 +169,8 @@
 #+latex_header: \newcommand{\proj}{\mathtt{pr}}
 #+latex_header: \newcommand\refl{\mathsf{refl}}
 #+latex_header: \newcommand\transport{\mathsf{transport}}
+#+latex_header: \newcommand\ap{\mathsf{ap}}
+#+latex_header: \newcommand\apd{\mathsf{apd}}
 
 ** Abstract
 :PROPERTIES:
@@ -6971,15 +6972,19 @@ forcing techniques with allowed to construct new models of ZFC.
 # [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
 ** TODO Presheaves
+# [Moerdijk]
 # TODO: Comma category is equivalent to a presheaf category
 # TODO: Pullbacks (in particular, products) always exist on presheaf cats
-# TODO: Terminal and pullbacks imply all finite limis
+# TODO: Terminal and pullbacks imply all finite limits
 
 ** Cartesian closed categories and lambda calculus
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
 *** Lawvere theories
+# TODO: Cambiar el orden aquí! Primero la noción clásica, luego la
+# noción de Lawvere.
+
 #+ATTR_LATEX: :options [Lawvere algebraic theory]
 #+BEGIN_definition
 An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
@@ -7188,6 +7193,7 @@ B^A
 **** Presheaves and sets are cartesian closed                     :ignore:
 #+ATTR_LATEX: :options [Presheaf categories are cartesian closed]
 #+BEGIN_exampleth
+<<example-presheaves-ccc>>
 $\Set$ is cartesian closed, with exponentials given by function sets. In
 general, any presheaf category $\Set^{{\cal C}^{op}}$ from a small ${\cal C}$ is cartesian closed.
 Given any two presheaves $Q,P$, if the exponential exists, its component
@@ -7221,7 +7227,8 @@ the adjunction by Proposition [[prop-characterize-adjunctions]].
 #+END_exampleth
 
 # Example 2.2.10 from Bauer, Awodey
-# This is Proposition I.6.1 in "Sheaves in geometry and logic." https://mathoverflow.net/questions/10406/general-construction-for-internal-hom-in-a-presheaf-category
+# This is Proposition I.6.1 in "Sheaves in geometry and logic."
+# https://mathoverflow.net/questions/10406/general-construction-for-internal-hom-in-a-presheaf-category
 
 **** Category of cartesian-closed categories                      :ignore:
 In general, cartesian-closed categories with functors
@@ -7912,30 +7919,118 @@ Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\as
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
 ** TODO Initial algebras and inductive types
+*** The natural numbers object
+*** Initial algebras
 ** Locally cartesian closed categories and dependent types
 *** Quantifiers and subsets
 **** Logical formulas as subsets                                  :ignore:
-**** Substitution                                                 :ignore:
-Substitution inside a formula
-
+A motivation for this section is the interpretation of logical formulas
+as subsets. Every predicate $P$ on a set $A$ can be seen as a subset
 \[\begin{tikzcd}
-\left\{a{:}A \mid P(f(a)) \right\} \rar{} \dar[swap,hook]{} &
-\left\{ b{:}B \mid P(b) \right\} \dar[hook]{} \\
+\left\{ a \in A \mid P(a) \right\} \rar[hook] & A
+\end{tikzcd}\]
+determined by the inclusion monomorphism. Under this interpretation,
+logical implication between two propositions, $P \to Q$, can be seen
+as a morphism that commutes with the two inclusions; that is,
+\[\begin{tikzcd}[column sep=tiny] 
+\left\{ a\in A\mid P(a) \right\} \ar{rr}\drar[hook] & & \left\{ a\in A\mid Q(a) \right\}\dlar[hook]
+\\ & A & 
+\end{tikzcd}\]
+$P$ implies $Q$ if and only if each $a \in A$ such that $P(a)$ is also in
+the subset of elements such that $Q(a)$. Note how we are working in
+a full subcategory of the slice category $\Set/A$.
+
+**** Substitution                                                 :ignore:
+Any property in a set $B$ induces a property on a set $A$ for each
+$f : A \to B$ via *substitution* in the relevant logical formula. This
+substitution can be encoded categorically as a pullback: the pullback
+of a proposition along a function is this induced proposition.
+\[\begin{tikzcd}
+\left\{a \in A \mid P(f(a)) \right\} \rar{} \dar[swap,hook]{} &
+\left\{ b \in B \mid P(b) \right\} \dar[hook]{} \\
 A \rar{f} & B \\
 \end{tikzcd}\]
 
 **** Weakening                                                    :ignore:
-A particular case is weakening
-
+A particular case of a substitution is *logical weakening*: a proposition
+on the set $A$ can be seen as a proposition on $A \times B$ where we simply
+discard the $B$ component of a pair.
 \[\begin{tikzcd}
-\left\{(a,b) : A \times B \mid P(a) \right\} \rar{} \dar[swap,hook]{} &
-\left\{ a{:}A \mid P(a) \right\} \dar[hook]{} \\
+\left\{(a,b) \in A \times B \mid P(\pi(a,b)) \right\} \rar{} \dar[swap,hook]{} &
+\left\{ a \in A \mid P(a) \right\} \dar[hook]{} \\
 A \times B \rar{\pi} & A \\
 \end{tikzcd}\]
+Although it seems like an uninteresting particular case, existential
+and universal quantifiers can be obtained as adjoints to weakening
+once we formalize what this means exactly.
 
 **** The pullback functor                                         :ignore:
-**** Set example                                                  :ignore:
-**** Quantifiers as adjoints                                      :ignore:
+#+ATTR_LATEX: :options [The pullback functor]
+#+BEGIN_definition
+Given a function $f \colon A \to B$ in any category ${\cal C}$ with all pullbacks, the
+*pullback functor* $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ is defined for any object $y \colon Y \to B$
+as the object $f^{\ast}y \colon (f^{\ast}Y) \to A$ such that
+\[\begin{tikzcd}
+(f^{\ast}Y) \rar{}\drar[phantom, near start, "\ulcorner"] \dar[swap]{f^{\ast}y} & Y \dar{y} \\
+A\rar{f} & B
+\end{tikzcd}\]
+is a pullback square. The functor is defined on any morphism
+$\alpha \colon y \to y'$ between two objects $y \colon Y \to B$, $y' \colon Y' \to B$ as
+the only morphism making the following diagram commute
+\[\begin{tikzcd}
+f^{\ast}Y \ar{rrr}\ar[dashed]{dr}{\exists! f^{\ast}\alpha} \ar[bend right,swap]{ddr}{f^{\ast}y} &&&
+Y \ar{dl}{\alpha}\ar[bend left=60]{ddl}{y} \\
+& f^{\ast}Y' \dar[swap]{f^{\ast}y'} \rar & Y' \dar{y'} \\
+& A \rar[swap]{f} & B \\
+\end{tikzcd}\]
+where $x$ and $x'$ form pullback squares with $y$ and $y'$. Note that the pullback
+functor is only defined up to isomorphism in objects and well-defined on
+morphisms by virtue of the universal property of pullbacks.
+#+END_definition
+
+**** Quantifiers as adjoints in sets                              :ignore:
+In $\Set$, we can find two adjoints to the particular case of the
+weakening functor $\pi^{\ast} \colon {\cal C}/A \to {\cal C}/(A \times B)$. These two adjoints
+are $\exists \dashv \pi^{\ast} \dashv \forall$ because
+
+ * proving the implication $P(\pi(a,b)) \to Q(a,b)$ for each pair $(a,b)$ 
+   amounts to prove that $P(a) \to \left(\forall b \in B, Q(a,b)\right)$ for each $a$;
+   \begin{prooftree}
+   \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&, row sep=tiny]
+   \& A \times B \& \\
+   \left\{ (a,b) \mid P(a) \right\} \urar[hook] \ar{rr} \&\& 
+   \left\{ (a,b) \mid Q(a,b) \right\} \ular[hook]
+   \end{tikzcd}}
+   \doubleLine
+   \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=tiny]
+   \left\{ a \mid P(a) \right\} \drar[hook] \ar{rr} \&\& 
+   \left\{ a \mid \forall b\in B, Q(a,b) \right\} \dlar[hook]
+   \\
+   \& A \&
+   \end{tikzcd}}
+   \end{prooftree}
+
+ * and proving that $(\exists b\in B, P(a,b)) \to Q(a)$ for each $a$ is the
+   same as proving that $P(a,b) \to Q(\pi(a,b))$ for each pair $(a,b)$.
+   \begin{prooftree}
+   \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&, row sep=tiny]
+   \& A \times B \& \\
+   \left\{ (a,b) \mid P(a,b) \right\} \urar[hook] \ar{rr} \&\& 
+   \left\{ (a,b) \mid Q(a) \right\} \ular[hook]
+   \end{tikzcd}}
+   \doubleLine
+   \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=tiny]
+   \left\{ a \mid \exists b\in B, P(a,b) \right\} \drar[hook] \ar{rr} \&\& 
+   \left\{ a \mid Q(a) \right\} \dlar[hook]
+   \\
+   \& A \&
+   \end{tikzcd}}
+   \end{prooftree}
+
+Note how, in this case, we are drawing adjunction diagrams in the
+slice category. A generalization of this idea to other categories
+will extend our categorical logic with quantifiers.
+
 *** Locally cartesian closed categories
 **** Left adjoint                                                 :ignore:
 #+ATTR_LATEX: :options [Left adjoint of the pullback functor]
@@ -7965,6 +8060,7 @@ for this name becomes apparent in the following characterization.
 **** Characterization by slices                                   :ignore:
 #+ATTR_LATEX: :options [Characterization]
 #+BEGIN_theorem
+<<theorem-characterization-lccc>>
 A category ${\cal C}$ with terminal object is locally cartesian closed if and only
 if ${\cal C}/A$ is cartesian closed for any object $A$.
 #+END_theorem
@@ -8005,6 +8101,42 @@ universal property of the pullback in ${\cal C}$.
 #+END_proof
 
 **** Presheaf categories are locally cartesian closed             :ignore:
+We proved earlier that "generalized sets", or presheaves, were
+cartesian closed; we will now prove that they are actually locally
+cartesian closed.
+
+# Proof from [Awodey]
+
+#+ATTR_LATEX: :options [Presheaf categories are locally cartesian closed]
+#+BEGIN_theorem
+Any presheaf category $\Set^{{\cal C}^{op}}$ from a small category ${\cal C}$ is locally cartesian
+closed.
+#+END_theorem
+#+BEGIN_proof
+We will prove that given any $A \in \Set^{{\cal C}^{op}}$, there exists a small category ${\cal D}$
+such that there is an equivalence of categories $\Set^{{\cal D}^{op}} \simeq \Set^{{\cal C}^{op}}/A$. Thus,
+every slice is cartesian closed as shown in Example [[example-presheaves-ccc]]
+and by the characterization of Theorem [[theorem-characterization-lccc]], the
+whole category is locally cartesian closed.
+
+We take ${\cal D}$ as a particular case of a comma category where objects are
+arrows $f \colon yC \to A$ in $\Set^{{\cal C}^{op}}$ from the Yoneda embedding of an object
+$C \in {\cal C}$ to the fixed object $A$. Morphisms are commutative triangles
+
+# commutative triangle
+#yC -> yC'
+#   A
+
+where, as Yoneda is a full and faithful embedding, $\varphi$ must be of the
+form $\varphi = yh$ for a unique $h \colon C \to C'$. Note how ${\cal D}$ can be embedded
+inside $\Set^{{\cal C}^{op}}/A$.
+
+A functor $\varPhi \colon \Set^{{\cal C}^{op}}/A \to \Set^{{\cal D}^{op}}$ can be now defined as
+$\varPhi(q) = \hom_{\Set^{{\cal C}^{op}}/A}(-,q)$.
+
+# TODO: Show that it is an equivalence
+#+END_proof
+
 *** Dependent types
 **** Dependent types                                              :ignore:
 In the same way that cartesian closed categories model the types of
