@@ -7285,14 +7285,14 @@ On the one hand, we define $\eta \colon {\cal C} \to {\cal S}(\mathbb{L}({\cal C
 for any morphism $f \colon A \to B$. It is a functor because $\intl{\id}\ a \equiv a$ and $\intl{g \circ f}\ a \equiv g\ (f\ a)$.
 We define $\theta : {\cal S}(\mathbb{L}({\cal C})) \to {\cal C}$ on types inductively as $\theta(1) = 1$, $\theta(\intl{A}) = A$,
 $\theta(B \times C) = \theta(A) \times \theta(C)$ and $\theta(B \to C) = \theta(C)^{\theta(B)}$. Now there is a natural 
-isomorphism $\eta\theta \todot \Id$, using the isomorphisms induced by the constants $\mathtt{T}, \mathtt{P}, \mathtt{E}$,
+isomorphism $\eta\theta \tonat \Id$, using the isomorphisms induced by the constants $\mathtt{T}, \mathtt{P}, \mathtt{E}$,
 \begin{center}\begin{array}{ll}
 \eta(\theta \intl{A}) = \eta A = \intl{A}, \\
 \eta(\theta 1) = \eta 1 = \intl{1} \cong 1, \\
 \eta(\theta (A \times B)) = \intl{\theta(A) \times \theta(B)} \cong \intl{\theta A} \times \intl{\theta B} = \eta\theta A \times \eta\theta B \cong A \times B. \\
 \eta(\theta (A \to B)) = \intl{\theta(A) \to \theta(B)} = \intl{\theta B}^{\intl{\theta A}} = (\eta\theta B)^{(\eta \theta A)} = B^A;
 \end{array}\end{center}
-and a natural isomorphism $\Id \todot \theta\eta$ which is in fact an identity, $A = \theta\intl{A} = \theta\eta(A)$.
+and a natural isomorphism $\Id \tonat \theta\eta$ which is in fact an identity, $A = \theta\intl{A} = \theta\eta(A)$.
 # TODO: Check that \eta is natural
 
 On the other hand, we define a translation $\tau \colon \mathbb{T} \to \mathbb{L}({\cal S}(\mathbb{T}))$ as $\tau A = \intl{A}$ in types
@@ -7779,7 +7779,7 @@ projection functor, $p^{\ast} \colon {\cal P}(Y) \to {\cal P}(X \times Y)$.
 Given any function on sets $f \colon Z \to Y$, the inverse image functor $f^{\ast} \colon {\cal P}Y \to {\cal P}Z$
 has left and right adjoints, called $\exists_f$ and $\forall_f$.
 #+end_theorem
-** TODO Initial algebras and inductive types
+** TODO Initial algebras and equality types
 *** The natural numbers object
 *** Initial algebras
 ** Locally cartesian closed categories and dependent types
@@ -8627,11 +8627,10 @@ the *reflexivity* path
 \[
 \refl : \prod_{a:A} (a = a).
 \]
-
 That is, we can always construct a trivial path $a = a$. Consequently,
 the induction principle says that if we want to proof something for
 all equalities, it suffices to do that for the reflexivity case. 
-This induction principle is usually called *path induction*, and could
+This induction principle is usually called *path induction*, and it can
 be written in type theory as
 \[
 \prod_{(C : \prod_{(x,y : A)}(x=y) \to {\cal U})} \left(
