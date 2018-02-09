@@ -5004,7 +5004,6 @@ Kr \dar{E\pair{f,F}} \\
 \Nat(\hom(r',-),K') \rar{y} &
 K'r'
 \end{tikzcd}\]
-
 where, given any $\alpha \in \Nat(\hom(r,-),K)$, it follows from naturality
 of $\alpha$ that
 \[\begin{aligned}
@@ -5020,40 +5019,46 @@ y\big(N\pair{f,F}(\alpha)\big)
 #+end_proof
 
 **** Yoneda functor                                               :ignore:
-#+begin_definition
-In the conditions of the [[lemma-yoneda][Yoneda Lemma]] (Lemma [[lemma-yoneda]]) the *Yoneda functor*,
-$Y \colon D^{op} \to \Sets^{D}$, is defined with the arrow function
+In the conditions of the Yoneda Lemma (Lemma [[lemma-yoneda]]) the *Yoneda functor*,
+$Y \colon {\cal D}^{op} \to \Sets^{{\cal D}}$, is defined with the arrow function
 \[
 \left(f \colon s \to r\right) \mapsto 
-\Big(\hom_D(f,-) \colon \hom_D(r,-) \to \hom_D(s,-)\Big).
+\Big(\hom_{\cal D}(f,-) \colon \hom_{\cal D}(r,-) \to \hom_{\cal D}(s,-)\Big).
 \]
-It can be also written as $Y' \colon D \to \Sets^{D^{op}}$.
-#+end_definition
+It can be also written as $Y\colon {\cal D} \to \Sets^{{\cal D}^{op}}$. By the Yoneda Lemma, there
+is a bijection $y \colon \Nat(\hom(r,-), \hom(s,-)) \cong \hom(s,r)$ given by
+$y(\hom(f,-)) = f$; making the Yoneda functor full and faithful.
 
+***** OLD Full and faithful as proposition                       :ignore:
 #+begin_proposition
 The Yoneda functor is full and faithful.
 #+end_proposition
 #+begin_proof
-By [[lemma-yoneda][Yoneda Lemma]], we know that
+By Yoneda Lemma (Lemma [[lemma-yoneda]]), we know that
 \[
 y \colon \Nat(\hom(r,-), \hom(s,-)) \cong \hom(s,r)
 \]
-is a bijection, where $y(\hom(f,-)) = f$.
+is a bijection, where
 #+end_proof
-
 # TODO: The Yoneda functor is a currying of the hom functor.
 
 *** Limits
+# TODO: Limpiar toda esta parte
 **** Motivation: products                                         :ignore:
 In the definition of product, we chose two objects of the category, we
 considered all possible */\red{cones}/* over two objects and we picked the
 universal one. Diagramtically,
 \[\begin{tikzcd}[column sep=tiny]
-&&& && d \dar[dashed]{\exists!} \ar[bend left,color=myred]{ddr}\ar[bend right,swap,color=myred]{ddl} & \\
-& c \drar[color=myred]\dlar[color=myred] & &&& a \times b \drar[color=myred]\dlar[color=myred] & \\
-a && b &\phantom{gap}& a && b
+&&&&& 
+D \dar[dashed]{\exists!} \ar[bend left,color=myred]{ddr}\ar[bend right,swap,color=myred]{ddl} &\\& 
+C \drar[color=myred]\dlar[color=myred] &&&&
+A \times B \drar[color=myred]\dlar[color=myred] & \\
+A && 
+B &\phantom{gap}& 
+A && 
+B
 \end{tikzcd}\]
-$c$ is a cone and $a \times b$ is the universal one: every cone factorizes through
+$C$ is a cone and $A \times B$ is the universal one: every cone factorizes through
 it. In this particular case, the base of each cone is given by two objects;
 or, in other words, by the image of a functor from the discrete category with
 only two objects, called the /index category/.
@@ -5077,7 +5082,7 @@ The constant functor sends a morphism $g \colon c \to c'$ to a natural
 transformation $\Delta g \colon \Delta c \to \Delta c'$ whose components are all $g$.
 #+END_definition
 
-We could say that $\Delta c$ squeezes the whole category ${\cal J}$ into $c$. A
+We could say that $\Delta c$ compresses the whole category ${\cal J}$ into $c$. A
 natural transformation from this functor to some other $F \colon {\cal J} \to {\cal C}$
 should be regarded as a */\red{cone}/* from the object $c$ to a copy
 of ${\cal J}$ inside the category ${\cal C}$; as the following diagram exemplifies
@@ -5157,42 +5162,43 @@ called $\downarrow\downarrow$ as index category,
 \cdot
 \end{tikzcd}\]
 A functor $F \colon \downarrow\downarrow \to {\cal C}$ is a pair of parallel arrows in ${\cal C}$.
-Limits of functors from this category are called *equalizers*.
+Limits of functors from this category are called /equalizers/.
 With this definition, the *equalizer* of two parallel arrows
-$f,g \colon a \to b$ is an object $\mathrm{eq}(f,g)$ with a morphism
-$e \colon \mathrm{eq}(f,g) \to a$ such that $f \circ e = g \circ e$; and such that
+$f,g \colon A \to B$ is an object $\mathrm{eq}(f,g)$ with a morphism
+$e \colon \mathrm{eq}(f,g) \to A$ such that $f \circ e = g \circ e$; and such that
 any other object with a similar morphism factorizes uniquely
 through it
 \[\begin{tikzcd}[column sep=tiny]
 &
-d
+D
 \dar[dashed]{\exists!}
 \arrow[bend right, swap, color=myred]{ddl}{e'}
 \arrow[bend left, color=myred]{ddr}  &\\& 
 \operatorname{eq}(f,g)
 \drar[color=myred]
 \dlar[swap, color=myred]{e} &\\
-a 
+A 
 \arrow[bend left=15]{rr}{f}
 \arrow[bend right=15, swap]{rr}{g} &&
-b
+B
 \end{tikzcd}\]
 note how the right part of the cone is completely determined
 as $f \circ e$. Because of this, equalizers can be written without
-specifying it, and the diagram can be simplified to
+specifying it, and the diagram can be simplified to the
+following one.
 \[\begin{tikzcd}
 \mathrm{eq}(f,g) 
 \rar{e} & 
-a 
+A 
 \arrow[bend left=15]{r}{f}
 \arrow[bend right=15, swap]{r}{g} &
-b \\
-d 
+B \\
+D 
 \ar[swap]{ur}{e'} 
 \ar[dashed]{u}{\exists!} &&&
 \end{tikzcd}\]
-.
 
+**** Equalizers in Sets                                           :ignore:
 #+ATTR_LATEX: :options [Equalizers in Sets]
 #+BEGIN_exampleth
 The equalizer of two parallel functions $f,g \colon A \to B$ in $\Sets$ 
@@ -5213,6 +5219,7 @@ D
 \end{tikzcd}\]
 #+END_exampleth
 
+**** Kernels                                                      :ignore:
 #+ATTR_LATEX: :options [Kernels]
 #+BEGIN_exampleth
 In the category of abelian groups, the kernel of a function $f$,
@@ -5226,25 +5233,25 @@ can be defined in the category of $R\mhyphen\text{Modules}$, for any ring $R$.
 Any functor from that category is a pair of arrows with a common
 codomain; and the pullback is the universal cone over them.
 \[\begin{tikzcd}
-& d
+& D
 \arrow[bend right,swap,color=myred]{ddl}{p'}
 \arrow[bend left,color=myred]{ddr}{q'}
 \arrow[bend right,color=myred]{dd}
 \arrow[dashed]{d}{\exists!} &\\
-& a
+& A
 \drar[bend left,swap,color=myred]{q}
 \dlar[bend right,color=myred]{p}
 \arrow[color=myred]{d} & \\
-x\rar[swap]{f} & z & y\lar{g} \\
+X\rar[swap]{f} & Z & Y\lar{g} \\
 \end{tikzcd}\]
 Again, the central arrow of the diagram is determined as
 $f \circ q = g \circ p$; so it can be ommited in the diagram. The usual
-definition of a pullback for two morphisms $f \colon x \to z$ and
-$g \colon y \to z$ is pair of morphisms $p \colon a \to x$ and $q \colon a \to y$
+definition of a pullback for two morphisms $f \colon X \to Z$ and
+$g \colon Y \to Z$ is pair of morphisms $p \colon A \to X$ and $q \colon A \to Y$
 such that $f \circ q = g \circ p$ which are also universal, that is,
-given any pair of morphisms $p' \colon d \to x$ and $q' \colon d \to y$,
-there exists a unique $u \colon d \to a$ making the diagram commute.
-Usually we write the pullback object as $x \times_z y$ and we write
+given any pair of morphisms $p' \colon D \to X$ and $q' \colon D \to Y$,
+there exists a unique $u \colon D \to A$ making the diagram commute.
+Usually we write the pullback object as $X \times_Z Y$ and we write
 this property diagramatically as
 \[\begin{tikzcd}
 d
@@ -5440,8 +5447,6 @@ The square in this diagram is usually called a
 
 *** Adjunctions
 **** Definition of adjunction                                     :ignore:
-#+attr_latex: :options [Adjunction]
-#+begin_definition
 An *adjunction* from categories ${\cal X}$ to ${\cal Y}$ is a pair of functors
 $F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a bijection
 \[
@@ -5449,7 +5454,6 @@ $F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a bijectio
 \]
 natural in both $x\in {\cal X}$ and $y \in {\cal Y}$. We say that $F$ is /left-adjoint/ to
 $G$ and that $G$ is /right-adjoint/ to $F$. We write this as $F \dashv G$.
-#+end_definition
 
 Naturality of $\varphi$ means that both
 \[\begin{tikzcd}
@@ -5649,10 +5653,9 @@ y \end{tikzcd}}
 \BIC{}
 \end{prooftree}
 
-Finally, the triangle identities follow directly from the previous ones,
-
- * $\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta$;
- * $\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$. \qedhere
+Finally, the triangle identities follow directly from the previous ones:
+we have $\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta$ and
+$\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$.
 #+END_proof
 
 **** Characterization of adjunctions                              :ignore:
@@ -5741,8 +5744,7 @@ thus, they must be equal, $\theta \circ Ff = F'f \circ \theta$.
 # Theorem 1 pag 103
 #+ATTR_LATEX: :options [Composition of adjunctions]
 #+BEGIN_theorem
-Given two adjunctions between categories ${\cal X},{\cal Y}$ and ${\cal Y},{\cal Z}$
-respectively,
+Given two adjunctions between categories ${\cal X},{\cal Y}$ and ${\cal Y},{\cal Z}$ respectively,
 \[
 \varphi \colon \hom(Fx,y) \cong \hom(x,Gy)
 \qquad
@@ -5926,37 +5928,37 @@ the solution set condition.
 #+END_theorem
 
 *** Monads
-The notion of *monads* is pervasive in category theory. A monad is
+**** Motivation                                                   :ignore:
+The notion of /monads/ is pervasive in category theory. A monad is
 a certain type of endofunctor that arises naturally when considering
 adjoints. They will be useful to model algebraic notions inside
 category theory and to model a variety of effects and contextual
 computations in functional programming languages.
  
+\\
+
 **** Definition of monads                                         :ignore:
-#+attr_latex: :options [Monad]
-#+begin_definition
 A *monad* is a functor $T\colon X \to X$ with natural transformations
 
- * $\eta\colon I \tonat T$, called /unit/; and
+ * $\eta\colon \Id \tonat T$, called /unit/; and
  * $\mu \colon T^2 \tonat T$, called /multiplication/;
 
-such that the following two diagrams commute
+such that the following two diagrams commute.
 \[\begin{tikzcd}
 T^3 \rar{T\mu}\dar{\mu T} & T^2\dar{\mu} \\
 T^2 \rar{\mu} & T
 \end{tikzcd}
 \qquad
 \begin{tikzcd}
-IT \rar{\eta T}\drar[swap]{\cong} & T^2\dar{\mu} & \lar[swap]{T\eta}\dlar{\cong} TI \\
-& T & &.
+\Id \circ T \rar{\eta T}\drar[swap]{\cong} & T^2\dar{\mu} & \lar[swap]{T\eta}\dlar{\cong} T\circ \Id \\
+& T &
 \end{tikzcd}\]
-#+end_definition
 
 The first diagram is encoding some form of associativity of the
 multiplication, while the second one is encoding the fact that
 $\eta$ creates a neutral element with respect to this multiplication.
 These statements will be made precise when we talk about algebraic
-theories.
+theories. A *comonad* is the dual of a monad.
 
 **** Each adjunction gives rise to a monad                        :ignore:
 #+attr_latex: :options [Each adjunction gives rise to a monad]
@@ -5965,7 +5967,7 @@ Given $F \dashv G$, the composition $GF$ is a monad.
 #+end_proposition
 #+begin_proof
 We take the unit of the adjunction as the monad unit. We define the
-product as $\mu = G\varepsilon F$. Associativity follows from these diagrams
+product as $\mu = G\varepsilon F$. Associativity follows from
 \[\begin{tikzcd}
 FGFG\rar{FG\varepsilon} \dar[swap]{\varepsilon FG} & FG \dar{\varepsilon} \\
 FG\rar{\varepsilon} & I
@@ -5973,58 +5975,30 @@ FG\rar{\varepsilon} & I
 \qquad
 \begin{tikzcd}
 GFGFGF\rar{GFG\varepsilon F} \dar[swap]{G\varepsilon FGF} & GFGF \dar{G\varepsilon F} \\
-GFGF\rar{G\varepsilon F} & GF &,
+GFGF\rar{G\varepsilon F} & GF
 \end{tikzcd}\]
-
-where the first is commutative by Proposition [[prop-interchangelaw]] and the second
-is obtained by applying functors $G$ and $F$. Unit laws follow from
-the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
+where the first diagram is commutative by Proposition [[prop-interchangelaw]]
+and the second one is obtained by applying functors $G$ and $F$. Unit laws
+follow from the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
 
-**** Comonads                                                     :ignore:
-#+attr_latex: :options [Comonad]
-#+begin_definition
-A *comonad* is a functor $L\colon X \to X$ with natural transformations
+*** Algebras
+Let $F \colon {\cal C} \to {\cal C}$ be a functor. An $F\textbf{-algebra}$ is 
 
- * $\varepsilon\colon L\to I$, called /counit/
- * $\delta\colon L \to L^2$, called /comultiplication/
-
-such that
-\[\begin{tikzcd}
-L\rar{\delta} \dar[swap]{\delta} & L^{2} \dar{L\delta} \\
-L^{2}\rar{\delta L} & L^{3}
-\end{tikzcd}
-\qquad
-\begin{tikzcd}
-& L \dar{\delta} \dlar[swap]{\cong} \drar{\cong} & \\
-IL & 
-L^2 \lar{\varepsilon L}\rar[swap]{L \varepsilon} & 
-LI
-&.
-\end{tikzcd}\]
-#+end_definition
-
-*** Algebras for a monad
-#+attr_latex: :options [T-algebra]
-#+begin_definition
+**** OLD T-algebras
+# TODO: Algebras para cualquier endofuntor
 For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
-/structure map/ making these diagrams commute
+/structure map/ making this diagram commute.
 \[\begin{tikzcd}
 T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
 Tx\rar{h} & x
-\end{tikzcd}
-\]
-#+end_definition
-
-#+attr_latex: :options [Morphism of T-algebras]
-#+begin_definition
-A *morphism of T-algebras* is an arrow $f\colon x \to x'$ making the following square
-commute
+\end{tikzcd}\]
+A *morphism of* $T\textbf{-algebras}$ is an arrow $f\colon x \to x'$ making the following diagram
+commute.
 \[\begin{tikzcd}
 Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
 Tx' \rar[swap]{h'} & Tx'
 \end{tikzcd}\]
-#+end_definition
 
 #+attr_latex: :options [Category of T-algebras]
 #+begin_proposition
@@ -6033,7 +6007,6 @@ The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
 #+begin_proof
 Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
 is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
-
 \[\begin{tikzcd}
 Tx \rar{h}\dar[swap]{Tf} & 
 x \dar{f}\\
@@ -6042,7 +6015,6 @@ x' \dar{g}\\
 Tx'' \rar{h''}&
 x''
 \end{tikzcd}\]
-
 commutes.
 #+end_proof
 
@@ -6647,7 +6619,7 @@ composable morphisms of length $n$.
 
 #+ATTR_LATEX: :options [Nerve functor]
 #+BEGIN_lemma
-The *nerve functor* $N \colon \Cat \to \sSets$ is fully faithful.
+The *nerve functor* $N \colon \Cats \to \sSets$ is fully faithful.
 #+END_lemma
 
 **** Standard n-simplex                                           :ignore:
@@ -6936,6 +6908,7 @@ product and inverse of the group in order to be natural.
 # set of integers with the addition $(+)$, opposite $(-)$ and zero $(0)$ as operations. The
 # term $(x,y,z \vdash (x \cdot y^{-1}) \cdot (z^{-1} \cdot e))$ would be interpreted as
 
+# TODO: Monads are monoids in the category of endofunctors
 
 \\
 
