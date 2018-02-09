@@ -4565,43 +4565,43 @@ S(f'\circ f, g' \circ g)
 \]
 for any composable morphisms $f,f',g,g'$. On the other hand, if a bifunctor exists,
 \[\begin{aligned}
-M_{b'}(g) \circ L_c(f) 
-&= S(\id_{b'}, g) \circ S(f, \id_c)
-= S(\id_{b'} \circ f, g \circ \id_c) \\
-&= S(f \circ \id_b, \id_{c'} \circ g)
-= S(f,\id_{c'}) \circ S(\id_b,g) \\
-&= L_{c'}(f) \circ M_b(f).
+M_{B'}(g) \circ L_C(f) 
+&= S(\id_{B'}, g) \circ S(f, \id_C)
+= S(\id_{B'} \circ f, g \circ \id_C) \\
+&= S(f \circ \id_B, \id_{C'} \circ g)
+= S(f,\id_{C'}) \circ S(\id_B,g) \\
+&= L_{C'}(f) \circ M_B(f).
 \end{aligned}\]
 #+END_proof
 
-**** Naturality for bifunctors :ignore:
+**** Naturality for bifunctors                                    :ignore:
 #+ATTR_LATEX: :options [Naturality for bifunctors]
 #+BEGIN_proposition
-Given $S,S'$ bifunctors, $\alpha_{b,c} \colon S(b,c) \to S'(b,c)$ is a natural transformation
-if and only if $\alpha(b,c)$ is natural in $b$ for each $c$ and natural in $c$ for each $b$.
+Given $S,S'$ bifunctors, $\alpha_{B,C} \colon S(B,C) \to S'(B,C)$ is a natural transformation
+if and only if $\alpha_{B,C}$ is natural in $B$ for each $C$ and natural in $C$ for each $B$.
 #+END_proposition
 #+BEGIN_proof
 If $\alpha$ is natural, in particular, we can use the identities to prove that
-it must be natural in its two components
+it must be natural in its two components.
 \[\begin{tikzcd}
-S(b,c) \rar{\alpha_{b,c}}\dar[swap]{S\pair{f,\id_c}} & 
-S'(b,c) \dar{S'\pair{f,\id_c}} &&
-S(b,c) \rar{\alpha_{b,c}} \dar[swap]{S\pair{\id_b,g}} &
-S'(b,c) \dar{S'\pair{\id_b,g}} \\
-S(b',c) \rar{\alpha_{b',c}} &
-S'(b',c) &&
-S(b,c') \rar{\alpha_{b,c'}} &
-S'(b,c') \\
+S(B,C) \rar{\alpha}\dar[swap]{S\pair{f,\id}} & 
+S'(B,C) \dar{S'\pair{f,\id}} &&
+S(B,C) \rar{\alpha} \dar[swap]{S\pair{\id,g}} &
+S'(B,C) \dar{S'\pair{\id,g}} \\
+S(B',C) \rar{\alpha} &
+S'(B',C) &&
+S(B,C') \rar{\alpha} &
+S'(B,C')
 \end{tikzcd}\]
 If both components of $\alpha$ are natural, the naturality of the natural
 transformation follows from the composition of these two squares
 \[\begin{tikzcd}
-S(b,c)   \rar{\alpha_{b,c}} \dar[swap]{S\pair{f,\id_{c}}} &
-S'(b,c)  \dar{S'\pair{f,\id_c}} \\
-S(b',c)  \rar{\alpha_{b',c}} \dar[swap]{S\pair{\id_{b'},g}} &
-S'(b',c) \dar{S'\pair{\id_{b'},g}} \\
-S(b',c') \rar{\alpha_{b',c'}}  &
-S'(b',c') \\
+S(B,C)   \rar{\alpha} \dar[swap]{S\pair{f,\id}} &
+S'(B,C)  \dar{S'\pair{f,\id}} \\
+S(B',C)  \rar{\alpha} \dar[swap]{S\pair{\id,g}} &
+S'(B',C) \dar{S'\pair{\id,g}} \\
+S(B',C') \rar{\alpha}  &
+S'(B',C')
 \end{tikzcd}\]
 where each square is commutative by the naturality of each component
 of $\alpha$.
@@ -4610,8 +4610,6 @@ of $\alpha$.
 **** TODO [#C] Examples of product categories
 *** Opposite categories and contravariant functors
 **** Opposite category                                            :ignore:
-#+attr_latex: :options [Opposite category]
-#+begin_definition
 The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
 same objects as ${\cal C}$ but with all its arrows reversed. That is, for each
 morphism $f : A \to B$, there exists a morphism $f^{op} : B \to A$ in ${\cal C}^{op}$.
@@ -4620,10 +4618,9 @@ Composition is defined as
 f^{op} \circ g^{op} = (g\circ f)^{op},
 \]
 exactly when the composite $g \circ f$ is defined in ${\cal C}$.
-#+end_definition
 
 Reversing all the arrows is a process that directly translates every
-property of the category into its */dual/* property. A morphism $f$ is a
+property of the category into its /dual/ property. A morphism $f$ is a
 monomorphism if and only if $f^{op}$ is an epimorphism; a terminal object
 in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse becomes a left
 inverse on the opposite category. This process is also an /involution/,
@@ -4643,39 +4640,30 @@ In a locally small category ${\cal C}$, the *Hom-functor* is the bifunctor
 \[
 \hom \colon {\cal C}^{op} \times {\cal C} \to \Sets,
 \]
-defined as $\hom(a,b)$ for any two objects $a,b \in {\cal C}$. Given $f \colon a \to a'$
-and $g \colon b \to b'$, this functor is defined on any $p \in \hom(a,b)$ as
+defined as $\hom(A,B)$ for any two objects $A,B \in {\cal C}$. Given $f \colon A \to A'$
+and $g \colon B \to B'$, this functor is defined on any $p \in \hom(A,B)$ as
 \[
-\hom(f,g)(p) = f \circ p \circ g \in \hom(a',b').
+\hom(f,g)(p) = f \circ p \circ g \in \hom(A',B').
 \]
-
 Partial applications of the functors give rise to
 
- * $\hom(a,-)$, a covariant functor for any fixed $a \in {\cal C}$. Given $g \colon b \to b'$,
-   \[
-   \hom(a,f) \colon \hom(a,b) \to \hom(a,b')
-   \]
-   is defined as the postcomposition with $g$, that we write as $- \circ g$.
+ * $\hom(A,-)$, a covariant functor for any fixed $A \in {\cal C}$ that maps $g \colon B \to B'$
+   to the partial composition $- \circ g \colon \hom(A,B) \to \hom(A,B')$;
 
- * $\hom(-,b)$, a contravariant functor for any fixed $b \in {\cal C}$. Given $f \colon a \to a'$,
-   \[
-   \hom(f,b) \colon \hom(a',b) \to \hom(a,b)
-   \]
-   is defined as the precomposition with $f$, that we write as $f \circ -$.
+ * $\hom(-,B)$, a contravariant functor for any fixed $B \in {\cal C}$ that maps $f \colon A \to A'$
+   to the partial precomposition $f\circ - \colon \hom(A',B) \to \hom(A,B)$.
 
+Note that this is a well-defined bifunctor by virtue of Proposition
+[[prop-existence-bifunctor]] and the fact that $(-\circ g)\circ(f\circ -) = (f\circ -)\circ(-\circ g)$.
 This kind of functor, contravariant on the first variable and covariant on
-the second is usually called a *profunctor*.
+the second, is usually called a *profunctor*.
 #+END_exampleth
 
 *** Functor categories
-#+ATTR_LATEX: :options [Functor category]
-#+BEGIN_definition
 Given two categories ${\cal B},{\cal C}$, the *functor category* ${\cal B}^{{\cal C}}$ has all functors
 ${\cal C} \to {\cal B}$ as objects and natural transformations between them as morphisms.
-#+END_definition
-
-If we consider the category of small categories $\mathtt{Cat}$, there is
-a profunctor $-^{-} \colon \mathtt{Cat}^{op} \times \mathtt{Cat} \to \mathtt{Cat}$ sending any two categories
+If we consider the category of small categories $\Cat$, there is
+a hom-profunctor $-^{-} \colon \Cat^{op} \times \Cat \to \Cat$ sending any two categories
 to their functor category.
 
 In cite:lawvere09, multiple examples of usual mathematical
@@ -4756,7 +4744,7 @@ of morphisms $\{\alpha_r\}_{r \in \mathbb{R}}$ such that
 \[
 \alpha_r \circ \alpha_s = \alpha_{r+s} \qquad \forall r,s \in \mathbb{R}.
 \]
-This example is described in cite:lawvere09.
+This example is described in detail in cite:lawvere09.
 #+END_exampleth
 
 **** TODO Pointed Sets (?)
@@ -4782,23 +4770,10 @@ The *comma category* $(T \downarrow S)$ has
 Diagramatically, a morphism in this category is a commutative diagram
 \[\begin{tikzcd}
 \color{black!50}{Te} \rar{Tk} \dar[swap,color=black!50]{f} & \color{black!50}{Te'}\dar[,color=black!50]{f'} \\
-\color{black!50}Sd \rar{Sh}                & \color{black!50}{Sd'}          \\
+\color{black!50}Sd \rar{Sh}                & \color{black!50}{Sd'}
 \end{tikzcd}\]
 where the objects of the category are drawn in grey.
 #+END_definition
-# \[\begin{tikzcd}[remember picture]
-# Te \rar{Tk}\dar[swap]{f} & Te'  \dar{f'} \\
-# Sd \rar{Sh}              & Sd'          \\
-# \end{tikzcd}
-# \begin{tikzpicture}[remember picture,overlay]
-# \node (A) at ([xshift=0.1cm]\tikzcdmatrixname-1-1) {};
-# \node (B) at ([xshift=-0.1cm]\tikzcdmatrixname-2-1) {};
-# \node (C) at ([xshift=0.1cm]\tikzcdmatrixname-1-2) {};
-# \node (D) at ([xshift=-0.1cm]\tikzcdmatrixname-2-2) {};
-# \node[draw=black!50, fit=(A) (B)]() {};
-# \node[draw=black!50, fit=(C) (D)]() {};
-# \end{tikzpicture}\]
-
 
 **** Slice category                                               :ignore:
 # Motivation
@@ -5013,7 +4988,7 @@ to $\Sets$.
 #+end_proposition
 #+begin_proof
 We define $N \colon \Sets^D \times D \to \Sets$ on objects as $N\pair{r,K} = \Nat(\hom(r,-),K)$.
-Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on morphisms as
+Given $f \colon r \to r'$ and $F \colon K \tonat K'$, the functor is defined on morphisms as
 \[
 N\pair{f,F}(\alpha) =
 F \circ \alpha \circ (- \circ f) \in
@@ -5021,7 +4996,7 @@ F \circ \alpha \circ (- \circ f) \in
 \]
 
 where $\alpha \in \Nat(\hom(r,-),K)$. We define $E \colon \Sets^D \times D \to \Sets$ on objects as $E\pair{r,K} = Kr$.
-Given $f \colon r \to r'$ and $F \colon K \todot K'$, the functor is defined on morphisms as
+Given $f \colon r \to r'$ and $F \colon K \tonat K'$, the functor is defined on morphisms as
 \[
 E\pair{f,F}(a) =
 F(Kf(a)) = K'f(Fa) \in
@@ -5163,11 +5138,11 @@ functors.
 #+ATTR_LATEX: :options [Limit]
 #+BEGIN_definition
 The *limit* of a functor $F \colon {\cal J} \to {\cal C}$ is an object $r \in {\cal C}$ such that
-there exists a universal arrow $v \colon \Delta r \todot F$ from $\Delta$ to $F$. It is
+there exists a universal arrow $v \colon \Delta r \tonat F$ from $\Delta$ to $F$. It is
 usually written as $r = \Limit F$.
 #+END_definition
 
-That is, for every natural transformation $w \colon \Delta d \todot F$, there is a unique
+That is, for every natural transformation $w \colon \Delta d \tonat F$, there is a unique
 morphism $f \colon d \to r$ such that
 \[\begin{tikzcd}
 d\dar[dashed,swap]{\exists! f} & \Delta d \dar[swap,dashed]{\Delta f}\drar{w} & \\
@@ -5357,10 +5332,10 @@ commutes.
 #+attr_latex: :options [Colimits]
 #+begin_definition
 The *colimit* of a functor $F \colon J \to {\cal C}$ is an object $r \in {\cal C}$ such that there exists
-a universal arrow $u \colon F \todot \Delta r$ from $F$ to $\Delta$. It is usually written as $r = \Colimit F$.
+a universal arrow $u \colon F \tonat \Delta r$ from $F$ to $\Delta$. It is usually written as $r = \Colimit F$.
 #+end_definition
 
-That is, for every natural transformation $w \colon F \todot \Delta d$, there is a unique
+That is, for every natural transformation $w \colon F \tonat \Delta d$, there is a unique
 morphism $f \colon r \to d$ such that
 \[\begin{tikzcd}
 d & \Delta d  & \\
@@ -5695,9 +5670,9 @@ Finally, the triangle identities follow directly from the previous ones,
 Each adjunction is $F \dashv G$ between categories ${\cal X}$ and ${\cal Y}$ is completely determined
 by any of the following data,
 
- 1) functors $F,G$ and $\eta\colon 1 \todot GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
+ 1) functors $F,G$ and $\eta\colon 1 \tonat GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
  2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, where $F_0x \in {\cal Y}$, creating a functor $F$.
- 3) functors $F,G$ and $\varepsilon\colon FG \todot 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
+ 3) functors $F,G$ and $\varepsilon\colon FG \tonat 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
  4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$,  where $G_0x \in {\cal X}$, creating a functor $G$.
  5) functors $F,G$, with natural transformations satisfiying the triangle
     identities $G\varepsilon \circ \eta G = \id$ and $\varepsilon F \circ F\eta = \id$.
@@ -5970,8 +5945,8 @@ computations in functional programming languages.
 #+begin_definition
 A *monad* is a functor $T\colon X \to X$ with natural transformations
 
- * $\eta\colon I \todot T$, called /unit/; and
- * $\mu \colon T^2 \todot T$, called /multiplication/;
+ * $\eta\colon I \tonat T$, called /unit/; and
+ * $\mu \colon T^2 \tonat T$, called /multiplication/;
 
 such that the following two diagrams commute
 \[\begin{tikzcd}
@@ -7089,7 +7064,7 @@ Q^PA \cong \Nat(\hom(-,A), Q^P) \cong \Nat(\hom(-,A) \times P, Q)
 \]
 by the Yoneda lemma, which is a set when ${\cal C}$ is small.
 A family of evaluation functions $\varepsilon_A \colon \Nat(\hom(-,A) \times P,Q) \times PA \to QA$ can be defined as
-$\varepsilon_A(\eta, p) = \eta(\id_A,p)$. We show that each is a universal arrow: given any $n \colon R\times P \todot Q$,
+$\varepsilon_A(\eta, p) = \eta(\id_A,p)$. We show that each is a universal arrow: given any $n \colon R\times P \tonat Q$,
 we can show that there exists a unique $\phi$ making the diagram
 \[\begin{tikzcd}
 R \times P \dar[dashed,swap]{\phi \times \Id}\drar{n} & \\
