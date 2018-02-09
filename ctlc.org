@@ -3880,20 +3880,17 @@ can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 * Category theory (abstract)                                         :ignore:
 * Category theory
 ** Categories
-We will think of a category as the algebraic structure that captures
-the notion of composition. A category will be built from some sort
-of objects linked by composable arrows; to which associativity and
-identity laws will apply.
+A *category* is an algebraic structure that captures the notion of
+composition. It consists of objects linked by composable arrows; to
+which associativity and identity laws will apply.
 
-Thus, a category has to rely in some notion of /*collection*/. When
-interpreted inside set-theory, it is common to use this term to denote
-some unspecified formal notion of compilation of entities that could
-be given by sets or proper classes. We will want to define categories
-whose objects are all the possible sets and we will need the objects
-to form a proper class in order to avoid inconsistent results such as
-the Russell's paradox. This is why we will consider, from this
-approach, a particular class of categories of small set-theoretical
-size to be specially well-behaved.
+Thus, a category has to rely in some notion of /collection of
+objects/.  When interpreted inside set-theory, this term can denote
+sets or proper classes. We will want to define categories whose
+objects are all the possible sets and we will need the objects to form
+a proper class in order to avoid inconsistent results such as the
+Russell's paradox. This is why we will consider a particular class of
+categories of small set-theoretical size to be specially well-behaved.
 
 #+attr_latex: :options [Small and locally small categories]
 #+begin_definition
@@ -3906,32 +3903,27 @@ be given by a set.
 A different approach, however, would be to simply take the /objects/
 and the /arrows/ as fundamental concepts of our theory. These
 foundational concerns will not cause any explicit problem in this
-presentation of category theory, so we will keep them deliberately
+presentation of category theory, so we will keep it deliberately
 open to both interpretations.
 
 *** Definition of category
 **** Categories, objects and morphisms                            :ignore:
 #+attr_latex: :options [Category]
 #+begin_definition
-A *category* ${\cal C}$, as defined in cite:maclane78, is given by
+A *category* ${\cal C}$, as defined in cite:maclane78 or cite:awodey10, is given by
 
  * ${\cal C}_0$ (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), a /collection/ whose
    elements are called *objects*, and
  * ${\cal C}_1$, a /collection/ whose elements are called *morphisms*.
 
-Every morphism $f \in {\cal C}_1$ is assigned two objects: a
-*domain*, written as $\mathrm{dom}(f) \in {\cal C}_0$, and a
-*codomain*, written as $\mathrm{cod}(f) \in {\cal C}_0$; a common
-notation for such morphism is
-\[
-f \colon \mathrm{dom}(f) \to \mathrm{cod}(f).
-\]
+Every morphism $f \in {\cal C}_1$ is assigned two objects: a *domain* $\mathrm{dom}(f) \in {\cal C}_0$,
+and a *codomain* $\mathrm{cod}(f) \in {\cal C}_0$; a common notation to indicate $A = \mathrm{dom}(f)$
+and $B = \mathrm{cod}(f)$ is to write $f \colon A \to B$.
 
 Given two morphisms $f \colon A \to B$ and $g \colon B \to C$, there exists a 
-*composition morphism*, written as $g \circ f \colon A \to C$; or
-simply by yuxtaposition, as $gf$.
-Morphism composition is a binary associative operation with an
-identity element $\id_{A}\colon A \to A$ for every object $A$, that is,
+*composition* morphism $g \circ f \colon A \to C$. Morphism composition is a 
+binary associative operation with an identity element $\id_{A}\colon A \to A$
+for every object $A$, that is,
 \[
 h \circ (g \circ f) = (h \circ g) \circ f
 \quad\text{ and }\quad
@@ -3941,15 +3933,14 @@ for any $f,g,h$, composable morphisms.
 #+end_definition
 
 **** Definition of hom-sets                                       :ignore:
-#+attr_latex: :options [Hom-sets]
-#+begin_definition
-The *hom-set* of two objects $A,B$ on a category is the collection of morphisms 
-between them. It is written as $\hom(A,B)$. The set of *endomorphisms*
-of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
-#+end_definition
+The *hom-set* of two objects $A,B$ on a category is the collection of
+morphisms between them. It is written as $\hom(A,B)$. We can use a
+subscript, as in $\hom_{{\cal C}}(A,B)$, to explicitly specify the
+category we are working in when necessary.
 
-We can use a subscript, as in $\hom_{{\cal C}}(A,B)$ to explicitly
-specify the category we are working in when necessary.
+***** OLD Endomorphisms
+The set of *endomorphisms*
+of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
 
 *** Morphisms
 **** Morphisms: introduction                                      :ignore:
@@ -3965,15 +3956,6 @@ to other objects in the exact same way; that is, whenever an
 invertible morphism between them exists. This will constitute an
 equivalence relation on the category.
 
-In a certain sense, morphisms are an abstraction of the notion of the
-structure-preserving homomorphisms that are defined between algebraic
-structures. From this perspective, /*monomorphisms*/ and
-/*epimorphisms*/ can be thought as abstractions of the usual injective
-and surjective homomorphisms. We will see, however, how some
-properties that we take for granted, such as ''isomorphism'' meaning
-exactly the same as ''both injective and surjective'', are not true in
-general.
-
 **** Isomorphisms                                                 :ignore:
 #+attr_latex: :options [Isomorphisms]
 #+begin_definition
@@ -3983,12 +3965,12 @@ $f^{-1} : B \to A$ such that
   * $f^{-1} \circ f = \id_{A}$,
   * $f \circ f^{-1} = \id_{B}$.
 
-This morphism is called an /inverse morphism/.
+This morphism is called an *inverse* of $f$. Two objects are *isomorphic*
+if an isomorphism between them exists.  We write $A \cong B$ when $A$
+and $B$ are isomorphic.
 #+end_definition
 
-We call *automorphisms* to the morphisms which are both endomorphisms
-and isomorphisms.
-
+**** Unicity of inverses                                          :ignore:
 #+attr_latex: :options [Unicity of inverses]
 #+begin_proposition
 <<prop-unicityinverse>>
@@ -4003,18 +3985,9 @@ g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) =
 (g_1 \circ f) \circ g_2 =
 \id \circ g_2 = g_2.
 \]
-We have used associativity of composition, neutrality of the identity 
-and the fact that $g_1$ is a left-side inverse and $g_2$ is a 
-right-side inverse.
 #+end_proof
 
-#+begin_definition
-Two objects are *isomorphic* if an isomorphism between them exists.
-We write $A \cong B$ when $A$ and $B$ are isomorphic.
-#+end_definition
-
-#+attr_latex: :options [Isomorphy is an equivalence relation]
-#+begin_proposition
+**** Equivalence relation                                         :ignore:
 The relation of being isomorphic is an equivalence relation. In
 particular,
 
@@ -4022,31 +3995,34 @@ particular,
  * the inverse of an isomorphism, $(f^{-1})^{-1} = f$;
  * and the composition of isomorphisms, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$;
 
-are all isomorphisms.
-#+end_proposition
-#+BEGIN_proof
-We can check that those are in fact inverses. From their existance
-follows
+are all isomorphisms. We can check that these are in fact their inverses
+and from their existence, it follows that the relation is reflexive,
+symmetric and transitive.
 
- * reflexivity, $A \cong A$;
- * symmetry, $A \cong B$ implies $B \cong A$;
- * transitivity, $A \cong B$ and $B \cong C$ imply $A \cong C$.
-#+END_proof
+**** TODO Automorphisms                                           :ignore:
+We call *automorphisms* to the morphisms which are both endomorphisms
+and isomorphisms.
+
 
 **** Monomorphisms and epimorphisms                               :ignore:
+Morphisms are an abstraction of the notion of structure-preserving
+homomorphisms between algebraic structures. From this perspective,
+*monomorphisms* and *epimorphisms* will be abstractions of the usual
+injective and surjective homomorphisms, respectively.
+
 #+attr_latex: :options [Monomorphisms and epimorphisms]
 #+begin_definition
 A *monomorphism* is a left-cancellable morphism, that is, $f : A \to B$ is
 a monomorphism if, for every $g,h : B \to A$, 
-\[ f \circ g = f \circ h  \implies g = h.
-\]
+\[ f \circ g = f \circ h  \implies g = h. \]
 An *epimorphism* is a right-cancellable morphism, that is, $f : A \to B$ is
 an epimorphism if, for every $g,h : B \to A$,
-\[ g \circ f = h \circ f \implies g = h.
-\]
+\[ g \circ f = h \circ f \implies g = h. \]
+#+end_definition
+
+***** TODO Bimorphisms
 A morphism that is a monomorphism and an epimorphism at the same time is
 called a *bimorphism*.
-#+end_definition
 
 #+begin_remark
 A morphism can be a bimorphism without being an isomorphism. We will
@@ -4054,6 +4030,9 @@ cover [[*Examples of categories][examples]] of this fact later.
 #+end_remark
 
 **** Retractions and sections                                     :ignore:
+Note that we could have chosen a stronger and non-equivalent notion
+to generalize the notions of injective and surjective functions.
+
 #+attr_latex: :options [Retractions and sections]
 #+begin_definition
 A *retraction* is a left inverse, that is, a morphism that has a right inverse;
