@@ -188,6 +188,8 @@
 \definecolor{Maroon}{cmyk}{0, 0.87, 0.68, 0.32}
 \definecolor{RoyalBlue}{cmyk}{1, 0.50, 0, 0}
 \definecolor{Black}{cmyk}{0, 0, 0, 0}
+% ** UGR
+\definecolor{ugrColor}{HTML}{c6474b}
 
 % ********************************************************************
 % Font Stuff
@@ -383,7 +385,7 @@
     \titleformat{\part}[display]
         {\normalfont\centering\large}%
         {\thispagestyle{empty}\partname~\MakeTextUppercase{\thepart}}{1em}%
-        {\color{Maroon}\spacedallcaps}[\bigskip\normalfont\normalsize\color{Black}\begin{quote}\ct@parttext\end{quote}]
+        {\color{ugrColor}\spacedallcaps}[\bigskip\normalfont\normalsize\color{Black}\begin{quote}\ct@parttext\end{quote}]
       }{\relax}
     % chapters
     \ifthenelse{\boolean{@linedheaders}}%
@@ -454,7 +456,7 @@
 %      \renewcommand{\cftpartaftersnum}{\cftchapaftersnum}%
 %      \renewcommand{\cftpartaftersnumb}{\quad}%
 %      \setlength{\cftpartnumwidth}{\cftpartnumwidth}
-      \renewcommand{\cftpartfont}{\color{Maroon}\normalfont}%
+      \renewcommand{\cftpartfont}{\color{ugrColor}\normalfont}%
       \renewcommand{\cftpartpagefont}{\normalfont}%
       \ifthenelse{\boolean{@dottedtoc}}{\relax}%
       {%
