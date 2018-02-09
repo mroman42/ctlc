@@ -122,7 +122,7 @@
 #+latex_header: \newcommand\todot{\xrightarrow{.}}
 #+latex_header: \newcommand\toddot{\xrightarrow{..}}
 #+latex_header: \newcommand\Set{\mathsf{Set}}
-#+latex_header: \newcommand\Cat{\mathsf{Cat}}
+#+latex_header: \newcommand\Cats{\mathsf{Cat}}
 #+latex_header: \newcommand\Sets{\mathsf{Set}}
 #+latex_header: \newcommand\sSets{\mathsf{sSets}}
 #+latex_header: \newcommand\Nat{\operatorname{Nat}}
@@ -4257,7 +4257,7 @@ at least in the case of small categories, into a category.
 **** Composition of functors                                      :ignore:
 #+ATTR_LATEX: :options [The category of small categories]
 #+BEGIN_definition
-The category $\Cat$ is defined as the category of (small) categories as
+The category $\Cats$ is defined as the category of (small) categories as
 objects and functors as morphisms.
 
  * Given two functors $F \colon {\cal C} \to {\cal B}$ and $G \colon {\cal B} \to {\cal A}$, their composite functor
@@ -4524,7 +4524,7 @@ following diagram commute.
 \end{tikzcd}\]
 Explicitly, it acts on arrows as $(F \times G)\pair{f,g} = \pair{Ff,Gg}$.
 In this sense, the $\times$ operation can be seen as a functor acting on objects
-and morphisms of the $\Cat$ category of all categories.
+and morphisms of the $\Cats$ category of all categories.
 
 **** Bifunctors                                                   :ignore:
 A *bifunctor* is a functor from a product category; and it also can be
@@ -4662,14 +4662,13 @@ the second, is usually called a *profunctor*.
 *** Functor categories
 Given two categories ${\cal B},{\cal C}$, the *functor category* ${\cal B}^{{\cal C}}$ has all functors
 ${\cal C} \to {\cal B}$ as objects and natural transformations between them as morphisms.
-If we consider the category of small categories $\Cat$, there is
-a hom-profunctor $-^{-} \colon \Cat^{op} \times \Cat \to \Cat$ sending any two categories
+If we consider the category of small categories $\Cats$, there is
+a hom-profunctor $-^{-} \colon \Cats^{op} \times \Cats \to \Cats$ sending any two categories
 to their functor category.
 
+**** Category of graphs                                           :ignore:
 In cite:lawvere09, multiple examples of usual mathematical
 constructions in terms of functor categories can be found.
-
-**** Category of graphs                                           :ignore:
 Graphs, for instance, can be seen as functors; and graphs
 homomorphisms as the natural transformations between them.
 
@@ -4756,93 +4755,87 @@ The idea of functor categories leads us to think about categories
 whose objects are themselves diagrams on a category. The most relevant
 examples, which will be useful in our development of categorical logic,
 are the *comma categories*, and specially the particular case of a
-*slice category*.
+*slice categories*.
 
 #+ATTR_LATEX: :options [Comma category]
 #+BEGIN_definition
-Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $T \colon {\cal E} \to {\cal C}$ and $S \colon {\cal D} \to {\cal C}$.
-The *comma category* $(T \downarrow S)$ has
+Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $F \colon {\cal C} \to {\cal E}$ and $G \colon {\cal D} \to {\cal E}$.
+The *comma category* $(F \downarrow G)$ has
 
-  * morphisms of the form $f \colon Te \to Sd$ as objects, for $e \in {\cal E}, d \in {\cal D}$;
-  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon e \to e'$ and $h \colon d \to d'$ such
-    that $f' \circ Tk = Sh \circ f$, as arrows.
+  * morphisms of the form $f \colon FC \to GD$ as objects, for $C \in {\cal C}$
+    and $D \in {\cal D}$;
+  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon C \to C'$ and $h \colon D \to D'$ are morphisms
+    in ${\cal C}$ and ${\cal D}$ respectively such that $f' \circ Fk = Gh \circ f$.
 
 Diagramatically, a morphism in this category is a commutative diagram
 \[\begin{tikzcd}
-\color{black!50}{Te} \rar{Tk} \dar[swap,color=black!50]{f} & \color{black!50}{Te'}\dar[,color=black!50]{f'} \\
-\color{black!50}Sd \rar{Sh}                & \color{black!50}{Sd'}
+\color{black!50}{FC} \rar{Fk} \dar[swap,color=black!50]{f} & 
+\color{black!50}{FC'}\dar[,color=black!50]{f'} \\
+\color{black!50}{GD} \rar{Gh} &
+\color{black!50}{GD'}
 \end{tikzcd}\]
 where the objects of the category are drawn in grey.
 #+END_definition
 
 **** Slice category                                               :ignore:
-# Motivation
-
-#+ATTR_LATEX: :options [Slice category]
+#+ATTR_LATEX: :options [Slice and coslice categories]
 #+BEGIN_definition
-A *slice category* is a particular case of a comma category $(T \downarrow S)$
-in which $T = \mathrm{Id}$ is the identity functor and $S$ is a functor from the
+A *slice category* is a particular case of a comma category $(F \downarrow G)$
+in which $F = \mathrm{Id}$ is the identity functor and $G$ is a functor from the
 terminal category, a category with only one object and its identity
 morphism.
 #+END_definition
 
 A functor from the terminal category simply chooses an object
-of the category.
-If we call $a = S(\ast)$, objects of this category are morphisms
-$f \colon c \to a$, where $c \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$, where
-$k \colon c \to c'$ such that $f' \circ k = f$. Diagramatically a morphism is
-drawn as
+of the category. If we call $A = G(\ast)$, objects of this category
+are morphisms $f \colon C \to A$, where $C \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$,
+where $k \colon C \to C'$ such that $f' \circ k = f$, as in the following diagram.
 \[\begin{tikzcd}[remember picture, column sep=tiny]
-\color{black!50}{c} \ar{rr}{Tk}\drar[swap,color=black!50]{f} & &
-\color{black!50}{c'} \dlar[color=black!50]{f'} \\
-              & \color{black!50}{a} &          \\
+\color{black!50}{C} \ar{rr}{k}\drar[swap,color=black!50]{f} &&
+\color{black!50}{C'} \dlar[color=black!50]{f'} \\&
+\color{black!50}{A} &
 \end{tikzcd}\]
+This slice category is conventionally written as ${\cal C}/A$. In general,
+we can write $(F \downarrow A)$ when $G$ is a functor from the terminal category
+picking an object $A$.
 
-This slice category is conventionally written as $({\cal C} \downarrow a)$. In
-general, we write $(T \downarrow a)$ when $S$ is a functor from the terminal
-category picking an object $a$; and we write $({\cal C} \downarrow S)$ when $T$ is
+\\
+
+***** TODO Old notation                                        :noexport:
+This slice category is conventionally written as $({\cal C} \downarrow A)$. In
+general, we write $(F \downarrow A)$ when $G$ is a functor from the terminal
+category picking an object $A$; and we write $({\cal C} \downarrow G)$ when $F$ is
 the identity functor.
 
 **** Coslice category                                             :ignore:
-#+ATTR_LATEX: :options [Coslice category]
-#+BEGIN_definition
-*Coslice categories* are the categorical dual of slice categories. It
-is the particular case of a comma category $(T \downarrow S)$ in which $S = \mathrm{Id}$
-is the identity functor and $T$ is a functor from the terminal category,
-a category with only one object and its identity morphism.
-#+END_definition
-
-If we call $a = T(\ast)$, objects of this category are morphisms
-$f \colon c \to a$, where $c \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$, where
-$k \colon c \to c'$ such that $k \circ f' = f$. Diagramatically a morphism is
-drawn as
+*Coslice categories* are the categorical dual of slice categories.
+Objects of this category are morphisms $f \colon C \to A$, where $C \in {\cal C}$;
+and morphisms are $\pair{k} \colon f \to f'$, where $k \colon C \to C'$ such that $k \circ f' = f$,
+as in the following diagram.
 \[\begin{tikzcd}[remember picture, column sep=tiny]
-& \color{black!50}{a} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
-\color{black!50}{c} \ar{rr}{Sk} & & \color{black!50}{c'} \\
+& \color{black!50}{A} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
+\color{black!50}{C} \ar{rr}{k} & & \color{black!50}{C'}
 \end{tikzcd}\]
+This coslice category is conventionally written as $(A \setminus {\cal C})$.
+In general, we can write $(A \downarrow G)$ when $F$ is a functor
+from the terminal category picking an object $A$.
 
-This slice category is conventionally written as $(a \downarrow {\cal C})$. In
-general, we write $(a \downarrow S)$ when $T$ is a functor from the terminal
-category picking an object $a$; and we write $(T \downarrow {\cal C})$ when $S$ is
-the identity functor.
-
-**** Arrow category                                               :ignore:
+**** OLD Arrow category                                           :ignore:
 #+ATTR_LATEX: :options [Arrow category]
 #+BEGIN_definition
-*Arrow categories* are a particular case of comma categories $(T \downarrow S)$
+*Arrow categories* are a particular case of comma categories $(F \downarrow G)$
 in which both functors are the identity. They are usually written as ${\cal C}^{\to}$.
+Objects in this category are morphisms in ${\cal C}$, and morphisms in this
+category are commutative squares in ${\cal C}$ as in the following diagram.
+\[\begin{tikzcd}
+\color{black!50}{A}\rar{k}\dar[swap,color=black!50]{f} & 
+\color{black!50}{B} \dar[color=black!50]{f'} \\
+\color{black!50}{A'}\rar{h} &
+\color{black!50}{B'}
+\end{tikzcd}\]
 #+END_definition
 
-Objects in this category are morphisms in ${\cal C}$, and morphisms in this
-category are commutative squares in ${\cal C}$. Diagramatically,
-\[\begin{tikzcd}
-\color{black!50}{a}\rar{k}\dar[swap,color=black!50]{f} & 
-\color{black!50}{b} \dar[color=black!50]{f'} \\
-\color{black!50}{a'}\rar{h} & \color{black!50}{b'}
-\end{tikzcd}\]
-.
-
-*** TODO Examples of comma categories
+*** OLD Examples of comma categories
 **** TODO Pointed sets
 ** Universality and limits
 # TODO: Example: quotients
@@ -4852,101 +4845,104 @@ conditions of existence and uniqueness on morphisms, representing some
 sort of natural isomorphism. They can be used to define certain
 constructions up to isomorphism and to operate with them in an
 abstract setting. We will formally introduce universal properties
-using /universal arrows/ from an object $c$ to a functor $S$; the
-property of these arrows is that every arrow of the form $c \to Sd$
+using /universal arrows/ from an object $C$ to a functor $G$; the
+property of these arrows is that every arrow of the form $C \to GD$
 will factor uniquely through the universal arrow.
 
-#+attr_latex: :options [Universal arrow]
-#+begin_definition
-A *universal arrow* from $c$ to $S$ is a morphism $u \colon c \to Sr$ such that
-for every $g \colon c \to Sd$ exists a unique morphism $f \colon r \to d$ making this diagram
-commute
-\[\begin{tikzcd}
-& Sd & d \\
-c \rar[swap]{u}\urar{g} & Sr \uar[swap,dashed]{Sf} & r \uar[dashed,swap]{\exists! f} &.
-\end{tikzcd}\]
-#+end_definition
+\\
 
+**** Universal arrow                                              :ignore:
+A *universal arrow* from $C \in {\cal C}$ to $G \colon {\cal D} \to {\cal C}$ is a morphism $u \colon C \to GD_0$
+such that for every $g \colon C \to GD$ exists a unique morphism $f \colon D_0 \to D$
+making the following diagram commute.
+\[\begin{tikzcd}
+& 
+GD &
+D \\
+C \rar[swap]{u}\urar{g} &
+GD_0 \uar[swap,dashed]{Gf} & 
+D_0 \uar[dashed,swap]{\exists! f}
+\end{tikzcd}\]
 Note how an universal arrow is, equivalently, the initial object of
-the comma category $(c \downarrow S)$. Thus, universal arrows must be unique up
+the comma category $(C \downarrow G)$. Thus, universal arrows must be unique up
 to isomorphism.
 
+**** Universality in terms of hom-sets                            :ignore:
 #+attr_latex: :options [Universality in terms of hom-sets]
 #+begin_proposition
-The arrow $u \colon c \to Sr$ is universal if and only if $f \mapsto Sf \circ u$ is a bijection
-$\hom(r,d) \cong \hom(c,Sd)$ natural in $d$. Any natural bijection of this
+<<prop-universality-homsets>>
+The arrow $u \colon C \to GD_0$ is universal if and only if $f \mapsto Gf \circ u$ is a bijection
+$\hom(D_0,D) \cong \hom(C,GD)$ natural in $D$. Any natural bijection of this
 kind is determined by a unique universal arrow.
 #+end_proposition
 #+begin_proof
 On the one hand, given an universal arrow, bijectivity follows
 from the definition of universal arrow; and naturality follows from
-the fact that $S(gf)\circ u = Sg \circ Sf \circ u$.
+the fact that $G(g\circ f)\circ u = Gg \circ Gf \circ u$.
 
-On the other hand, given a bijection $\varphi$, we define $u = \varphi(\id_r)$.
-By naturality, we have the bijection $\varphi(f) = Sf \circ u$, and every arrow
+On the other hand, given a bijection $\varphi$, we define $u = \varphi(\id_{D_0})$.
+By naturality, we have the bijection $\varphi(f) = Gf \circ u$, and every arrow
 is written in this way.
 #+end_proof
 
+**** Couniversal arrows                                           :ignore:
 The categorical dual of an universal arrow from an object to a functor
 is the notion of universal arrow from a functor to an object. Note how,
-particularly in this case, we avoid the name /couniversal arrow/; as
-both arrows are representing what we usually call a /universal property/.
+in this case, we avoid the name /couniversal arrow/; as both arrows are
+representing what we usually call a /universal property/.
 
-#+ATTR_LATEX: :options [Dual universal arrow]
-#+BEGIN_definition
-A *universal arrow* from $S$ to $c$ is a morphism $v \colon Sr \to c$ such that
-for every $g \colon Sd \to c$ exists a unique morphism $f \colon d \to r$ making this diagram
-commute
+A /dual/ *universal arrow* from $G$ to $C$ is a morphism $v \colon GD_0 \to C$ such that
+for every $g \colon GD \to C$ exists a unique morphism $f \colon D \to D_0$ making the
+following diagram commute.
 \[\begin{tikzcd}
-d\dar[dashed,swap]{\exists! f} & Sd \dar[swap,dashed]{Sf}\drar{g} & \\
-r & Sr \rar[swap]{v} & c
+D\dar[dashed,swap]{\exists! f} & GD \dar[swap,dashed]{Sf}\drar{g} & \\
+D_0 & GD_0 \rar[swap]{v} & C
 \end{tikzcd}\]
-#+END_definition
 
 # TODO Universal from a functor to another
 **** TODO Examples
 # TODO Equivalence relations
 *** Representability
-#+attr_latex: :options [Representation of a functor]
-#+begin_definition
-A *representation* of a functor from an arbitrary category to the category of
-sets, $K \colon D \to \Sets$, is a natural isomorphism making it isomorphic to a
+A *representation* of a functor from a locally small category to the category of
+sets, $K \colon {\cal D} \to \Sets$, is a natural isomorphism making it isomorphic to a
 partially applied hom-functor,
 \[
-\psi\colon \hom_{D}(r,-) \cong K.
+\psi\colon \hom_{{\cal D}}(r,-) \cong K.
 \]
-
 A functor is /representable/ if it has a representation. The object $r$ is
-called a /representing object/. Note that, for this definition to work,
-$D$ must have small hom-sets.
-#+end_definition
+called a /representing object/.
 
 #+attr_latex: :options [Representations in terms of universal arrows]
 #+begin_proposition
-If $u \colon \ast \to Kr$ is a universal arrow for a functor $K\colon D \to \Sets$, then
-$f \mapsto K(f)(u\ast)$ is a representation. Every representation is obtained
-in this way.
+If $u \colon 1 \to Kr$ is a universal arrow for a functor $K\colon {\cal D} \to \Sets$, then
+the map $f \mapsto Kf(u(\ast))$ is a representation. Every representation is
+obtained in this way.
 #+end_proposition
 #+begin_proof
-We know that $\hom(\ast, X) \xrightarrow{.} X$ is a natural isomorphism in $X$; in particular
-$\hom(\ast, K-) \xrightarrow{.} K-$. Every representation is built then as
-\[ \hom_{D}(r,-) \cong \hom(\ast,K-) \cong K, \]
-
-for every natural isomorphism $D(r,-) \cong \Sets(\ast,K-)$. But every natural
-isomorphism of this kind is universal arrow.
-# TODO: In which sense?
+There is a trivial natural isomorphism $\hom_{\Set}(1, X) \tonat X$ for each $X$; in particular
+$\hom_{\Set}(1, K-) \tonat K-$ is a natural isomorphism. Every representation is then
+built as
+\[
+\hom_{{\cal D}}(r,-) \cong \hom_{\Set}(1,K-) \cong K,
+\]
+using universality of $u$. Moreover, every natural isomorphism $\hom_{{\cal D}}(r,-) \cong K$
+determines an natural isomorphism $\hom_{{\cal D}}(r,-) \cong \hom_{\Set}(1,K-)$, which in
+turn determines a universal arrow by Proposition [[prop-universality-homsets]].
 #+end_proof
+# TODO: Check this proof
 
 *** Yoneda Lemma
+**** TODO Motivation of Yoneda Lemma                              :ignore:
+**** Statement of the Yoneda Lemma                                :ignore:
 #+attr_latex: :options [Yoneda Lemma]
 #+begin_lemma
 <<lemma-yoneda>>
-For any $K\colon D \to \Sets$ and $r \in D$, there is a bijection
+For any $K\colon {\cal D} \to \Sets$ and $r \in {\cal D}$, there is a bijection
 \[
-y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr
+y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr
 \]
-sending any natural transformation $\alpha \colon \hom_{D}(r,-) \xrightarrow{.} K$
-to its image on the identity, $\alpha_r(\id_r)$.
+sending any natural transformation $\alpha \colon \hom_{{\cal D}}(r,-) \tonat K$ to 
+its image on the identity, $\alpha_r(\id_r)$.
 #+end_lemma
 #+begin_proof
 The complete natural transformation $\alpha$ is determined by $\alpha_r(\id_r)$.
@@ -4960,17 +4956,17 @@ By naturality, given any $f \colon r \to s$,
 \end{tikzcd}\]
 it must be the case that $\alpha_s(f) = Kf(\alpha_r(\id_r))$.
 #+end_proof
-# TODO: Check proof
 
+**** Natural transformations between representable functors       :ignore:
 #+attr_latex: :options [Characterization of natural transformations between representable functors]
 #+begin_corollary
-Given $r,s \in D$, any natural transformation $\hom(r,-) \xrightarrow{.} \hom(s,-)$ is
+Given $r,s \in {\cal D}$, any natural transformation $\hom(r,-) \tonat \hom(s,-)$ is
 of the form $- \circ h$ for a unique morphism $h\colon s \to r$.
 #+end_corollary
 #+begin_proof
 Using Yoneda Lemma (Lemma [[lemma-yoneda]]), we know that
 \[
-\mathrm{Nat}(\hom_D(r,-), \hom_D(s,-)) \cong \hom_D(s,r),
+\mathrm{Nat}(\hom_{\cal D}(r,-), \hom_{\cal D}(s,-)) \cong \hom_{\cal D}(s,r),
 \]
 sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to r$. The
 rest of the natural transformation is determined as $- \circ h$ by naturality.
@@ -4979,15 +4975,14 @@ rest of the natural transformation is determined as $- \circ h$ by naturality.
 **** Naturality of the Yoneda Lemma                               :ignore:
 #+attr_latex: :options [Naturality of the Yoneda Lemma]
 #+begin_proposition
-The bijection on the [[lemma-yoneda][Yoneda Lemma]] (Lemma [[lemma-yoneda]]),
+The bijection on the Yoneda Lemma (Lemma [[lemma-yoneda]]),
 \[
-y \colon \mathrm{Nat}(\hom_{D}(r,-), K) \cong Kr,
+y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr,
 \]
-is a natural isomorphism between two functors from $\Sets^D \times D$
-to $\Sets$.
+is a natural isomorphism between two functors $\Sets^{\cal D} \times {\cal D} \to \Sets$.
 #+end_proposition
 #+begin_proof
-We define $N \colon \Sets^D \times D \to \Sets$ on objects as $N\pair{r,K} = \Nat(\hom(r,-),K)$.
+We define $N \colon \Sets^{\cal D} \times {\cal D} \to \Sets$ on objects as $N\pair{r,K} = \Nat(\hom(r,-),K)$.
 Given $f \colon r \to r'$ and $F \colon K \tonat K'$, the functor is defined on morphisms as
 \[
 N\pair{f,F}(\alpha) =
@@ -4995,14 +4990,11 @@ F \circ \alpha \circ (- \circ f) \in
 \Nat(\hom(r',-),K),
 \]
 
-where $\alpha \in \Nat(\hom(r,-),K)$. We define $E \colon \Sets^D \times D \to \Sets$ on objects as $E\pair{r,K} = Kr$.
+where $\alpha \in \Nat(\hom(r,-),K)$. We define $E \colon \Sets^{\cal D} \times {\cal D} \to \Sets$ on objects as $E\pair{r,K} = Kr$.
 Given $f \colon r \to r'$ and $F \colon K \tonat K'$, the functor is defined on morphisms as
 \[
-E\pair{f,F}(a) =
-F(Kf(a)) = K'f(Fa) \in
-K'r',
+E\pair{f,F}(a) = F(Kf(a)) = K'f(Fa) \in K'r',
 \]
-
 where $a \in Kr$, and the equality holds because of the naturality
 of $F$. The naturality of $y$ is equivalent to the commutativity of the
 following diagram
