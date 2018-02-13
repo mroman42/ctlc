@@ -1966,63 +1966,61 @@ way they are constructed, used in derivations, and simplified.
 
 #+attr_latex: :options [Curry-Howard simplification example]
 #+begin_exampleth
-As an example of this duality, we will write a proof/term of the proposition/type =A → B + A=
-and we are going to simplify/compute it using proof simplification rules/\beta-rules.
-Similar examples can be found in cite:wadler15.
+As an example of this duality, we will write a proof/term of the proposition/type 
+$A \to B + A$ and we are going to simplify/compute it using proof simplification
+rules/\beta-rules. Similar examples can be found in cite:wadler15.
 
-We start with the following derivation tree; in which terms are colored in
-$\cterms{red}$ and types are colored in $\ctypes{blue}$
+We start with the following derivation tree;
+#+latex: \\[-40pt]
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{b }\ctypes{: [A+B]}$}
-\AXC{$\cterms{c }\ctypes{: A}$}
+\AXC{$\red{m } : \blue{ [A+B]}$}
+\AXC{$\red{c } : \blue{ A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr c }\ctypes{: B+A}$}
-\AXC{$\cterms{c }\ctypes{: B}$}
+\UIC{$\red{\mathrm{inr}\ c} : \blue{ B+A}$}
+\AXC{$\red{c } : \blue{ B}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl c }\ctypes{: B+A}$}
+\UIC{$\red{\mathrm{inl}\ c } : \blue{ B+A}$}
 \RightLabel{$(case)$}
-\TIC{$\cterms{case b of [c].inr c; [c].inl c }\ctypes{: B+A}$}
+\TIC{$\red{\mathrm{case}\ m\ \mathrm{of}\ [c].\mathrm{inr}\ c; [c].\mathrm{inl}\ c } : \blue{ B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λb.case b of [c].inr c; [c].inl c }\ctypes{: A+B \to B+A}$}
+\UIC{$\red{\lambda m.\mathrm{case}\ m\ \mathrm{of}\ [c].\mathrm{inr}\ c; [c].\mathrm{inl}\ c } : \blue{ A+B \to B+A}$}
 
-\AXC{$\cterms{a }\ctypes{: A}$}
+\AXC{$\red{a } : \blue{ A}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl a }\ctypes{: A+B}$}
+\UIC{$\red{\mathrm{inl}\ a } : \blue{ A+B}$}
 \RightLabel{$(app)$}
-\BIC{$\cterms{(λb.case b of [c].inr c; [c].inl c)(inl a) }\ctypes{: B+A}$}
+\BIC{$\red{(\lambda m.\mathrm{case}\ m\ \mathrm{of}\ [c].\mathrm{inr}\ c; [c].\mathrm{inl}\ c)\ (\mathrm{inl}\ a) } : \blue{ B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λa.(λb.case b of [c].inr c; [c].inl c) (inl a) }\ctypes{: A \to B + A}$}
+\UIC{$\red{\lambda a.((\lambda m.\mathrm{case}\ m\ \mathrm{of}\ [c].\mathrm{inr}\ c; [c].\mathrm{inl}\ c)\ (\mathrm{inl}\ a)) } : \blue{ A \to B + A}$}
 \end{prooftree}
 
-which is encoded by the term =λa.(λc.case c of [a].inr a; [b].inl b) (λz.inl z)=.
+which is encoded by the term $\lambda a.(\lambda c.\mathrm{case}\ c\ \mathrm{of}\ [a].\mathrm{inr}\ a; [b].\mathrm{inl}\ b)\ (\lambda z.\mathrm{inl}\ z)$.
 We apply the simplification rule/\beta-rule of the implication/function application
 to get
-
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{z }\ctypes{: A}$}
+\AXC{$\red{z} : \blue{ A}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl z }\ctypes{: A+B}$}
-\AXC{$\cterms{a }\ctypes{: A}$}
+\UIC{$\red{\mathrm{inl}\  z} : \blue{ A+B}$}
+\AXC{$\red{a }: \blue{ A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr a }\ctypes{: B+A}$}
-\AXC{$\cterms{b }\ctypes{: B}$}
+\UIC{$\red{\mathrm{inr}\ a} : \blue{ B+A}$}
+\AXC{$\red{b} : \blue{ B}$}
 \RightLabel{$(inl)$}
-\UIC{$\cterms{inl b }\ctypes{: B+A}$}
+\UIC{$\red{\mathrm{inl}\  b} : \blue{ B+A}$}
 \RightLabel{$(case)$}
-\TIC{$\cterms{case (inl z) of [a].inr a; [b].inl b }\ctypes{: B+A}$}
+\TIC{$\red{\mathrm{case}\ (\mathrm{inl}\  z)\ \mathrm{of}\ [a].\mathrm{inr}\ a; [b].\mathrm{inl}\  b} : \blue{ B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λ z.case (inl z) of [a].inr a; [b].inl b }\ctypes{: A \to B +A}$}
+\UIC{$\red{\lambda z.\mathrm{case}\ (\mathrm{inl}\  z)\ \mathrm{of}\ [a].\mathrm{inr}\ a; [b].\mathrm{inl}\  b} : \blue{ A \to B +A}$}
 \end{prooftree}
 
-which is encoded by the term =λa.case (inl a) of (inr) (inl)=. We finally
-apply the =case= simplification/reduction rule to get
-
+which is encoded by the term $\lambda a.\mathrm{case}\ (\mathrm{inl}\ a)\ \mathrm{of}\ \mathrm{inr}\ \mathrm{inl}$. We finally
+apply the case simplification/reduction rule to get
 \begin{prooftree}\EnableBpAbbreviations
-\AXC{$\cterms{a }\ctypes{: A}$}
+\AXC{$\red{a } : \blue{ A}$}
 \RightLabel{$(inr)$}
-\UIC{$\cterms{inr a }\ctypes{: B+A}$}
+\UIC{$\red{\mathrm{inr}\ a } : \blue{ B+A}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λ a.inr a }\ctypes{: A \to B + A}$}
+\UIC{$\red{\lambda a.\mathrm{inr}\ a} : \blue{ A \to B + A}$}
 \end{prooftree}
 
 which is encoded by =λa.(inr a)=.
@@ -3068,7 +3066,7 @@ a continuation to a Javascript function.
 A particular version of the =Main.hs= module of Mikrokosmos was written in
 order to provide a =mikrokosmos= function, callable from Javascript. This
 version includes the standard libraries automatically and reads blocks of
-texts as independent Mikrokosmos commands. The relevant use of the foreign
+text as independent Mikrokosmos commands. The relevant use of the foreign
 function interface is showed in the following code
 
 #+BEGIN_SRC haskell
@@ -4538,6 +4536,7 @@ M_{B'}(g) \circ L_C(f)
 **** Naturality for bifunctors                                    :ignore:
 #+ATTR_LATEX: :options [Naturality for bifunctors]
 #+BEGIN_proposition
+<<prop-naturality-bifunctor>>
 Given $S,S'$ bifunctors, $\alpha_{B,C} \colon S(B,C) \to S'(B,C)$ is a natural transformation
 if and only if $\alpha_{B,C}$ is natural in $B$ for each $C$ and natural in $C$ for each $B$.
 #+END_proposition
@@ -5239,6 +5238,7 @@ The square in this diagram is usually called a
 **** TODO Powers                                                  :ignore:
 **** TODO Posets
 *** Colimits
+# TODO: Ahorrarse los colimits por dualidad
 **** Cocones                                                      :ignore:
 A colimit is the dual notion of a limit. We could consider 
 cocones to be the dual of cones and pick the universal one.
@@ -5411,104 +5411,99 @@ The square in this diagram is usually called a
 An *adjunction* from categories ${\cal X}$ to ${\cal Y}$ is a pair of functors
 $F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a bijection
 \[
-\varphi \colon \hom(Fx,y) \cong \hom(x,Gy),
+\varphi \colon \hom(FX,Y) \cong \hom(X,GY),
 \]
-natural in both $x\in {\cal X}$ and $y \in {\cal Y}$. We say that $F$ is /left-adjoint/ to
-$G$ and that $G$ is /right-adjoint/ to $F$. We write this as $F \dashv G$.
+natural in both $X\in {\cal X}$ and $Y \in {\cal Y}$. We say that $F$ is /left-adjoint/ to
+$G$ and that $G$ is /right-adjoint/ to $F$ and we denote this as $F \dashv G$.
 
-Naturality of $\varphi$ means that both
+Naturality of $\varphi$, by Proposition [[prop-naturality-bifunctor]], means that both
 \[\begin{tikzcd}
-\hom(Fx,y)
-\rar{\varphi_{x,y}}
+\hom(FX,Y)
+\rar{\varphi}
 \dar[swap]{- \circ Fh} & 
-\hom(x,Gy)
+\hom(X,GY)
 \dar{- \circ h} & 
-\hom(Fx,y)
-\rar{\varphi_{x,y}}
+\hom(FX,Y)
+\rar{\varphi}
 \dar[swap]{k \circ -} &
-\hom(x,Gy)
+\hom(X,GY)
 \dar{Gk \circ -} \\
-\hom(Fx',y) 
-\rar[swap]{\varphi_{x,y}} &
-\hom(x',Gy) &
-\hom(Fx,y')
-\rar[swap]{\varphi_{x,y}} &
-\hom(x,Gy')
+\hom(FX',Y) 
+\rar[swap]{\varphi} &
+\hom(X',GY) &
+\hom(FX,Y')
+\rar[swap]{\varphi} &
+\hom(X,GY')
 \end{tikzcd}\]
-commute for every $h \colon x \to x'$ and $k \colon y \to y'$. That is, for every $f \colon Fx \to y$,
-$\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k \circ f)$. Equivalently, $\varphi^{-1}$ is natural
-and that means that, for every $g \colon x \to Gy$, $k \circ \varphi^{-1}(g) = \varphi^{-1}(Gk \circ g)$ and
+commute for every $h \colon X \to X'$ and $k \colon Y \to Y'$. That is, for every $f \colon FX \to Y$,
+we have $\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k \circ f)$. Equivalently, $\varphi^{-1}$ is natural,
+and that means that, for every $g \colon X \to GY$, we have $k \circ \varphi^{-1}(g) = \varphi^{-1}(Gk \circ g)$ and
 $\varphi^{-1}(g) \circ Fh = \varphi^{-1}(g \circ h)$.
 
+\\
+
 **** Lawvere's notation                                           :ignore:
-A different and more intuitive way to write adjunctions is used by
-William Lawvere on his notes on logical operators (see cite:lawvere309).
-An adjunction $F\dashv G$ can be written as
+A different and maybe more intuitive way to write adjunctions is by
+logical diagrams (see cite:lawvere309). An adjunction $F\dashv G$ can be
+written as
 \begin{prooftree}
-\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] Fx \rar{f}\& y \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FX \rar{f}\& Y \end{tikzcd}}
 \doubleLine
-\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] x \rar{\varphi{(f)}}\& Gy \end{tikzcd}}
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] X \rar{\varphi{(f)}}\& GY \end{tikzcd}}
 \end{prooftree}
-
-to emphasize that, for each morphism $f : Fx \to y$, there exists a unique
-morphism $\varphi(f) :x \to Gy$; written in a way that resembles bidirectional
+to emphasize that, for each morphism $f\colon FX \to Y$, there exists a unique
+morphism $\varphi(f)\colon X \to GY$; written in a way that resembles bidirectional
 logical inference rules.
-
-Naturality, in this setting, means that the precomposition and the
-postcomposition of arrows are preserved by the /inference rule/. Given
-morphisms $h \colon x' \to x$ and $k \colon y \to y'$, we have that the composition arrows
-of the following diagrams are adjoint to one another
+Naturality, in this setting, means that precomposition and postcomposition
+of arrows are preserved by the /inference rule/. Given morphisms $h \colon X' \to X$
+and $k \colon Y \to Y'$, we know by naturality that the composed arrows of the
+following diagrams are adjoint to one another.
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-Fx' \ar[bend left=45]{rr}{f \circ Fh} \rar{Fh}\& 
-Fx \rar{f}\& 
-y 
+FX' \ar[bend left=45]{rr}{f \circ Fh} \rar{Fh}\& 
+FX \rar{f}\& 
+Y
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x' \ar[bend right=45]{rr}[swap]{\varphi(f) \circ h} \rar[swap]{h}\& 
-x \rar[swap]{\varphi(f)}\&
-Gy 
+X' \ar[bend right=45]{rr}[swap]{\varphi(f) \circ h} \rar[swap]{h}\& 
+X \rar[swap]{\varphi(f)}\&
+GY 
 \end{tikzcd}}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-Fx \ar[bend left=45]{rr}{k \circ f} \rar{f}\&
-y \rar{k}\&
-y' \end{tikzcd}}
+FX \ar[bend left=45]{rr}{k \circ f} \rar{f}\&
+Y \rar{k}\&
+Y' \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \ar[bend right=45]{rr}[swap]{Gk \circ \varphi(f)} \rar[swap]{\varphi(f)}\&
-Gy \rar[swap]{Gk}\&
-Gy'\end{tikzcd}}
+X \ar[bend right=45]{rr}[swap]{Gk \circ \varphi(f)} \rar[swap]{\varphi(f)}\&
+GY \rar[swap]{Gk}\&
+GY'\end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
-In other words, that $\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k \circ f)$,
+In other words, $\varphi(f) \circ h = \varphi(f \circ Fh)$ and $Gk \circ \varphi(f) = \varphi(k \circ f)$,
 as we wrote earlier.
 
 **** Unit and counit of an adjunction                             :ignore:
 In the following two propositions, we will characterize all this
 information in terms of natural transformations made up of universal
-arrows.
+arrows. Given an adjunction $F \dashv G$, we define
 
-#+ATTR_LATEX: :options [Unit and counit of an adjunction]
-#+BEGIN_definition
-Given an adjunction $F \dashv G$, we define
+ * the *unit* $\eta$ as the family of morphisms $\eta_X = \varphi(\id_{FX}) \colon X \to GFX$,
+   for each $X$;
+ * the *counit* $\varepsilon$ as the family of morphisms $\varepsilon_Y = \varphi^{-1}(\id_{GY}) \colon FGY \to Y$,
+   for each $Y$.
 
- * the *unit* $\eta$ as the family of morphisms $\eta_x = \varphi(\id_{Fx}) \colon x \to GFx$,
-   for each $x$;
- * the *counit* $\varepsilon$ as the family of morphisms $\varepsilon_y = \varphi^{-1}(\id_{Gy}) \colon FGy \to y$,
-   for each $y$.
-#+END_definition
-
-Diagramatically, they can be obtained by taking $y$ to be $Fx$ and $x$ to be $Gy$,
-respectively in the definition of adjunction
+Diagramatically, they can be obtained by taking $Y$ to be $FX$ and $X$ to be $GY$,
+respectively in the definition of adjunction.
 \begin{prooftree}
-\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] Fx \rar{\id}\& Fx \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FX \rar{\id}\& FX \end{tikzcd}}
 \doubleLine
-\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] x \rar{\eta_{x}}\& GFx \end{tikzcd}}
-\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FGy \rar{\varepsilon_{y}}\& y \end{tikzcd}}
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] X \rar{\eta_{x}}\& GFX \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FGY \rar{\varepsilon_{y}}\& Y \end{tikzcd}}
 \doubleLine
-\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] Gy \rar{\id}\& Gy \end{tikzcd}}
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] GY \rar{\id}\& GY \end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
