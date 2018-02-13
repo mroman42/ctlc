@@ -1260,7 +1260,7 @@ replaced according to the substitution $\psi$.
 We consider a type to be /more general/ than other if the latter can be obtained by
 applying a substitution to the former. In this case, the latter is called an /instance/
 of the former. For example, $A \to B$ is more general than its instance
-$(C \to D) \to B$, where $A$ has been substituted by $C \to D$. An
+$(C \to D) \to B$, where $A$ has been substituted by $C \to D$. A
 crucial property of simply typed \lambda-calculus is that every type has a most
 general type, called its /principal type/; this will be proved in Theorem [[thm-typeinfer]].
 
@@ -1272,19 +1272,16 @@ $M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\s
 #+end_definition
 
 *** Unification and type inference
-**** Unification :ignore:
+**** Unification                                                  :ignore:
 The unification of two type templates is the construction of two substitutions
 making them equal as type templates; that is, the construction of a type that
 is a particular instance of both at the same time. We will not only aim for
 an unifier but for the most general one between them.
 
-#+attr_latex: :options [Most general unifier]
-#+begin_definition
 A substitution $\psi$ is called an *unifier* of two sequences of type templates
 $\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ if $\overline{\psi} A_i = \overline{\psi} B_i$ for any $i$. We say that it
 is the *most general unifier* if given any other unifier $\phi$ exists a substitution
 $\varphi$ such that $\phi = \overline{\varphi} \circ \psi$.
-#+end_definition
 
 #+attr_latex: :options [Unification]
 #+begin_lemma
@@ -1331,8 +1328,8 @@ Therefore, we need to apply induction on the number of type variables and only t
 induction on the size of the arguments.
 #+end_proof
 
-**** Type Inference :ignore:
-Using unification, we can define type inference.
+**** Type Inference                                               :ignore:
+Using unification, we can write an algorithm inferring types.
 
 #+attr_latex: :options [Type inference]
 #+begin_theorem
@@ -1381,6 +1378,7 @@ if we assume the variables to have the given types.
 #+end_proof
 
 *** Subject reduction and normalization
+**** Subject reduction                                            :ignore:
 A crucial property is that type inference and \beta-reductions do not
 interfere with each other. A term can be \beta-reduced without changing
 its type.
@@ -1398,6 +1396,7 @@ case uses that $x$ and $Q$ have the same type) we can prove
 that substitutions do not alter the type and thus, $\Gamma,Q:B \vdash P[Q/x] : A$.
 #+end_proof
 
+**** Reducibility                                                 :ignore:
 We have seen previously that the term $\Omega = (\lambda x.xx)(\lambda x.xx)$ is
 not weakly normalizing; but it is also non-typeable. In this section
 we will prove that, in fact, every typeable term is strongly normalizing.
@@ -1408,10 +1407,7 @@ follow cite:girard89.
 The notion of */reducibility/* is an abstract concept originally
 defined by Tait in cite:tait67 which we will use to ease this
 proof. It should not be confused with the notion of \beta-reduction.
-
-#+ATTR_LATEX: :options [Reducibility]
-#+BEGIN_definition
-We inductively define the set of *reducible* terms of type $T$
+We inductively define the set $\redu_T$ of *reducible* terms of type $T$
 for basic and arrow types.
 
  * If $t : T$ where $T$ a basic type, $t \in \redu_{T}$ if $t$ is strongly
@@ -1419,11 +1415,10 @@ for basic and arrow types.
 
  * If $t : U \to V$, an arrow type, $t \in \redu_{U \to V}$ if $t\ u \in \redu_{V}$ for all
    $u \in \redu_{U}$.
-#+END_definition
 
-Properties of reducibility will be used directly in the Strong
-Normalization Theorem. We prove three of them at the same time in
-order to use mutual induction.
+**** Properties of reducibility                                   :ignore:
+We prove three properties of reducibility at the same time in order
+to use mutual induction.
 
 #+ATTR_LATEX: :options [Properties of reducibility]
 #+BEGIN_proposition
@@ -1462,10 +1457,11 @@ For arrow types,
      thus, $t\ u \in \redu_{U}$.
 #+END_proof
 
+**** Abstraction lemma                                            :ignore:
 #+ATTR_LATEX: :options [Abstraction lemma]
 #+BEGIN_lemma
 <<lemma-reductionabstraction>>
-If $v[u/x] \in \redu_{V}_{}$ for all $u \in \redu_{U}$, then $\lambda x.v \in \redu_{U \to V}_{}_{}$.
+If $v[u/x] \in \redu_{V}$ for all $u \in \redu_{U}$, then $\lambda x.v \in \redu_{U \to V}_{}_{}$.
 #+END_lemma
 #+BEGIN_proof
 We apply induction over the sum of the lengths of the longest
@@ -1478,9 +1474,10 @@ We apply induction over the sum of the lengths of the longest
 Thus, by Proposition [[prop-reducibilityprop]], $(\lambda x.v) \in \redu_{U \to V}$.
 #+END_proof
 
-A final lemma is needed before the proof of the Strong Normalization Theorem.
-It is a generalization of the main theorem, useful because of the stronger
-induction hypothesis it provides.
+**** Strong normalization lemma                                   :ignore:
+A final lemma is needed before the proof of the Strong Normalization
+Theorem.  It is a generalization of the main theorem, useful because
+of the stronger induction hypothesis it provides.
 
 #+ATTR_LATEX: :options [Strong Normalization lemma]
 #+BEGIN_lemma
