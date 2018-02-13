@@ -78,7 +78,7 @@
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{tikz}
 #+latex_header: \usepackage{tikz-cd}
-#+latex_header: \usetikzlibrary{shapes,fit}
+#+latex_header: \usetikzlibrary{shapes,fit,graph}
 #+latex_header: \usepackage{bussproofs}
 #+latex_header: \EnableBpAbbreviations{}
 #+latex_header: \usepackage{mathtools}
