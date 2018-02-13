@@ -7163,24 +7163,28 @@ Two types are /isomorphic/, $A \cong A'$ if there exist terms $f \colon A \to A'
 and $g \colon A' \to A$ such that $f\ (g\ a) \equiv a$ for each $a {:} A$, and $g\ (f\ a') \equiv a'$
 for each $a'{:}A'$.
 
+**** System T                                                     :ignore:
 #+ATTR_LATEX: :options [System T]
 #+BEGIN_exampleth
+<<example-systemt>>
 Gödel's *System T* cite:girard89 is defined as a \lambda-theory with the basic types =nat=
 and =bool=; the constants $0 {:} \mathtt{nat}$, $S {:} \mathtt{nat}\to \mathtt{nat}$, $\mathrm{true} {:} \mathtt{bool}$, $\mathrm{false} {:} \mathtt{bool}$,
-$\mathrm{ifelse} {:} \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} {:} C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$;
+$\mathrm{ifelse} {:} \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} : C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$;
 and the axioms
 \begin{center}\arraycolsep=30pt\begin{array}{ll}
-\textrm{ifelse}\ \textrm{true}\ a\ b \equiv a, & \textrm{rec}\ c_0\ c_s\ 0 \equiv c_0, \\
+\textrm{ifelse}\ \textrm{true}\ a\ b \equiv a,  & \textrm{rec}\ c_0\ c_s\ 0 \equiv c_0, \\
 \textrm{ifelse}\ \textrm{false}\ a\ b \equiv b, & \textrm{rec}\ c_0\ c_s\ (S n) \equiv c_s\ n\ (\textrm{rec}\ c_0\ c_s\ n). \\
 \end{array}\end{center}
 #+END_exampleth
 
+**** Untyped lambda calculus as a theory                          :ignore:
 #+ATTR_LATEX: :options [Untyped \lambda-calculus]
 #+BEGIN_exampleth
+<<example-untypedlambda-theory>>
 Untyped \lambda calculus can be recovered as a \lambda theory with a single
 basic type $\mathtt{D}$ and a type isomorphism $\mathtt{D} \cong \mathtt{D}\to \mathtt{D}$ given by two constants
-$r \colon \mathtt{D}\to (\mathtt{D} \to \mathtt{D})$ and $s \colon (\mathtt{D}\to \mathtt{D})\to \mathtt{D}$ such that $r\ (s\ f) \equiv f$ for each
-$f \colon \mathtt{D}\to \mathtt{D}$ and $s\ (r\ x) \equiv x$ for each $x {:} \mathtt{D}$. We assume that each term of the
+$r : \mathtt{D}\to (\mathtt{D} \to \mathtt{D})$ and $s : (\mathtt{D}\to \mathtt{D})\to \mathtt{D}$ such that $r\ (s\ f) \equiv f$ for each
+$f : \mathtt{D}\to \mathtt{D}$ and $s\ (r\ x) \equiv x$ for each $x : \mathtt{D}$. We assume that each term of the
 untyped calculus is of type $\mathtt{D}$ and apply $r,s$ as needed to construct well-typed
 terms.
 #+END_exampleth
@@ -7222,6 +7226,7 @@ weaker notion of *equivalence of theories*. Two theories with translations $\tau
 and $\sigma \colon \mathbb{U} \to \mathbb{T}$ are equivalent $\mathbb{T} \simeq \mathbb{U}$ if there exist two families of
 /type isomorphisms/ $\tau\sigma A \cong A$ and $\sigma\tau B \cong B$.
 
+*** Syntactic categories and internal languages
 **** Syntactic category                                           :ignore:
 # Models are functors from the sintactic category
 #+ATTR_LATEX: :options [Syntactic category]
@@ -7362,12 +7367,8 @@ Thus, we can say that the simply-typed lambda calculus is the language
 of cartesian closed categories; each theory is a model inside a
 cartesian closed category. 
 
-*** Working in cartesian closed categories
-We can now talk internally about cartesian closed categories using
-lambda calculus. Note each closed \lambda term $\vdash a : A$ can also be
-seen as a morphism from the terminal object $1 \to A$.
-
-**** Diagonal arguments                                           :ignore:
+** Working in cartesian closed categories
+*** Diagonal arguments
 # https://golem.ph.utexas.edu/category/2006/12/classical_vs_quantum_computati_8.html
 # http://tac.mta.ca/tac/reprints/articles/15/tr15abs.html
 # http://math.andrej.com/2007/04/08/on-a-proof-of-cantors-theorem/
@@ -7379,12 +7380,18 @@ seen as a morphism from the terminal object $1 \to A$.
 # Gödel's first incompleteness theorem
 # Fixed points in untyped lambda calculus
 
+We can now talk internally about cartesian closed categories using
+lambda calculus. Note each closed \lambda term $\vdash a : A$ can also be
+seen as a morphism from the terminal object $1 \to A$.
+
+**** Point-surjective                                             :ignore:
+# Weak point-surjection suffices
+# Existence of products suffice
 We say that a morphism $f {:} A \to B$ in a cartesian closed category is
 *point-surjective* if, for every $b {:} B$, there exists an $a {:} A$ such that
 $f\ a \equiv b$.
-# Weak point-surjection suffices
-# Existence of products suffice
 
+**** Lawvere's fixed point theorem                                :ignore:
 #+ATTR_LATEX: :options [Lawvere's fixed point theorem]
 #+BEGIN_theorem
 In any cartesian closed category, if there exists a point-surjective
@@ -7396,6 +7403,7 @@ As $d$ is point-surjective, there exists $x {:} A$ such that $d\ x \equiv \lambd
 but then, $d\ x\ x \equiv (\lambda a.f\ (d\ a\ a))\ x \equiv f\ (d\ x\ x)$ is a fixed point.
 #+END_proof
 
+**** Consequences                                                 :ignore:
 This theorem has nontrivial consequences when interpreted in different
 contexts:
 
@@ -7408,8 +7416,9 @@ contexts:
    there exists a comprehension set $\left\{ y \in \mathrm{Sets} \mid P(y) \right\}$;
 
  * the *existence of fixed points* for any term of *in untyped \lambda-calculus* 
-   follows from the fact that there exists a type isomorphism (in particular, a
-   point-surjection) $\mathtt{D} \to (\mathtt{D}\to \mathtt{D})$;
+   given as a theory like in Example [[example-untypedlambda-theory]] follows from 
+   the fact that there exists a type isomorphism (in particular, a point-surjection)
+   $\mathtt{D} \to (\mathtt{D}\to \mathtt{D})$;
 
 # Turing halting problem from yanofsky follows in a category of computations
 
