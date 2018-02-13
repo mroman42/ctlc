@@ -4,7 +4,7 @@
 #+TODO: TODO(t) OLD(o) | DONE(d)
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+LATEX_HEADER_EXTRA: %\input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
+#+LATEX_HEADER_EXTRA: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
 
 # Escribir mucho menos, usar muchos menos teoremas, tener una versión
 # larga con todos los teoremas y recomendaciones y una versión corta
@@ -17,6 +17,12 @@
 # Tener un cuerpo común de código en Agda que exportar a HTML como documentación
 # Sacar árbol de dependencias de Agda
 # Colorear reglas del cálculo lambda simplemente tipado
+
+# Referencias principales
+#  - Selinger
+#  - MacLane, Categories for the working mathematician
+#  - Homotopy type theory book
+#  - nLab
 
 ** Macros and libraries                                             :ignore:
 *** Classic thesis setup                                           :ignore:
@@ -62,8 +68,8 @@
 
 #+latex_header: \colorlet{myred}{redPRL}
 #+latex_header: \colorlet{myblue}{bluePRL}
-#+latex_header: \newcommand{\red}[1]{\color{myred}{#1}}
-#+latex_header: \newcommand{\blue}[1]{\color{myblue}{#1}}
+#+latex_header: \newcommand{\red}[1]{{\color{myred}{{#1}}}}
+#+latex_header: \newcommand{\blue}[1]{{\color{myblue}{{#1}}}}
 #+latex_header: \newcommand{\ctypes}[1]{\color{bluePRL}{#1}}
 #+latex_header: \newcommand{\cterms}[1]{\color{redPRL}{\texttt{#1}}}
 
