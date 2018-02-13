@@ -173,7 +173,7 @@
 #+latex_header: \newcommand\fst{\mathtt{fst}} % first
 #+latex_header: \newcommand\snd{\mathtt{snd}} % second
 #+latex_header: \DeclareMathOperator{\freevars}{FV} % Free variables
-
+#+latex_header: \newcommand\TypeTemp{\mathtt{TypeTemp}} % type templates
 *** Type theory                                                    :ignore:
 #+latex_header: \newcommand{\wtype}{\mathop{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\huge{\textsf{W}}}}}{\vcenter{\hbox{\Large\textsf{W}}}}{\textsf{W}}{\textsf{W}}}\displaylimits}
 #+latex_header: \newcommand{\wt}{\textsf{W}}
@@ -182,6 +182,7 @@
 #+latex_header: \newcommand\transport{\mathsf{transport}}
 #+latex_header: \newcommand\ap{\mathsf{ap}}
 #+latex_header: \newcommand\apd{\mathsf{apd}}
+#+latex_header: \newcommand\J{\mathsf{J}}
 
 ** Abstract
 :PROPERTIES:
@@ -633,7 +634,7 @@ on what the last rule we used to derive it was.
   * Extensionality, given $x \notin \mathrm{FV}(P)$. By induction, $P \rhd P'$, hence
     $\lambda x.P[U/y]x \rhd P'[U'/y]$.
 
-Note that we are implicitely assuming the Barendregt's variable convention; all
+Note that we are implicitly assuming the Barendregt's variable convention; all
 variables have been renamed to avoid clashes.
 #+end_proof
 
