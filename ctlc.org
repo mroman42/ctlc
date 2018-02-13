@@ -5512,8 +5512,8 @@ respectively in the definition of adjunction.
 #+begin_proposition
 The *unit* and the *counit* are natural transformations such that
 
- 1) for each $f \colon Fx \to y$, $\varphi(f) = Gf \circ \eta_x$;
- 2) for each $g \colon x \to Gy$, $\varphi^{-1}(g) = \varepsilon_y \circ Fg$;
+ 1) for each $f \colon FX \to Y$, $\varphi(f) = Gf \circ \eta_x$;
+ 2) for each $g \colon X \to GY$, $\varphi^{-1}(g) = \varepsilon_y \circ Fg$;
 
 that follow the *triangle identities*, $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
 \[\begin{tikzcd}
@@ -5532,86 +5532,85 @@ equations we gave in the definition of $\varphi$;
 diagramatically,
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-Fx \ar[bend left=45]{rr}{\varepsilon \circ Fg} \rar{Fg}\& 
-FGy \rar{\varepsilon_y}\& 
-y 
+FX \ar[bend left=45]{rr}{\varepsilon \circ Fg} \rar{Fg}\& 
+FGY \rar{\varepsilon_Y}\& 
+Y 
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \ar[bend right=45]{rr}[swap]{g} \rar[swap]{g}\& 
-Gy \rar[swap]{\id}\&
-Gy 
+X \ar[bend right=45]{rr}[swap]{g} \rar[swap]{g}\& 
+GY \rar[swap]{\id}\&
+GY 
 \end{tikzcd}}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-Fx \ar[bend left=45]{rr}{f} \rar{\id}\&
-Fx \rar{f}\&
-y \end{tikzcd}}
+FX \ar[bend left=45]{rr}{f} \rar{\id}\&
+FX \rar{f}\&
+Y \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \ar[bend right=45]{rr}[swap]{Gf \circ \eta_{x}} \rar[swap]{\eta_{x}}\&
-GFx \rar[swap]{Gf}\&
-Gy \end{tikzcd}}
+X \ar[bend right=45]{rr}[swap]{Gf \circ \eta_X} \rar[swap]{\eta_X}\&
+GFX \rar[swap]{Gf}\&
+GY \end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
-
 The naturality of $\eta$ and $\varepsilon$ can be deduced again from the naturality of $\varphi$;
-given any two functions $h \colon x \to y$ and $k \colon x \to y$,
-# TODO: note they are in different categories, maybe x x' y y' is a better option
+given any two functions $h \colon X \to X'$ and $k \colon Y \to Y'$,
+# TODO: note they are in different categories, x x' y y' is the correct notation!!
 
- * $GFh \circ \eta_x = GFh \circ \varphi(\id_{Fx}) = \varphi(Fh) = \varphi(\id_{Fx}) \circ h = \eta_x \circ h$;
- * $\varepsilon_x \circ FGk = \varphi^{-1}(\id_{Fx}) \circ FGk = \varphi^{-1}(Gk) = k \circ \varphi^{-1}(\id_{Gx}) = k \circ \varepsilon_{x}$;
+ * $GFh \circ \eta_X = GFh \circ \varphi(\id_{FX}) = \varphi(Fh) = \varphi(\id_{FX'}) \circ h = \eta_{X'} \circ h$;
+ * $\varepsilon_{Y'} \circ FGk = \varphi^{-1}(\id_{GY'}) \circ FGk = \varphi^{-1}(Gk) = k \circ \varphi^{-1}(\id_{GY}) = k \circ \varepsilon_Y$;
 
-diagramatically, we can prove that the adjunct of $Fh$ is $GFh \circ \eta_x$ and $\eta_x \circ h$
-at the same time; while the adjunct of $Gk$ is $k \circ \varepsilon_x$ and $\varepsilon_x \circ FGk$,
+diagramatically, we can prove that the adjunct of $Fh$ is $GFh \circ \eta_X$ and $\eta_X' \circ h$
+at the same time; while the adjunct of $Gk$ is $k \circ \varepsilon_Y$ and $\varepsilon_{Y'} \circ FGk$ at the same
+time.
 #+latex: \\[-40pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
 \phantom{Fx}\&
-x \rar{h}\& 
-y \rar{\eta_{y}}\& 
-GFy 
+X \rar{h}\& 
+Y \rar{\eta}\& 
+GFY
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-Fx \rar{\id}\& 
-Fx \rar{Fh}\& 
-Fy \rar{\id}\& 
-Fy 
+FX \rar{\id}\& 
+FX \rar{Fh}\& 
+FY \rar{\id}\& 
+FY 
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \rar[swap]{\eta_x}\& 
-GFx \rar[swap]{GFh}\&
-GFy \&
+X \rar{\eta}\& 
+GFX \rar{GFh}\&
+GFY \&
 \phantom{Gy}
 \end{tikzcd}}
 
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-FGx \rar{\varepsilon_x} \&
-x \rar{k}\& 
-y \& 
+FGX \rar{\varepsilon} \&
+X \rar{k}\& 
+Y \& 
 \phantom{GFy}
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-Gx \rar{\id}\&
-Gx \rar{Gk}\&
-Gy \rar{\id} \&
-Gy\end{tikzcd}}
+GX \rar{\id}\&
+GX \rar{Gk}\&
+GY \rar{\id} \&
+GY
+\end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
 \phantom{Gx}\&
-FGx  \rar[swap]{FGk}\&
-FGy \rar[swap]{\varepsilon_{x}}\&
+FGx \rar{FGk}\&
+FGy \rar{\varepsilon}\&
 y \end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
-
 Finally, the triangle identities follow directly from the previous ones:
-we have $\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta$ and
-$\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$.
+we have $\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta$ and $\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$.
 #+END_proof
 
 **** Characterization of adjunctions                              :ignore:
@@ -5621,52 +5620,57 @@ $\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$.
 Each adjunction is $F \dashv G$ between categories ${\cal X}$ and ${\cal Y}$ is completely determined
 by any of the following data,
 
- 1) functors $F,G$ and $\eta\colon 1 \tonat GF$ where $\eta_x\colon x \to GFx$ is universal to $G$.
- 2) functor $G$ and universals $\eta_x \colon x \to GF_0 x$, where $F_0x \in {\cal Y}$, creating a functor $F$.
- 3) functors $F,G$ and $\varepsilon\colon FG \tonat 1$ where $\varepsilon_a\colon FGa \to a$ is universal from $F$.
- 4) functor $F$ and universals $\varepsilon_a\colon FG_0a \to a$,  where $G_0x \in {\cal X}$, creating a functor $G$.
+ 1) functors $F,G$ and $\eta\colon 1 \tonat GF$ where $\eta_X\colon X \to GFX$ is universal to $G$.
+ 2) functor $G$ and universals $\eta_X \colon X \to GF_0 X$, where $F_0X \in {\cal Y}$, creating a functor $F$.
+ 3) functors $F,G$ and $\varepsilon\colon FG \tonat 1$ where $\varepsilon_Y\colon FGY \to Y$ is universal from $F$.
+ 4) functor $F$ and universals $\varepsilon_Y\colon FG_0Y \to Y$,  where $G_0Y \in {\cal X}$, creating a functor $G$.
  5) functors $F,G$, with natural transformations satisfiying the triangle
     identities $G\varepsilon \circ \eta G = \id$ and $\varepsilon F \circ F\eta = \id$.
 #+end_proposition
 #+begin_proof
- 1) Universality of $\eta_x$ gives a isomorphism $\varphi \colon \hom(Fx,y) \cong \hom(x,Gy)$ between 
-    the arrows in the following diagram
-    \[\begin{tikzcd}
-    & Gy & y \\
-    x \rar[swap]{\eta_x}\urar{f} & GFx \uar[swap,dashed]{Gg} & Fx \uar[dashed,swap]{\exists! g}
-    \end{tikzcd}\]
-    defined as $\varphi(g) = Gg \circ \eta_x$. This isomorphism is natural in $x$; for every
-    $h \colon x' \to x$ we know by naturality of $\eta$ that $Gg \circ \eta \circ h = G(g \circ Fh) \circ \eta$.
-    The isomorphism is also natural in $y$; for every $k \colon y \to y'$ we know by
-    functoriality of $G$ that $Gh\circ Gg \circ \eta = G(h \circ g) \circ \eta$.
+/1./ Universality of $\eta_X$ gives a isomorphism $\varphi \colon \hom(FX,Y) \cong \hom(X,GY)$ between 
+the arrows in the following diagram
+\[\begin{tikzcd}
+& GY & Y \\
+X \rar[swap]{\eta_x}\urar{f} & GFX \uar[swap,dashed]{Gg} & FX \uar[dashed,swap]{\exists! g}
+\end{tikzcd}\]
+defined as $\varphi(g) = Gg \circ \eta_X$. This isomorphism is natural in $X$; for every
+$h \colon X' \to X$ we know by naturality of $\eta$ that $Gg \circ \eta \circ h = G(g \circ Fh) \circ \eta$.
+The isomorphism is also natural in $Y$; for every $k \colon Y \to Y'$ we know by
+functoriality of $G$ that $Gh\circ Gg \circ \eta = G(h \circ g) \circ \eta$.
 
- 2) We can define a functor $F$ on objects as $Fx = F_0x$. Given any
-    $h \colon x \to x'$, we can use the universality of $\eta$ to define
-    $Fh$ as the unique arrow making this diagram commute
-    \[\begin{tikzcd}
-    & GFx' & Fx' \\
-    x \rar[swap]{\eta_x}\urar{\eta_{x'} \circ h} & GFx \uar[swap,dashed]{GFh} & Fx \uar[dashed,swap]{\exists! Fh}
-    \end{tikzcd}\]
-    and this choice makes $F$ a functor and $\eta$ a natural transformation,
-    as it can be checked in the following diagrams using the existence
-    and uniqueness given by the universality of $\eta$ in both cases
-    \[\begin{tikzcd}
-    &     &    & x'' \rar{\eta_{x''}}  & GFx''  & Fx'' \\
-    & GFx & Fx & x'  \uar{h'} \rar{\eta_{x'}}  & GFx'  \uar[swap]{GFh'}  & Fx' \uar[dashed]{\exists! Fh'} \\
-    x \rar[swap]{\eta_x}\urar{\eta_{x}} & GFx \uar[swap,dashed]{\id} & Fx \uar[dashed,swap]{\id} & x \rar{\eta_{x}}\uar{h} & GFx \uar[swap]{GFh} & Fx \uar[dashed]{\exists! Fh'} \ar[dashed,swap,bend right]{uu}{\exists! F(h' \circ h)}
-    \end{tikzcd}\]
+/2./ We can define a functor $F$ on objects as $FX = F_0X$. Given any
+$h \colon X \to X'$, we can use the universality of $\eta$ to define
+$Fh$ as the unique arrow making this diagram commute
+\[\begin{tikzcd}
+& GFX' & FX' \\
+X \rar[swap]{\eta_X}\urar{\eta_{X'} \circ h} & GFX \uar[swap,dashed]{GFh} &
+FX \uar[dashed,swap]{\exists! Fh}
+\end{tikzcd}\]
+and this choice makes $F$ a functor and $\eta$ a natural transformation,
+as it can be checked in the following diagrams using the existence
+and uniqueness given by the universality of $\eta$ in both cases
+\[\begin{tikzcd}
+&&& X'' \rar{\eta_{X''}}  & GFX''  & FX'' \\
+& GFX & FX & X'  \uar{h'} \rar{\eta_{X'}}  & GFX'  \uar[swap]{GFh'}  & 
+FX' \uar[dashed]{\exists! Fh'} \\
+X \rar[swap]{\eta_X}\urar{\eta_{X}} & GFX \uar[swap,dashed]{\id} & 
+FX \uar[dashed,swap]{\id} & 
+X \rar{\eta_{X}}\uar{h} & GFX \uar[swap]{GFh} & 
+FX \uar[dashed]{\exists! Fh'} \ar[dashed,swap,bend right]{uu}{\exists! F(h' \circ h)}
+\end{tikzcd}\]
 
- 3) The proof is dual to that of 1.
+/3./ The proof is dual to that of /1/.
 
- 4) The proof is dual to that of 2.
+/4./ The proof is dual to that of /2/.
 
- 5) We can define two functions $\varphi(f) = Gf \circ \eta_x$ and $\theta(g) = \varepsilon_y \circ Fg$.
-    We checked in 1 (and 3) that these functions are natural in both arguments;
-    now we will see that they are inverses of each other using naturality
-    and the triangle identities
+/5./ We can define two functions $\varphi(f) = Gf \circ \eta_X$ and $\theta(g) = \varepsilon_Y \circ Fg$.
+We checked in 1 (and 3) that these functions are natural in both arguments;
+now we will see that they are inverses of each other using naturality
+and the triangle identities
 
-     * $\varphi(\theta(g)) &= G\varepsilon_a \circ GFg \circ \eta_x = G\varepsilon_a \circ \eta_x \circ g = g$;
-     * $\theta(\varphi(f)) = \varepsilon \circ FGf \circ F\eta = f \circ \varepsilon \circ F\eta = f$.
+ * $\varphi(\theta(g)) &= G\varepsilon \circ GFg \circ \eta = G\varepsilon \circ \eta \circ g = g$;
+ * $\theta(\varphi(f)) = \varepsilon \circ FGf \circ F\eta = f \circ \varepsilon \circ F\eta = f$.\qedhere
 #+end_proof
 
 **** Uniqueness                                                   :ignore:
@@ -5676,15 +5680,15 @@ Two adjoints to the same functor $F,F' \dashv G$ are naturally isomorphic.
 #+END_proposition
 #+BEGIN_proof
 Note that the two different adjunctions give two units $\eta, \eta'$, and for
-each $x$ both $\eta_x \colon x \to GFx$ and $\eta'_x \colon x \to GF'x$ are universal arrows
-from $x$ to $G$. As universal arrows are unique up to isomorphism, we
-have a unique isomorphism $\theta_x \colon Fx \to F'x$ such that $G\theta_x \circ \eta_x = \eta'_x$.
+each $X$ both $\eta_X \colon X \to GFX$ and $\eta_{X'} \colon X \to GF'X$ are universal arrows
+from $X$ to $G$. As universal arrows are unique up to isomorphism, we
+have a unique isomorphism $\theta_X \colon FX \to F'X$ such that $G\theta_X \circ \eta_X = \eta'_X$.
 
 We know that $\theta$ is natural because there are two arrows, $\theta \circ Ff$ and 
 $F'f \circ \theta$, making this universal diagram commute
 \[\begin{tikzcd}
-y \rar{\eta'} & GF'y & F'y\\
-x \rar{\eta}\uar{f} & GFx \uar[dashed,swap]{} & Fx \uar[dashed]{\exists!}
+Y \rar{\eta'} & GF'Y & F'Y\\
+X \rar{\eta}\uar{f} & GFX \uar[dashed,swap]{} & FX \uar[dashed]{\exists!}
 \end{tikzcd}\]
 because
 
@@ -5694,77 +5698,72 @@ because
 thus, they must be equal, $\theta \circ Ff = F'f \circ \theta$.
 #+END_proof
 
-# Proof using Yoneda
-
+# TODO: Proof using Yoneda
 **** Composition of adjoints                                      :ignore:
 # Theorem 1 pag 103
 #+ATTR_LATEX: :options [Composition of adjunctions]
 #+BEGIN_theorem
-Given two adjunctions between categories ${\cal X},{\cal Y}$ and ${\cal Y},{\cal Z}$ respectively,
-\[
-\varphi \colon \hom(Fx,y) \cong \hom(x,Gy)
-\qquad
-\theta \colon \hom(F'y,z) \cong \hom(y,G'z)
-\]
-the composite functors yield a composite adjunction
-\[
-\varphi \cdot \theta \colon \hom(F'Fx,z) \cong \hom(x,GG'z).
-\]
-If the unit and counit of $\varphi$ are $\pair{\eta,\varepsilon}$ and the unit and counit
-of $\theta$ are $\pair{\eta',\varepsilon'}$; the unit and counit of the composite adjunction
+Given two adjunctions $\varphi \colon F \dashv G$ and $\theta \colon F' \dashv G'$ between categories ${\cal X},{\cal Y}$
+and ${\cal Y},{\cal Z}$ respectively, the composite functors yield a composite adjunction
+$\varphi \cdot \theta \colon F'\circ F \dashv G\circ G'$. Let the unit and counit of $\varphi$ be $\pair{\eta,\varepsilon}$ and the unit
+and counit of $\theta$ be $\pair{\eta',\varepsilon'}$; the unit and counit of the composite adjunction
 are $\pair{G \eta' F \circ \eta,\ \varepsilon' \circ F' \varepsilon G'}$.
 #+END_theorem
 #+BEGIN_proof
-We saw previously that the componentwise composition of two natural
-isomorphisms is itself an natural isomorphism. Diagramatically, we
-compose
+We see that the vertical composition of two natural isomorphisms is itself
+an natural isomorphism because the composition of isomorphisms is itself an
+isomorphism. Diagramatically, we compose
+#+latex: \\[-20pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-F'Fx \rar{f}\& y\end{tikzcd}}
+F'FX \rar{f}\& Y
+\end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-Fx \rar{\theta(f)}\& G'y\end{tikzcd}}
+FX \rar{\theta(f)}\& G'Y
+\end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \rar{\varphi\theta(f)}\& GG'y\end{tikzcd}}
+X \rar{\varphi\theta(f)}\& GG'Y
+\end{tikzcd}}
 \end{prooftree}
-
 If we apply the two natural isomorphisms to the identity, we find the unit
 and the counit of the adjunction.
+#+latex: \\[-40pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-\phantom{Fx}\&
-F'Fx \rar{\id}\& 
-F'Fx 
+\phantom{FX}\&
+F'FX \rar{\id}\& 
+F'FX 
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-Fx \rar{\id}\& 
-Fx \rar{\eta'_{Fx}}\& 
-G'F'Fx
+FX \rar{\id}\& 
+FX \rar{\eta'_{FX}}\& 
+G'F'FX
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \rar[swap]{\eta}\& 
-GFx \rar[swap]{G\eta'_{Fx}}\&
-GG'F'Fx
+X \rar[swap]{\eta}\& 
+GFX \rar[swap]{G\eta'_{FX}}\&
+GG'F'FX
 \end{tikzcd}}
 
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
-GG'z \rar{\id} \&
-GG'z \& 
+GG'Z \rar{\id} \&
+GG'Z \& 
 \phantom{FFGy}
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-FGG'z \rar{\varepsilon_{G'z}}\&
-G'z \rar{\id}\&
-G'z \end{tikzcd}}
+FGG'Z \rar{\varepsilon_{G'Z}}\&
+G'Z \rar{\id}\&
+G'Z \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-F'FGG'z  \rar[swap]{F'\varepsilon_{G'z}}\&
-F'G'z \rar[swap]{\varepsilon'}\&
-z \end{tikzcd}}
+F'FGG'Z  \rar[swap]{F'\varepsilon_{G'Z}}\&
+F'G'Z \rar[swap]{\varepsilon'}\&
+Z \end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
