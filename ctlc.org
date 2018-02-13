@@ -1510,11 +1510,11 @@ It is the particular case of Lemma [[lemma-strongnormalization]] where we
 take $u_i = x_i$.
 #+END_proof
 
+**** Turing completeness of STLC                                  :ignore:
 # [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
 Every term normalizes in simply typed \lambda-calculus and every
-computation ends.  We know, however, that the Halting Problem is
-unsolvable, so simply typed \lambda-calculus must be not Turing
-complete.
+computation ends, therefore, simply typed \lambda-calculus must be not
+Turing complete.
 # !!!! Detail and check this proof
 
 ** The Curry-Howard correspondence
