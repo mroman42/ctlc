@@ -1524,15 +1524,15 @@ Turing complete.
 
 *** Extending the simply typed \lambda-calculus
 We will add now special syntax for some terms and types, such as
-pairs, unions and unit types. This syntax will make our \lambda-calculus
-more expressive, but the unification and type inference algorithms
-will continue to work. The previous proofs and algorithms can be extended to cover
-all the new cases.
-# And this is done on the mikrokosmos implementation
+pairs, unions and unit types. This new syntax will make our
+\lambda-calculus more expressive, but the unification and type
+inference algorithms will continue to work in a similar way. The
+previous proofs and algorithms can be extended to cover all the new
+cases.
+
+\\
 
 **** Simple types II                                              :ignore:
-#+attr_latex: :options [Simple types II]
-#+begin_definition
 The new set of *simple types* is given by the following BNF
 \[\mathtt{Type} ::= \iota \mid 
 \mathtt{Type} \to \mathtt{Type} \mid
@@ -1540,21 +1540,18 @@ The new set of *simple types* is given by the following BNF
 \mathtt{Type} + \mathtt{Type} \mid
 1 \mid
 0,\]
-where $\iota$ would be any /basic type/.
-#+end_definition
-
+where $\iota$ is any /basic type/.
 That is to say that, for any given types $A,B$, there exists a product
 type $A \times B$, consisting of the pairs of elements where the first
 one is of type $A$ and the second one of type $B$; there exists the
 union type $A + B$, consisting of a disjoint union of tagged terms
 from $A$ or $B$; an unit type $1$ with only an element, and an empty
-or void type $0$ without inhabitants. The raw typed \lambda-terms are
-extended to use these new types.
+or void type $0$ without inhabitants.
+
+\\
 
 **** Raw typed lambda terms II                                    :ignore:
-#+attr_latex: :options [Raw typed lambda terms II]
-#+begin_definition
-The new set of raw *typed lambda terms* is given by the BNF
+The new set of *typed lambda terms* is given by the BNF
 \[\begin{aligned} 
 \mathtt{Term} ::=\ &
 x \mid
@@ -1566,12 +1563,11 @@ x \mid
 \textrm{inl}\ \mathtt{Term} \mid
 \textrm{inr}\ \mathtt{Term} \mid
 \textrm{case}\ \mathtt{Term}\ \textrm{of}\ \mathtt{Term}; \mathtt{Term} \mid \\&
-\textrm{abort}\ \mathtt{Term} \mid \ast
+\textrm{abort}\ \mathtt{Term} \mid \ast.
 \end{aligned}\]
-#+end_definition
 
-The use of these new terms is formalized by the following extended set
-of typing rules.
+And the use of these new terms is formalized by the following extended
+set of typing rules.
 
  1) The $(var)$ rule simply makes explicit the type of a variable from
     the context.
@@ -1581,68 +1577,50 @@ of typing rules.
     \UIC{$\Gamma, x:A \vdash x:A$}
     \end{prooftree}
 
- 2) The $(abs)$ gives the type of a \lambda-abstraction as the type of
-    functions from the variable type to the result type. It acts as
-    a constructor of function terms.
+ 2) The $(abs)$ and $(app)$ rules construct and apply function terms.
     \begin{prooftree}
     \LeftLabel{$(abs)$}
-    \AXC{$\Gamma, x:A \vdash M : B$}
-    \UIC{$\Gamma \vdash \lambda x.M : A \to B$}
-    \end{prooftree}
-
- 3) The $(app)$ rule gives the type of a well-typed application of a
-    lambda term. A term $f : A \to B$ applied to a term $a : A$ is a term
-    of type $B$. It acts as a destructor of function terms.
-    \begin{prooftree}
+    \AXC{$\Gamma, x:A \vdash m : B$}
+    \UIC{$\Gamma \vdash \lambda x.m : A \to B$}
     \LeftLabel{$(app)$}
     \AXC{$\Gamma \vdash f : A \to B$}
     \AXC{$\Gamma \vdash a : A$}
-    \BIC{$\Gamma \vdash f a : B$}
+    \BIC{$\Gamma \vdash f\ a : B$}
+    \noLine
+    \BIC{}
     \end{prooftree}
 
- 4) The $(pair)$ rule gives the type of a pair of elements. It acts as
-    a constructor of pair terms.
+ 3) The $(pair)$ rule constructs pairs of elements. The $(\pi_1)$ and $(\pi_2)$ 
+    rules destruct a pair into its projections.
     \begin{prooftree}
     \LeftLabel{$(pair)$}
     \AXC{$\Gamma \vdash a : A$}
     \AXC{$\Gamma \vdash b :  B$}
     \BIC{$\Gamma \vdash \pair{a,b} : A \times B$}
-    \end{prooftree}
-
- 5) The $(\pi_1)$ rule extracts the first element from a pair. It acts as
-    a destructor of pair terms.
-    \begin{prooftree}
     \LeftLabel{$(\pi_1)$}
     \AXC{$\Gamma \vdash m : A \times B$}
     \UIC{$\Gamma \vdash \pi_1\ m : A$}
-    \end{prooftree}
-
- 6) The $(\pi_1)$ rule extracts the second element from a pair. It acts as
-    a destructor of pair terms.
-    \begin{prooftree}
     \LeftLabel{$(\pi_2)$}
     \AXC{$\Gamma \vdash m : A \times B$}
     \UIC{$\Gamma \vdash \pi_2\ m : B$}
+    \noLine
+    \TIC{}
     \end{prooftree}
 
- 7) The $(inl)$ rule creates a union type from the left side type of
-    the sum. It acts as a constructor of union terms.
+ 4) The $(inl)$ and $(inr)$ rules provide the two ways of creating a tagged
+    union type, while the $(case)$ rule extracts a term from a union type
+    applying case analysis. Note that we write $[a].n$ and $[b].p$ to
+    explicitly indicate that $n$ and $p$ can depend on $a$ and $b$, respectively.
     \begin{prooftree}
     \LeftLabel{$(inl)$}
     \AXC{$\Gamma \vdash a : A$}
     \UIC{$\Gamma \vdash \mathrm{inl}\ a : A + B$}
-    \end{prooftree}
-
- 8) The $(inr)$ rule creates a union type from the right side type of
-    the sum. It acts as a constructor of union terms.
-    \begin{prooftree}
     \LeftLabel{$(inr)$}
     \AXC{$\Gamma \vdash b : B$}
     \UIC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
+    \noLine
+    \BIC{}
     \end{prooftree}
-
- 9) The $(case)$ rule extracts a term from an union and applies the appropiate
-    deduction on any of the two cases
     \begin{prooftree}
     \LeftLabel{$(case)$}
     \AXC{$\Gamma \vdash m : A + B$}
@@ -1650,78 +1628,79 @@ of typing rules.
     \AXC{$\Gamma, b:B \vdash p : C$}
     \TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].n;\ [b].p) : C$}
     \end{prooftree}
-    Note that we write $[a].n$ and $[b].p$ to indicate that $n$ and $p$ depend on $a$ and $b$
-    respectively.
+    
+ 5) The $(\ast)$ rule simply creates the only element of type $1$.
+    \begin{prooftree}
+    \LeftLabel{$(\ast)$}
+    \AXC{$$}
+    \UIC{$\Gamma \vdash \ast : 1$}
+    \end{prooftree}
 
- 10) The $(\ast)$ rule simply creates the only element of $1$. It is a constructor
-     of the unit type.
-     \begin{prooftree}
-     \LeftLabel{$(\ast)$}
-     \AXC{$$}
-     \UIC{$\Gamma \vdash \ast : 1$}
-     \end{prooftree}
-
- 11) The $(abort)$ rule extracts a term of any type from the void type.
-     \begin{prooftree}
-     \LeftLabel{$(abort)$}
-     \AXC{$\Gamma \vdash M : 0$}
-     \UIC{$\Gamma \vdash \mathrm{abort}_A\ M : A$}
-     \end{prooftree} 
-
-     The abort function must be understood as the unique function going
-     from the empty set to any given set.
+ 6) The $(abort)$ rule extracts a term of any type from the void type.
+    If we reach a void type, we have reached an error, and thus we
+    can throw any typed exception.
+    \begin{prooftree}
+    \LeftLabel{$(abort)$}
+    \AXC{$\Gamma \vdash m : 0$}
+    \UIC{$\Gamma \vdash \mathrm{abort}_A\ m : A$}
+    \end{prooftree}
 
 **** Beta-eta reductions in extended typed lambda calculus        :ignore:
 The \beta-reduction of terms is defined the same way as for the untyped
 \lambda-calculus; except for the inclusion of \beta-rules governing the
 new terms, each for every new destruction rule.
 
-  1) Function application, $(\lambda x.M)N \to_{\beta} M[N/x]$.
-  2) First projection, $\pi_1 \left\langle M,N \right\rangle \to_{\beta} M$.
-  3) Second projection, $\pi_2 \left\langle M,N \right\rangle \to_{\beta} N$.
-  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) \to_{\beta} N a$ if $m$ is of the form $m = \mathrm{inl}\ a$; and
-     $(\mathrm{case}\ m\ \mathrm{of}\ [a].N;\ [b].P) \to_{\beta} P b$ if $m$ is of the form $m = \mathrm{inr}\ b$.
+  1) Function application, $(\lambda x.m)\ n \to_{\beta} m[n/x]$.
+  2) First projection, $\pi_1 \left\langle m,n \right\rangle \to_{\beta} m$.
+  3) Second projection, $\pi_2 \left\langle m,n \right\rangle \to_{\beta} n$.
+  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [x].n;\ [y].p) \to_{\beta} n[a/x]$ if $m$ is of the form
+     $m = \mathrm{inl}\ a$; and $(\mathrm{case}\ m\ \mathrm{of}\ [x].n;\ [y].p) \to_{\beta} p[b/y]$ if $m$ is of the
+     form $m = \mathrm{inr}\ b$.
 
-On the other side, new \eta-rules are defined, each for every new construction rule.
+On the other hand, new \eta-rules are defined, each for every new
+construction rule.
 
-  1) Function extensionality, $\lambda x.M x \to_{\eta} M$.
-  2) Definition of product, $\langle \pi_1 M, \pi_{2} M \rangle \to_{\eta} M$.
-  3) Uniqueness of unit, $M \to_{\eta} \ast$.
-  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].P[ \mathrm{inl}\ a/c ];\ [b].P[ \mathrm{inr}\ b/c ]) \to_{\eta} P[m/c]$.
+  1) Function extensionality, $\lambda x.f\ x \to_{\eta} f$ for any $f : A \to B$.
+  2) Definition of product, $\langle \pi_1\ m, \pi_{2}\ m \rangle \to_{\eta} m$ for any $m : A \times B$.
+  3) Uniqueness of unit, $t \to_{\eta} \ast$ for any $t : 1$.
+  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].p[ \mathrm{inl}\ a/c ];\ [b].p[ \mathrm{inr}\ b/c ]) \to_{\eta} p[m/c]$
+     for any $m : A + B$.
 
 *** Natural deduction
 The natural deduction is a logical system due to Gentzen. We introduce
 it here following cite:selinger13 and cite:wadler15. Its relationship
-with the simply-typed lambda calculus will be made explicit in the [[*Propositions as types][next section]].
+with the simply-typed lambda calculus will be made explicit in Section 
+[[Propositions as types]].
 
-We will use the logical binary connectives $\to,\land,\lor$, and two
-given propositions, $\top,\bot$ representing the trivially true and false
-propostions, respectively.
-The rules defining natural deduction come in pairs; there are introductors
-and eliminators for every connective. Every introductor uses a set of
-assumptions to generate a formula and every eliminator gives a way to
-extract precisely that set of assumptions.
+\\
+
+**** Rules of natural deduction                                   :ignore:
+We use the logical binary connectives $\blue{\to},\blue{\land},\blue{\lor}$, and two unary
+connectives, $\blue{\top}$ and $\blue{\bot}$, representing respectively the trivially true and false
+propostions. The rules defining natural deduction come in
+pairs; there are introductors and eliminators for every
+connective. Every introductor uses a set of assumptions to generate a
+formula and every eliminator gives a way to extract precisely that set
+of assumptions.
 
  1) Every axiom on the context can be used.
-
-    \begin{prooftree}
+    \begin{prooftree} 
     \RightLabel{(Ax)}
-    \AXC{}
-    \UIC{$\Gamma,A \vdash A$}
+    \AXC{}  
+    \UIC{$\Gamma,\blue{A} \vdash \blue{A}$}
     \end{prooftree}
 
  2) Introduction and elimination of the $\to$ connective. Note that the
     elimination rule corresponds to /modus ponens/ and the introduction
     rule corresponds to the /deduction theorem/.
-
     \begin{prooftree}
     \RightLabel{($I_{\to}$)}
-    \AXC{$\Gamma, A \vdash B$}
-    \UIC{$\Gamma \vdash A \to B$}
+    \AXC{$\Gamma, \blue{A} \vdash \blue{B}$}
+    \UIC{$\Gamma \vdash \blue{A \to B}$}
     \RightLabel{($E_{\to}$)}
-    \AXC{$\Gamma \vdash A \to B$}
-    \AXC{$\Gamma \vdash A$}
-    \BIC{$\Gamma \vdash B$}
+    \AXC{$\Gamma \vdash \blue{A \to B}$}
+    \AXC{$\Gamma \vdash \blue{A}$}
+    \BIC{$\Gamma \vdash \blue{B}$}
     \noLine
     \BIC{}
     \end{prooftree}
@@ -1729,18 +1708,17 @@ extract precisely that set of assumptions.
  3) Introduction and elimination of the $\land$ connective. Note that the
     introduction in this case takes two assumptions, and there are
     two different elimination rules.
-
     \begin{prooftree}
     \RightLabel{($I_{\land}$)}
-    \AXC{$\Gamma \vdash A$}
-    \AXC{$\Gamma \vdash B$}
-    \BIC{$\Gamma \vdash A \land B$}
+    \AXC{$\Gamma \vdash \blue{A}$}
+    \AXC{$\Gamma \vdash \blue{B}$}
+    \BIC{$\Gamma \vdash \blue{A \land B}$}
     \RightLabel{($E_{\land}^1$)}
-    \AXC{$\Gamma \vdash A \land B$}
-    \UIC{$\Gamma \vdash A$}
+    \AXC{$\Gamma \vdash \blue{A \land B}$}
+    \UIC{$\Gamma \vdash \blue{A}$}
     \RightLabel{($E_{\land}^2$)}
-    \AXC{$\Gamma \vdash A \land B$}
-    \UIC{$\Gamma \vdash B$}
+    \AXC{$\Gamma \vdash \blue{A \land B}$}
+    \UIC{$\Gamma \vdash \blue{B}$}
     \noLine
     \TIC{}
     \end{prooftree}
@@ -1748,43 +1726,41 @@ extract precisely that set of assumptions.
  4) Introduction and elimination of the $\lor$ connective. Here, we need
     two introduction rules to match the two assumptions we use on the
     eliminator.
-
     \begin{prooftree}
     \RightLabel{($I_{\lor}^1$)}
-    \AXC{$\Gamma \vdash A$}
-    \UIC{$\Gamma \vdash A \lor B$}
+    \AXC{$\Gamma \vdash \blue{A}$}
+    \UIC{$\Gamma \vdash \blue{A \lor B}$}
     \RightLabel{($I_{\lor}^2$)}
-    \AXC{$\Gamma \vdash B$}
-    \UIC{$\Gamma \vdash A \lor B$}
+    \AXC{$\Gamma \vdash \blue{B}$}
+    \UIC{$\Gamma \vdash \blue{A \lor B}$}
     \RightLabel{($E_{\lor}$)}
-    \AXC{$\Gamma \vdash A \lor B$}
-    \AXC{$\Gamma,A \vdash C$}
-    \AXC{$\Gamma,B \vdash C$}
-    \TIC{$\Gamma \vdash C$}
+    \AXC{$\Gamma \vdash \blue{A \lor B}$}
+    \AXC{$\Gamma,\blue{A} \vdash \blue{C}$}
+    \AXC{$\Gamma,\blue{B} \vdash \blue{C}$}
+    \TIC{$\Gamma \vdash \blue{C}$}
     \noLine
     \TIC{}
     \end{prooftree}
 
  5) Introduction for $\top$. It needs no assumptions and, consequently,
     there is no elimination rule for it.
-
     \begin{prooftree}
     \RightLabel{($I_{\top}$)}
     \AXC{}
-    \UIC{$\Gamma \vdash \top$}
+    \UIC{$\Gamma \vdash \blue{\top}$}
     \end{prooftree}
 
  6) Elimination for $\bot$. It can be eliminated in all generality, and,
     consequently, there are no introduction rules for it. This elimination
     rule represents the /"ex falsum quodlibet"/ principle that says that
     falsity implies anything.
-
     \begin{prooftree}
     \RightLabel{($E_{\bot}$)}
-    \AXC{$\Gamma \vdash \bot$}
-    \UIC{$\Gamma \vdash C$}
+    \AXC{$\Gamma \vdash \blue{\bot}$}
+    \UIC{$\Gamma \vdash \blue{C}$}
     \end{prooftree}
 
+**** Deduction trees                                              :ignore:
 Proofs on natural deduction are written as deduction trees, and they
 can be simplified according to some simplification rules, which can
 be applied anywhere on the deduction tree. On these rules, a chain
@@ -1792,32 +1768,31 @@ of dots represents any given part of the deduction tree.
 
   1) An implication and its antecedent can be simplified using the
      antecedent directly on the implication.
-
-    \begin{prooftree}
-    \AXC{$[A]$}\noLine
-    \UIC{$\vdots^{1}$}\noLine
-    \UIC{$B$}
-    \UIC{$A \to B$}
-    \AXC{$\vdots^2$}\noLine
-    \UIC{$A$}
-    \BIC{$B$}
-
-    \UIC{$\vdots$}\noLine
-    \AXC{$\Longrightarrow$}
-    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
-
-    \AXC{$\vdots^{2}$}\noLine
-    \UIC{$A$}\noLine
-    \UIC{$\vdots^{1}$}\noLine
-    \UIC{$B$}
-    \UIC{$\vdots$}\noLine
-    \noLine
-    \TIC{}
-    \end{prooftree}
+     #+latex: \\[-40pt]
+     \begin{prooftree}
+     \AXC{$[A]$}\noLine
+     \UIC{$\vdots^{1}$}\noLine
+     \UIC{$B$}
+     \UIC{$A \to B$}
+     \AXC{$\vdots^2$}\noLine
+     \UIC{$A$}
+     \BIC{$B$}
+ 
+     \UIC{$\vdots$}\noLine
+     \AXC{$\Longrightarrow$}
+     \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
+ 
+     \AXC{$\vdots^{2}$}\noLine
+     \UIC{$A$}\noLine
+     \UIC{$\vdots^{1}$}\noLine
+     \UIC{$B$}
+     \UIC{$\vdots$}\noLine
+     \noLine
+     \TIC{}
+     \end{prooftree}
 
   2) The introduction of an unused conjunction can be simplified
      as
-
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$A$}
@@ -1836,7 +1811,6 @@ of dots represents any given part of the deduction tree.
     \end{prooftree}
 
     and, similarly, on the other side as
-
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$A$}
@@ -1856,58 +1830,58 @@ of dots represents any given part of the deduction tree.
 
   3) The introduction of a disjunction followed by its elimination can
      be also simplified
+     #+latex: \\[-40pt]
+     \begin{prooftree}
+     \AXC{$\vdots^{1}$}\noLine
+     \UIC{$A$}
+     \UIC{$A \vee B$}
+     \AXC{$[A]$}\noLine
+     \UIC{$\vdots^2$}\noLine
+     \UIC{$C$}
+     \AXC{$[B]$}\noLine
+     \UIC{$\vdots^3$}\noLine
+     \UIC{$C$}
+     \TIC{$C$}
+ 
+     \UIC{$\vdots$}\noLine
+     \AXC{$\Longrightarrow$}
+     \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
+ 
+     \AXC{$\vdots^{1}$}\noLine
+     \UIC{$A$}\noLine
+     \UIC{$\vdots^{2}$}\noLine
+     \UIC{$C$}
+     \UIC{$\vdots$}\noLine
+     \noLine
+     \TIC{}
+     \end{prooftree}
 
-    \begin{prooftree}
-    \AXC{$\vdots^{1}$}\noLine
-    \UIC{$A$}
-    \UIC{$A \vee B$}
-    \AXC{$[A]$}\noLine
-    \UIC{$\vdots^2$}\noLine
-    \UIC{$C$}
-    \AXC{$[B]$}\noLine
-    \UIC{$\vdots^3$}\noLine
-    \UIC{$C$}
-    \TIC{$C$}
-
-    \UIC{$\vdots$}\noLine
-    \AXC{$\Longrightarrow$}
-    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
-
-    \AXC{$\vdots^{1}$}\noLine
-    \UIC{$A$}\noLine
-    \UIC{$\vdots^{2}$}\noLine
-    \UIC{$C$}
-    \UIC{$\vdots$}\noLine
-    \noLine
-    \TIC{}
-    \end{prooftree}
-
-    and a similar pattern is used on the other side of the disjunction
-
-    \begin{prooftree}
-    \AXC{$\vdots^{1}$}\noLine
-    \UIC{$B$}
-    \UIC{$A \vee B$}
-    \AXC{$[A]$}\noLine
-    \UIC{$\vdots^2$}\noLine
-    \UIC{$C$}
-    \AXC{$[B]$}\noLine
-    \UIC{$\vdots^3$}\noLine
-    \UIC{$C$}
-    \TIC{$C$}
-
-    \UIC{$\vdots$}\noLine
-    \AXC{$\Longrightarrow$}
-    \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
-
-    \AXC{$\vdots^{1}$}\noLine
-    \UIC{$B$}\noLine
-    \UIC{$\vdots^{3}$}\noLine
-    \UIC{$C$}
-    \UIC{$\vdots$}\noLine
-    \noLine
-    \TIC{}
-    \end{prooftree}
+     and a similar pattern is used on the other side of the disjunction
+     #+latex: \\[-40pt]
+     \begin{prooftree}
+     \AXC{$\vdots^{1}$}\noLine
+     \UIC{$B$}
+     \UIC{$A \vee B$}
+     \AXC{$[A]$}\noLine
+     \UIC{$\vdots^2$}\noLine
+     \UIC{$C$}
+     \AXC{$[B]$}\noLine
+     \UIC{$\vdots^3$}\noLine
+     \UIC{$C$}
+     \TIC{$C$}
+ 
+     \UIC{$\vdots$}\noLine
+     \AXC{$\Longrightarrow$}
+     \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
+ 
+     \AXC{$\vdots^{1}$}\noLine
+     \UIC{$B$}\noLine
+     \UIC{$\vdots^{3}$}\noLine
+     \UIC{$C$}
+     \UIC{$\vdots$}\noLine
+     \noLine
+     \TIC{}
+     \end{prooftree}
 
 *** Propositions as types
 In 1934, Curry observed in cite:curry34 that the type of a function
@@ -1920,9 +1894,9 @@ a proof of $A$ into a proof of $B$. It was not until 1969 that Howard pointed
 a deep correspondence between the simply-typed \lambda-calculus and the
 natural deduction at three levels
 
-  1) propositions are types.
-  2) proofs are programs.
-  3) simplification of proofs is the evaluation of programs.
+  1. propositions are types;
+  2. proofs are programs; and
+  3. simplification of proofs is evaluation of programs.
 
 In the case of simply typed \lambda-calculus and natural deduction,
 the correspondence starts when we describe the following one-to-one
@@ -1942,8 +1916,9 @@ Where, in particular, the negation of a proposition $\neg A$ is interpreted
 as the fact that that proposition implies falsehood, $A \to \bot$; and its
 corresponding type is a function from the type $A$ to the empty type, $A \to 0$.
 
-Now it is easy to notice that every [[*Natural deduction][deduction rule]] for a proposition has a
-correspondence with a [[*Extending the simply typed \lambda-calculus][typing rule]]. The only distinction between them is the
+Now it is easy to notice that every deduction rule of Section [[Natural deduction]] 
+has a correspondence with a typing rule of Section [[Extending the simply typed \lambda-calculus]].
+The only distinction between them is the
 appearance of \lambda-terms on the first set of rules. As every typing rule
 results on the construction of a particular kind of \lambda-term, they can
 be interpreted as encodings of proof in the form of derivation trees. That is,
@@ -1956,19 +1931,29 @@ In particular, the typing derivation of the term
 \lambda a. \lambda b. \pair{a,b}
 \]
 can be seen as a deduction tree proving $A \to B \to A \wedge B$; as
-the following diagram shows, in which terms are colored in
-$\cterms{red}$ and types are colored in $\ctypes{blue}$.
+the following diagram shows.
 \begin{prooftree}
 \EnableBpAbbreviations
-\AXC{$\cterms{a }\ctypes{: A}$}
-\AXC{$\cterms{b }\ctypes{: B}$}
+\AXC{$\red{a} : \blue{A}$}
+\AXC{$\red{b} : \blue{B}$}
 \RightLabel{$(pair)$}
-\BIC{$\cterms{<a,b> }\ctypes{: A \times B}$}
+\BIC{$\red{\pair{a,b}} : \blue{A \times B}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λb.<a,b> }\ctypes{: B \to A \times B}$}
+\UIC{$\red{\lambda b.\pair{a,b}} : \blue{B \to A \times B}$}
 \RightLabel{$(abs)$}
-\UIC{$\cterms{λa.λb.<a,b> }\ctypes{: A \to B \to A \times B}$}
+\UIC{$\red{\lambda a.\lambda b.\pair{a,b}} : \blue{A \to B \to A \times B}$}
 \end{prooftree}
+# \begin{prooftree}
+# \EnableBpAbbreviations
+# \AXC{$\cterms{a }\ctypes{: A}$}
+# \AXC{$\cterms{b }\ctypes{: B}$}
+# \RightLabel{$(pair)$}
+# \BIC{$\cterms{<a,b> }\ctypes{: A \times B}$}
+# \RightLabel{$(abs)$}
+# \UIC{$\cterms{λb.<a,b> }\ctypes{: B \to A \times B}$}
+# \RightLabel{$(abs)$}
+# \UIC{$\cterms{λa.λb.<a,b> }\ctypes{: A \to B \to A \times B}$}
+# \end{prooftree}
 #+END_exampleth
 
 Furthermore, under this interpretation, 
