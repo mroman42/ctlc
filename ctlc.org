@@ -5775,8 +5775,8 @@ Z \end{tikzcd}}
 #+ATTR_LATEX: :options [Product and coproduct as adjoints]
 #+BEGIN_exampleth
 Given any category ${\cal C}$, we define a *diagonal functor* to a product
-category $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, sending every object $x$ to a pair $(x,x)$,
-and each morphism $f : x \to y$ to the pair $\pair{f,f} \colon (x,x) \to (y,y)$.
+category $\Delta \colon {\cal C} \to {\cal C} \times {\cal C}$, sending every object $X$ to a pair $(X,X)$,
+and each morphism $f : X \to Y$ to the pair $\pair{f,f} \colon (X,X) \to (Y,Y)$.
 
 The right adjoint to this functor will be the categorical product
 $\times \colon {\cal C} \times {\cal C} \to {\cal C}$, sending each pair of objects to their product and
@@ -5785,22 +5785,22 @@ this functor will be the categorical sum, $+ \colon {\cal C}\times {\cal C} \to 
 each pair of objects to their sum and each pair of morphisms to their
 unique sum. That is, we have the following chain of adjoints,
 \[+ \dashv \Delta \dashv \times.\]
-More precisely, knowing that a morphism $(x,x') \to (y,z)$ is actually
-pair of morphisms $x \to y$ and $x' \to z$, the adjoint properties for the
+More precisely, knowing that a morphism $(X,X') \to (Y,Z)$ is actually
+pair of morphisms $X \to Y$ and $X' \to Z$, the adjoint properties for the
 diagonal functor
 #+latex: \\[-40pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-\Delta x \rar\& (y,z) \end{tikzcd}}
+\Delta X \rar\& (Y,Z) \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \rar\& \times(y,z) \end{tikzcd}}
+X \rar\& \times(Y,Z) \end{tikzcd}}
 
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-+(x,y) \rar\& z \end{tikzcd}}
++(X,Y) \rar\& Z \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-(x,y) \rar\& \Delta z \end{tikzcd}}
+(X,Y) \rar\& \Delta Z \end{tikzcd}}
 
 \noLine
 \BIC{}
@@ -5809,16 +5809,16 @@ can be rewritten as bidirectional inference rules with two premises
 #+latex: \\[-40pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \to y \& x \to z \end{tikzcd}}
+X \to Y \& X \to Z \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \rar\& y \times z \end{tikzcd}}
+X \rar\& Y \times Z \end{tikzcd}}
 
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x + y \rar\& z \end{tikzcd}}
+X + Y \rar\& Z \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
-x \to z \& y \to z \end{tikzcd}}
+X \to Z \& Y \to Z \end{tikzcd}}
 
 \noLine
 \BIC{}
@@ -5827,6 +5827,8 @@ which are exactly the universal properties of the product and the sum.
 The necessary natural isomorphism is given by the existence and uniqueness
 provided by the inference rule.
 #+END_exampleth
+
+# TODO:
 # Naturality?
 # Product: What's the unit? Diagonal. What's the counit? Projections.
 # Sum: What's the unit? Diagonal. What's the counit? Projections.
@@ -5881,7 +5883,6 @@ A functor $G \colon {\cal C} \to {\cal D}$ from a small and locally small comple
 has a left adjoint if and only if it preserves small limits and satisfies
 the solution set condition.
 #+END_theorem
-
 *** Monads
 **** Motivation                                                   :ignore:
 The notion of /monads/ is pervasive in category theory. A monad is
@@ -5936,46 +5937,6 @@ where the first diagram is commutative by Proposition [[prop-interchangelaw]]
 and the second one is obtained by applying functors $G$ and $F$. Unit laws
 follow from the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
-
-*** Algebras
-Let $F \colon {\cal C} \to {\cal C}$ be a functor. An $F\textbf{-algebra}$ is 
-
-**** OLD T-algebras
-# TODO: Algebras para cualquier endofuntor
-For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
-/structure map/ making this diagram commute.
-\[\begin{tikzcd}
-T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
-Tx\rar{h} & x
-\end{tikzcd}\]
-A *morphism of* $T\textbf{-algebras}$ is an arrow $f\colon x \to x'$ making the following diagram
-commute.
-\[\begin{tikzcd}
-Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
-Tx' \rar[swap]{h'} & Tx'
-\end{tikzcd}\]
-
-#+attr_latex: :options [Category of T-algebras]
-#+begin_proposition
-The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
-#+end_proposition
-#+begin_proof
-Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
-is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
-\[\begin{tikzcd}
-Tx \rar{h}\dar[swap]{Tf} & 
-x \dar{f}\\
-Tx' \dar[swap]{Tg} \rar{h'} &
-x' \dar{g}\\
-Tx'' \rar{h''}&
-x''
-\end{tikzcd}\]
-commutes.
-#+end_proof
-
-# TODO: Initial algebras: Wellfounded trees in categories
-
-*** TODO Free algebras for a monad
 *** Kleisli categories
 #+ATTR_LATEX: :options [Kleisli category]
 #+BEGIN_definition
@@ -6011,6 +5972,148 @@ is precisely $T$.
 # Theorem 1 pag 147 MacLane
 #+END_proof
 
+*** Algebras
+Let $F \colon {\cal C} \to {\cal C}$ be a functor. An $F\textbf{-algebra}$ is an object $X$ with a
+map $\mu \colon FX \to X$ called /structure map/. A morphism between two
+$F\text{-algebras}$ $\mu \colon FX \to X$ and $\nu \colon FY \to Y$ is a map $h : X \to Y$
+such that the following diagram commutes.
+\[\begin{tikzcd}
+FX \rar{Fh}\dar{\mu} & FY\dar{\nu} \\
+X \rar{h} & Y
+\end{tikzcd}\]
+This defines a category $\mathsf{Alg}_F({\cal C})$. The initial object of this category,
+is called the *initial algebra* for $F$; it needs not to exist, but when
+it does, it is unique up to isomorphism.
+
+# The theory of combinatorial species [Cite Joyal]
+
+**** Lambek's theorem                                             :ignore:
+$F\text{-algebras}$ are closely related to induction principles. The following
+theorem states that the initial algebra is a fixed point of the functor,
+and, by its initiality property, it maps into any other fixed point.
+
+#+ATTR_LATEX: :options [Lambek's theorem]
+#+BEGIN_theorem
+The structure map of an initial algebra is an isomorphism. That is,
+if $X$ is an initial algebra, $\mu \colon FX \cong X$ (see cite:awodey10).
+#+END_theorem
+#+BEGIN_proof
+Consider the following commutative diagram, where $l \colon X \to FX$ 
+is given by initiality of $X$.
+\[\begin{tikzcd}
+FX\rar{Fl} \dar[swap]{\mu} &
+FFX \dar{F\mu} \rar{F\mu} &
+FX \dar{\mu} \\
+X\rar{l} &
+FX\rar{\mu} &
+X
+\end{tikzcd}\]
+By initiality of $X$, we have $\mu \circ l = \id$, and by commutativity
+of the left square, $l \circ \mu = F(\mu \circ l) = \id$.
+#+END_proof
+
+**** Natural numbers as an initial algebra                        :ignore:
+#+ATTR_LATEX: :options [Natural numbers object]
+#+BEGIN_exampleth
+<<example-naturalnumbersobj>>
+Consider the functor $F(X) = 1 + X$ in a category ${\cal C}$ with coproducts
+and a terminal object. Its initial algebra is called a *natural numbers object*
+due to the fact that, in $\Set$, this initial algebra is precisely the
+set of natural numbers $\mathbb{N}$ with the successor function $\mathrm{succ}\colon \mathbb{N} \to \mathbb{N}$
+and the zero element given as a morphism from the terminal object, $0 \colon 1 \to \mathbb{N}$.
+\[\begin{tikzcd}
+1+\mathbb{N}\rar{} \dar[swap]{\pair{0,\mathrm{succ}}} & 
+1+X\dar{\pair{x,f}} \\
+\mathbb{N}\rar{\varphi} &
+X
+\end{tikzcd}\]
+Let $X$ be an $F\text{-algebra}$ given by $x \colon 1 \to X$ and $f \colon X \to X$; by induction over
+the natural numbers we can show that a morphism of algebras $\varphi$ making that diagram
+commute must follow $\varphi(0) = x$ and $\varphi(\mathrm{succ}(n)) = f(\varphi(n))$. Thus, in a certain sense, the 
+initiality captures the principle of induction.
+
+For instance, we can define addition $+ \colon \mathbb{N} \times \mathbb{N} \to \mathbb{N}$, interpreted
+as a unary operation $+ \colon \mathbb{N} \to \hom(\mathbb{N},\mathbb{N})$, as the unique morphism $\varphi$
+from the initial algebra to the algebra given by $\hom(\mathbb{N},\mathbb{N})$ with $\id$
+and postcomposition with $\mathrm{succ}$.
+\[\begin{tikzcd}
+1+\mathbb{N}\rar{} \dar[swap]{\pair{0,succ}} & 
+1+\hom(\mathbb{N},\mathbb{N}) \dar{\pair{\id, \mathrm{succ}\,\circ\, -}} \\
+\mathbb{N}\rar{+} &
+\hom(\mathbb{N},\mathbb{N})
+\end{tikzcd}\]
+This definition immediatly implies the equalities $0+m = \id(m) = m$
+and $\mathrm{succ}(n) + m = (\mathrm{succ}\circ (n+\_))(m) = \mathrm{succ}(n+m)$.
+#+END_exampleth
+
+**** Lists or free monoids                                        :ignore:
+#+ATTR_LATEX: :options [Free monoids]
+#+BEGIN_exampleth
+Fixing a set $A$ and changing the functor slightly to $F(X) = 1 + A \times X$
+we get the set of lists of elements of $A$ as the initial algebra.  This
+algebra is written as $\mathrm{List}(A)$ with the empty list $\mathrm{nil} \colon 1 \to \mathrm{List}(A)$ and
+appending, $\mathrm{cons} \colon A \times \mathrm{List}(A) \to \mathrm{List}(A)$, as the binary operation.
+\[\begin{tikzcd}
+1+ A \times \mathrm{List}(A) \rar{} \dar[swap]{\pair{\mathrm{nil} , \mathrm{cons}}} & 
+1 + A \times X \dar{\pair{x,\bullet}} \\
+\mathrm{List}(A) \rar{\varphi} &
+X
+\end{tikzcd}\]
+Given any other $F\text{-algebra}$ $X$, with $x \colon 1 \to X$ and $\bullet \colon A \times X \to X$,
+we can show by induction on the length of the list that
+the unique morphism $\varphi \colon \mathrm{List}(A) \to X$ making the diagram commute must be such
+that $\varphi( \mathrm{nil} ) = x$ and $\varphi( \mathrm{cons}(a,l) ) = a \bullet \varphi(l)$.
+
+# TODO: Example, fold of a list
+For instance, fixing $A = \mathbb{N}$, we can define the sum of a list of
+naturals $\mathrm{sum}\colon \mathrm{List}(\mathbb{N}) \to \mathbb{N}$ as the unique morphism $\varphi$ from the
+initial algebra to the algebra given by $\mathbb{N}$ with zero and the
+addition.
+\[\begin{tikzcd}
+1+ \mathbb{N} \times \mathrm{List}(\mathbb{N}) \rar{} \dar[swap]{\pair{\mathrm{nil} , \mathrm{cons}}} & 
+1 + \mathbb{N} \times \mathbb{N} \dar{\pair{0,+}} \\
+\mathrm{List}(\mathbb{N}) \rar{\mathrm{sum}} &
+\mathbb{N}
+\end{tikzcd}\]
+This definition immediately implies the equalities $\mathrm{sum}(\mathrm{nil}) = 0$
+and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
+#+END_exampleth
+
+**** OLD T-algebras
+# TODO: Algebras para cualquier endofuntor
+For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
+/structure map/ making this diagram commute.
+\[\begin{tikzcd}
+T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
+Tx\rar{h} & x
+\end{tikzcd}\]
+A *morphism of* $T\textbf{-algebras}$ is an arrow $f\colon x \to x'$ making the following diagram
+commute.
+\[\begin{tikzcd}
+Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
+Tx' \rar[swap]{h'} & Tx'
+\end{tikzcd}\]
+
+#+attr_latex: :options [Category of T-algebras]
+#+begin_proposition
+The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
+#+end_proposition
+#+begin_proof
+Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
+is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
+\[\begin{tikzcd}
+Tx \rar{h}\dar[swap]{Tf} & 
+x \dar{f}\\
+Tx' \dar[swap]{Tg} \rar{h'} &
+x' \dar{g}\\
+Tx'' \rar{h''}&
+x''
+\end{tikzcd}\]
+commutes.
+#+end_proof
+
+# TODO: Initial algebras: Wellfounded trees in categories
+*** TODO Free algebras for a monad
 *** TODO Beck's theorem
 #+ATTR_LATEX: :options [Beck's theorem]
 #+BEGIN_theorem
@@ -6757,6 +6860,11 @@ forcing techniques with allowed to construct new models of ZFC.
 # TODO: Pullbacks (in particular, products) always exist on presheaf cats
 # TODO: Terminal and pullbacks imply all finite limits
 
+*** Has \omega-colimits
+# Proposition 10.12 in Awodey gives initial algebras for presheaves.
+
+# Yoneda embedding preserves colimits and limits (?), that is why
+# presheaves have colimits.
 ** Cartesian closed categories and lambda calculus
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
