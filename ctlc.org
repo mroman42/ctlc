@@ -11,9 +11,7 @@
 
 # No usar definiciones en un entorno cuando no sea estrictamente necesario.
 
-# Usar + para la suma
-# Usar adyacencia para la composición
-# Usar 1 y 0 para objetos inicial y final
+# Usar adyacencia para la composición -> No parece buena idea porque crea ambigüedad a veces
 # Tener un cuerpo común de código en Agda que exportar a HTML como documentación
 # Sacar árbol de dependencias de Agda
 # Colorear reglas del cálculo lambda simplemente tipado
@@ -993,13 +991,13 @@ structural induction,
 
 Three different notions of computability were proposed in the 1930s
 
- * the *general recursive functions* were defined by Herbrand and Gödel.
-   They form a class of functions over the natural numbers closed under
-   composition, recursion and unbound search.
+ * the *general recursive functions* were defined by Herbrand and Gödel;
+   they form a class of functions over the natural numbers closed under
+   composition, recursion and unbound search;
 
- * the *\lambda-definable functions* were proposed by Church. They are
+ * the *\lambda-definable functions* were proposed by Church; they are
    functions on the natural numbers that can be represented by
-   \lambda-terms.
+   \lambda-terms;
 
  * the *Turing computable functions*, proposed by Alan Turing as the
    functions that can be defined on a theoretical model of a machine,
@@ -1021,10 +1019,10 @@ It is Turing-complete.
 # in chapter ? proving that a Turing machine can be represented in it.
 # interpreter and implementing general recursive functions on it.
 
-A complete implementation of untyped \lambda-calculus is discussed in the
-chapter on [[*Mikrokosmos][Mikrokosmos]]; and a detailed description on how to use the
-untyped \lambda-calculus as a programming language is given in the chapter
-''[[*Programming in the untyped \lambda-calculus][Programming in the untyped \lambda-calculus]]''.
+A complete implementation of untyped \lambda-calculus is discussed in
+Chapter [[Implementation of \lambda-expressions]]; and a detailed description on how to use the
+untyped \lambda-calculus as a programming language is given in Chapter
+[[Programming in untyped \lambda-calculus]].
 
 # Church - An unsolvable problem of elementary number theory
 # Corollary 1 pág 362.
@@ -2025,7 +2023,7 @@ apply the case simplification/reduction rule to get
 
 which is encoded by =λa.(inr a)=.
 
-On the chapter on [[*Mikrokosmos][Mikrokosmos]], we develop a \lambda-calculus interpreter
+On Chapter [[Implementation of \lambda-expressions]], we develop a \lambda-calculus interpreter
 which is able to check and simplify proofs in intuitionistic logic.
 This example could be checked and simplified by this interpreter as
 it is shown in image [[mikrogentzen]]. 
@@ -2037,49 +2035,49 @@ it is shown in image [[mikrogentzen]].
 
 # Extending the Curry-Howard correspondence in other type systems
 ** Other type systems
-*** TODO Hindley-Milner
-*** TODO Gödel's System T
-*** TODO System F                                                :noexport:
-**** TODO System F is strongly normalizing
-*** TODO Type algebra
-# Type algebra should be studied, at least, on System F.
-# Properties of type algebra can be proved in Agda.
-
-**** Lists, trees and generating functions
-**** Derivatives and one-hole contexts
-**** Seven trees in one
 *** \lambda-cube
 The *\lambda-cube* is a taxonomy for Church-style type systems given
 by Barendregt in cite:barendregt92. It describes eight type systems
 based on the \lambda-calculus along three axes, representing three
-properties of the systems. These properties are
+properties of the systems.
 
-  1) *parametric polymorphism*, terms that depend on types. This is
+  1) *Parametric polymorphism:* terms that depend on types. This is
      achieved via universal quantification over types. It allows type
      variables and binders for them. An example is the following parametric
-     identity function
+     identity function where $\Lambda$ acts as a $\lambda$ for types, and $\tau$ is a
+     type variable.
      \[
      \mathrm{id} \equiv \Lambda \tau . \lambda x . x : \forall \tau . \tau \to \tau, 
      \]
-     that can be applied to any particular type $\sigma$ to obtain the 
+     It can be applied to any particular type $A$ to obtain the 
      specific identity function for that type as
      \[
-     \mathrm{id}_{\sigma} \equiv \lambda x.x : \sigma \to \sigma.
+     \mathrm{id}_{A} \equiv \lambda x.x : A \to A.
      \]
 
-     *System F* is the simplest type system on the cube implementing
-     polymorphism.
+  2) *Type operators:* types that depend on types.  An example of type
+     operator is $[-]$, which sends each type $A$ to the type $[A]$ of
+     lists of elements of $A$. If we also assume polymorphism, a
+     higher-order function mapping a function argument over a list
+     would have the following type.
+     \[ \mathrm{map} : \forall \tau. \forall \sigma. (\tau \to \sigma) \to [\tau] \to [\sigma] \]
 
-  2) *type operators*, types that depend on types.
-
-  3) *dependent types*, types that depend on terms.
-
+  3) *Dependent types:* types that depend on terms.  An example is the
+     type $\mathrm{Vect}(n)$ of vectors of a fixed length $n$, where $n$ is, itself,
+     an element of a natural numbers type $n : \mathbb{N}$. The type of vectors
+     of any length, $\mathrm{Vect}(0) + \mathrm{Vect}(1) + \mathrm{Vect}(2) + \dots$, is written as
+     \[
+     \sum_{n : \mathbb{N}} \mathrm{Vect}(n).
+     \]
+     Chapters [[Locally cartesian closed categories and dependent types]]
+     and [[Martin-Löf type theory]] are devoted to the study of dependent
+     types.
 # Pierce
 # Lectures on the Curry-Howard isomorphism
 # Introduction to generalized type systems - Barendregt
 
 # https://en.wikipedia.org/wiki/System_F#System_F.CF.89
-
+The \lambda-cube is shown in the following figure.
 \[\begin{tikzcd}[column sep=small]
 &&& |[label={above:\lcubett{System F$\omega$}}]| \systemfo \ar{rr}
 &&  |[label=above:\lcubett{CoC},label=above:\phantom{System Fo}]| \systemcoc 
@@ -2101,22 +2099,37 @@ properties of the systems. These properties are
 &
 \end{tikzcd}\]
 
-The following type systems
+It presents the following type systems. Some of which are not commonly used,
+but all of them are strongly normalizing.
 
- * *Simply typed \lambda-calculus* ($\stlc$);
- * *System F* ($\systemf$);
- * typed \lambda-calculus with *dependent types* ($\systemlp$);
- * typed \lambda-calculus with *type operators* ($\systemo$);
- * *System F-omega* ($\systemfo$);
+ * *Simply typed \lambda-calculus* ($\stlc$); as described in Section
+   [[Typing rules for simply typed \lambda-calculus]].
+ * *Simply typed \lambda-calculus with operators* ($\systemo$).
+ * *System F* ($\systemf$) and *System F-omega* ($\systemfo$) add polymorphism to the
+   simply typed \lambda-calculus and type operators. The Haskell
+   programming language is based on System F-omega with some restrictions.
+ * *Dependently typed \lambda-calculus* ($\systemlp$); used 
+   in the Edinburgh Logical Framework for logic programming
+   (see cite:harper93).
+ * *Calculus of constructions* ($\systemcoc$); where full mathematical theories
+   can be developed (see cite:coquand88). It is used in the Coq Proof Assistant.
    
-The \lambda-cube is generalized by the theory of pure type systems.
-
-All systems on the \lambda-cube are strongly normalizing.
+The \lambda-cube is generalized by the theory of pure type systems, described
+in cite:barendregt92 and cite:geuvers93.
 
 # https://cstheory.stackexchange.com/questions/7561/whats-the-relation-and-difference-between-calculus-of-inductive-constructions-a
-A different approach to higher-order type systems will be presented in the
-chapter on Type Theory.
 
+*** TODO Hindley-Milner
+*** TODO Gödel's System T
+*** TODO System F                                                :noexport:
+**** TODO System F is strongly normalizing
+*** TODO Type algebra
+# Type algebra should be studied, at least, on System F.
+# Properties of type algebra can be proved in Agda.
+
+**** Lists, trees and generating functions
+**** Derivatives and one-hole contexts
+**** Seven trees in one
 *** TODO Pure type systems
 In particular *System F* is equivalent to the single-sorted pure system $\lambda 2$.
 # https://www.ps.uni-saarland.de/extras/fscd17/
@@ -3076,7 +3089,7 @@ foreign import javascript unsafe "mikrokosmos = $1"
 
 which provides =mikrokosmos= as a Javascript function once the code is
 transpiled. In particular, the following is an example of how to call
-Mikrokosmos from Javascript
+Mikrokosmos from Javascript.
 
 #+BEGIN_SRC javascript
 button.onclick = function () {
@@ -3090,7 +3103,9 @@ A small script has been written in Javascript to help with the task of
 embedding Mikrokosmos into a web page. It and can be included directly
 from
 
-=https://m42.github.io/mikrokosmos-js/mikrobox.js=
+#+begin_center
+https://m42.github.io/mikrokosmos-js/mikrobox.js
+#+end_center
 
 using GitHub as a CDN. It will convert any HTML script tag written as
 follows
@@ -4950,8 +4965,9 @@ F \circ \alpha \circ (- \circ f) \in
 \Nat(\hom(r',-),K),
 \]
 
-where $\alpha \in \Nat(\hom(r,-),K)$. We define $E \colon \Sets^{\cal D} \times {\cal D} \to \Sets$ on objects as $E\pair{r,K} = Kr$.
-Given $f \colon r \to r'$ and $F \colon K \tonat K'$, the functor is defined on morphisms as
+where $\alpha \in \Nat(\hom(r,-),K)$. We define $E \colon \Sets^{\cal D} \times {\cal D} \to \Sets$ on
+objects as $E\pair{r,K} = Kr$. Given $f \colon r \to r'$ and $F \colon K \tonat K'$, the
+functor is defined on morphisms as
 \[
 E\pair{f,F}(a) = F(Kf(a)) = K'f(Fa) \in K'r',
 \]
@@ -5214,18 +5230,18 @@ there exists a unique $u \colon D \to A$ making the diagram commute.
 Usually we write the pullback object as $X \times_Z Y$ and we write
 this property diagramatically as
 \[\begin{tikzcd}
-d
+D
 \ar[dashed]{dr}{\exists! u} 
 \ar[bend left]{drr}{p'} 
 \ar[swap,bend right]{ddr}{q'} &&\\
-& x \times_z y
+& X \times_z Y
 \dar[swap]{q}
 \rar{p} &
-x
+X
 \dar{f} \\
-& y
+& Y
 \rar[swap]{g} &
-z
+Z
 \end{tikzcd}\]
 The square in this diagram is usually called a 
 /pullback square/, and the pullback object is usually called a
@@ -5404,8 +5420,6 @@ The square in this diagram is usually called a
 **** TODO Copowers                                                :ignore:
 **** TODO Posets                                                  :ignore:
 ** Adjoints, monads and algebras
-# TODO: Lawvere's notation
-
 *** Adjunctions
 **** Definition of adjunction                                     :ignore:
 An *adjunction* from categories ${\cal X}$ to ${\cal Y}$ is a pair of functors
@@ -7586,11 +7600,9 @@ For instance, the above diagram represents the term
 ** Locally cartesian closed categories and dependent types
 *** Quantifiers and subsets
 **** Logical formulas as subsets                                  :ignore:
-A motivation for this section is the interpretation of logical formulas
+The motivation for this section is the interpretation of logical formulas
 as subsets. Every predicate $P$ on a set $A$ can be seen as a subset
-\[\begin{tikzcd}
-\left\{ a \in A \mid P(a) \right\} \rar[hook] & A
-\end{tikzcd}\]
+$\left\{ a \in A \mid P(a) \right\}\hookrightarrow A$
 determined by the inclusion monomorphism. Under this interpretation,
 logical implication between two propositions, $P \to Q$, can be seen
 as a morphism that commutes with the two inclusions; that is,
@@ -7600,17 +7612,19 @@ as a morphism that commutes with the two inclusions; that is,
 \end{tikzcd}\]
 $P$ implies $Q$ if and only if each $a \in A$ such that $P(a)$ is also in
 the subset of elements such that $Q(a)$. Note how we are working in
-a full subcategory of the slice category $\Set/A$.
+a subcategory of the slice category $\Set/A$.
+\\
 
 **** Substitution                                                 :ignore:
-Any property in a set $B$ induces a property on a set $A$ for each
-$f : A \to B$ via *substitution* in the relevant logical formula. This
+Given a function $f \colon A \to B$, any property in $B$ induces a property on
+$A$ via *substitution* in the relevant logical formula. This
 substitution can be encoded categorically as a pullback: the pullback
-of a proposition along a function is this induced proposition.
+of a proposition along a function is the proposition induced by
+substitution.
 \[\begin{tikzcd}
 \left\{a \in A \mid P(f(a)) \right\} \rar{} \dar[swap,hook]{} &
 \left\{ b \in B \mid P(b) \right\} \dar[hook]{} \\
-A \rar{f} & B \\
+A \rar{f} & B
 \end{tikzcd}\]
 
 **** Weakening                                                    :ignore:
@@ -7620,11 +7634,11 @@ discard the $B$ component of a pair.
 \[\begin{tikzcd}
 \left\{(a,b) \in A \times B \mid P(\pi(a,b)) \right\} \rar{} \dar[swap,hook]{} &
 \left\{ a \in A \mid P(a) \right\} \dar[hook]{} \\
-A \times B \rar{\pi} & A \\
+A \times B \rar{\pi} & A
 \end{tikzcd}\]
-Although it seems like an uninteresting particular case, existential
-and universal quantifiers can be obtained as adjoints to weakening
-once we formalize what this means exactly.
+Although it seems like an uninteresting particular case, once we
+formalize this operation as a functor, existential and universal
+quantifiers can be obtained as adjoints to weakening.
 
 **** The pullback functor                                         :ignore:
 #+ATTR_LATEX: :options [The pullback functor]
@@ -7633,21 +7647,21 @@ Given a function $f \colon A \to B$ in any category ${\cal C}$ with all pullback
 *pullback functor* $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ is defined for any object $y \colon Y \to B$
 as the object $f^{\ast}y \colon (f^{\ast}Y) \to A$ such that
 \[\begin{tikzcd}
-(f^{\ast}Y) \rar{}\drar[phantom, near start, "\ulcorner"] \dar[swap]{f^{\ast}y} & Y \dar{y} \\
+(f^{\ast}Y) \rar{} \dar[swap]{f^{\ast}y} & Y \dar{y} \\
 A\rar{f} & B
 \end{tikzcd}\]
 is a pullback square. The functor is defined on any morphism
 $\alpha \colon y \to y'$ between two objects $y \colon Y \to B$, $y' \colon Y' \to B$ as
-the only morphism making the following diagram commute
+the only morphism making the following diagram commute.
 \[\begin{tikzcd}
 f^{\ast}Y \ar{rrr}\ar[dashed]{dr}{\exists! f^{\ast}\alpha} \ar[bend right,swap]{ddr}{f^{\ast}y} &&&
 Y \ar{dl}{\alpha}\ar[bend left=60]{ddl}{y} \\
 & f^{\ast}Y' \dar[swap]{f^{\ast}y'} \rar & Y' \dar{y'} \\
-& A \rar[swap]{f} & B \\
+& A \rar[swap]{f} & B
 \end{tikzcd}\]
-where $x$ and $x'$ form pullback squares with $y$ and $y'$. Note that the pullback
-functor is only defined up to isomorphism in objects and well-defined on
-morphisms by virtue of the universal property of pullbacks.
+Note that the pullback functor is only defined up to isomorphism in
+objects and well-defined on morphisms by virtue of the universal
+property of pullbacks.
 #+END_definition
 
 **** Quantifiers as adjoints in sets                              :ignore:
@@ -7689,7 +7703,7 @@ are $\exists \dashv \pi^{\ast} \dashv \forall$ because
    \end{tikzcd}}
    \end{prooftree}
 
-Note how, in this case, we are drawing adjunction diagrams in the
+Note how, in this case, we are considering adjunction diagrams in the
 slice category. A generalization of this idea to other categories
 will extend our categorical logic with quantifiers.
 
@@ -7715,16 +7729,18 @@ X \ar[bend right,swap]{ddr}{x} \ar[dashed]{dr}\ar[dashed, bend left]{drr} & & \\
 #+END_proof
 
 **** Locally cartesian closed category                            :ignore:
-We define a *locally cartesian closed category* as a category ${\cal C}$ where the
-pullback functor also has a right adjoint $\Pi_f \colon {\cal C}/A \to {\cal C}/B$. The rationale
-for this name becomes apparent in the following characterization.
+We define a *locally cartesian closed category* as a category with a
+terminal object and pullbacks ${\cal C}$ such that the pullback functor also
+has a right adjoint $\Pi_f \colon {\cal C}/A \to {\cal C}/B$. The rationale for this name
+becomes apparent in the following characterization.
 
 **** Characterization by slices                                   :ignore:
+# Newstead
 #+ATTR_LATEX: :options [Characterization]
 #+BEGIN_theorem
 <<theorem-characterization-lccc>>
 A category ${\cal C}$ with terminal object is locally cartesian closed if and only
-if ${\cal C}/A$ is cartesian closed for any object $A$.
+if ${\cal C}/A$ is cartesian closed for any object $A$ (see cite:newstead17).
 #+END_theorem
 #+BEGIN_proof
 $(\Rightarrow)$ Suppose ${\cal C}$ be locally cartesian closed. The terminal object of ${\cal C}/A$ is
@@ -7745,8 +7761,7 @@ $a,b \colon Z \to A$,
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] a \rar{}\& \Pi_y (y^{\ast} b) \end{tikzcd}}
 \end{prooftree}
-
-and so, the product has a right adjoint and the exponential is given by
+the product has a right adjoint and the exponential is given by
 $a^y = \Pi_y y^{\ast} a$.
 
 $(\Leftarrow)$ Suppose ${\cal C}$ such that ${\cal C}/A$ is always cartesian closed. In particular
@@ -7759,7 +7774,51 @@ ${\cal C}/A$, their product creates a morphism $X \times_A Y \to A$ in ${\cal C}
 universal property of the product in the slice category is exactly the
 universal property of the pullback in ${\cal C}$.
 
-# TODO: Build adjoints
+Now, given $f \colon A \to B$, we will define $\Pi_f$. As ${\cal C}/B$ is cartesian closed,
+there is a functor $(-)^f$ that we can apply to any $x \colon X \to A$ when seen
+as the triangle $x \colon (f \circ x) \to x$ in the slice category. Moreover, the
+identity $\id_f \colon f \to f$ has a transpose $h \colon \id_B \to f^f$; so we can compute
+the following pullback on ${\cal C}/B$ that defines $\Pi_fx$ as $h^{\ast}(x^f)$.
+\[\begin{tikzcd}
+\Pi_fX \rar\dar[swap]{\Pi_fx} & X^f \dar{x^f} \ar[bend left]{ddr}{(f \circ x)^f} & \\
+B \rar{h} \ar[bend right, swap]{drr}{\id_B} & A^f\drar{f^f} & \\
+& & B
+\end{tikzcd}\]
+Note that $\Pi_f$ is defined in objects as the composition of two functors,
+thus, it can be directly extended to morphisms. We only have to prove
+that there is a natural bijection $\hom(f^{\ast}y,x) \cong \hom(y,\Pi_fx)$.
+
+By the universal property of the pullback, each $k \colon y \to \Pi_fx$
+determines two pullback projections $k_1\colon y \to (f \circ x)^f$ and
+$k_2 \colon y \to \id$ such that $x^f \circ k_1 = h \circ k_2$. Applying the adjunction,
+in both sides of the equation we see that they are determined by
+morphisms $j \colon f^{\ast}Y \to X$ such that $f^{\ast}y = x \circ j$.
+#+latex: \\[-40pt]
+\[\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+y \rar{k_2}\& \id \rar{h} \& f^f \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+f \times y \rar{f^{\ast} y} \& f \rar{\id} \& f \end{tikzcd}}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
+y \rar{k_1}\& (f \circ x)^f \rar{x^f} \& f^f \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&]
+f \times y \rar{j} \& f \circ x \rar{x} \& f \end{tikzcd}}
+\noLine
+\BIC{}
+\end{prooftree}\]
+#+latex:\\[-40pt]
+But those morphisms are precisely morphisms $f^{\ast}y \to x$ in ${\cal C}/A$,
+and we have established the natural bijection.
+#+latex:\\[-10pt]
+\[\begin{tikzcd}
+f^{\ast}Y \rar{k} \dar[swap]{f^{\ast}y} & 
+X \dar{x} \ar[bend left]{ddr}{f \circ x} & \\
+A \rar{\id} \ar[bend right, swap]{drr}{f} & 
+A\drar{f} & \\
+& & B
+\end{tikzcd}\]
 #+END_proof
 
 **** Presheaf categories are locally cartesian closed             :ignore:
@@ -7772,7 +7831,7 @@ cartesian closed.
 #+ATTR_LATEX: :options [Presheaf categories are locally cartesian closed]
 #+BEGIN_theorem
 Any presheaf category $\Set^{{\cal C}^{op}}$ from a small category ${\cal C}$ is locally cartesian
-closed.
+closed (see cite:awodey10).
 #+END_theorem
 #+BEGIN_proof
 We will prove that given any $A \in \Set^{{\cal C}^{op}}$, there exists a small category ${\cal D}$
@@ -7783,18 +7842,18 @@ whole category is locally cartesian closed.
 
 We take ${\cal D}$ as a particular case of a comma category where objects are
 arrows $f \colon yC \to A$ in $\Set^{{\cal C}^{op}}$ from the Yoneda embedding of an object
-$C \in {\cal C}$ to the fixed object $A$. Morphisms are commutative triangles
-
-# commutative triangle
-#yC -> yC'
-#   A
-
+$C \in {\cal C}$ to the fixed object $A$.  Morphisms are commutative triangles
+\[\begin{tikzcd}[column sep=tiny]
+yC \ar{rr}{\varphi}\drar[swap]{f} && yC'\dlar{f'} \\
+& A &
+\end{tikzcd}\]
 where, as Yoneda is a full and faithful embedding, $\varphi$ must be of the
-form $\varphi = yh$ for a unique $h \colon C \to C'$. Note how ${\cal D}$ can be embedded
-inside $\Set^{{\cal C}^{op}}/A$.
+form $\varphi = yh$ for a unique $h \colon C \to C'$. Note how ${\cal D}$ can be fully and
+faithfully embedded inside $\Set^{{\cal C}^{op}}/A$ with a functor $I \colon {\cal D} \to \Set^{{\cal C}^{op}}/A$.
 
-A functor $\varPhi \colon \Set^{{\cal C}^{op}}/A \to \Set^{{\cal D}^{op}}$ can be now defined as
-$\varPhi(q) = \hom_{\Set^{{\cal C}^{op}}/A}(-,q)$.
+A functor $\varPhi \colon \Set^{{\cal C}^{op}}/A \to \Set^{{\cal D}^{op}}$ can be now defined on objects
+as $\varPhi(q) = \hom_{\Set^{{\cal C}^{op}}/A}(I(-),q)$, which is a composition of functors.
+It remains to show that this functor in fact determines an equivalence.
 
 # TODO: Show that it is an equivalence
 #+END_proof
@@ -7846,28 +7905,32 @@ create the terms of $\Phi$.
 A particular kind of substitutions will be *display maps*. If a term
 can be constructed on a given context, $\Gamma \vdash a : A$, the context can be
 extended with that term to $\Gamma, a : A$. Display maps are substitutions
-of the form $\pi_A \colon (\Gamma, a{:}A) \to \Gamma$ that simply list the variables of $\Gamma$.
+of the form $\pi_A \colon \intr{\Gamma, a : A} \to \intr{\Gamma}$ that simply list the variables of $\Gamma$
+and discard $a : A$.
 
 This way, each type $A$ in a context $\Gamma$ is represented by the object
-$\pi_A \colon (\Gamma, a{:}A) \to \Gamma$ of the slice category $\Gamma/A$; and each term of the
-type, $\Gamma \vdash a : A$ is represented by a morphism from $\id \colon \Gamma \to \Gamma$, the 
-terminal object of $\Gamma/A$, as
+$\pi_A \colon \intr{\Gamma, a:A} \to \intr{\Gamma}$ of the slice category ${\cal C}/\intr{\Gamma}$; and each term of the
+type, $\Gamma \vdash a : A$ is represented by a morphism from $\id \colon \intr{\Gamma} \to \intr{\Gamma}$, which
+is the terminal object of $\Gamma/A$, as in the following diagram.
 \[\begin{tikzcd}
 \intr{\Gamma} \rar{a} \drar[equal] & \intr{\Gamma, a:A} \dar{\pi_A} \\
 & \intr{\Gamma}
 \end{tikzcd}\]
 
+# TODO: From Shulman17, not all objects are of this form, but they are
+# equivalent to some object of this form.
+
 *** Dependent pairs
 The locally cartesian closed structure of a category induces new
-type constructors in the type theory, dependent sums and dependent
-products. Their meaning under the Curry-Howard interpretation is that
-of the existential and universal quantifier, respectively.
+type constructors in the type theory: dependent pairs and dependent
+functions. Their meaning under the Curry-Howard interpretation is that
+of the existential and universal quantifiers, respectively.
 
 *Dependent pair types*, or *\Sigma-types*, can be seen as a
 generalized version of product types. Given a family of types parametrized
 by another type, $\{B(a)\}_{a : A}$, the elements of $\sum_{a:A}B(a)$
-are pairs $\pair{a,b}$ where the first element is $a : A$ and the
-second element is $b : B(a)$; that is, the type of the second
+are pairs $\pair{a,b}$ with a first element $a : A$ and a
+second element $b : B(a)$; that is, the type of the second
 component depends on the first component.  This type is often written
 as $\Sigma (a:A), B(a)$ and it corresponds to the intuitionistic
 existential quantifier under the /propositions as types/
@@ -7875,18 +7938,17 @@ interpretation. That is, the proof of $\exists (a:A), B(a)$ must be
 seen as a pair given by an element $a$ and a proof of $B(a)$.
 
 In a locally closed cartesian category, a type $B$ depending on $\Gamma, a:A$,
-as $\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$, the type $\sum_{a:A}B$ is given by the
-object
+can be written as $\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$; then, the type $\sum_{a:A}B$
+is given by the object
 \[
 \Sigma_{\pi_A}\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma}.
 \]
 That is, the sigma type over a type is left adjoint to the
 weakening that determines that type; this left adjoint, as we proved
 in Proposition [[prop-leftadjointweak]], is given by postcomposition with
-$\pi_A$.
-
-Thus, categorically, the type $\sum_{a:A} B(a)$ is given in the empty context by the composition of
-the projections that give rise to the types $\vdash A \text{ type}$ and $a : A \vdash B \text{ type}$.
+$\pi_A$. Thus, categorically, the type $\sum_{a:A} B(a)$ is given in the empty
+context by the composition of the projections that give rise to the
+type $A$ and to the type $B$ in the context of $A$.
 \[\begin{tikzcd}
 \intr{x : A, y : B} \rar{\pi_B} & \intr{x : A} \rar{\pi_A} & 1
 \end{tikzcd}\]
@@ -7900,45 +7962,52 @@ an element $b : B(a)$.
 & \intr{\Gamma} \rar{a}\drar[equal] & \intr{\Gamma, x : A} \dar{\pi_A} \\
 && \intr{\Gamma}
 \end{tikzcd}\]
-This can be rewritten as the introduction rule
+This can be rewritten as the following introduction rule.
 \begin{prooftree}
 \AXC{$\Gamma \vdash a : A$}
 \AXC{$\Gamma \vdash b : B[a/x]$}
 \BIC{$\Gamma \vdash \pair{a,b} : \sum_{x:A}B$}
 \end{prooftree}
 
-The adjunction in the slice category can be particularized in the following
-two cases
+The adjunction in the slice category can be then particularized
+in the following two cases, taking $\delta \colon \intr{\Gamma,A} \to \intr{\Gamma,A,A}$ to be
+the substitution that simply duplicates the $A$.
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\& \Gamma,A \& \\ C \ar{rr}{\pi_{A}} \urar[bend left] \&\& A \ular[bend right]
+\& \intr{\Gamma,A} \& \\ 
+\intr{\Gamma,A,B} \ar{rr}{\delta\circ \pi_{B}} \urar[bend left] \&\&
+\intr{\Gamma,A,A} \ular[bend right]
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\sum_{a:A}C \ar{rr}{\mathrm{fst}} \drar[bend right] \&\& A \dlar[bend left] \\ \& \Gamma \&
+\intr{\Gamma, \sum_{a:A}B} \ar{rr}{\mathrm{fst}} \drar[bend right] \&\& 
+\intr{\Gamma,A} \dlar[bend left] \\
+\& \intr{\Gamma} \&
 \end{tikzcd}}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\& \Gamma,A \& \\ C \ar{rr}{id} \urar[bend left] \&\& C \ular[bend right]
+\& \intr{\Gamma,A} \& \\
+\intr{\Gamma, A, B} \ar{rr}{id} \urar[bend left] \&\&
+\intr{\Gamma, A, B} \ular[bend right]
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\sum_{a:A}C \ar{rr}{\mathrm{snd}} \drar[bend right] \&\& C \dlar[bend left] \\ \& \Gamma \&
+\intr{\Gamma, \sum_{a:A}B} \ar{rr}{\mathrm{snd}} \drar[bend right] \&\&
+\intr{\Gamma, A, B} \dlar[bend left] \\
+\& \intr{\Gamma} \&
 \end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
-
-that give the two elimination rules
+These two equalities represent two elimination rules.
 \begin{prooftree}
 \AXC{$\Gamma \vdash m : \sum_{x:A} C$}
 \UIC{$\Gamma \vdash \fst(m) : A$}
 \AXC{$\Gamma \vdash m : \sum_{x:A} C$}
-\UIC{$\Gamma \vdash \snd(m) : C[\pi_1(m)/a]$}
+\UIC{$\Gamma \vdash \snd(m) : C[\fst(m)/a]$}
 \noLine
 \BIC{}
 \end{prooftree}
-
-while we have two beta rules $\fst\pair{a,b} \equiv a$ and $\snd\pair{a,b} \equiv b$, and a uniqueness
+We have two beta rules $\fst\pair{a,b} \equiv a$ and $\snd\pair{a,b} \equiv b$, and a uniqueness
 rule $m \equiv \pair{\fst(m), \snd(m)}$.
 
 *** Dependent functions
@@ -7957,8 +8026,8 @@ $\pi_B \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma, a:A}$, the type $\prod_{
 \[
 \Pi_{\pi_A} \pi_{B} \colon \intr{\Gamma, a:A, b:B} \to \intr{\Gamma}.
 \]
-That is, the pi type over a type is right adjoint to the weakening that
-determines that type.
+That is, the dependent function type over a type is right adjoint to
+the weakening that determines that type.
 
 Thus, categorically, the type $\prod_{a:A}B(a)$ is given in the empty context as the
 adjoint $\pi_A^{\ast} \dashv \Pi_{\pi_A}$ of the morphism representing the type $B$. Elements of this 
@@ -7978,24 +8047,31 @@ That is, we have the following adjunction and counit in the slice
 category
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\& \Gamma,A \& \\ \Gamma,A \ar{rr}{b} \urar[bend left] \&\& \Gamma,A,B \ular[bend right]
+\& \intr{\Gamma,A} \& \\ 
+\intr{\Gamma,A} \ar{rr}{b} \urar[bend left] \&\& 
+\intr{\Gamma,A,B} \ular[bend right]
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\Gamma \ar{rr}{(\lambda a.b)} \drar[bend right] \&\& \Gamma, \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
+\intr{\Gamma} \ar{rr}{(\lambda a.b)} \drar[bend right] \&\& 
+\intr{\Gamma, \prod_{a:A}B} \dlar[bend left] \\ 
+\& \intr{\Gamma} \&
 \end{tikzcd}}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\& \Gamma,A \& \\ \Gamma,A,\prod_{a:A}B \ar{rr}{app} \urar[bend left] \&\& \Gamma,A,B \ular[bend right]
+\& \intr{\Gamma,A} \& \\
+\intr{\Gamma,A,\prod_{a:A}B} \ar{rr}{app} \urar[bend left] \&\& 
+\intr{\Gamma,A,B} \ular[bend right]
 \end{tikzcd}}
 \doubleLine
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,column sep=tiny,row sep=small] 
-\Gamma, \prod_{a:A}B \ar{rr}{\mathrm{id}} \drar[bend right] \&\& \Gamma, \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
+\intr{\Gamma, \prod_{a:A}B} \ar{rr}{\mathrm{id}} \drar[bend right] \&\&
+\intr{\Gamma, \prod_{a:A}B} \dlar[bend left] \\ 
+\& \intr{\Gamma} \&
 \end{tikzcd}}
 \noLine
 \BIC{}
 \end{prooftree}
-
-which can be rewritten as an introduction and elimination rules
+which can be rewritten as introduction and elimination rules.
 \begin{prooftree}
 \AXC{$\Gamma, a : A \vdash b : B$}
 \UIC{$\Gamma \vdash (\lambda a.b) : \prod_{a:A}B$}
@@ -8005,9 +8081,8 @@ which can be rewritten as an introduction and elimination rules
 \noLine
 \BIC{}
 \end{prooftree}
-
-while the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ are consequences
-of naturality.
+We have the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ as
+beta and eta rules.
 
 **** Eta rule                                            :ignore:noexport:
 \[\begin{prooftree}
@@ -8021,6 +8096,7 @@ of naturality.
 \end{prooftree}\]
 
 **** Beta rule                                           :noexport:ignore:
+** Working in locally cartesian closed categories
 *** Examples of dependent types
 **** Vectors                                                      :ignore:
 #+ATTR_LATEX: :options [Vectors]
@@ -8135,7 +8211,6 @@ technique that will allow us to recreate the classical existential
 quantifier.
 #+END_exampleth
 
-** Working in locally cartesian closed categories
 *** Equality types
 *Equality* in our theory comes from an adjunction, as was first proposed
 in cite:lawvere70. The equality type
@@ -8185,7 +8260,7 @@ we have the following elimination rule for equality types, called
 The rule informally says that, if we want to prove some property
 $C(a,b)$ for each $a,b : A$, and we have $a = b$, we only need to prove
 $C(x,x)$ for each $x:A$. Moreover, if we consider the unit of the
-adjunction, as shown in the following diagram
+adjunction, as shown in the following diagram,
 \[\begin{array}{lll}\begin{tikzcd}
 \phantom{f}\vartriangle^{\ast}\!\! A \rar\dar & A\dar{\vartriangle} \\
 A\rar{\vartriangle}\uar[dashed,bend left]{\refl} & A\times A
@@ -8214,6 +8289,7 @@ parametrized over $p$, of the form $C(x,y,p)$.
 \BIC{$\Gamma \vdash \J_C(c,p) : C(a,b,p)$}
 \end{prooftree}
 The corresponding computation rule would be $\J_C(c,\refl)\equiv c[a/x]$.
+
 *** TODO Soundness up to isomorphism
 ** TODO Beyond locally cartesian closed categories
 *** TODO Table of correspondences                                  :ignore:
@@ -8231,6 +8307,7 @@ to take models for these languages is narrower.
 | Martin-Löf intensional type theory | Locally cartesian closed (\infty,1)-categories |
 | Homotopy type theory               | Elementary (\infty,1)-topos                    |
 |------------------------------------+------------------------------------------------|
+
 ** TODO Topoi
 Follows [Leinster] and [Moerdijk]
 
@@ -8385,6 +8462,7 @@ will have the added benefit that every formal proof in the system will
 be a closed lambda term and checking that a proof is correct amounts to
 typechecking the term.
 
+The type theory we are using in this text is due to Martin-Löf
 *Martin-Löf type theory* was developed [...]
 Two variants can be considered.
 
@@ -8755,8 +8833,8 @@ http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 
 ** TODO Notes
 This text defines $\mathbb{N}$ with a zero.
-* Removed                                                   :noexport:ignore:
-** First chapters
+* OLD Removed                                               :noexport:ignore:
+** OLD First chapters
 **** OLD Beta rules for STLC                             :noexport:ignore:
 # These rules are not necessary, we are only using function types.
 
