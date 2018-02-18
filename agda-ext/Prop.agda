@@ -95,11 +95,6 @@ module Prop where
   a ≡≡ b = prop (a ≡ b) uip
 
 
-
-  -- Equivalent propositions
-  -- postulate equivprop : (P Q : Prop) → Prf ((P <~> Q) ~> (P ≡≡ Q))
-
-
   -- Propositionality as a monad
   _>>=_ : {A B : Set} → ∥ A ∥ → (A → ∥ B ∥) → ∥ B ∥
   a >>= f = trunc-rec trunc f a

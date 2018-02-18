@@ -4,7 +4,7 @@ module Equality where
 
   -- Definition of equality
   infix 5 _≡_
-  data _≡_ {ℓ} {A : Set ℓ} : A → A → Set where
+  data _≡_ {ℓ} {A : Set ℓ} : A → A → Set ℓ where
       refl : {a : A} → a ≡ a
   {-# BUILTIN EQUALITY _≡_ #-}
   {-# BUILTIN REWRITE _≡_ #-}

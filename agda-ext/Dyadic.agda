@@ -1,47 +1,12 @@
 {-# OPTIONS --rewriting #-}
 
-open import Base
+open import Base hiding (_+_)
 open import Equality
-open import Naturals
-open import Integers
+open import naturals.Naturals
+open import integers.Integers 
 open import Prop
 
 module Dyadic where
-
-  iseven : ℤ → Set
-  iseven zer = ⊤
-  iseven (pos zero) = ⊥
-  iseven (pos (succ zero)) = ⊤
-  iseven (pos (succ (succ x))) = iseven (pos x)
-  iseven (neg zero) = ⊥
-  iseven (neg (succ zero)) = ⊤
-  iseven (neg (succ (succ x))) = iseven (neg x)
-
-  iseven-dec : (z : ℤ) → (iseven z) + ¬ (iseven z)
-  iseven-dec zer = inl **
-  iseven-dec (pos zero) = inr (λ ())
-  iseven-dec (pos (succ zero)) = inl **
-  iseven-dec (pos (succ (succ x))) = iseven-dec (pos x)
-  iseven-dec (neg zero) = inr (λ ())
-  iseven-dec (neg (succ zero)) = inl **
-  iseven-dec (neg (succ (succ x))) = iseven-dec (neg x)
-
-  div2 : (z : ℤ) → (iseven z) → ℤ
-  div2 zer evenz = zer
-  div2 (pos zero) ()
-  div2 (pos (succ zero)) evenz = pos zero
-  div2 (pos (succ (succ x))) evenz = zsucc (div2 (pos x) evenz)
-  div2 (neg zero) ()
-  div2 (neg (succ zero)) evenz = neg zero
-  div2 (neg (succ (succ x))) evenz = zpred (div2 (neg x) evenz)
-
-  exp2 : ℕ → ℤ
-  exp2 zero = pos zero
-  exp2 (succ n) = pos (succ zero) *ᶻ exp2 n
-
-  normalized : ℤ → ℕ → Set
-  normalized mnt zero = ⊤
-  normalized mnt (succ exp) = ¬ (iseven mnt)
 
   record Dyadic : Set where
     constructor dyadic
@@ -53,74 +18,81 @@ module Dyadic where
 
   -- Normalization
   _*2^_ : ℤ → ℕ → Dyadic
-  _*2^_ mnt zero = dyadic mnt zero **
-  _*2^_ mnt (succ exp) with (iseven-dec mnt)
-  _*2^_ mnt (succ exp) | inr x = dyadic mnt (succ exp) x
-  _*2^_ mnt (succ exp) | inl x = (div2 mnt x) *2^ exp
+  _*2^_ mnt zeroⁿ = dyadic mnt zeroⁿ **
+  _*2^_ mnt (succⁿ exp) with (iseven-dec mnt)
+  _*2^_ mnt (succⁿ exp) | inr x = dyadic mnt (succⁿ exp) x
+  _*2^_ mnt (succⁿ exp) | inl x = (div2ᶻ mnt x) *2^ exp
 
   -- Normalization properties
-  norm-d : (m : ℤ) → (e : ℕ) → (n : normalized m e) → m *2^ e ≡ dyadic m e n
-  norm-d zer zero ** = refl
-  norm-d zer (succ e) n = exfalso (n **)
-  norm-d (pos zero) zero ** = refl
-  norm-d (pos zero) (succ e) n = ap (dyadic (pos zero) (succ e)) (funext (λ ()))
-  norm-d (pos (succ x)) zero ** = refl
-  norm-d (pos (succ x)) (succ e) n with (iseven-dec (pos (succ x)))
-  norm-d (pos (succ x)) (succ e) n | inl p = exfalso (n p)
-  norm-d (pos (succ x)) (succ e) n | inr p = ap (dyadic (pos (succ x)) (succ e) ) (funext λ u → exfalso (p u))
-  norm-d (neg zero) zero ** = refl
-  norm-d (neg zero) (succ e) n = ap (dyadic (neg zero) (succ e) ) (funext (λ ()))
-  norm-d (neg (succ x)) zero ** = refl
-  norm-d (neg (succ x)) (succ e) n with (iseven-dec (neg (succ x)))
-  norm-d (neg (succ x)) (succ e) n | inl p = exfalso (n p)
-  norm-d (neg (succ x)) (succ e) n | inr p = ap (dyadic (neg (succ x)) (succ e) ) (funext λ u → exfalso (p u))
+  normd : (m : ℤ) → (e : ℕ) → (n : normalized m e) → m *2^ e ≡ dyadic m e n
+  normd zeroᶻ zeroⁿ ** = refl
+  normd zeroᶻ (succⁿ e) n = exfalso (n **)
+  normd (pos zeroⁿ) zeroⁿ ** = refl
+  normd (pos zeroⁿ) (succⁿ e) n = ap (dyadic (pos zeroⁿ) (succⁿ e)) (funext (λ ()))
+  normd (pos (succⁿ x)) zeroⁿ ** = refl
+  normd (pos (succⁿ x)) (succⁿ e) n with (iseven-dec (pos (succⁿ x)))
+  normd (pos (succⁿ x)) (succⁿ e) n | inl p = exfalso (n p)
+  normd (pos (succⁿ x)) (succⁿ e) n | inr p = ap (dyadic (pos (succⁿ x)) (succⁿ e) ) (funext λ u → exfalso (p u))
+  normd (neg zeroⁿ) zeroⁿ ** = refl
+  normd (neg zeroⁿ) (succⁿ e) n = ap (dyadic (neg zeroⁿ) (succⁿ e) ) (funext (λ ()))
+  normd (neg (succⁿ x)) zeroⁿ ** = refl
+  normd (neg (succⁿ x)) (succⁿ e) n with (iseven-dec (neg (succⁿ x)))
+  normd (neg (succⁿ x)) (succⁿ e) n | inl p = exfalso (n p)
+  normd (neg (succⁿ x)) (succⁿ e) n | inr p = ap (dyadic (neg (succⁿ x)) (succⁿ e) ) (funext λ u → exfalso (p u))
 
-  norm-exp : (e : ℕ) → zer *2^ e ≡ zer *2^ zero
-  norm-exp zero = refl
-  norm-exp (succ e) = norm-exp e
-  {-# REWRITE norm-exp #-}
+  n-zero : (e : ℕ) → zeroᶻ *2^ e ≡ zeroᶻ *2^ zeroⁿ
+  n-zero zeroⁿ = refl
+  n-zero (succⁿ e) = n-zero e
+  {-# REWRITE n-zero #-}
 
 
   -- Operations on dyadics
-  zeroᵈ : Dyadic
-  zeroᵈ = dyadic zer zero **
+  div2 : Dyadic → Dyadic
+  div2 (dyadic m e n) with (iseven-dec m)
+  div2 (dyadic m e n) | inl x = {!!}
+  div2 (dyadic m e n) | inr x = {!!}
 
-  oneᵈ : Dyadic
-  oneᵈ = dyadic (pos zero) zero **
+  zero : Dyadic
+  zero = dyadic zeroᶻ zeroⁿ **
 
-  1/2ᵈ : Dyadic
-  1/2ᵈ = dyadic (pos zero) 1 (λ z → z)
+  one : Dyadic
+  one = dyadic (pos zeroⁿ) zeroⁿ **
+
+  1/2 : Dyadic
+  1/2 = dyadic (pos zeroⁿ) 1 (λ z → z)
 
   -- Negation
-  -ᵈ_ : Dyadic → Dyadic
-  -ᵈ (dyadic m e n) = (- m) *2^ e
+  -_ : Dyadic → Dyadic
+  - (dyadic m e n) = (-ᶻ m) *2^ e
 
   -- Addition
-  _+ᵈ_ : Dyadic → Dyadic → Dyadic
-  dyadic m e n +ᵈ dyadic m' e' n' = (m *ᶻ exp2 e' +ᶻ exp2 e *ᶻ m') *2^ (e +ⁿ e')
+  _+_ : Dyadic → Dyadic → Dyadic
+  dyadic m zeroⁿ n + dyadic m' e' n' = dyadic ((exp2 e') *ᶻ m +ᶻ m') zeroⁿ **
+  dyadic m (succⁿ e) n + dyadic m' zeroⁿ n' = {!!}
+  dyadic m (succⁿ e) n + dyadic m' (succⁿ e') n' = {!!}
 
-  +ᵈ-lzero : (d : Dyadic) → zeroᵈ +ᵈ d ≡ d
-  +ᵈ-lzero (dyadic m n e) = norm-d m n e
+  -- +ᵈ-lzero : (d : Dyadic) → zero + d ≡ d
+  -- +ᵈ-lzero (dyadic m n e) = normd m n e
 
-  +ᵈ-rzero : (d : Dyadic) → d +ᵈ zeroᵈ ≡ d
-  +ᵈ-rzero (dyadic m e n) = norm-d m e n
+  -- +ᵈ-rzeroⁿ : (d : Dyadic) → d + zero ≡ d
+  -- +ᵈ-rzeroⁿ (dyadic m e n) = normd m e n
 
   -- Multiplication
-  _*ᵈ_ : Dyadic → Dyadic → Dyadic
-  dyadic m e n *ᵈ dyadic m' e' n' = (m *ᶻ m') *2^ (e +ⁿ e')
+  _*_ : Dyadic → Dyadic → Dyadic
+  dyadic m e n * dyadic m' e' n' = (m *ᶻ m') *2^ (e +ⁿ e')
 
-  *ᵈ-lzero : (d : Dyadic) → zeroᵈ *ᵈ d ≡ zeroᵈ
-  *ᵈ-lzero (dyadic m zero n) = refl
-  *ᵈ-lzero (dyadic m (succ e) n) = refl
+  *lzero : (d : Dyadic) → zero * d ≡ zero
+  *lzero (dyadic m zeroⁿ n) = refl
+  *lzero (dyadic m (succⁿ e) n) = refl
 
-  *ᵈ-rzero : (d : Dyadic) → d *ᵈ zeroᵈ ≡ zeroᵈ
-  *ᵈ-rzero (dyadic m e n) = refl
+  *rzero : (d : Dyadic) → d * zero ≡ zero
+  *rzero (dyadic m e n) = refl
 
   -- Ordering
   _<ᵈ_ : Dyadic → Dyadic → Prop
   dyadic m e n <ᵈ dyadic m' e' n' = (m *ᶻ exp2 e' <ᶻ m' *ᶻ exp2 e)
 
-  <ᵈ-*pos : {a c d : Dyadic} → Prf ((zeroᵈ <ᵈ a) ~> (c <ᵈ d) ~> ((a *ᵈ c) <ᵈ (a *ᵈ d)))
+  <ᵈ-*pos : {a c d : Dyadic} → Prf ((zero <ᵈ a) ~> (c <ᵈ d) ~> ((a * c) <ᵈ (a * d)))
   <ᵈ-*pos {dyadic a f o} {dyadic m e n} {dyadic m' e' n'} p q = {!!}
 
   
