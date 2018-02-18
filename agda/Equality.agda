@@ -76,6 +76,8 @@ module Equality where
                      → ((transport P q) ∘ (transport P p)) x == transport P (p · q) x
     transport-comp-h {P = P} (refl a) q x = refl (transport P q x)
 
+    
+
     -- Notation for transport
     _✶ : ∀{ℓⱼ} {P : A → Type ℓⱼ} {a b : A} → a == b → P a → P b
     _✶ = transport _
@@ -138,6 +140,11 @@ module Equality where
                    → {f : A → B} → {x y : A} → (p : x == y) → (u : P (f x))
                    → transport (P ∘ f) p u == transport P (ap f p) u
   transport-family (refl a) u = refl u
+  
+  transport-fun : ∀{ℓᵢ ℓⱼ ℓₖ} {X : Type ℓᵢ} {x y : X} {A : X → Type ℓⱼ} {B : X → Type ℓₖ}
+                  → (p : x == y) → (f : A x → B x)
+                  → transport (λ x → (A x → B x)) p f == (λ x → transport B p (f (transport A (inv p) x)))
+  transport-fun (refl a) f = refl f
 
   apd : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ}  {P : A → Type ℓⱼ} {a b : A}
       → (f : (a : A) → P a) → (p : a == b)

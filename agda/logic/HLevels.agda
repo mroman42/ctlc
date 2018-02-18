@@ -1,11 +1,10 @@
 {-# OPTIONS --without-K #-}
 
-open import Agda.Primitive
 open import Base
 open import Equality
 open import EquationalReasoning
 open import equality.Sigma
-open import equality.DependentProduct
+open import equality.FunctionExtensionality
 open import logic.Contractible
 open import logic.Propositions
 open import logic.Sets

@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K #-}
 
-open import Agda.Primitive
+
 open import Base
 open import Equality
 open import EquationalReasoning
@@ -11,7 +11,7 @@ open import logic.Contractible
 open import logic.Propositions
 open import logic.Sets
 open import logic.HLevels
-open import equality.DependentProduct
+open import equality.FunctionExtensionality
 open import equivalence.Equivalence
 open import equivalence.EquivalenceComposition
 open import equivalence.EquivalenceProp

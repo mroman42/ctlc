@@ -1,6 +1,5 @@
 {-# OPTIONS --without-K #-}
 
-open import Agda.Primitive
 open import Base
 open import Equality
 open import EquationalReasoning
@@ -17,7 +16,13 @@ module equivalence.Quasiinverses {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ
   -- Definitions for quasiinverses, left-inverses, right-inverses and
   -- biinverses.
   qinv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
-  qinv f = Σ (B → A) (λ g → ((f ∘ g) ∼ id) × ((g ∘ f) ∼ id)) 
+  qinv f = Σ (B → A) (λ g → ((f ∘ g) ∼ id) × ((g ∘ f) ∼ id))
+
+  -- record qinv (f : A → B) : Type (ℓᵢ ⊔ ℓⱼ) where
+  --   field
+  --     g : B → A
+  --     η : (g ∘ f) ∼ id
+  --     ε : (f ∘ g) ∼ id
 
   linv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
   linv f = Σ (B → A) (λ g → (g ∘ f) ∼ id)

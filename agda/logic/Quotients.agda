@@ -1,6 +1,5 @@
 {-# OPTIONS --without-K #-}
 
-open import Agda.Primitive
 open import Base
 open import Equality
 open import logic.Propositions
@@ -45,3 +44,10 @@ module logic.Quotients where
             → ((x y : A) → (o : R {{r}} x y) → (transport B (Req o) (f x)) == f y)
             → (z : A / r) → B z
   QRel-ind f p ![ x ] = f x
+
+  -- Recursion in two arguments
+  QRel-rec-bi : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {r : QRel A} {B : Type ℓⱼ}
+              → (f : A → A → B) → ((x y z t : A) → R {{r}} x y → R {{r}} z t → f x z == f y t)
+              → A / r → A / r → B
+  QRel-rec-bi f p ![ x ] ![ y ] = f x y
+  

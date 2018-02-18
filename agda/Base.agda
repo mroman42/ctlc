@@ -2,33 +2,12 @@
 
 module Base where
 
-  open import Agda.Primitive
-  
-  module Universes where
-    -- Our Universe hierarchy. It is implemented over the primitive
-    -- Agda universe hierarchy but it uses Type instead of Set, the
-    -- usual name for the Universe in Agda.  
-    Type : (i : Level) → Set (lsuc i)
-    Type i = Set i
-
-    -- First levels of the universe hierarchy
-    Type0 : Type (lsuc lzero)
-    Type0 = Type lzero
-    
-    Type1 : Type (lsuc (lsuc lzero))
-    Type1 = Type (lsuc lzero)
-
-  open Universes public
+  open import base.Universes public
+  open import base.Empty public
+  open import base.Unit public
 
   module Basic where
-    -- Agda allows datatype declarations and record types.
-    -- A datatype without constructors is the empty type.
-    data ⊥ : Type0 where
   
-    -- A record without constructors is the unit type.
-    record ⊤ : Type0 where
-      constructor ★
-
     -- Sigma types are a particular case of records, but records can be
     -- constructed using only sigma types. Note that l ⊔ q is the maximum
     -- of two hierarchy levels l and q. This way, we define sigma types in
@@ -61,20 +40,12 @@ module Base where
       zero : ℕ
       succ : ℕ → ℕ
     {-# BUILTIN NATURAL ℕ #-}
-    
-  open Basic public
 
-  -- Negation
-  ¬ : ∀{ℓ} → Type ℓ → Type ℓ
-  ¬ A = (A → ⊥)
+  open Basic public
 
   -- Identity function
   id : ∀{ℓ} {A : Type ℓ} → A → A
   id a = a
-
-  -- Ex falso quodlibet
-  exfalso : ∀{ℓ} {A : Type ℓ} → ⊥ → A
-  exfalso ()
 
   -- Composition
   _∘_ : ∀{ℓᵢ ℓⱼ ℓₖ} {A : Type ℓᵢ} {B : Type ℓⱼ} {C : Type ℓₖ}
@@ -82,7 +53,7 @@ module Base where
   (g ∘ f) z = g (f z)
 
   -- Equality is defined as an inductive type
-  data _==_ {ℓ} {A : Set ℓ} : A → A → Type ℓ where
+  data _==_ {ℓ} {A : Type ℓ} : A → A → Type ℓ where
     refl : (a : A) → a == a
 
   -- Composition of paths

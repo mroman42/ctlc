@@ -5,6 +5,8 @@ open import Base
 open import Equality
 open import logic.Sets
 open import logic.Hedberg
+open import logic.Propositions
+open import equality.Sigma
 open import equality.DecidableEquality
 open import algebra.Monoids
 
@@ -70,8 +72,12 @@ module numbers.Naturals where
   zero-not-succ n = encode (succ n) 0
 
   -- The successor function is injective
-  succ-inj : (n m : ℕ) → (succ n == succ m) → n == m
-  succ-inj n m p = decode n m (encode (succ n) (succ m) p)
+  succ-inj : {n m : ℕ} → (succ n == succ m) → n == m
+  succ-inj {n} {m} p = decode n m (encode (succ n) (succ m) p)
+
+  +-inj : (k : ℕ) {n m : ℕ} → (k +ₙ n == k +ₙ m) → n == m
+  +-inj zero   p = p
+  +-inj (succ k) p = +-inj k (succ-inj p)
   
   nat-decEq : decEq ℕ
   nat-decEq zero zero = inl (refl zero)
@@ -79,7 +85,7 @@ module numbers.Naturals where
   nat-decEq (succ n) zero = inr (λ ())
   nat-decEq (succ n) (succ m) with (nat-decEq n m)
   nat-decEq (succ n) (succ m) | inl p = inl (ap succ p)
-  nat-decEq (succ n) (succ m) | inr f = inr λ p → f (succ-inj n m p)
+  nat-decEq (succ n) (succ m) | inr f = inr λ p → f (succ-inj p)
 
   nat-isSet : isSet ℕ
   nat-isSet = hedberg nat-decEq
@@ -95,3 +101,12 @@ module numbers.Naturals where
     ; runit = plus-runit
     ; assoc = plus-assoc
     }
+
+  -- Ordering
+  _<ₙ_ : ℕ → ℕ → Type0
+  n <ₙ m = Σ ℕ (λ k → n +ₙ succ k == m)
+
+  <-isProp : (n m : ℕ) → isProp (n <ₙ m)
+  <-isProp n m (k1 , p1) (k2 , p2) = Σ-bycomponents (succ-inj (+-inj n (p1 · inv p2)) , nat-isSet _ _ _ _)
+
+  

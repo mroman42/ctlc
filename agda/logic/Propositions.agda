@@ -1,10 +1,11 @@
 {-# OPTIONS --without-K #-}
 
-open import Agda.Primitive
 open import Base
 open import Equality
-open import equality.DependentProduct
+open import equality.FunctionExtensionality
+open import equality.CartesianProduct
 open import logic.Contractible
+
 
 module logic.Propositions where
 
@@ -23,4 +24,7 @@ module logic.Propositions where
   piProp : ∀{ℓᵢ ℓⱼ} → {A : Type ℓᵢ} → {B : A → Type ℓⱼ}
          → ((a : A) → isProp (B a)) → isProp ((a : A) → B a)
   piProp props f g = funext λ a → props a (f a) (g a)
-       
+
+  isProp-prod : ∀{ℓᵢ ℓⱼ} → {A : Type ℓᵢ} → {B : Type ℓⱼ}
+              → isProp A → isProp B → isProp (A × B)
+  isProp-prod p q x y = prodByComponents ((p _ _) , (q _ _))

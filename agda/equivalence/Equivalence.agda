@@ -6,6 +6,7 @@ open import Equality
 open import Composition
 open import Homotopies
 open import logic.Contractible
+open import logic.Fibers
 
 module equivalence.Equivalence where
 

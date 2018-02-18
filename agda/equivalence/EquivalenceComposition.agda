@@ -10,7 +10,7 @@ open import logic.Contractible
 open import equivalence.Equivalence
 open import equivalence.EquivalenceProp
 open import equivalence.Quasiinverses
-open import equality.DependentProduct
+open import equality.FunctionExtensionality
 
 module equivalence.EquivalenceComposition where
 

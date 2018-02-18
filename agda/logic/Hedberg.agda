@@ -3,7 +3,7 @@
 open import Agda.Primitive
 open import Base
 open import Equality
-open import equality.DependentProduct
+open import equality.FunctionExtensionality
 open import logic.Relation
 open import logic.Propositions
 open import logic.Sets

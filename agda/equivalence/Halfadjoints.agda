@@ -1,12 +1,12 @@
 {-# OPTIONS --without-K #-}
 
-open import Agda.Primitive
 open import Base
 open import Equality
 open import Homotopies
 open import Composition
 open import EquationalReasoning
 open import logic.Contractible
+open import logic.Fibers
 open import logic.Propositions
 open import equality.Sigma
 open import equivalence.Equivalence

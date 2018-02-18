@@ -2,95 +2,182 @@
 
 open import Base
 open import Equality
-open import Composition
-open import logic.Quotients
+open import logic.Sets
 open import logic.Hedberg
+open import EquationalReasoning
 open import equivalence.Equivalence
 open import equivalence.Quasiinverses
 open import equality.DecidableEquality
-open import equality.DependentProduct
 open import numbers.Naturals
-
+open import algebra.Monoids
 
 module numbers.Integers where
 
-  -- Definition of the integers as a quotient over the naturals
-  z-rel : ℕ × ℕ → ℕ × ℕ → Type0
-  z-rel (a , c) (b , d) = (a +ₙ d) == (b +ₙ c)
-
-  z-QRel : QRel (ℕ × ℕ)
-  z-QRel = record { R = z-rel
-                  ; Aset = hedberg (decEqProd nat-decEq nat-decEq)
-                  ; Rprop = λ { (a , c) (b , d) → nat-isSet (a +ₙ d) (b +ₙ c) } }
-
-  ℤ : Type1
-  ℤ = (ℕ × ℕ) / z-QRel
-
-  -- Properties of the relation
-  -- z-rel-plus-both : (o a b : ℕ) → z-rel (a , b) (o +ₙ a , o +ₙ b)
-  -- z-rel-plus-both zero     a b = refl (plus a b)
-  -- z-rel-plus-both (succ o) a b = {!!}
-
+  data ℤ : Type0 where
+    zer : ℤ
+    pos : ℕ → ℤ
+    neg : ℕ → ℤ
 
   -- Inclusion of the natural numbers into the integers
-  ntoz : ℕ → ℤ
-  ntoz n = [(n , zero)]
+  NtoZ : ℕ → ℤ
+  NtoZ zero     = zer
+  NtoZ (succ n) = pos n
 
-  ntoZneg : ℕ → ℤ
-  ntoZneg n = [(zero , n)]
-
-  z-zero : ℤ
-  z-zero = ntoz 0
-  z-one : ℤ
-  z-one = ntoz 1
-
-  -- We need to prove that a function on the quotient type is well-defined.
+  -- Successor function
   zsucc : ℤ → ℤ
-  zsucc = QRel-rec f welldefined
-    where
-      f : (ℕ × ℕ) → ℤ
-      f (a , b) = [(succ a , b)]
-      
-      welldefined : (u v : ℕ × ℕ) → R {{z-QRel}} u v → f u == f v
-      welldefined (a , c) (b , d) r = Req (ap succ r)
+  zsucc zer            = pos 0
+  zsucc (pos x)        = pos (succ x)
+  zsucc (neg zero)     = zer
+  zsucc (neg (succ x)) = neg x
 
+  -- Predecessor function
   zpred : ℤ → ℤ
-  zpred = QRel-rec f welldefined
-    where
-      f : (ℕ × ℕ) → ℤ
-      f (a , b) = [(a , succ b)]
+  zpred zer            = neg 0
+  zpred (pos zero)     = zer
+  zpred (pos (succ x)) = pos x
+  zpred (neg x)        = neg (succ x)
 
-      welldefined : (u v : ℕ × ℕ) → R {{z-QRel}} u v → f u == f v
-      welldefined (a , c) (b , d) r = Req (plus-succ-rs a _ b _ r)
+  -- Successor and predecessor
+  zsuccpred-id : (n : ℤ) → zsucc (zpred n) == n
+  zsuccpred-id zer            = refl _
+  zsuccpred-id (pos zero)     = refl _
+  zsuccpred-id (pos (succ n)) = refl _
+  zsuccpred-id (neg n)        = refl _
 
-  zsucc-pred-id : (x : ℤ) → zsucc (zpred x) == x
-  zsucc-pred-id = QRel-ind f welldefined
-    where
-      f : (u : ℕ × ℕ) → zsucc (zpred [ u ]) == [ u ]
-      f (a , b) = Req (plus-succ-rs zero _ a _ (refl (plus a _)))
+  zpredsucc-id : (n : ℤ) → zpred (zsucc n) == n
+  zpredsucc-id zer            = refl _
+  zpredsucc-id (pos n)        = refl _
+  zpredsucc-id (neg zero)     = refl _
+  zpredsucc-id (neg (succ n)) = refl _
 
-      welldefined : (u v : ℕ × ℕ) → (o : R {{z-QRel}} u v)
-                  → transport (λ x → zsucc (zpred x) == x) (Req o) (f u) == f v
-      welldefined u v o = Rtrunc (zsucc (zpred [ v ])) [ v ] _ _
+  zpredsucc-succpred : (n : ℤ) → zpred (zsucc n) == zsucc (zpred n)
+  zpredsucc-succpred zer = refl zer
+  zpredsucc-succpred (pos zero) = refl (pos zero)
+  zpredsucc-succpred (pos (succ x)) = refl (pos (succ x))
+  zpredsucc-succpred (neg zero) = refl (neg zero)
+  zpredsucc-succpred (neg (succ x)) = refl (neg (succ x))
 
-  zpred-succ-id : (x : ℤ) → zpred (zsucc x) == x
-  zpred-succ-id = QRel-ind f welldefined
-    where
-      f : (u : ℕ × ℕ) → zpred (zsucc [ u ]) == [ u ]
-      f (a , b) = Req (plus-succ-rs zero _ a _ (refl (plus a _)))
-
-      welldefined : (u v : ℕ × ℕ) → (o : R {{z-QRel}} u v)
-                  → transport (λ x → zpred (zsucc x) == x) (Req o) (f u) == f v
-      welldefined u v o = Rtrunc (zpred (zsucc [ v ])) [ v ] _ _
-
+  zsuccpred-predsucc : (n : ℤ) → zsucc (zpred n) == zpred (zsucc n)
+  zsuccpred-predsucc n = inv (zpredsucc-succpred n)
+  
+  -- Equivalence given by successor and predecessor
   zequiv-succ : ℤ ≃ ℤ
-  zequiv-succ = qinv-≃ zsucc (zpred , (zsucc-pred-id , zpred-succ-id))
+  zequiv-succ = qinv-≃ zsucc (zpred , (zsuccpred-id , zpredsucc-id))
 
-  -- zpaths : ∀{ℓ} {A : Type ℓ} {a : A} → (p : a == a) → (n : ℤ) → a == a
-  -- zpaths {a = a} p = {!!}
-  --   where
-  --     f : (u : ℕ × ℕ) → a == a
-  --     f (n , m) = {!!}
+  -- Negation
+  - : ℤ → ℤ
+  - zer     = zer
+  - (pos x) = neg x
+  - (neg x) = pos x
 
-  --     welldefined : (u v : ℕ × ℕ) → R {{z-QRel}} u v → f u == f v
-  --     welldefined (a , c) (b , d) r = {!!}
+  double- : (z : ℤ) → - (- z) == z
+  double- zer = refl _
+  double- (pos x) = refl _
+  double- (neg x) = refl _
+
+  zequiv- : ℤ ≃ ℤ
+  zequiv- = qinv-≃ - (- , (double- , double-))
+
+  -- Addition on integers
+  infixl 60 _+ᶻ_
+  _+ᶻ_ : ℤ → ℤ → ℤ
+  zer +ᶻ m = m
+  pos zero +ᶻ m = zsucc m
+  pos (succ x) +ᶻ m = zsucc (pos x +ᶻ m)
+  neg zero +ᶻ m = zpred m
+  neg (succ x) +ᶻ m = zpred (neg x +ᶻ m)
+
+  -- Lemmas on addition
+  +ᶻ-lunit : (n : ℤ) → n == n +ᶻ zer
+  +ᶻ-lunit zer            = refl _
+  +ᶻ-lunit (pos zero)     = refl _
+  +ᶻ-lunit (pos (succ x)) = ap zsucc (+ᶻ-lunit (pos x))
+  +ᶻ-lunit (neg zero)     = refl _
+  +ᶻ-lunit (neg (succ x)) = ap zpred (+ᶻ-lunit (neg x))
+
+
+  +ᶻ-unit-zsucc : (n : ℤ) → zsucc n == (n +ᶻ pos zero)
+  +ᶻ-unit-zsucc zer = refl _
+  +ᶻ-unit-zsucc (pos zero) = refl _
+  +ᶻ-unit-zsucc (pos (succ x)) = ap zsucc (+ᶻ-unit-zsucc (pos x))
+  +ᶻ-unit-zsucc (neg zero) = refl _
+  +ᶻ-unit-zsucc (neg (succ x)) = inv (zpredsucc-id (neg x)) · ap zpred (+ᶻ-unit-zsucc (neg x))
+
+  +ᶻ-unit-zpred : (n : ℤ) → zpred n == (n +ᶻ neg zero)
+  +ᶻ-unit-zpred zer = refl _
+  +ᶻ-unit-zpred (pos zero) = refl zer
+  +ᶻ-unit-zpred (pos (succ x)) = inv (zsuccpred-id (pos x)) · ap zsucc (+ᶻ-unit-zpred (pos x))
+  +ᶻ-unit-zpred (neg zero) = refl _
+  +ᶻ-unit-zpred (neg (succ x)) = ap zpred (+ᶻ-unit-zpred (neg x))
+
+
+  +ᶻ-pos-zsucc : (n : ℤ) → (x : ℕ) → zsucc (n +ᶻ pos x) == n +ᶻ pos (succ x)
+  +ᶻ-pos-zsucc zer x = refl _
+  +ᶻ-pos-zsucc (pos zero) x = refl _
+  +ᶻ-pos-zsucc (pos (succ n)) x = ap zsucc (+ᶻ-pos-zsucc (pos n) x)
+  +ᶻ-pos-zsucc (neg zero) x = zsuccpred-id (pos x)
+  +ᶻ-pos-zsucc (neg (succ n)) x = zsuccpred-predsucc (neg n +ᶻ pos x) · ap zpred (+ᶻ-pos-zsucc (neg n) x)
+
+  +ᶻ-neg-zpred : (n : ℤ) → (x : ℕ) → zpred (n +ᶻ neg x) == n +ᶻ neg (succ x)
+  +ᶻ-neg-zpred zer x = refl _
+  +ᶻ-neg-zpred (pos zero) x = zpredsucc-id (neg x)
+  +ᶻ-neg-zpred (pos (succ n)) x = zpredsucc-succpred (pos n +ᶻ neg x) · ap zsucc (+ᶻ-neg-zpred (pos n) x)
+  +ᶻ-neg-zpred (neg zero) x = refl _
+  +ᶻ-neg-zpred (neg (succ n)) x = ap zpred (+ᶻ-neg-zpred (neg n) x)
+  
+  +ᶻ-comm : (n m : ℤ) → n +ᶻ m == m +ᶻ n
+  +ᶻ-comm zer m = +ᶻ-lunit m
+  +ᶻ-comm (pos zero) m = +ᶻ-unit-zsucc m
+  +ᶻ-comm (pos (succ x)) m = ap zsucc (+ᶻ-comm (pos x) m) · +ᶻ-pos-zsucc m x 
+  +ᶻ-comm (neg zero) m = +ᶻ-unit-zpred m
+  +ᶻ-comm (neg (succ x)) m = ap zpred (+ᶻ-comm (neg x) m) · +ᶻ-neg-zpred m x
+
+  
+
+  -- Decidable equality
+  pos-inj : {n m : ℕ} → pos n == pos m → n == m
+  pos-inj {n} {.n} (refl .(pos n)) = refl n
+
+  neg-inj : {n m : ℕ} → neg n == neg m → n == m
+  neg-inj {n} {.n} (refl .(neg n)) = refl n
+  
+  z-decEq : decEq ℤ
+  z-decEq zer zer = inl (refl zer)
+  z-decEq zer (pos x) = inr (λ ())
+  z-decEq zer (neg x) = inr (λ ())
+  z-decEq (pos x) zer = inr (λ ())
+  z-decEq (pos n) (pos m) with (nat-decEq n m)
+  z-decEq (pos n) (pos m) | inl p = inl (ap pos p)
+  z-decEq (pos n) (pos m) | inr f = inr (f ∘ pos-inj)
+  z-decEq (pos n) (neg m) = inr (λ ())
+  z-decEq (neg n) zer = inr (λ ())
+  z-decEq (neg n) (pos x₁) = inr (λ ())
+  z-decEq (neg n) (neg m) with (nat-decEq n m)
+  z-decEq (neg n) (neg m) | inl p = inl (ap neg p)
+  z-decEq (neg n) (neg m) | inr f = inr (f ∘ neg-inj)
+
+  z-isSet : isSet ℤ
+  z-isSet = hedberg z-decEq
+
+
+  -- Multiplication
+  infixl 60 _*ᶻ_
+  _*ᶻ_ : ℤ → ℤ → ℤ
+  zer *ᶻ m = zer
+  pos zero *ᶻ m = m
+  pos (succ x) *ᶻ m = (pos x *ᶻ m) +ᶻ m
+  neg zero *ᶻ m = - m
+  neg (succ x) *ᶻ m = (neg x *ᶻ m) +ᶻ (- m)
+
+
+  -- Ordering
+  _<ᶻ_ : ℤ → ℤ → Type0
+  zer <ᶻ zer = ⊥
+  zer <ᶻ pos x = ⊤
+  zer <ᶻ neg x = ⊥
+  pos x <ᶻ zer = ⊥
+  pos x <ᶻ pos y = x <ₙ y
+  pos x <ᶻ neg y = ⊥
+  neg x <ᶻ zer = ⊤
+  neg x <ᶻ pos y = ⊤
+  neg x <ᶻ neg y = y <ₙ x
