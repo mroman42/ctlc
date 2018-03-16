@@ -7478,7 +7478,7 @@ be rewritten to match the structure of these adjoints
 \UIC{$\Gamma, z:0 \vdash \mathrm{abort} : C$}
 \AXC{$\Gamma, a:A \vdash c : C$}
 \AXC{$\Gamma, b:B \vdash c' : C$}
-\BIC{$\Gamma, u : A+B \vdash \mathrm{case}\ u\ \mathrm{of}\ c;c'$}
+\BIC{$\Gamma, u : A+B \vdash \mathrm{case}\ u\ \mathrm{of}\ c;c' : C$}
 \noLine
 \BIC{}
 \end{prooftree}
@@ -8455,6 +8455,12 @@ in cite:maclane94.
 
 *** TODO (\infty,1)-toposes
 * Type theory
+# The connection between constructivity, computability and continuity
+# goes back to Brower. (Shulman 17)
+
+# Types vs sets, la pertenencia a un tipo es juzgamental. Es la
+# perspectiva de etcs, estructural end vez de material.
+
 ** Martin-Löf type theory
 In this chapter, we will exclusively work internally in dependent type
 theory and use it as a constructive foundation of mathematics. This
@@ -8815,6 +8821,8 @@ $\ap_f(\mathsf{loop}) = s$.
 *** The fundamental group of the circle
 ** Constructive analysis
 ** Computer verification
+# Sprinkles of extensionality for your vanilla type theory
+
 # Higher inductive types using Dan Licata's trick
 * Conclusions
 * Appendices
