@@ -1030,6 +1030,8 @@ untyped \lambda-calculus as a programming language is given in Chapter
 # recursively enumerable.
 
 ** Simply typed \lambda-calculus
+# TODO: The weak lambda calculus as a reasonable machine
+
 */Types/* were introduced in mathematics as a response to the
 Russell's paradox, found in the first naive axiomatizations of set
 theory. An attempt to use untyped \lambda-calculus as a foundational
@@ -3060,13 +3062,13 @@ In order to install Mikrokosmos on a server and use it as =root= user,
 we need
 
   * to clone the libraries into =/usr/lib/mikrokosmos=. They should be
-    available system-wide.
+    available system-wide;
 
   * to install the Mikrokosmos interpreter into =/usr/local/bin=. In
     this case, we chose not to install Mikrokosmos from source, but simply
-    copy the binaries and check the availability of the =ncurses= library.
+    copy the binaries and check the availability of the =ncurses= library;
 
-  * to install the Mikrokosmos Jupyter kernel as usual.
+  * and to install the Mikrokosmos Jupyter kernel as usual.
 
 Our server used a SSL certificate; and OAuth autentication via GitHub.
 Mikrokosmos tutorials were installed for every student.
@@ -8825,6 +8827,9 @@ $\ap_f(\mathsf{loop}) = s$.
 
 # Higher inductive types using Dan Licata's trick
 * Conclusions
+** Further
+ * https://arxiv.org/abs/quant-ph/0312174
+
 * Appendices
 bibliographystyle:alpha
 bibliography:Bibliography.bib
