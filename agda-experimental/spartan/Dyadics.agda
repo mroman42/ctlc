@@ -52,13 +52,17 @@ drefl' (dyadic n zero x) (dyadic n' zero x') p rewrite
 drefl' (dyadic n zero x) (dyadic n' (succ e') x') p rewrite
   *runit n'
   | inv p
---  | or-rfalse  (odd (n * (exp2 e' + exp2 e'))) 
---  | oddmul n (exp2 e' + exp2 e')
-  = {!!}
+  = exfalso (refute n e' x')
+  where
+    refute : (m e' : ℕ) → or (odd (m * (exp2 e' + exp2 e'))) false ≡ true → ⊥
+    refute n e p rewrite notodd*a+b n (exp2 e) = true≢false (inv p)
 drefl' (dyadic n (succ e) x) (dyadic n' zero x') p rewrite
   *runit n
-  | inv p
-  = {!!}
+  | p
+  = exfalso (refute n' e x)
+  where
+    refute : (m e' : ℕ) → or (odd (m * (exp2 e' + exp2 e'))) false ≡ true → ⊥
+    refute n e p rewrite notodd*a+b n (exp2 e) = true≢false (inv p)
 drefl' (dyadic n (succ e) x) (dyadic n' (succ e') x') p
   -- rewrite exp2-even-div n n' (succ e) (succ e') ? ? ?
   = {!exp2-odd-div!}

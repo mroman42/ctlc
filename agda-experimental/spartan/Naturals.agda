@@ -287,6 +287,19 @@ not-odd-form (succ (succ n)) x | k , q rewrite q | inv (+rsucc k k) = (succ k) ,
 notodda+a : ∀ a → not (odd (a + a)) ≡ true
 notodda+a a rewrite oddplus a a | xoraa (odd a) = refl
 
+odda+a : ∀ a → odd (a + a) ≡ false
+odda+a a rewrite
+  inv (not-double (odd (a + a)))
+  | notodda+a a
+  = refl
+
+notodd*a+b : ∀ a b → odd (a * (b + b)) ≡ false
+notodd*a+b a b rewrite
+  oddmul a (b + b)
+  | odda+a b
+  | and-false (odd a)
+  = refl
+
 exp2 : ℕ → ℕ
 exp2 zero = 1
 exp2 (succ n) = exp2 n + exp2 n
