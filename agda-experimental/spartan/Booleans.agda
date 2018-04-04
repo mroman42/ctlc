@@ -75,3 +75,6 @@ or-rtrue false = refl
 or-rfalse : (a : Bool) → or a false ≡ a
 or-rfalse true = refl
 or-rfalse false = refl
+
+true≢false : true ≡ false → ⊥
+true≢false ()

@@ -26,6 +26,9 @@ record Σ (S : Set) (T : S → Set) : Set where
     snd : T fst
 open Σ public
 
+Σ-elim : {A : Set} {B : A → Set} {P : Set} → Σ A B → (Σ A B → P) → P
+Σ-elim (a , b) f = f (a , b)
+
 
 -- Product type
 _×_ : (S : Set) (T : Set) → Set

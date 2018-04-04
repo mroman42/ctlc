@@ -61,7 +61,8 @@ drefl' (dyadic n (succ e) x) (dyadic n' zero x') p rewrite
   = {!!}
 drefl' (dyadic n (succ e) x) (dyadic n' (succ e') x') p
   -- rewrite exp2-even-div n n' (succ e) (succ e') ? ? ?
-  = {!exp2-even-div n n' (succ e) (succ e') (nonzero-normalized n e x) (nonzero-normalized n' e' x')!}
+  = {!exp2-odd-div!}
+  -- = {!exp2-odd-div n n' (succ e) (succ e') (nonzero-normalized n e x) (nonzero-normalized n' e' x')!}
 
 mkdyadic : ℕ → ℕ → Dyadic
 mkdyadic n zero = dyadic n 0 (or-rtrue (odd n))

@@ -400,9 +400,9 @@ exp2-odd-div n m zero (succ d) x y p rewrite
   *runit n
   | p
   | oddmul m (exp2 d + exp2 d)
---  | not-inj (odd m) true {!!}
   | odd+both (exp2 d)
-  = refute {!!}
+  | and-false (odd m)
+  = refute (inv x)
   where
     refute : true ≡ false → m * (exp2 d + exp2 d) ≡ m
     refute ()

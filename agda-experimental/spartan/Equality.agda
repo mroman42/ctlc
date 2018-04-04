@@ -11,6 +11,9 @@ module Equality where
   inv : {A : Set} {a b : A} → a ≡ b → b ≡ a
   inv refl = refl
 
+  transport : {A : Set} (P : A → Set) {a b : A} → a ≡ b → P a → P b
+  transport P refl = λ x → x
+
   _·_ : {A : Set} {a b c : A} → a ≡ b → b ≡ c → a ≡ c
   refl · q = q
 
