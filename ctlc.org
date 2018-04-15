@@ -235,21 +235,21 @@ while trying to develop a foundational notion of functions (/as formulae/)
 on mathematics. It is a logical theory of functions, where application and
 abstraction are primitive notions; and, at the same time, it
 is also one of the simplest programming languages, in which many other
-full-fledged languages are based, as we will explain in detail later.
+full-fledged languages are based.
 
 The *untyped* or *pure \lambda-calculus* is, syntactically, the
 simplest of those formal systems. In it, a function does not need a
 domain nor a codomain; every function is a formula that can be
 directly applied to any expression. It even allows functions to be
 applied to themselves, a notion that would be troublesome
-in our usual set-theoretical foundations. In particular, if $f$ is a member of its own
+in our usual set-theoretical foundations. In particular, if $f$ were a member of its own
 domain, the infinite descending sequence
 \[
 f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 \]
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
 set theory (see, for example, cite:kunen11).
-However, untyped \lambda-calculus presents some problems such as non-terminating
+In constrast, untyped \lambda-calculus presents some problems such as non-terminating
 functions.
 
 This presentation of the untyped lambda calculus will follow
@@ -286,11 +286,10 @@ which is itself a function; most commonly written as $f \circ f$. In particular,
 \]
 evaluates to $6$.
 
-# Darle la vuelta a la frase
 #+attr_latex: :options [Lambda terms]
 #+begin_definition
 <<def-lambdaterms>>
-*\lambda-terms* are constructed inductively using the following rules
+*\lambda-terms* are constructed using the following rules:
 
   * every */variable/*, taken from an infinite countable set of
     variables and usually written as lowercase single letters
@@ -304,42 +303,34 @@ evaluates to $6$.
   * every possible \lambda-term can be constructed using these rules, no other
     \lambda-term exists.
 
-Equivalently, they can also be defined by the following Backus-Naur form,
+Equivalently, they are given by the following Backus-Naur form,
 \[
-\mathtt{Term} ::= x \mid (\mathtt{Term}\ \mathtt{Term}) \mid (\lambda x.\mathtt{Term})\quad,
+\mathtt{Term} ::= x \mid (\mathtt{Term}\ \mathtt{Term}) \mid (\lambda x.\mathtt{Term}),
 \]
 where $x$ can be any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
 left-associativity, for example, $MNP$ will always mean $(MN)P$. Note
-that the application of \lambda-terms is different from its
-composition, which is distributive and will be formally defined later. We
+that the application of \lambda-terms is not the same as
+composition of functions, which is associative. We also
 consider \lambda-abstraction as having the lowest precedence. For
 example, $\lambda x. M N$ should be read as $\lambda x.(MN)$ instead
 of $(\lambda x.M) N$.
 
-# NOTE: This is not necessary.
-# Multiple \lambda-abstractions can be also contracted to a single 
-# multivariate abstraction; thus $\lambda x.\lambda y.M$ can 
-# become $\lambda x,y.M$.
-
 *** Free and bound variables, substitution
 In \lambda-calculus, the scope of a variable restricts to the \lambda-abstraction
 where it appeared, if any. Thus, the same variable can be used multiple
-times on the same term independently. For example, in 
-$(\lambda x.x)(\lambda x.x)$, the variable $x$ appears twice
-with two different meanings.
-
-Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said
-to be */bound/*; and any variable without bound ocurrences is said to be
-*/free/*. Formally, we can define the set of free variables on a given
-term as follows.
+times on the same term independently. For example, in $(\lambda x.x)(\lambda x.x)$, the
+variable $x$ appears twice with two different meanings.
 
 #+attr_latex: :options [Free variables]
 #+begin_definition
 <<def-freevariables>>
-The *set of free variables* of a term $M$ is defined inductively as
+Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said
+to be */bound/*; and any variable without bound ocurrences is said to be
+*/free/*.  The *set of free variables* of a term $M$ is defined inductively
+as
 \[\begin{aligned}
 \freevars(x) &= \{x\}, \\
 \freevars(MN) &= \freevars(M) \cup \freevars(N), \\
@@ -349,7 +340,7 @@ The *set of free variables* of a term $M$ is defined inductively as
 
 Evaluation in \lambda-calculus relies in the notion of */substitution/*.
 Any free ocurrence of a variable can be substituted by a term, as we do
-when we are evaluating terms. For instance, in the previous example, we
+when evaluating. For instance, in the previous example, we
 evaluated $(\lambda x.\ x^2+x)(2)$ by substituting $2$ in the place of $x$ inside $x^{2} + x$;
 as in
 \[\begin{tikzcd}
@@ -360,11 +351,13 @@ as in
 This, however, should be done avoiding the unintended binding which happens
 when a variable is substituted inside the scope of a binder with the
 same name, as in the following example: if we were to evaluate the expression
-$(\lambda x.\ y x)(\lambda z.\ xz)$,
+$(\lambda x.y x)(\lambda z.xz)$,
 where $x$ appears two times (once bound and once free), we should substitute $y$ by $(\lambda z.xz)$
 on $(\lambda x.yx)$ and $x$ (the free variable) would get tied to $x$ (the bounded variable)
 \[\begin{tikzcd}
-(\lambda y.\lambda x.yx)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} && (\lambda x.(\lambda z.xz)x).
+(\lambda y.\lambda x.yx)(\lambda z.xz)
+\ar{rr}{y \mapsto (\lambda z.xz)} && 
+(\lambda x.(\lambda z.xz)x).
 \end{tikzcd}\]
 
 To avoid this, the bounded $x$ must be given a new name before the
@@ -372,7 +365,7 @@ substitution, which must be carried as
 \[\begin{tikzcd}
 (\lambda y. \lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u),
 \end{tikzcd}\]
-keeping the free character of $x$.
+keeping $x$ free.
 
 #+attr_latex: :options [Substitution on lambda terms]
 #+begin_definition
@@ -394,23 +387,22 @@ We could define a criterion for choosing exactly what this new
 variable should be, or simply accept that our definition will not be
 exactly well-defined, but only
 /well-defined up to a change on the name of the variables/.
-This equivalence relation will be defined 
-formally on the next section. In practice, it is common to follow the 
-/Barendregt's variable convention/, which simply assumes that bound 
-variables have been renamed to be distinct.
+This equivalence relation will be defined formally on the next section.
+In practice, it is common to follow the /Barendregt's variable convention/,
+which simply assumes that bound variables have been renamed to be distinct.
 
 *** \alpha-equivalence
-In \lambda-terms, variables are only placeholders and its name, as we have
+Variables are only placeholders; and its name, as we have
 seen before, is not relevant. Two \lambda-terms whose only difference is
 the naming of the variables are called \alpha-equivalent. For example,
 \[
 (\lambda x.\lambda y. x\ y) \quad\text{ is $\alpha$-equivalent to }\quad (\lambda f.\lambda x. f\ x).
 \]
-
 *\alpha-equivalence* formally captures the fact that the name of a bound
 variable can be changed without changing the meaning of the term. This
-idea appears recurrently on mathematics; for example, the renaming of variables of
-integration or the variable on a limit are a examples of \alpha-equivalence.
+idea appears repeatedly on mathematics; for example, the renaming of
+variables of integration or the variable on a limit are a examples of
+\alpha-equivalence.
 \[
 \int_0^1 x^2\ dx = \int_0^1 y^2\ dy;
 \qquad
@@ -435,10 +427,9 @@ and it is compatible with the structure of lambda terms,
 
 *** \beta-reduction
 The core idea of evaluation in \lambda-calculus is captured by the notion
-of *\beta-reduction*.
-Until now, evaluation has been only informally described; it is time
-to define it as a relation, $\tto_{\beta}$, going from the initial term to
-any of its partial evaluations. We
+of *\beta-reduction*. Until now, evaluation has been only informally
+described; it is time to define it as a relation, $\tto_{\beta}$, going from the
+initial term to any of its partial evaluations. We
 will firstly consider a /one-step reduction/ relationship, called
 $\to_{\beta}$, which will be extended by transitivity to $\tto_{\beta}$.
 
@@ -464,34 +455,32 @@ closure of $\tto_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta
 
 *** \eta-reduction
 Although we lost the extensional view of functions when we decided to
-adopt the /functions as formulae/ perspective, the idea of function
-extensionality in \lambda-calculus can be partially recovered by the notion
-of \eta-reduction.
-This form of /function extensionality for \lambda-terms/ can be captured
-by the notion that any term which simply applies a function to the
-argument it takes can be reduced to the actual function. That is,
-any $\lambda x.M x$ can be reduced to $M$.
+adopt the /functions as formulae/ perspective, some notion of
+/function extensionality/ in \lambda-calculus can be partially recovered
+by the notion of \eta-reduction: any term which simply applies a function to the
+argument it takes can be reduced to that function. That is, $\lambda x.M x$
+can be reduced to $M$.
 
 #+attr_latex: :options [\eta-reduction]
 #+begin_definition
-The *\eta-reduction* is the smallest relation on \lambda-terms satisfiying the
-same congruence rules as \beta-reduction and the following axiom
-\[
-\lambda x.Mx \to_{\eta} M,\text{ for any } x \notin \mathrm{FV}(M).
-\]
+The *\eta-reduction* is the smallest relation on \lambda-terms satisfiying 
+
+ * $\lambda x.Mx \to_{\eta} M$, for any $x \notin \mathrm{FV}(M)$,
+ * $MN \to_{\eta} M'N$ and $NM \to_{\eta} NM'$ for any $M,M'$ such that $M \to_{\eta} M'$, and
+ * $\lambda x.M \to_{\eta} \lambda x.M'$, for any $M,M'$ such that $M \to_{\eta} M'$.
+
+Note that, in the particular case where $M$ is itself a \lambda-abstraction,
+\eta-reduction is simply a particular case of \beta-reduction.
 We define single-step \beta\eta-reduction as the union of \beta-reduction
 and \eta-reduction. This will be written as $\to_{\beta\eta}$, and its reflexive transitive
 closure will be $\tto_{\beta\eta}$.
 #+end_definition
 
-Note that, in the particular case where $M$ is itself a \lambda-abstraction,
-\eta-reduction is simply a particular case of \beta-reduction.
-
-# TODO: Comments in https://cstheory.stackexchange.com/a/8261/28986
-# suggest a theorem in Urzyczyn, Sorensen which might be relevant
+# Comments in https://cstheory.stackexchange.com/a/8261/28986
+# suggest a theorem in Urzyczyn, Sorensen which might be relevant.
 
 *** Confluence
-As we mentioned above, it is not possible in general to evaluate a \lambda-term
+It is not possible in general to evaluate a \lambda-term
 into a canonical, non-reducible term. However, we will be able to prove
 that, in the cases where it exists, it is unique. This property
 is a consequence of a sightly more general one, */confluence/*, which
@@ -499,20 +488,21 @@ can be defined in any abstract rewriting system.
 
 #+attr_latex: :options [Confluence]
 #+begin_definition
-A relation $\to$ on a set ${\cal S}$ is *confluent* if, given its reflexive transitive closure
-$\tto$, for any $M,N,P \in {\cal S}$,  $M \tto N$ and $M \tto P$ imply the existence of some
-$Z \in {\cal S}$ such that $N \tto Z$ and $P \tto Z$.
+A relation $\to$ on a set ${\cal S}$ is *confluent* if, given its reflexive
+transitive closure $\tto$, for any $M,N,P \in {\cal S}$,  $M \tto N$ and $M \tto P$
+imply the existence of some $Z \in {\cal S}$ such that $N \tto Z$ and $P \tto Z$.
 #+end_definition
 
 Given any binary relation $\to$ of which $\tto$ is its reflexive transitive
-closure, we can consider three seemingly related properties
+closure, we can consider three apparently related properties:
 
-  * the *confluence* (also called /Church-Rosser property/) we have just defined,
-  * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$,
+  * the *confluence property* (also called /Church-Rosser property/) we have just defined;
+  * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$, and
   * the *diamond property*, which is defined substituting $\tto$ by $\to$ on
     the definition on confluence.
 
-Diagrammatically, the three properties can be represented as
+Diagrammatically, the three properties can be represented
+respectively as
 \[\begin{tikzcd}[column sep=small]
 & 
 M \drar[two heads]\dlar[two heads] &&& 
@@ -528,10 +518,10 @@ Z &&&
 Z &&&
 Z &\\
 \end{tikzcd}\]
+#+latex: \\[-30pt]
 and we can show that the diamond relation implies confluence; while
-the quasidiamond does not. Both claims are easy to prove, and they
-show us that, in order to prove confluence for a given relation, we
-can use the diamond property instead of the quasidiamond property.
+the quasidiamond does not. In order to prove confluence for a given relation, we
+must use the diamond property instead of the quasidiamond property.
 
 The statement of $\tto_{\beta}$ and $\tto_{\beta\eta}$ being confluent is what we
 call the */Church-Rosser Theorem/*. The definition of a relation satisfying
@@ -549,30 +539,28 @@ It is based on the idea of parallel one-step reduction.
 We define the *parallel one-step reduction* relation on \lambda-terms, $\rhd$,
 as the smallest relation satisfying that the following properties
 
-  * reflexivity, $x \rhd x$;
-  * parallel application, $PN \rhd P'N'$;
-  * congruence to \lambda-abstraction, $\lambda x.N \rhd \lambda x.N'$;
-  * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$;
-  * and extensionality, $\lambda x.P x \rhd P'$, if $x \not\in \mathrm{FV}(P)$,
+  * reflexivity for variables, $\red{x} \rhd \red{x}$;
+  * parallel application, $\red{MN} \rhd \red{M'N'}$;
+  * \lambda-abstraction congruence, $\red{\lambda x.N} \rhd \red{\lambda x.N'}$;
+  * parallel substitution, $\red{(\lambda x.M)N} \rhd \red{M'[N'/x]}$;
+  * and extensionality, $\red{\lambda x.M x} \rhd \red{M'}$, if $\red{x} \not\in \mathrm{FV}(\red{M})$,
 
-hold for any variable $x$ and any terms $N,N',P,P'$ such that $P \rhd P'$ and $N \rhd N'$.
+hold for any variable $\red{x}$ and any terms $\red{N},\red{N'},\red{M},\red{M'}$ such that $\red{M}\rhd\red{M'}$ and $\red{N}\rhd\red{N'}$.
+Using the first three rules, it is trivial to show inductively that
+this relation is in fact reflexive.
 #+end_definition
-
-Using the first three rules, it is trivial to show that this relation
-is in fact reflexive.
 
 #+begin_lemma
 <<lemma-transclosureparallel>>
-The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$.
-In particular, given any \lambda-terms $M,M'$,
+The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$. In particular, given
+any \lambda-terms $\red{P},\red{P'}$,
 
-  1) if $M \to_{\beta\eta} M'$, then $M \rhd M'$.
-  2) if $M \rhd M'$, then $M \tto_{\beta\eta} M'$;
+  1) if $\red{P} \to_{\beta\eta} \red{P'}$, then $\red{P} \rhd \red{P'}$.
+  2) if $\red{P} \rhd \red{P'}$, then $\red{P} \tto_{\beta\eta} \red{P'}$;
 #+end_lemma
 #+begin_proof
-  1) We can prove this by exhaustion and structural induction on
-     \lambda-terms, the possible ways in which we arrive at $M \to M'$
-     are
+1) All possible ways in which we can arrive at $P \to_{\beta\eta} P'$ imply $P \rhd P'$.
+   They are
 
      * $(\lambda x.M)N \to M[N/x]$; where we know that, by parallel substitution
        and reflexivity $(\lambda x.M)N \rhd M[N/x]$;
@@ -584,26 +572,26 @@ In particular, given any \lambda-terms $M,M'$,
      * congruence to \lambda-abstraction, which is a shared property between
        the two relations where we can apply structural induction again;
 
-     * $\lambda x. Px \to P$, where $x \not\in \mathrm{FV}(P)$ and we can apply extensionality for $\rhd$
+     * $\lambda x. Mx \to M$, where $x \not\in \mathrm{FV}(M)$ and we can apply extensionality for $\rhd$
        and reflexivity.
 
-  2) We can prove this by induction on any derivation of $M \rhd M'$. The
-     possible ways in which we arrive at this are
+2) We can prove this by structural induction on the derivations of $M \rhd M'$. The
+   possible ways in which we arrive at it are
      
      * the trivial one, reflexivity;
 
-     * parallel application $NP \rhd N'P'$, where, by induction, we have $P \tto P'$ 
-       and $N \tto N'$. Using two steps, $NP \tto N'P \tto N'P'$ we prove $NP \tto N'P'$;
+     * parallel application $NM \rhd N'M'$, where, by induction, we have $M \tto M'$ 
+       and $N \tto N'$. Using two steps, $NM \tto N'M \tto N'M'$ we prove $NM \tto N'M'$;
 
      * congruence to \lambda-abstraction $\lambda x.N \rhd \lambda x.N'$, where, by induction,
        we know that $N \tto N'$, so $\lambda x.N \tto \lambda x.N'$;
 
-     * parallel substitution, $(\lambda x.P)N \rhd P'[N'/x]$, where, by induction,
-       we know that $P \tto P'$ and $N\tto N'$. Using multiple steps,
-       $(\lambda x.P)N \tto (\lambda x.P')N \tto (\lambda x.P')N' \to P'[N'/x]$;
+     * parallel substitution, $(\lambda x.M)N \rhd M'[N'/x]$, where, by induction,
+       we know that $M \tto M'$ and $N\tto N'$. Using multiple steps,
+       $(\lambda x.M)N \tto (\lambda x.M')N \tto (\lambda x.M')N' \to M'[N'/x]$;
 
-     * extensionality, $\lambda x.P x \rhd P'$, where by induction $P \tto P'$, and trivially,
-       $\lambda x.Px \tto \lambda x.P'x$.
+     * extensionality, $\lambda x.M x \rhd M'$, where by induction $M \tto M'$, and trivially,
+       $\lambda x.Mx \tto \lambda x.M'x$.
 
 Because of this, the reflexive transitive closure of $\rhd$ should be a subset and a
 superset of $\tto$ at the same time.
@@ -615,10 +603,11 @@ superset of $\tto$ at the same time.
 Assuming $M \rhd M'$ and $U \rhd U'$, $M[U/y] \rhd M'[U'/y]$.
 #+end_lemma
 #+begin_proof
-We apply structural induction on derivations of $M \rhd M'$, depending
-on what the last rule we used to derive it was.
+By structural induction on the derivations of $M \rhd M'$, depending
+on what was the last derivation rule we used, we have the following
+cases.
 
-  * Reflexivity, $M = x$. If $x=y$, we simply use $U \rhd U'$; if $x \neq y$,
+  * Reflexivity, $M = x$. If $x=y$, we simply use a$U \rhd U'$; if $x \neq y$,
     we use reflexivity on $x$ to get $x \rhd x$.
 
   * Parallel application. By induction hypothesis, $P[U/y] \rhd P'[U'/y]$ and
@@ -632,8 +621,8 @@ on what the last rule we used to derive it was.
   * Extensionality, given $x \notin \mathrm{FV}(P)$. By induction, $P \rhd P'$, hence
     $\lambda x.P[U/y]x \rhd P'[U'/y]$.
 
-Note that we are implicitly assuming the Barendregt's variable convention; all
-variables have been renamed to avoid clashes.
+Note that we are implicitly assuming the Barendregt's variable
+convention: all variables have been renamed to avoid clashes.
 #+end_proof
 
 #+attr_latex: :options [Maximal parallel one-step reduct]
