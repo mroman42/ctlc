@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Naturals where
 
 open import Prop public
@@ -11,6 +13,7 @@ data ℕ : Set where
   succ : ℕ → ℕ
 {-# BUILTIN NATURAL ℕ #-}
 
+
 succ-inj-l : ∀ n m → (n ≡ m) → (succ n ≡ succ m)
 succ-inj-l n m p = ap succ p
 
@@ -21,6 +24,7 @@ infixl 30 _+_
 _+_ : ℕ → ℕ → ℕ
 zero + b = b
 succ a + b = succ (a + b)
+{-# BUILTIN NATPLUS _+_ #-}
 
 +rzero : ∀ n → n + 0 ≡ n
 +rzero 0 = refl
@@ -56,6 +60,8 @@ infixl 35 _*_
 _*_ : ℕ → ℕ → ℕ
 zero * m = zero
 succ n * m = m + (n * m)
+{-# BUILTIN NATTIMES _*_ #-}
+
 
 *rzero : ∀ n → n * zero ≡ zero
 *rzero zero = refl
@@ -114,12 +120,30 @@ data Less (n m : ℕ) : Set where
 data LessThan (n m : ℕ) : Set where
   lth : (k : ℕ) → k + n ≡ m → LessThan n m 
 
+_==_ : ℕ → ℕ → Bool
+zero  == zero  = true
+zero  == succ _ = false
+succ _ == zero = false
+succ n == succ m = n == m
+{-# BUILTIN NATEQUALS _==_ #-}
 
 infix 6 _<_ 
 _<_ : ℕ → ℕ → Bool
-m < zero = false
-zero < succ m = true
+_ < zero = false
+zero < succ _ = true
 succ n < succ m = n < m
+{-# BUILTIN NATLESS _<_ #-}
+
+<evd : (n m : ℕ) → n < m ≡ true → Σ ℕ (λ k → (n + k ≡ m) × (0 < k ≡ true))
+<evd zero zero ()
+<evd zero (succ m) p = succ m , (refl , refl)
+<evd (succ n) zero ()
+<evd (succ n) (succ m) p with <evd n m p
+<evd (succ n) (succ m) p | k , (α , β) = k , ((ap succ α) , β)
+
+<zero : ∀ n → 0 < n ≡ false → n ≡ 0
+<zero zero p = refl
+<zero (succ n) ()
 
 infix 6 _≤_ 
 _≤_ : (n m : ℕ) → Bool
@@ -276,7 +300,11 @@ iszero-not-mult : ∀ a b
 iszero-not-mult zero b () q
 iszero-not-mult (succ a) zero p ()
 iszero-not-mult (succ a) (succ b) p q = refl  
-  
+
+<mult-inj : ∀ n m k → iszero k ≡ false → k * n < k * m ≡ n < m
+<mult-inj n m zero ()
+<mult-inj n m (succ k) p = <mult n m k
+
 
 not-odd-form : (n : ℕ) → odd n ≡ false → Σ ℕ (λ k → n ≡ k + k)
 not-odd-form zero x = zero , refl
@@ -303,6 +331,15 @@ notodd*a+b a b rewrite
 exp2 : ℕ → ℕ
 exp2 zero = 1
 exp2 (succ n) = exp2 n + exp2 n
+
+exp2plus : ∀ a b → exp2 (a + b) ≡ exp2 a * exp2 b
+exp2plus zero b rewrite +rzero (exp2 b) = refl
+exp2plus (succ a) b rewrite
+  exp2plus a b
+  | *comm (exp2 a + exp2 a) (exp2 b)
+  | *distr (exp2 b) (exp2 a) (exp2 a)
+  | *comm (exp2 a) (exp2 b)
+  = refl
 
 exp2-even : (n : ℕ) → iszero n ≡ false → even (exp2 n) ≡ true
 exp2-even zero ()
@@ -432,6 +469,28 @@ exp2-odd-div n m (succ e) zero x y p rewrite
 exp2-odd-div n m (succ e) (succ d) x y p
   = exp2-odd-div n m e d x y (simpl-a2b≡c2d n (exp2 e) m (exp2 d) p)
 
+zero≢succ : ∀ a → 0 ≡ succ a → ⊥
+zero≢succ a = λ ()
+
+
+exp2-inj : ∀ a b → exp2 a ≡ exp2 b → a ≡ b
+exp2-inj zero zero p = refl
+exp2-inj zero (succ b) p with (exp2 b)
+exp2-inj zero (succ b) () | zero
+exp2-inj zero (succ b) p | succ w with (succ-inj-r zero (w + succ w) p)
+... | v rewrite +rsucc w w = exfalso (zero≢succ (w + w) v)
+exp2-inj (succ a) zero p with (exp2 a)
+exp2-inj (succ a) zero () | zero
+exp2-inj (succ a) zero p | succ w with (succ-inj-r (w + succ w) zero p)
+... | v rewrite +rsucc w w = exfalso (zero≢succ (w + w) (inv v))
+exp2-inj (succ a) (succ b) p = ap succ (exp2-inj a b (lemma (exp2 a) (exp2 b) p))
+  where
+    lemma : ∀ a b → a + a ≡ b + b → a ≡ b
+    lemma zero zero = λ _ → refl
+    lemma zero (succ b) = λ ()
+    lemma (succ a) zero = λ ()
+    lemma (succ a) (succ b) p rewrite +rsucc a a | +rsucc b b =
+      ap succ (lemma a b (succ-inj-r _ _ (succ-inj-r (succ (a + a)) (succ (b + b)) p)))
 
 *cross : ∀ a b c d e f
   → iszero c ≡ false
@@ -463,3 +522,12 @@ exp2-odd-div n m (succ e) (succ d) x y p
   -----------------------------
   → a * h ≡ g * b
 *bicross a b c d e f g h x y p q r = *cross a b e f g h y (*cross a b c d e f x p q) r
+
+
+ndec≡ : (a b : ℕ) → (a ≡ b) ⊎ ¬ (a ≡ b)
+ndec≡ zero zero = inl refl
+ndec≡ zero (succ b) = inr (λ ())
+ndec≡ (succ a) zero = inr (λ ())
+ndec≡ (succ a) (succ b) with ndec≡ a b
+ndec≡ (succ a) (succ b) | inl x = inl (ap succ x)
+ndec≡ (succ a) (succ b) | inr x = inr λ x₁ → x (succ-inj-r a b x₁)

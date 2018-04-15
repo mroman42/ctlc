@@ -6,61 +6,71 @@ open import Base
 open import Booleans
 open import Equality
 open import Prop
+open import Naturals using (ℕ)
 
-postulate
-  F : Set
-  zero : F
-  one : F
-  _+_ : F → F → F
-  _*_ : F → F → F
-  _<_ : F → F → Bool
+
+open import Dyadics renaming
+  ( D to F
+  ; zer to zero
+  ; oned to one
+  ; add to add-dyadic
+  ; mult to mult-dyadic
+  ; add-comm to +comm
+  ; add-zero to +zero
+  ; addhalfhalf to +half
+  ; mult-comm to *comm
+  ; mult-zero to *zero
+  ; mult-one to *one
+  ; lthalf to <half
+  ; ltzero to <zero
+  ; ltone to <one
+  ; dec≡ to dec-eq
+  ; add-assoc to +assoc
+  ; ltplus to <plus'
+  ; ltmult to <mult
+  ; dpositivity to <positivity
+  ; ltevd to <evd
+  ; mult-assoc to *assoc
+  ; mp-distr to *distr)
+
+
+_+_ : F → F → F
+_+_ = add-dyadic
+
+_*_ : F → F → F
+_*_ = mult-dyadic
+
+_<_ : F → F → Bool
+_<_ = lt
 
 infixl 30 _+_
 infixl 35 _*_
 infix 6 _<_
 
+<plus : (a b c : F) → (a + c) < (b + c) ≡ a < b
+<plus a b c rewrite +comm a c | +comm b c = <plus' c a b
+
 postulate
-  -- Algebraic structure
-  +comm : (a b : F) → a + b ≡ b + a
-  +assoc : (a b c : F) → a + (b + c) ≡ a + b + c
-  +zero : (a : F) → zero + a ≡ a
-
-  *comm : (a b : F) → a * b ≡ b * a
-  *assoc : (a b c : F) → a * (b * c) ≡ a * b * c
-  *zero : (a : F) → zero * a ≡ zero
-  *one : (a : F) → one * a ≡ a
-  *distr : (a b c : F) → a * (b + c) ≡ a * b + a * c
-
   -- Ordered field
-  <evd : (a b : F) → a < b ≡ true → Σ F (λ c → (a + c ≡ b) × (zero < c ≡ true))
-  <trans : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
-
-  <zero : (a : F) → zero < a ≡ false → a ≡ zero
-  <one : zero < one ≡ true
-  <plus : (a b c : F) → (a + c) < (b + c) ≡ a < b
-  <mult : (a b c : F) → zero < a ≡ true → a * b < a * c ≡ b < c
-
   <sqbetween : (a b : F) → a < b ≡ true → Σ F (λ c → (a < c * c ≡ true) × (c * c < b ≡ true))
-  <positivity : (a b : F) → zero < a ≡ true → zero < a + b ≡ true
 
-  -- Half
-  half : F
-  <half : zero < half ≡ true
-  +half : half + half ≡ one
++nonzero : (a b : F)
+  → zero < a ≡ true
+  → zero < b ≡ true
+  → zero < a + b ≡ true
++nonzero a b p q = ADMITTED
+  
 
-  -- Decidable equality
-  dec-eq : (a b : F) → (a ≡ b) ⊎ ¬ (a ≡ b)
-
-<trans' : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
-<trans' a b c p q with (<evd a b p) | (<evd b c q)
-<trans' a b c p q | d , (refl , β) | e , (refl , β2) rewrite
+<trans : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
+<trans a b c p q with (<evd a b p) | (<evd b c q)
+<trans a b c p q | d , (refl , β) | e , (refl , β2) rewrite
   (inv (+assoc a d e))
   | inv (+zero a)
   | inv (+assoc zero a (d + e))
   | +zero (a + (d + e))
   | +comm a (d + e)
   | <plus zero (d + e) a
-  = {!!}
+  = +nonzero d e β β2
 
 min : F → F → F
 min a b with (a < b)
@@ -81,7 +91,7 @@ min-def1 : (a b c : F)
   → min a b < c ≡ true
 min-def1 a b c p with (a < b)??
 min-def1 a b c p | inl x rewrite x = p
-min-def1 a b c p | inr x rewrite x = {!!}
+min-def1 a b c p | inr x rewrite x = ADMITTED
 
 min-def2 : (a b c : F)
   → b < c ≡ true
@@ -192,6 +202,9 @@ mean a b = half * (a + b)
       | <mult half a b <half
       = refl
 
+<mean-max' : (a b : F) → a < b ≡ true → a < mean a b ≡ true
+<mean-max' a b p rewrite <mean-max a b | p = refl
+
 <mean-min : (a b : F) → a < b ≡ mean a b < b
 <mean-min a b = lemma · ap (λ u → mean a b < u) (inv (halfsplit b))
   where
@@ -201,6 +214,9 @@ mean a b = half * (a + b)
       | <plus (half * a) (half * b) (half * b)
       | <mult half a b <half
       = refl
+
+<mean-min' : (a b : F) → a < b ≡ true → mean a b < b ≡ true
+<mean-min' a b p rewrite <mean-min a b | p = refl
 
 <mean-max-true : (a b : F) → a < b ≡ true → a < mean a b ≡ true
 <mean-max-true a b p rewrite inv p | inv (<mean-max a b) = refl
@@ -215,8 +231,8 @@ mean a b = half * (a + b)
 <sqless a b p with (a < b)??
 <sqless a b p | inl x = x
 <sqless a b p | inr x with (a * b < b * b)??
-<sqless a b p | inr x | inr y = {!!}
-<sqless a b p | inr x | inl y = {!!}
+<sqless a b p | inr x | inr y = ADMITTED
+<sqless a b p | inr x | inl y = ADMITTED
 -- Usando que (a < b) es decidible
 
 <*zero : (b : F) → b * zero < b ≡ true → zero < b ≡ true
@@ -227,8 +243,8 @@ mean a b = half * (a + b)
   → a * a < b * b ≡ true
 <sqcrec a b p with (zero < a)??
 <sqcrec a b p | inl x with (zero < b)??
-<sqcrec a b p | inl x | inl y = <trans (a * a) (b * a) (b * b) {!<mult a b a!} {!!}
-<sqcrec a b p | inl x | inr y = {!!}
+<sqcrec a b p | inl x | inl y = <trans (a * a) (b * a) (b * b) ADMITTED ADMITTED
+<sqcrec a b p | inl x | inr y = ADMITTED
 <sqcrec a b p | inr x rewrite
   <zero a x
   | *zero zero
@@ -298,29 +314,29 @@ F-lemma5 : (y' z' y z f : F)
   → y * z ≡ f
   → y' * z' < f ≡ true
 F-lemma5 y' z' y z .(y * z) α β refl with (zero < y')??
-F-lemma5 y' z' y z .(y * z) α β refl | inl x = <trans (y' * z') (y' * z) (y * z) {!!} {!!}
-F-lemma5 y' z' y z .(y * z) α β refl | inr x = {!!} -- <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
+F-lemma5 y' z' y z .(y * z) α β refl | inl x = <trans (y' * z') (y' * z) (y * z) ADMITTED ADMITTED
+F-lemma5 y' z' y z .(y * z) α β refl | inr x = ADMITTED -- <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
   where
     sublemma1 : y' * z' < y * z' ≡ true
-    sublemma1 = {!!}
+    sublemma1 = ADMITTED
 
     sublemma2 : y * z' < y * z ≡ true
-    sublemma2 = {!!}
+    sublemma2 = ADMITTED
 
 
 F-lemma6 : (a g g' : F)
   → a < g * g ≡ true
   → a < g' * g' ≡ true
   → a < g * g' ≡ true
-F-lemma6 = {!!}
+F-lemma6 = ADMITTED
 
 F-lemma7 : (a b c : F)
   → a * b < c ≡ true
   → Σ F (λ s → (zero < s ≡ true) × ((a + s) * b ≡ c))
-F-lemma7 a b c p = {!!}
+F-lemma7 a b c p = ADMITTED
 
 F-lemma8 : (a b : F) → min a b * min a b < a * b ≡ true
-F-lemma8 = {!!}
+F-lemma8 a b = ADMITTED
 
 --------------------------------------------------------
 --------------------------------------------------------
@@ -534,3 +550,76 @@ loc-rational : (f : F) → Locator (rat f)
 loc-rational f q with (f < q)??
 loc-rational f q | inl x = inl x
 loc-rational f q | inr x rewrite x = inr λ y → true≢false (inv y)
+
+locate : (r : ℝ⁺) → Locator r → (q : F) → Bool
+locate r loc q with loc q
+locate r loc q | inl x = true
+locate r loc q | inr x = false
+
+
+loc-sqrt2 : Locator (sqrt (rat (one + one)))
+loc-sqrt2 q with (one + one < q * q)??
+loc-sqrt2 q | inl x = inl (mean (one + one) (q * q) ,,
+  (<mean-max' (one + one) (mult-dyadic q q) x , <mean-min' (dyadic 2 0 refl) (q * q) x)
+  )
+loc-sqrt2 q | inr x = inr λ α →
+  Ex-elim α (λ _ → λ ()) λ { (f , (u , v)) →
+  lemma (one + one) f (q * q) u v x
+  }
+  where
+    lemma : ∀ a b c
+      → a < b ≡ true
+      → b < c ≡ true
+      → a < c ≡ false
+      -----------------
+      → ⊥
+    lemma a b c p q r rewrite (<trans a b c p q) = true≢false r
+
+
+
+
+-- Example
+sqrt2 : ℝ⁺
+sqrt2 = sqrt (rat (one + one))
+
+data List (A : Set) : Set where
+  []   : List A
+  _∷_ : A → List A → List A  
+infixr 45 _∷_
+
+postulate
+  Bit : Set
+  O : Bit
+  I : Bit
+
+locateBit : (r : ℝ⁺) → Locator r → (q : F) → Bit
+locateBit r loc q with loc q
+locateBit r loc q | inl x = O
+locateBit r loc q | inr x = I
+
+digits : (r : ℝ⁺) → Locator r → (steps : ℕ) → (base ε : F) → List Bit
+digits r loc ℕ.zero base ε = locateBit r loc (base + ε) ∷ []
+digits r loc (ℕ.succ n) base ε with locate r loc (base + ε)
+digits r loc (ℕ.succ n) base ε | true = O ∷ digits r loc n base (half * ε)
+digits r loc (ℕ.succ n) base ε | false = I ∷ digits r loc n (base + ε) (half * ε)
+
+
+-- agda --compile Reals.agda --ghc-flag=-dynamic && ./Reals
+open import Agda.Builtin.IO
+
+postulate
+  Unit : Set
+  printBit : Bit → IO Unit
+  printBitList : List Bit → IO Unit  
+
+{-# COMPILE GHC List = data [] ([] | (:)) #-}
+{-# COMPILE GHC Unit = type () #-}
+{-# COMPILE GHC Bit = type Int #-}
+{-# COMPILE GHC I = 1 #-}
+{-# COMPILE GHC O = 0 #-}
+{-# COMPILE GHC printBit = Prelude.print #-}
+{-# COMPILE GHC printBitList = Prelude.print #-}
+
+main : IO Unit
+main = printBitList (digits sqrt2 loc-sqrt2 10 one half)
+-- [0,1,1,0,1,0,1,0,0,0,0,0]

@@ -1,9 +1,10 @@
-{-# OPTIONS --rewriting #-}
+{-# OPTIONS --without-K #-}
 
 module Base where
 
 record ⊤ : Set where
   instance constructor tt
+{-# BUILTIN UNIT ⊤ #-}
 
 data ⊥ : Set where
 

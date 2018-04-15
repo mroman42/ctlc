@@ -4,8 +4,11 @@ open import Base
 module Booleans where
 
 data Bool : Set where
-  true : Bool
-  false : Bool
+  false true : Bool
+{-# BUILTIN BOOL  Bool  #-}
+{-# BUILTIN FALSE false #-}
+{-# BUILTIN TRUE  true  #-}
+
 
 _?? : (b : Bool) → (b ≡ true) ⊎ (b ≡ false)
 true ?? = inl refl
