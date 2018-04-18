@@ -26,13 +26,15 @@ open import Dyadics renaming
   ; ltone to <one
   ; dec≡ to dec-eq
   ; add-assoc to +assoc
-  ; ltplus to <plus'
-  ; ltmult to <mult
-  ; dpositivity to <positivity
   ; ltevd to <evd
   ; mult-assoc to *assoc
   ; mp-distr to *distr)
-
+open import Dyadics-Ordering renaming
+  ( ltplus to <plus'
+  ; ltmult to <mult
+  ; dpositivity to <positivity
+  )
+  
 
 _+_ : F → F → F
 _+_ = add-dyadic
@@ -58,7 +60,7 @@ postulate
   → zero < a ≡ true
   → zero < b ≡ true
   → zero < a + b ≡ true
-+nonzero a b p q = ADMITTED
++nonzero a b p q = {!!}
   
 
 <trans : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
@@ -308,14 +310,20 @@ F-lemma4 : (u f r : F)
   → u < f * f ≡ true
 F-lemma4 u f r p q = <trans u (r * r) (f * f) p (<sqcrec r f q)
 
+
 F-lemma5 : (y' z' y z f : F)
   → y' < y ≡ true
   → z' < z ≡ true
   → y * z ≡ f
   → y' * z' < f ≡ true
-F-lemma5 y' z' y z .(y * z) α β refl with (zero < y')??
-F-lemma5 y' z' y z .(y * z) α β refl | inl x = <trans (y' * z') (y' * z) (y * z) ADMITTED ADMITTED
-F-lemma5 y' z' y z .(y * z) α β refl | inr x = ADMITTED -- <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
+F-lemma5 y' z' y z .(y * z) α β refl with (zero < y')?? | (zero < z)??
+F-lemma5 y' z' y z .(y * z) α β refl | inl x | inl v =
+  <trans (y' * z') (y' * z) (y * z) (<mult y' z' z x · β) lemma
+  where
+    lemma : y' * z < y * z ≡ true
+    lemma rewrite *comm y' z | *comm y z | <mult z y' y v = α
+F-lemma5 y' z' y z .(y * z) α β refl | inl x | inr v = {!!}
+F-lemma5 y' z' y z .(y * z) α β refl | inr x | w = <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
   where
     sublemma1 : y' * z' < y * z' ≡ true
     sublemma1 = ADMITTED
