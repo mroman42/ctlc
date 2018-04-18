@@ -74,7 +74,7 @@ succ n * m = m + (n * m)
 *rsucc : ∀ n m → n * succ m ≡ (n * m) + n
 *rsucc zero m = refl
 *rsucc (succ n) m rewrite
-  (*rsucc n m)
+  *rsucc n m
   | +assoc m (n * m) n
   | +rsucc (n * m) n
   | +assoc m (n * m) (succ n)
@@ -300,6 +300,15 @@ iszero-not-mult : ∀ a b
 iszero-not-mult zero b () q
 iszero-not-mult (succ a) zero p ()
 iszero-not-mult (succ a) (succ b) p q = refl  
+
+<iszero : ∀ n → 0 < n ≡ true → iszero n ≡ false
+<iszero zero = λ ()
+<iszero (succ n) = λ _ → refl
+
+iszero< : ∀ n → iszero n ≡ false → 0 < n ≡ true
+iszero< zero ()
+iszero< (succ n) p = refl
+
 
 <mult-inj : ∀ n m k → iszero k ≡ false → k * n < k * m ≡ n < m
 <mult-inj n m zero ()
