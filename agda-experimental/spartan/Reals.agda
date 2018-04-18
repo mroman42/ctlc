@@ -8,13 +8,13 @@ open import Equality
 open import Prop
 open import Naturals using (ℕ)
 
-
-open import Dyadics renaming
+open import Dyadics using (half) renaming
   ( D to F
   ; zer to zero
   ; oned to one
-  ; add to add-dyadic
-  ; mult to mult-dyadic
+  ; _+d_ to _+_
+  ; _*d_ to _*_
+  ; _<d_ to _<_
   ; add-comm to +comm
   ; add-zero to +zero
   ; addhalfhalf to +half
@@ -23,45 +23,45 @@ open import Dyadics renaming
   ; mult-one to *one
   ; lthalf to <half
   ; ltzero to <zero
+  ; ltzeroref to <zeroref
   ; ltone to <one
+  ; twod to two
   ; dec≡ to dec-eq
   ; add-assoc to +assoc
-  ; ltevd to <evd
   ; mult-assoc to *assoc
+  ; mustbezero to mustbezero
   ; mp-distr to *distr)
-open import Dyadics-Ordering renaming
+open import Dyadics-Ordering using () renaming
   ( ltplus to <plus'
   ; ltmult to <mult
   ; dpositivity to <positivity
+  ; ltevd to <evd
+  ; leevd to <eevd
+  ; +nonzero to +nonzero
   )
-  
-
-_+_ : F → F → F
-_+_ = add-dyadic
-
-_*_ : F → F → F
-_*_ = mult-dyadic
-
-_<_ : F → F → Bool
-_<_ = lt
-
-infixl 30 _+_
-infixl 35 _*_
-infix 6 _<_
 
 <plus : (a b c : F) → (a + c) < (b + c) ≡ a < b
 <plus a b c rewrite +comm a c | +comm b c = <plus' c a b
 
-postulate
-  -- Ordered field
-  <sqbetween : (a b : F) → a < b ≡ true → Σ F (λ c → (a < c * c ≡ true) × (c * c < b ≡ true))
 
-+nonzero : (a b : F)
+<sqbetween : (a b : F) → a < b ≡ true → Σ F (λ c → (a < c * c ≡ true) × (c * c < b ≡ true))
+<sqbetween a b = {!!}
+
++nonzero2 : (a b : F)
   → zero < a ≡ true
   → zero < b ≡ true
   → zero < a + b ≡ true
-+nonzero a b p q = {!!}
-  
++nonzero2 a b p _ = +nonzero a b p
+
+*nonzero : (a b : F)
+  → zero < a ≡ true
+  → zero < b ≡ true
+  → zero < a * b ≡ true
+*nonzero a b p q = {!!}
+
+
+
+
 
 <trans : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
 <trans a b c p q with (<evd a b p) | (<evd b c q)
@@ -72,7 +72,32 @@ postulate
   | +zero (a + (d + e))
   | +comm a (d + e)
   | <plus zero (d + e) a
-  = +nonzero d e β β2
+  = +nonzero2 d e β β2
+
+<etrans : (a b c : F)
+  → a < b ≡ true
+  → a < c ≡ false
+  → c < b ≡ true
+<etrans a b c p q = {!!}
+
+<ltrans : (a b c : F)
+  → a < b ≡ false
+  → c < b ≡ true
+  ------------------
+  → c < a ≡ true
+<ltrans a b c = {!!}
+
+<plussmt : (a c : F) → a + c < c ≡ false
+<plussmt a c = {!!}
+
+<negation : (a b : F) → a < b ≡ true → b < a ≡ false
+<negation a b p = {!!}
+
+
+cantbezero : (a b : F) → a < b ≡ true → zero < b ≡ true
+cantbezero a b p with <evd a b p
+... | c , (α , β) rewrite inv α = <ltrans (a + c) c zero (<plussmt a c) β
+
 
 min : F → F → F
 min a b with (a < b)
@@ -93,7 +118,7 @@ min-def1 : (a b c : F)
   → min a b < c ≡ true
 min-def1 a b c p with (a < b)??
 min-def1 a b c p | inl x rewrite x = p
-min-def1 a b c p | inr x rewrite x = ADMITTED
+min-def1 a b c p | inr x rewrite x = <etrans a c b p x
 
 min-def2 : (a b c : F)
   → b < c ≡ true
@@ -168,7 +193,6 @@ min-or P a b pa pb | inr x rewrite x = pb
     lemma2 : c + b < c + d ≡ true
     lemma2 rewrite +comm c b | +comm c d | <plus b d c | q = refl
 
-
 <plus+zero : ∀ a b → a < a + b ≡ zero < b
 <plus+zero a b rewrite
   inv (+zero a)
@@ -233,9 +257,15 @@ mean a b = half * (a + b)
 <sqless a b p with (a < b)??
 <sqless a b p | inl x = x
 <sqless a b p | inr x with (a * b < b * b)??
-<sqless a b p | inr x | inr y = ADMITTED
-<sqless a b p | inr x | inl y = ADMITTED
--- Usando que (a < b) es decidible
+<sqless a b p | inr x | inr y with (zero < a)??
+... | inl z rewrite inv (<mult a a b z) = lemma
+  where
+    lemma : a * a < a * b ≡ true
+    lemma = <ltrans (a * b) (b * b) (a * a) y p
+... | inr z rewrite mustbezero a z | mustbezero b x | p = refl
+<sqless a b p | inr x | inl y with (zero < b)??
+... | inl z rewrite *comm a b | <mult b a b z = y
+... | inr z rewrite mustbezero b z = exfalso (<zeroref (a * a) p)
 
 <*zero : (b : F) → b * zero < b ≡ true → zero < b ≡ true
 <*zero b q rewrite *comm b zero | (*zero b) = q
@@ -245,8 +275,13 @@ mean a b = half * (a + b)
   → a * a < b * b ≡ true
 <sqcrec a b p with (zero < a)??
 <sqcrec a b p | inl x with (zero < b)??
-<sqcrec a b p | inl x | inl y = <trans (a * a) (b * a) (b * b) ADMITTED ADMITTED
-<sqcrec a b p | inl x | inr y = ADMITTED
+<sqcrec a b p | inl x | inl y = <trans (a * a) (b * a) (b * b) lemma2 lemma1
+  where
+    lemma1 : b * a < b * b ≡ true
+    lemma1 rewrite <mult b a b y = p
+    lemma2 : a * a < b * a ≡ true
+    lemma2 rewrite *comm b a | <mult a a b x = p
+<sqcrec a b p | inl x | inr y rewrite mustbezero b y = exfalso (<zeroref a p)
 <sqcrec a b p | inr x rewrite
   <zero a x
   | *zero zero
@@ -322,29 +357,48 @@ F-lemma5 y' z' y z .(y * z) α β refl | inl x | inl v =
   where
     lemma : y' * z < y * z ≡ true
     lemma rewrite *comm y' z | *comm y z | <mult z y' y v = α
-F-lemma5 y' z' y z .(y * z) α β refl | inl x | inr v = {!!}
-F-lemma5 y' z' y z .(y * z) α β refl | inr x | w = <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
+F-lemma5 y' z' y z .(y * z) α β refl | inl x | inr v = exfalso (lemma β v)
+  where
+    lemma : z' < z ≡ true → F.dyadic 0 0 refl < z ≡ false → ⊥
+    lemma p q = <zeroref z' (<ltrans zero z z' q p)
+F-lemma5 y' z' y z .(y * z) α β refl | inr x | inl q rewrite
+  mustbezero y' x
+  | *zero z'
+  = *nonzero y z α q
+F-lemma5 y' z' y z .(y * z) α β refl | inr x | inr q = <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
   where
     sublemma1 : y' * z' < y * z' ≡ true
-    sublemma1 = ADMITTED
-
+    sublemma1 rewrite mustbezero z q = exfalso (<zeroref z' β)
     sublemma2 : y * z' < y * z ≡ true
-    sublemma2 = ADMITTED
-
+    sublemma2 rewrite mustbezero y' x | <mult y z' z α = β
 
 F-lemma6 : (a g g' : F)
   → a < g * g ≡ true
   → a < g' * g' ≡ true
   → a < g * g' ≡ true
-F-lemma6 = ADMITTED
+F-lemma6 a g g' p q with (g < g')??
+F-lemma6 a g g' p q | inl x with (zero < g)??
+F-lemma6 a g g' p q | inl x | inl x₁ = <trans a (g * g) (g * g') p (<mult g g g' x₁ · x)
+F-lemma6 a g g' p q | inl x | inr x₁ rewrite mustbezero g x₁ = exfalso (<zeroref a p)
+F-lemma6 a g g' p q | inr x with (zero < g')??
+F-lemma6 a g g' p q | inr x | inl x₁ rewrite inv (<mult g' g g' x₁) | *comm g g'
+  = <ltrans (g' * g) (g' * g') a x q
+F-lemma6 a g g' p q | inr x | inr x₁ rewrite mustbezero g' x₁ | *comm g zero | *zero g = q
 
 F-lemma7 : (a b c : F)
   → a * b < c ≡ true
   → Σ F (λ s → (zero < s ≡ true) × ((a + s) * b ≡ c))
-F-lemma7 a b c p = ADMITTED
+F-lemma7 a b c p = {!!}
 
-F-lemma8 : (a b : F) → min a b * min a b < a * b ≡ true
-F-lemma8 a b = ADMITTED
+F-lemma8 : (a b : F)
+  →  a * b < min a b * min a b  ≡ false
+F-lemma8 a b with (a < b)??
+F-lemma8 a b | inl x with (zero < a)??
+F-lemma8 a b | inl x | inl y rewrite x | <mult a b a y = <negation a b x
+F-lemma8 a b | inl x | inr y rewrite x | mustbezero a y | *zero b = refl
+F-lemma8 a b | inr x with (zero < b)??
+... | inl z rewrite x | *comm a b | <mult b a b z = x
+... | inr z rewrite x | *comm a b | mustbezero b z | *zero a = refl
 
 --------------------------------------------------------
 --------------------------------------------------------
@@ -522,6 +576,10 @@ sqrt*linv a = real-eq (sqrt a *ᵣ sqrt a) a lemma lemma2
       (β , (c ,, (c ,, (((r ,, (n , α)) , (r ,, (n , α))) , refl
       )))))}}
 
+cutnonzero : (a : ℝ⁺) → (f : F) → ℝ⁺.cut a f → zero < f ≡ true
+cutnonzero a f p = Ex-elim (round1 {{a}} f p) uip λ { (r , (β , _)) → cantbezero r f β }
+
+
 sqrt*rinv : ∀ a → sqrt (a *ᵣ a) ≡ a
 sqrt*rinv a = real-eq (sqrt (a *ᵣ a)) a lemma lemma2
   where
@@ -531,7 +589,7 @@ sqrt*rinv a = real-eq (sqrt (a *ᵣ a)) a lemma lemma2
       Ex-elim α1 (isprop {{a}} f) λ { (y , α2) →
       Ex-elim α2 (isprop {{a}} f) λ { (z , ((γ1 , γ2) , refl)) →
       round2 {{a}} f (min y z ,,
-        ( <sqless (min y z) f (<trans (min y z * min y z) (y * z) (f * f) (F-lemma8 y z) β)
+        ( <sqless (min y z) f (<etrans (y * z) (f * f) (min y z * min y z) β (F-lemma8 y z) )
         , min-or ((cut {{a}})) y z γ1 γ2)
         ) 
       }}}
@@ -568,7 +626,7 @@ locate r loc q | inr x = false
 loc-sqrt2 : Locator (sqrt (rat (one + one)))
 loc-sqrt2 q with (one + one < q * q)??
 loc-sqrt2 q | inl x = inl (mean (one + one) (q * q) ,,
-  (<mean-max' (one + one) (mult-dyadic q q) x , <mean-min' (dyadic 2 0 refl) (q * q) x)
+  (<mean-max' (one + one) (q * q) x , <mean-min' two (q * q) x)
   )
 loc-sqrt2 q | inr x = inr λ α →
   Ex-elim α (λ _ → λ ()) λ { (f , (u , v)) →

@@ -139,7 +139,14 @@ succ n < succ m = n < m
 <evd zero (succ m) p = succ m , (refl , refl)
 <evd (succ n) zero ()
 <evd (succ n) (succ m) p with <evd n m p
-<evd (succ n) (succ m) p | k , (α , β) = k , ((ap succ α) , β)
+... | k , (α , β) = k , ((ap succ α) , β)
+
+<nevd : (n m : ℕ) → n < m ≡ false → Σ ℕ (λ k → m + k ≡ n)
+<nevd zero zero p = 0 , refl
+<nevd zero (succ m) ()
+<nevd (succ n) zero p = succ n , refl
+<nevd (succ n) (succ m) p with <nevd n m p
+... | k , α = k , succ-inj-l (m + k) n α
 
 <zero : ∀ n → 0 < n ≡ false → n ≡ 0
 <zero zero p = refl
@@ -309,6 +316,9 @@ iszero< : ∀ n → iszero n ≡ false → 0 < n ≡ true
 iszero< zero ()
 iszero< (succ n) p = refl
 
+zero<false : ∀ n → zero < n ≡ false → n ≡ 0
+zero<false zero = λ _ → refl
+zero<false (succ n) = λ ()
 
 <mult-inj : ∀ n m k → iszero k ≡ false → k * n < k * m ≡ n < m
 <mult-inj n m zero ()
