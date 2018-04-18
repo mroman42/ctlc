@@ -4,9 +4,6 @@ module Dyadics where
 
 open import Naturals
 
-postulate
-  ADMITTED : {A : Set} → A
-
 
 normalized : ℕ → ℕ → Bool
 normalized n e = or (odd n) (iszero e)
@@ -275,7 +272,6 @@ add-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
           (n * exp2 e' + n' * exp2 e) * exp2 (pow$ (mkd n e) + pow$ (mkd n' e'))
         lemma = *inj k _ _ α1 (*inj k' _ _ α1'
           (lemma2 k k' n e n' e' _ (pow$ (mkd n e)) _ (pow$ (mkd n' e')) α2 α2' α3 α3'))
-        -- Escribir y demostrar la versión más general posible
 
 mult-mk : ∀ n e n' e' → mult (mkd n e) (mkd n' e') ≡ mkd (n * n') (e + e')
 mult-mk n e n' e' with (mk-const n e) | (mk-const n' e')
@@ -419,8 +415,27 @@ mp-distr (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
       lemma :
         n * (n₁ * exp2 e₂ + n₂ * exp2 e₁) * exp2 (e + e₁ + (e + e₂)) ≡
         (n * n₁ * exp2 (e + e₂) + n * n₂ * exp2 (e + e₁)) * exp2 (e + (e₁ + e₂))
-      lemma = ADMITTED
-
+      lemma rewrite
+        inv (+assoc e e₁ (e + e₂))
+        | exp2plus e (e₁ + (e + e₂))
+        | *distr n (n₁ * exp2 e₂) (n₂ * exp2 e₁)
+        | *assoc (n * (n₁ * exp2 e₂) + n * (n₂ * exp2 e₁)) (exp2 e) (exp2 (e₁ + (e + e₂)))
+        | *comm (n * (n₁ * exp2 e₂) + n * (n₂ * exp2 e₁)) (exp2 e)
+        | *distr (exp2 e) (n * (n₁ * exp2 e₂)) (n * (n₂ * exp2 e₁))
+        | *assoc n n₁ (exp2 e₂)
+        | *assoc n n₂ (exp2 e₁)
+        | *assoc (exp2 e) (n * n₁) (exp2 e₂)
+        | *assoc (exp2 e) (n * n₂) (exp2 e₁)
+        | *comm (exp2 e) (n * n₁)
+        | *comm (exp2 e) (n * n₂)
+        | inv (*assoc (n * n₁) (exp2 e) (exp2 e₂))
+        | inv (*assoc (n * n₂) (exp2 e) (exp2 e₁))        
+        | inv (exp2plus e e₂)
+        | inv (exp2plus e e₁)
+        | +assoc e₁ e e₂
+        | +comm e₁ e
+        | +assoc e e₁ e₂
+        = refl
 
 -- Decidable equality
 dec≡ : (a b : D) → (a ≡ b) ⊎ ¬ (a ≡ b)
@@ -460,48 +475,13 @@ ltzero (dyadic n e x) p rewrite *runit n | <zero n p = d≡ refl
 ltone : lt zer oned ≡ true
 ltone = refl
 
-ltmk : (n e n' e' : ℕ) → lt (mkd n e) (mkd n' e') ≡ n * exp2 e' < n' * exp2 e
-ltmk n e n' e' with mk-const n e | mk-const n' e'
-ltmk n e n' e' | k , (α , (β , γ)) | k' , (α' , (β' , γ')) rewrite
-  lt$ (mkd n e) (mkd n' e')
-  | inv (<mult-inj
-    (num$ (mkd n e) * exp2 (pow$ (mkd n' e')))
-    (num$ (mkd n' e') * exp2 (pow$ (mkd n e)))
-    k α)
-  | *assoc k (num$ (mkd n e)) (exp2 (pow$ (mkd n' e')))
-  | inv β
-  | *assoc k (num$ (mkd n' e')) (exp2 (pow$ (mkd n e)))
-  | *comm k (num$ (mkd n' e'))
-  | inv (*assoc (num$ (mkd n' e')) k (exp2 (pow$ (mkd n e))))
-  | inv γ
-  | inv (<mult-inj (n * exp2 (pow$ (mkd n' e'))) (num$ (mkd n' e') * exp2 e) k' α')
-  | *assoc k' n (exp2 (pow$ (mkd n' e')))
-  | *comm k' n
-  | inv (*assoc n k' (exp2 (pow$ (mkd n' e'))))
-  | inv γ'
-  | *assoc k' (num$ (mkd n' e')) (exp2 e)
-  | inv β'
-  = refl
 
-ltplus : (a b c : D) → lt (add a b) (add a c) ≡ lt b c
-ltplus (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) rewrite
-  ltmk (n * exp2 e₁ + n₁ * exp2 e) (e + e₁) (n * exp2 e₂ + n₂ * exp2 e) (e + e₂)
-  = {!!}
 
-ltmult : (a b c : D) → lt zer a ≡ true → lt (mult a b) (mult a c) ≡ lt b c
-ltmult (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) p rewrite
-  *runit n
-  | ltmk (n * n₁) (e + e₁) (n * n₂) (e + e₂)
-  = {!!}
-
-dpositivity : (a b : D) → lt zer a ≡ true → lt zer (add a b) ≡ true
-dpositivity (dyadic n e x) (dyadic n₁ e₁ x₁) p = ADMITTED
+postulate
+  ADMITTED : {A : Set} → A
 
 
 ltevd : (a b : D) → lt a b ≡ true → Σ D (λ c → (add a c ≡ b) × (lt zer c ≡ true))
-ltevd (dyadic n zero x) (dyadic n₁ zero x₁) p with <evd n n₁ ADMITTED
-ltevd (dyadic n zero x) (dyadic n₁ zero x₁) p | k , (α , β) rewrite
-  *runit k
-  = dyadic k 0 (iszero-normalized k zero refl) , (ADMITTED , ADMITTED)
-ltevd (dyadic n zero x) (dyadic n₁ (succ e₁) x₁) p = ADMITTED
+ltevd (dyadic n zero x) (dyadic n₁ e₁ x₁) p with <evd (n * exp2 e₁) (n₁ * 1) p
+... | (k , (α , β)) = dyadic k e₁ ADMITTED , ADMITTED
 ltevd (dyadic n (succ e) x) (dyadic n₁ e₁ x₁) p = ADMITTED
