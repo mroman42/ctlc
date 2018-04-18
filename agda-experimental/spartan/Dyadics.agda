@@ -163,27 +163,30 @@ zer = mkd 0 0
 oned : D
 oned = mkd 1 0
 
+twod : D
+twod = mkd 2 0
+
 half : D
 half = mkd 1 1
 
-add : D → D → D
-add (dyadic n e x) (dyadic n' e' x') = mkd (n * exp2 e' + n' * exp2 e) (e + e')
+_+d_ : D → D → D
+(_+d_) (dyadic n e x) (dyadic n' e' x') = mkd (n * exp2 e' + n' * exp2 e) (e + e')
 
-add' : D → D → D
-add' a b = mkd (n * exp2 e' + n' * exp2 e) (e + e')
+_+d'_ : D → D → D
+(_+d'_) a b = mkd (n * exp2 e' + n' * exp2 e) (e + e')
   where
     n = num$ a
     e = pow$ a
     n' = num$ b
     e' = pow$ b
 
-mult : D → D → D
-mult (dyadic n e x) (dyadic n' e' x') = mkd (n * n') (e + e')
+_*d_ : D → D → D
+(_*d_) (dyadic n e x) (dyadic n' e' x') = mkd (n * n') (e + e')
 
-add-numden : (a b : D) → add a b ≡ mkd (num$ a * exp2 (pow$ b) + num$ b * exp2 (pow$ a)) (pow$ a + pow$ b)
+add-numden : (a b : D) → (_+d_) a b ≡ mkd (num$ a * exp2 (pow$ b) + num$ b * exp2 (pow$ a)) (pow$ a + pow$ b)
 add-numden (dyadic n e x) (dyadic n₁ e₁ x₁) = refl
 
-mult-numden : (a b : D) → mult a b ≡ mkd (num$ a * num$ b) (pow$ a + pow$ b)
+mult-numden : (a b : D) → (_*d_) a b ≡ mkd (num$ a * num$ b) (pow$ a + pow$ b)
 mult-numden (dyadic n e x) (dyadic n₁ e₁ x₁) = refl
 
 mk-const : ∀ n e → Σ ℕ (λ k → (iszero k ≡ false) × ((n ≡ k * num$ (mkd n e)) × (exp2 e ≡ k * exp2 (pow$ (mkd n e)))))
@@ -216,7 +219,7 @@ mk-const n (succ e) | inr x | m , α | k' , (β1 , (β2 , β3)) = 2 * k' , (lemm
       = refl
 
 
-add-mk : ∀ n e n' e' → add (mkd n e) (mkd n' e') ≡ mkd (n * exp2 e' + n' * exp2 e) (e + e')
+add-mk : ∀ n e n' e' → (_+d_) (mkd n e) (mkd n' e') ≡ mkd (n * exp2 e' + n' * exp2 e) (e + e')
 add-mk n e n' e' with (mk-const n e) | (mk-const n' e')
 add-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
   add-numden (mkd n e) (mkd n' e') =
@@ -273,7 +276,7 @@ add-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
         lemma = *inj k _ _ α1 (*inj k' _ _ α1'
           (lemma2 k k' n e n' e' _ (pow$ (mkd n e)) _ (pow$ (mkd n' e')) α2 α2' α3 α3'))
 
-mult-mk : ∀ n e n' e' → mult (mkd n e) (mkd n' e') ≡ mkd (n * n') (e + e')
+mult-mk : ∀ n e n' e' → (_*d_) (mkd n e) (mkd n' e') ≡ mkd (n * n') (e + e')
 mult-mk n e n' e' with (mk-const n e) | (mk-const n' e')
 mult-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
   mult-numden (mkd n e) (mkd n' e')
@@ -313,7 +316,7 @@ mult-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrit
         | *comm n' n
         = refl
         
-add-comm : ∀ a b → add a b ≡ add b a
+add-comm : ∀ a b → (_+d_) a b ≡ b +d a
 add-comm (dyadic n e x) (dyadic n₁ e₁ x₁) = d≡ (cross≡ _ (e + e₁) _ (e₁ + e) lemma)
   where
     lemma : (n * exp2 e₁ + n₁ * exp2 e) * exp2 (e₁ + e) ≡ (n₁ * exp2 e + n * exp2 e₁) * exp2 (e + e₁)
@@ -322,7 +325,7 @@ add-comm (dyadic n e x) (dyadic n₁ e₁ x₁) = d≡ (cross≡ _ (e + e₁) _ 
       | +comm (n₁ * exp2 e) (n * exp2 e₁)
       = refl
 
-mult-comm : ∀ a b → mult a b ≡ mult b a
+mult-comm : ∀ a b → (_*d_) a b ≡ (_*d_) b a
 mult-comm (dyadic n e x) (dyadic n₁ e₁ x₁) = d≡ (cross≡ (n * n₁) (e + e₁) (n₁ * n) (e₁ + e) lemma)
   where
     lemma : n * n₁ * exp2 (e₁ + e) ≡ n₁ * n * exp2 (e + e₁)
@@ -331,19 +334,19 @@ mult-comm (dyadic n e x) (dyadic n₁ e₁ x₁) = d≡ (cross≡ (n * n₁) (e 
       | +comm e e₁
       = refl
 
-add-zero : ∀ a → add zer a ≡ a
+add-zero : ∀ a → (_+d_) zer a ≡ a
 add-zero (dyadic n e x) rewrite mkd-norm n e x | *runit n = d≡ refl
 
-addhalfhalf : add half half ≡ oned
+addhalfhalf : (_+d_) half half ≡ oned
 addhalfhalf = d≡ refl
 
-mult-zero : ∀ a → mult zer a ≡ zer
+mult-zero : ∀ a → (_*d_) zer a ≡ zer
 mult-zero (dyadic n e x) = d≡ (cross≡ zero e zero zero refl)
 
-mult-one : ∀ a → mult oned a ≡ a
+mult-one : ∀ a → (_*d_) oned a ≡ a
 mult-one (dyadic n e x) rewrite +rzero n = inv (mkd-norm n e x)
 
-add-assoc : ∀ a b c → add a (add b c) ≡ add (add a b) c
+add-assoc : ∀ a b c → (_+d_) a ((_+d_) b c) ≡ (_+d_) ((_+d_) a b) c
 add-assoc (dyadic n e x) (dyadic n' e' _) (dyadic n'' e'' x'')
   rewrite
     mkd-norm n e x
@@ -384,7 +387,7 @@ add-assoc (dyadic n e x) (dyadic n' e' _) (dyadic n'' e'' x'')
            | *assoc n' (exp2 e'') (exp2 e)
            = refl
 
-mult-assoc : ∀ a b c → mult a (mult b c) ≡ mult (mult a b) c
+mult-assoc : ∀ a b c → (_*d_) a ((_*d_) b c) ≡ (_*d_) ((_*d_) a b) c
 mult-assoc (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
   rewrite
     mkd-norm n e x
@@ -400,7 +403,7 @@ mult-assoc (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
         = refl
 
 
-mp-distr : ∀ a b c → mult a (add b c) ≡ add (mult a b) (mult a c)
+mp-distr : ∀ a b c → (_*d_) a ((_+d_) b c) ≡ (_+d_) ((_*d_) a b) ((_*d_) a c)
 mp-distr (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
   rewrite
   mkd-norm n e x
@@ -460,28 +463,30 @@ lt' a b = n * (exp2 e') < n' * (exp2 e)
     n' = num$ b
     e' = pow$ b
 
-lt : D → D → Bool
-lt (dyadic n e x) (dyadic n' e' x') = n * (exp2 e') < n' * (exp2 e)
+_<d_ : D → D → Bool
+_<d_ (dyadic n e x) (dyadic n' e' x') = n * (exp2 e') < n' * (exp2 e)
 
-lt$ : ∀ a b → lt a b ≡ (num$ a) * (exp2 (pow$ b)) < (num$ b) * (exp2 (pow$ a))
+lt$ : ∀ a b → a <d b ≡ (num$ a) * (exp2 (pow$ b)) < (num$ b) * (exp2 (pow$ a))
 lt$ (dyadic n e x) (dyadic n₁ e₁ x₁) = refl
 
-lthalf : lt zer half ≡ true
+lthalf : zer <d half ≡ true
 lthalf = refl
 
-ltzero : (a : D) → lt zer a ≡ false → a ≡ zer
+ltzero : (a : D) → zer <d a ≡ false → a ≡ zer
 ltzero (dyadic n e x) p rewrite *runit n | <zero n p = d≡ refl
 
-ltone : lt zer oned ≡ true
+ltone : zer <d oned ≡ true
 ltone = refl
 
+ltzeroref : (a : D) → ¬ (a <d zer ≡ true)
+ltzeroref (dyadic n e x) = λ y → true≢false (inv y)
 
+mustbezero : (a : D) → zer <d a ≡ false → a ≡ zer
+mustbezero (dyadic n e x) p rewrite *runit n | zero<false n p = lemma e x
+  where
+    lemma : ∀ e x → dyadic 0 e x ≡ dyadic 0 0 refl
+    lemma e x rewrite mkd-norm 0 e x | mkdzero e = refl
 
-postulate
-  ADMITTED : {A : Set} → A
-
-
-ltevd : (a b : D) → lt a b ≡ true → Σ D (λ c → (add a c ≡ b) × (lt zer c ≡ true))
-ltevd (dyadic n zero x) (dyadic n₁ e₁ x₁) p with <evd (n * exp2 e₁) (n₁ * 1) p
-... | (k , (α , β)) = dyadic k e₁ ADMITTED , ADMITTED
-ltevd (dyadic n (succ e) x) (dyadic n₁ e₁ x₁) p = ADMITTED
+infixl 30 _+d_
+infixl 35 _*d_
+infix 6 _<d_

@@ -4,7 +4,7 @@ open import Naturals
 open import Dyadics
 
 
-ltmk : (n e n' e' : ℕ) → lt (mkd n e) (mkd n' e') ≡ n * exp2 e' < n' * exp2 e
+ltmk : (n e n' e' : ℕ) → (mkd n e) <d (mkd n' e') ≡ n * exp2 e' < n' * exp2 e
 ltmk n e n' e' with mk-const n e | mk-const n' e'
 ltmk n e n' e' | k , (α , (β , γ)) | k' , (α' , (β' , γ')) rewrite
   lt$ (mkd n e) (mkd n' e')
@@ -27,7 +27,7 @@ ltmk n e n' e' | k , (α , (β , γ)) | k' , (α' , (β' , γ')) rewrite
   | inv β'
   = refl
 
-ltplus : (a b c : D) → lt (add a b) (add a c) ≡ lt b c
+ltplus : (a b c : D) → (a +d b) <d (a +d c) ≡ b <d c
 ltplus (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) rewrite
   ltmk (n * exp2 e₁ + n₁ * exp2 e) (e + e₁) (n * exp2 e₂ + n₂ * exp2 e) (e + e₂)
   | *comm (n * exp2 e₁ + n₁ * exp2 e) (exp2 (e + e₂))
@@ -62,7 +62,7 @@ ltplus (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) rewrite
   | *comm (exp2 e₁) n₂
   = refl
 
-ltmult : (a b c : D) → lt zer a ≡ true → lt (mult a b) (mult a c) ≡ lt b c
+ltmult : (a b c : D) → zer <d a ≡ true → (a *d b) <d (a *d c) ≡ b <d c
 ltmult (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) p rewrite
   *runit n
   | ltmk (n * n₁) (e + e₁) (n * n₂) (e + e₂)
@@ -80,7 +80,7 @@ ltmult (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) p rewrite
   | <mult-inj (n₁ * exp2 e₂) (n₂ * exp2 e₁) (exp2 e) (exp2-notzero e)
   = refl
 
-dpositivity : (a b : D) → lt zer a ≡ true → lt zer (add a b) ≡ true
+dpositivity : (a b : D) → zer <d a ≡ true → zer <d (a +d b) ≡ true
 dpositivity (dyadic n e x) (dyadic n₁ e₁ x₁) p
   rewrite
     mkd-norm 0 0 refl
@@ -90,3 +90,48 @@ dpositivity (dyadic n e x) (dyadic n₁ e₁ x₁) p
     = iszero< (n * exp2 e₁ + n₁ * exp2 e)
        (iszero-not-plus-r (n * exp2 e₁) (n₁ * exp2 e)
          (iszero-not-mult n (exp2 e₁) (<iszero n p) (exp2-notzero e₁)))
+
+postulate
+  ADMITTED : {A : Set} → A
+
+
+ltevd : (a b : D) → a <d b ≡ true → Σ D (λ c → (a +d c ≡ b) × (zer <d c ≡ true))
+ltevd (dyadic n e x) (dyadic n' e' x') p with <evd (n * exp2 e') (n' * exp2 e) p
+... | k , (α , β) = mkd k (e + e') , (lemma , lemma2)
+  where
+    lemma : dyadic n e x +d mkd k (e + e') ≡ dyadic n' e' x'
+    lemma rewrite
+      mkd-norm n e x
+      | add-mk n e k (e + e')
+      | mkd-norm n' e' x'
+      = dmk≡ (n * exp2 (e + e') + k * exp2 e) (e + (e + e')) n' e' sublemma
+      where
+        sublemma : (n * exp2 (e + e') + k * exp2 e) * exp2 e' ≡ n' * exp2 (e + (e + e'))
+        sublemma = ADMITTED
+
+    lemma2 : dyadic 0 0 refl <d mkd k (e + e') ≡ true
+    lemma2 rewrite ltmk 0 0 k (e + e') | *runit k = β
+
+leevd : (a b : D) → a <d b ≡ false → Σ D (λ c → b +d c ≡ a)
+leevd (dyadic n e x) (dyadic n₁ e₁ x₁) p with <nevd (n * exp2 e₁) (n₁ * exp2 e) p
+... | k , α = mkd k (e + e₁) , lemma
+  where
+    lemma : dyadic n₁ e₁ x₁ +d mkd k (e + e₁) ≡ dyadic n e x
+    lemma rewrite
+      mkd-norm n₁ e₁ x₁
+      | add-mk n₁ e₁ k (e + e₁)
+      | mkd-norm n e x
+      = dmk≡ (n₁ * exp2 (e + e₁) + k * exp2 e₁) (e₁ + (e + e₁)) n e sublemma
+      where
+        sublemma : (n₁ * exp2 (e + e₁) + k * exp2 e₁) * exp2 e ≡ n * exp2 (e₁ + (e + e₁))
+        sublemma = ADMITTED
+
+
++nonzero : (a b : D)
+  → zer <d a ≡ true
+  → zer <d a +d b ≡ true
++nonzero (dyadic n₁ e₁ x₁) (dyadic n e x) p rewrite
+  ltmk 0 0 (n₁ * exp2 e + n * exp2 e₁) (e₁ + e)
+  | *runit (n₁ * exp2 e + n * exp2 e₁)
+  | *runit n₁
+  = ADMITTED
