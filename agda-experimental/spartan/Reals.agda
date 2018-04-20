@@ -38,6 +38,9 @@ open import Dyadics-Ordering using () renaming
   ; ltevd to <evd
   ; leevd to <eevd
   ; +nonzero to +nonzero
+  ; *nonzero to *nonzero
+  ; alwayspos to <apos
+  ; ε-lemma to ε-lemma
   )
 
 <plus : (a b c : F) → (a + c) < (b + c) ≡ a < b
@@ -46,20 +49,6 @@ open import Dyadics-Ordering using () renaming
 
 <sqbetween : (a b : F) → a < b ≡ true → Σ F (λ c → (a < c * c ≡ true) × (c * c < b ≡ true))
 <sqbetween a b = {!!}
-
-+nonzero2 : (a b : F)
-  → zero < a ≡ true
-  → zero < b ≡ true
-  → zero < a + b ≡ true
-+nonzero2 a b p _ = +nonzero a b p
-
-*nonzero : (a b : F)
-  → zero < a ≡ true
-  → zero < b ≡ true
-  → zero < a * b ≡ true
-*nonzero a b p q = {!!}
-
-
 
 
 
@@ -72,32 +61,80 @@ open import Dyadics-Ordering using () renaming
   | +zero (a + (d + e))
   | +comm a (d + e)
   | <plus zero (d + e) a
-  = +nonzero2 d e β β2
+  = +nonzero d e β
 
-<etrans : (a b c : F)
-  → a < b ≡ true
-  → a < c ≡ false
-  → c < b ≡ true
-<etrans a b c p q = {!!}
+<plussmt : (a c : F) → a + c < c ≡ false
+<plussmt a c rewrite
+  inv (+zero c)
+  | +assoc a zero c
+  | <plus (a + zero) zero c
+  | +comm a zero
+  | +zero a
+  = <apos a
+
+<smtplus : (a b : F) → zero < b ≡ true → a < a + b ≡ true
+<smtplus a b p rewrite
+  inv (+zero a)
+  | +comm zero a
+  | inv (+assoc a zero b)
+  | +comm a zero
+  | +comm a (zero + b)
+  | <plus zero (zero + b) a
+  | +zero b
+  | p
+  = refl
 
 <ltrans : (a b c : F)
   → a < b ≡ false
   → c < b ≡ true
   ------------------
   → c < a ≡ true
-<ltrans a b c = {!!}
-
-<plussmt : (a c : F) → a + c < c ≡ false
-<plussmt a c = {!!}
+<ltrans a b c p q with <evd c b q | <eevd a b p
+<ltrans a b c p q | k , (α , β) | h , γ rewrite
+  inv γ
+  | inv α
+  | inv (+assoc c k h)
+  = <smtplus c (k + h) (<positivity k h β)
 
 <negation : (a b : F) → a < b ≡ true → b < a ≡ false
 <negation a b p = {!!}
-
 
 cantbezero : (a b : F) → a < b ≡ true → zero < b ≡ true
 cantbezero a b p with <evd a b p
 ... | c , (α , β) rewrite inv α = <ltrans (a + c) c zero (<plussmt a c) β
 
+<etrans : (a b c : F)
+  → a < b ≡ true
+  → a < c ≡ false
+  → c < b ≡ true
+<etrans a b c p q with <eevd a c q | <evd a b p
+... | (d , α) | (k , (β , γ)) rewrite
+  inv β
+  | inv α
+  | inv (+zero c)
+  | +comm zero c
+  | inv (+assoc c zero d)
+  | +zero d
+  | +comm c zero = lemma
+  where
+    lemma : zero + c < c + d + k ≡ true
+    lemma rewrite
+      inv (+assoc c d k)
+      | +comm c (d + k)
+      | <plus zero (d + k) c
+      = lemma2
+      where
+        lemma' : d < d + k ≡ F.dyadic 0 0 refl < k
+        lemma' rewrite
+          +comm d k
+          | inv (+zero d)
+          | +assoc k zero d
+          | <plus zero (k + zero) d
+          | +comm k zero
+          | +zero k
+          = refl
+        lemma2 : zero < d + k ≡ true
+        lemma2 rewrite cantbezero d (d + k) (lemma' · γ) = refl
 
 min : F → F → F
 min a b with (a < b)
@@ -387,8 +424,10 @@ F-lemma6 a g g' p q | inr x | inr x₁ rewrite mustbezero g' x₁ | *comm g zero
 
 F-lemma7 : (a b c : F)
   → a * b < c ≡ true
-  → Σ F (λ s → (zero < s ≡ true) × ((a + s) * b ≡ c))
-F-lemma7 a b c p = {!!}
+  → Σ F (λ s → (zero < s ≡ true) × ((a + s) * b < c ≡ true))
+F-lemma7 a b c p with <evd (a * b) c p 
+... | (k , (α , β)) with ε-lemma b k β
+... | (s , (u , v)) = s , (v , {!!})
 
 F-lemma8 : (a b : F)
   →  a * b < min a b * min a b  ≡ false
@@ -548,7 +587,8 @@ a *ᵣ b = record
      Ex-elim x2 Ex-isProp λ { (y , x3) →
      Ex-elim x3 Ex-isProp λ { (z , ((β1 , β2) , refl)) →
      Σ-elim (F-lemma7 y z f α) λ { (s , (ω , κ)) →
-     y + s ,, (z ,, (((round2 {{a}} (y + s) (y ,, (((<plus+zero y s) · ω) , β1))) , β2) , κ))
+     y + s ,, {!!}
+     -- (z ,, (((round2 {{a}} (y + s) (y ,, (((<plus+zero y s) · ω) , β1))) , β2) , κ))
      }}}}
   }
 

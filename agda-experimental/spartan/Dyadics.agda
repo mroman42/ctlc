@@ -189,7 +189,8 @@ add-numden (dyadic n e x) (dyadic n₁ e₁ x₁) = refl
 mult-numden : (a b : D) → (_*d_) a b ≡ mkd (num$ a * num$ b) (pow$ a + pow$ b)
 mult-numden (dyadic n e x) (dyadic n₁ e₁ x₁) = refl
 
-mk-const : ∀ n e → Σ ℕ (λ k → (iszero k ≡ false) × ((n ≡ k * num$ (mkd n e)) × (exp2 e ≡ k * exp2 (pow$ (mkd n e)))))
+mk-const : ∀ n e →
+  Σ ℕ (λ k → (iszero k ≡ false) × ((n ≡ k * num$ (mkd n e)) × (exp2 e ≡ k * exp2 (pow$ (mkd n e)))))
 mk-const n zero = 1 , (refl , ((inv (+rzero n)) , refl))
 mk-const n (succ e) with (odd n)??
 mk-const n (succ e) | inl x = 1 , (refl , ((inv (+rzero n)) , (inv (+rzero (exp2 e + exp2 e)))))

@@ -1,3 +1,5 @@
+{-# OPTIONS --allow-unsolved-metas #-} 
+
 module Dyadics-Ordering where
 
 open import Naturals
@@ -91,9 +93,6 @@ dpositivity (dyadic n e x) (dyadic n₁ e₁ x₁) p
        (iszero-not-plus-r (n * exp2 e₁) (n₁ * exp2 e)
          (iszero-not-mult n (exp2 e₁) (<iszero n p) (exp2-notzero e₁)))
 
-postulate
-  ADMITTED : {A : Set} → A
-
 
 ltevd : (a b : D) → a <d b ≡ true → Σ D (λ c → (a +d c ≡ b) × (zer <d c ≡ true))
 ltevd (dyadic n e x) (dyadic n' e' x') p with <evd (n * exp2 e') (n' * exp2 e) p
@@ -107,7 +106,7 @@ ltevd (dyadic n e x) (dyadic n' e' x') p with <evd (n * exp2 e') (n' * exp2 e) p
       = dmk≡ (n * exp2 (e + e') + k * exp2 e) (e + (e + e')) n' e' sublemma
       where
         sublemma : (n * exp2 (e + e') + k * exp2 e) * exp2 e' ≡ n' * exp2 (e + (e + e'))
-        sublemma = ADMITTED
+        sublemma = {!!}
 
     lemma2 : dyadic 0 0 refl <d mkd k (e + e') ≡ true
     lemma2 rewrite ltmk 0 0 k (e + e') | *runit k = β
@@ -124,7 +123,7 @@ leevd (dyadic n e x) (dyadic n₁ e₁ x₁) p with <nevd (n * exp2 e₁) (n₁ 
       = dmk≡ (n₁ * exp2 (e + e₁) + k * exp2 e₁) (e₁ + (e + e₁)) n e sublemma
       where
         sublemma : (n₁ * exp2 (e + e₁) + k * exp2 e₁) * exp2 e ≡ n * exp2 (e₁ + (e + e₁))
-        sublemma = ADMITTED
+        sublemma = {!!}
 
 
 +nonzero : (a b : D)
@@ -134,4 +133,41 @@ leevd (dyadic n e x) (dyadic n₁ e₁ x₁) p with <nevd (n * exp2 e₁) (n₁ 
   ltmk 0 0 (n₁ * exp2 e + n * exp2 e₁) (e₁ + e)
   | *runit (n₁ * exp2 e + n * exp2 e₁)
   | *runit n₁
-  = ADMITTED
+  = {!!}
+
+*nonzero : (a b : D)
+  → zer <d a ≡ true
+  → zer <d b ≡ true  
+  → zer <d a *d b ≡ true
+*nonzero (dyadic n₁ e₁ x₁) (dyadic n e x) p q rewrite
+  ltmk 0 0 (n₁ * n) (e₁ + e)
+  | *runit n
+  | *runit n₁
+  | *runit (n₁ * n)
+  | inv (*rzero n₁)
+  | inv (*rzero n)
+  | *assoc n₁ n 0
+  | inv (*runit (n₁ * n))
+  | inv (*assoc (n₁ * n) 1 0)
+  | <mult-inj 0 1 (n₁ * n) {!!}
+  = refl
+
+alwayspos : (a : D) → a <d zer ≡ false
+alwayspos (dyadic n e x) = refl
+
+ε-lemma : (a b : D)
+  → zer <d b ≡ true
+  → Σ D (λ s → (a *d s <d b ≡ true) × (zer <d s ≡ true))
+ε-lemma (dyadic n e x) (dyadic zero e₁ x₁) ()
+ε-lemma (dyadic n e x) (dyadic (succ n₁) e₁ x₁) p = mkd 1 (e₁ + n) , (lemma1 , lemma2)
+  where
+    lemma1 : dyadic n e x *d mkd 1 (e₁ + n) <d dyadic (succ n₁) e₁ x₁ ≡ true
+    lemma1 rewrite
+      mkd-norm n e x
+      | mkd-norm (succ n₁) e₁ x₁
+      | mult-mk n e 1 (e₁ + n)
+      | ltmk (n * 1) (e + (e₁ + n)) (succ n₁) e₁
+      | *runit n
+      = {!!}
+    lemma2 : zer <d mkd 1 (e₁ + n) ≡ true
+    lemma2 = {!!}
