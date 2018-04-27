@@ -375,6 +375,29 @@ exp2-notzero : (n : ℕ) → iszero (exp2 n) ≡ false
 exp2-notzero zero = refl
 exp2-notzero (succ n) = iszero-not-plus-r (exp2 n) (exp2 n) (exp2-notzero n)
 
+<bound+ : ∀ a b c → a < b ≡ true → a < b + c ≡ true
+<bound+ a b zero p rewrite +rzero b = p
+<bound+ a b (succ c) p rewrite +rsucc b c = <trans a (b + c) (succ (b + c)) (<bound+ a b c p) (v (b + c))
+  where
+    v : ∀ a → a < succ a ≡ true
+    v zero = refl
+    v (succ a) = v a
+
+<bound* : ∀ a b c → 0 < c ≡ true → a < b ≡ true → a < b * c ≡ true
+<bound* a b zero ()
+<bound* a b (succ c) p q rewrite *rsucc b c | +comm (b * c) b = <bound+ a b (b * c) q
+
+<boundsucc : ∀ a b → a < b ≡ true → a < succ b ≡ true
+<boundsucc a b p rewrite inv (+rone b) = <bound+ a b 1 p
+
+<boundpred : ∀ a b → succ a < b ≡ true → a < b ≡ true
+<boundpred a zero p = p
+<boundpred a (succ b) p = <boundsucc a b p
+
+exp2>zero : (n : ℕ) → 0 < exp2 n ≡ true
+exp2>zero zero = refl
+exp2>zero (succ n) = <bound+ zero (exp2 n) (exp2 n) (exp2>zero n)
+
 a+a≡2a : ∀ a →
   a + a ≡ 2 * a
 a+a≡2a zero = refl
@@ -550,3 +573,320 @@ ndec≡ (succ a) zero = inr (λ ())
 ndec≡ (succ a) (succ b) with ndec≡ a b
 ndec≡ (succ a) (succ b) | inl x = inl (ap succ x)
 ndec≡ (succ a) (succ b) | inr x = inr λ x₁ → x (succ-inj-r a b x₁)
+
+
+eq≤ : ∀ a b → a ≡ b → b < a ≡ false
+eq≤ zero .0 refl = refl
+eq≤ (succ a) .(succ a) refl = eq≤ a a refl
+
+eq≤succ : ∀ a b
+  → b < a ≡ false
+  → succ b < a ≡ false
+eq≤succ zero b p = refl
+eq≤succ (succ a) zero ()
+eq≤succ (succ a) (succ b) p = eq≤succ a b p
+
+eq< : ∀ a b
+  → a < succ b ≡ true
+  → ¬ (a ≡ b)
+  → a < b ≡ true
+eq< zero zero refl q = exfalso (q refl)
+eq< zero (succ b) p q = refl
+eq< (succ a) zero () q
+eq< (succ a) (succ b) p q = eq< a b p λ x → q (ap succ x)
+
+<succ : ∀ a → a < succ a ≡ true
+<succ zero = refl
+<succ (succ a) = <succ a
+
+-- Squares and truncated square root
+_² : ℕ → ℕ
+n ² = n * n
+
+nsqr : ℕ → ℕ
+nsqr zero = zero
+nsqr (succ n) with ndec≡ (succ (nsqr n) * succ (nsqr n)) (succ n)
+nsqr (succ n) | inl x = succ (nsqr n)
+nsqr (succ n) | inr x = nsqr n
+
+nsqr-lbound : (n : ℕ) → n < (nsqr n)² ≡ false
+nsqr-lbound zero = refl
+nsqr-lbound (succ n) with ndec≡ (succ (nsqr n) * succ (nsqr n)) (succ n)
+nsqr-lbound (succ n) | inl x = eq≤ _ n (succ-inj-r _ _ x)
+nsqr-lbound (succ n) | inr x = eq≤succ (nsqr n * nsqr n) n (nsqr-lbound n)
+
+nsqr-iszero : ∀ n → iszero n ≡ iszero (nsqr n)
+nsqr-iszero zero = refl
+nsqr-iszero (succ n) with ndec≡ (succ (nsqr n) * succ (nsqr n)) (succ n)
+nsqr-iszero (succ n) | inl x = refl
+nsqr-iszero (succ n) | inr x rewrite inv (nsqr-iszero n) with (iszero n)??
+... | inl x₁ rewrite (iszero-sound n x₁) = exfalso (x refl)
+... | inr x₁ = inv x₁
+
+nsqr-ubound : (n : ℕ) → n < (succ (nsqr n))² ≡ true
+nsqr-ubound zero = refl
+nsqr-ubound (succ n) with ndec≡ (succ (nsqr n) * succ (nsqr n)) (succ n)
+nsqr-ubound (succ n) | inl x with nsqr-ubound n
+... | w = <trans n (succ (nsqr n + nsqr n * succ (nsqr n)))
+  (succ (nsqr n + succ (succ (nsqr n + nsqr n * succ (succ (nsqr n))))))
+  w
+  (lemma n)
+  where
+    lemma : ∀ n →
+      nsqr n + nsqr n * succ (nsqr n) <
+      nsqr n + succ (succ (nsqr n + nsqr n * succ (succ (nsqr n))))
+      ≡ true
+    lemma zero = refl
+    lemma (succ m) rewrite
+      <plus (nsqr (succ m))
+        (nsqr (succ m) * succ (nsqr (succ m)))
+          (succ (succ (nsqr (succ m) + nsqr (succ m) * succ (succ (nsqr (succ m))))))
+      = <boundsucc (nsqr (succ m) * succ (nsqr (succ m)))
+         (succ (nsqr (succ m) + nsqr (succ m) * succ (succ (nsqr (succ m)))))
+        (<boundsucc (nsqr (succ m) * succ (nsqr (succ m)))
+          (nsqr (succ m) + nsqr (succ m) * succ (succ (nsqr (succ m))))
+        (lemma2 (succ m) refl))
+      where
+        lemma2 : ∀ n → iszero n ≡ false →
+          nsqr n * succ (nsqr n) <
+          nsqr n + nsqr n * succ (succ (nsqr n))
+          ≡ true
+        lemma2 n p rewrite
+          +comm (nsqr n) (nsqr n * succ (succ (nsqr n)))
+          = <bound+ (nsqr n * succ (nsqr n)) (nsqr n * succ (succ (nsqr n))) (nsqr n)
+            lemma3
+          where
+            lemma3 : nsqr n * succ (nsqr n) < nsqr n * succ (succ (nsqr n)) ≡ true
+            lemma3 rewrite
+              <mult-inj (succ (nsqr n)) (succ (succ (nsqr n))) (nsqr n) ((inv (nsqr-iszero n)) · p)
+              = <succ (nsqr n)
+nsqr-ubound (succ n) | inr x = eq< n
+  (nsqr n + nsqr n * succ (nsqr n)) (nsqr-ubound n) λ x₁ → x (inv (ap succ x₁))
+
+<+< : ∀ a b c d
+  → a < b ≡ true
+  → c < d ≡ true
+  → a + c < b + d ≡ true
+<+< zero b c d p q rewrite +comm b d = <bound+ c d b q
+<+< (succ a) b zero d p q rewrite +rzero a = <bound+ (succ a) b d p
+<+< (succ a) zero (succ c) d () q
+<+< (succ a) (succ b) (succ c) zero p ()
+<+< (succ a) (succ b) (succ c) (succ d) p q = <+< a b (succ c) (succ d) p q
+
+<sq : ∀ a b
+  → a < b ≡ true
+  → a ² < b ² ≡ true
+<sq zero zero p = p
+<sq zero (succ b) p = refl
+<sq (succ a) zero p = p
+<sq (succ a) (succ b) p rewrite
+  *comm a (succ a)
+  | *comm b (succ b)
+  = <+< a b (a + a * a) (b + b * b) p
+    (<+< a b (a * a) (b * b) p
+    (<sq a b p))
+
+sq-space : (u a : ℕ)
+  →  a ² < u ² ≡ false
+  →  a < u ≡ true
+  → ⊥
+sq-space zero a refl ()
+sq-space (succ u) a p q = true≢false (inv (<sq a (succ u) q) · p)
+
+
+eq<n : ∀ a b → a ≡ b → a < b ≡ false
+eq<n zero .0 refl = refl
+eq<n (succ a) .(succ a) refl = eq<n a a refl
+
+sqrbetween : (x y a k : ℕ)
+  → x + k ≡ y
+  → succ (a + a) < k ≡ true
+  → y < a ² ≡ true
+  → Σ ℕ (λ c → (x < c ² ≡ true) × (y < c ² ≡ false))
+sqrbetween x y zero k p q ()
+sqrbetween x y (succ a) k p q r with (y < a ²)??
+... | inl w = sqrbetween x y a k p lemma w
+  where
+    lemma : succ (a + a) < k ≡ true
+    lemma rewrite +rsucc a a = <boundpred (succ (a + a)) k (<boundpred (succ (succ (a + a))) k q)
+... | inr w with (x < a ²)??
+... | inl v = a , (v , w)
+... | inr v with (<nevd x (a ²) v)
+... | (l , α) rewrite (inv p) | inv α = exfalso
+  (true≢false (inv lemma2 · eq<n (a * a + 2 * a + 1) (succ a * succ a) (lemma3 a)))
+  where
+    lemma : a * a + l + 2 * a + 1 < succ (a + a * succ a) ≡ true
+    lemma = <trans (a * a + l + 2 * a + 1) (a * a + l + k)
+              (succ (a + a * succ a))
+              sublem
+              r 
+      where
+        sublem : a * a + l + (a + (a + zero)) + 1 < a * a + l + k ≡ true
+        sublem rewrite
+          inv (+assoc ((a * a) + l) (a + (a + zero)) 1)
+          | <plus ((a * a) + l) ((a + (a + zero)) + 1) k
+          | +rone (a + (a + 0))
+          | +rzero a
+          | +rsucc a a
+          = <boundpred (succ (a + a)) k (<boundpred (succ (succ (a + a))) k q)
+
+    lemma2 : a * a + 2 * a + 1 < succ a * succ a ≡ true
+    lemma2 with <evd (a * a + l + (a + (a + zero)) + 1) (succ (a + a * succ a)) lemma
+    ... | (j , (β , γ)) rewrite
+      inv β
+      | inv (+assoc (a * a) l (a + (a + 0)))
+      | +rzero a
+      | +comm l (a + a)
+      | inv (+assoc (a * a) (a + a + l) 1)
+      | inv (+assoc (a * a) (a + a + l + 1) j)
+      | inv (+assoc (a * a) (a + a) 1)
+      | <plus (a * a) (a + a + 1) (a + a + l + 1 + j)
+      | inv (+assoc ((a + a) + l) 1 j)
+      | inv (+assoc (a + a) l (succ j))
+      | <plus (a + a) 1 (l + succ j)
+      | +rsucc l j
+      | +comm l j
+      = <bound+ zero j l γ
+
+    lemma3 : ∀ a → a * a + 2 * a + 1 ≡ succ a * succ a
+    lemma3 a rewrite
+      *distr (succ a) 1 a
+      | *runit a
+      | +rzero a
+      | +comm (a * a + (a + a)) 1
+      | +comm (a * a) (a + a)
+      | +assoc a a (a * a)
+      = refl
+
+a<exp2a : ∀ a → a < exp2 a ≡ true
+a<exp2a zero = refl
+a<exp2a (succ a) with a<exp2a a
+a<exp2a (succ zero) | w = refl
+a<exp2a (succ (succ a)) | w =
+  <trans (succ (succ a)) (succ (exp2 a + exp2 a)) (exp2 a + exp2 a + (exp2 a + exp2 a))
+    w lemma
+    where
+      lemma2 : ∀ a → 1 < exp2 a + exp2 a ≡ true
+      lemma2 zero = refl
+      lemma2 (succ a) = <bound+ 1 (exp2 a + exp2 a) (exp2 a + exp2 a) (lemma2 a)
+      lemma : succ (exp2 a + exp2 a) < exp2 a + exp2 a + (exp2 a + exp2 a) ≡ true
+      lemma rewrite
+        +comm 1 (exp2 a + exp2 a)
+        | <plus (exp2 a + exp2 a) 1 (exp2 a + exp2 a)
+        = lemma2 a
+
+dexp : ∀ n → 1 < exp2 n + exp2 n ≡ true
+dexp zero = refl
+dexp (succ n) = <bound+ 1 (exp2 n + exp2 n) (exp2 n + exp2 n) (dexp n)
+
+asymp : ∀ a k
+  → iszero k ≡ false
+  → Σ ℕ (λ n → succ ((exp2 n * a) + (exp2 n * a)) < exp2 (n + n) * k ≡ true)
+asymp a k p = 2 * (succ a) , lemma (succ (a + succ (a + zero))) refl (lemma0 (a + succ (a + 0)) k lemma0' p)
+  where
+    lemma0' : iszero (a + succ (a + 0)) ≡ false
+    lemma0' rewrite +rsucc a (a + 0) = refl
+    
+    lemma0 : ∀ m k →
+      iszero m ≡ false →
+      iszero k ≡ false → succ m < (exp2 m + exp2 m) * k ≡ true
+    lemma0 zero zero q ()
+    lemma0 zero (succ k) q p rewrite +rsucc k (k + zero) = refl
+    lemma0 (succ m) k q p rewrite
+      *comm (exp2 m + exp2 m + (exp2 m + exp2 m)) k
+      | *distr k (exp2 m + exp2 m) (exp2 m + exp2 m)
+      | *comm k (exp2 m + exp2 m)
+      = <+< 1 ((exp2 m + exp2 m) * k) (succ m) ((exp2 m + exp2 m) * k)
+        (<bound* 1 (exp2 m + exp2 m) k (iszero< k p) (dexp m))
+        (<bound* (succ m) (exp2 m + exp2 m) k (iszero< k p) (s1 m))
+        where
+          s1 : ∀ m → succ m < exp2 m + exp2 m ≡ true
+          s1 zero = refl
+          s1 (succ m) = <+< 1 (exp2 m + exp2 m) (succ m) (exp2 m + exp2 m) (dexp m) (s1 m)
+          
+    lemma : ∀ n
+      → iszero n ≡ false
+      → 2 * (succ a) < exp2 n * k ≡ true
+      → succ (exp2 n * a + exp2 n * a) < exp2 (n + n) * k ≡ true
+    lemma n α p rewrite
+      +rzero a
+      | exp2plus n n
+      | inv (*distr (exp2 n) a a)
+      = <trans (succ (exp2 n * (a + a))) (exp2 n * succ (succ a + a))
+          (exp2 n * exp2 n * k)
+          sub
+          sub'         
+       where
+         sub' : exp2 n * succ (succ (a + a)) < exp2 n * exp2 n * k ≡ true
+         sub' rewrite
+           inv (*assoc (exp2 n) (exp2 n) k)
+           | <mult-inj (succ (succ (a + a))) (exp2 n * k) (exp2 n) (exp2-notzero n)
+           | +rsucc a a
+           = p
+
+         sub : succ (exp2 n * (a + a)) < exp2 n * succ (succ (a + a)) ≡ true
+         sub rewrite
+           *distr (exp2 n) 1 (succ (a + a))
+           = <+< 1 (exp2 n * 1) (exp2 n * (a + a)) (exp2 n * succ (a + a))
+             (s1 n α)
+             s2
+           where
+             s1' : ∀ n
+               → iszero n ≡ false
+               → 1 < exp2 n ≡ true
+             s1' zero ()
+             s1' (succ n) β rewrite *runit (exp2 n + exp2 n) = dexp n
+           
+             s1 : ∀ n
+               → iszero n ≡ false
+               → 1 < exp2 n * 1 ≡ true
+             s1 n rewrite *runit (exp2 n) = s1' n
+             
+             s2 : exp2 n * (a + a) < exp2 n * succ (a + a) ≡ true
+             s2 rewrite
+               <mult-inj (a + a) (succ (a + a)) (exp2 n) (exp2-notzero n)
+               = <succ (a + a)
+
+diffsq : ∀ x y
+  → x < y ≡ true
+  → Σ ℕ (λ n → Σ ℕ (λ c → (exp2 (2 * n) * x < c ² ≡ true) × (exp2 (2 * n) * y < c ² ≡ false)))
+diffsq x y p with <evd x y p
+diffsq x y p | k , (q , α) with asymp (succ y) k (<iszero k α)
+... | n , w with sqrbetween (exp2 (2 * n) * x) (exp2 (2 * n) * y) (exp2 n * (succ y)) (exp2 (2 * n) * k)
+  s1 s2 s3
+  where
+    s1 : exp2 (n + (n + zero)) * x + exp2 (n + (n + zero)) * k ≡ exp2 (n + (n + zero)) * y
+    s1 rewrite inv (*distr (exp2 (n + (n + zero))) x k) | q
+      = refl
+    s2 : succ (exp2 n * (succ y) + exp2 n * (succ y)) < exp2 (n + (n + zero)) * k ≡ true
+    s2 rewrite
+      +rzero n
+      = w
+    s3 : exp2 (n + (n + zero)) * y < ((exp2 n * succ y) ²) ≡ true
+    s3 rewrite
+      *comm (succ y) (exp2 n)
+      | inv (*assoc (exp2 n) (succ y) (exp2 n * succ y))
+      | +rzero n
+      | exp2plus n n
+      | *assoc (succ y) (exp2 n) (succ y)
+      | *comm (succ y) (exp2 n)
+      | inv (*assoc (exp2 n) (exp2 n) y)
+      | <mult-inj (exp2 n * y) (exp2 n * succ y * succ y) (exp2 n) (exp2-notzero n)
+      | inv (*assoc (exp2 n) (succ y) (succ y))
+      | <mult-inj (y) (succ y * succ y) (exp2 n) (exp2-notzero n)
+      | <bound+ y (succ y) (y * succ y) (<succ y)
+      = refl
+... | v = n , v
+
+-- diffsq' : ∀ x y
+--   → succ x < y ≡ true
+--   → Σ ℕ (λ n → Σ ℕ (λ c → (exp2 (2 * n) * x < c ² ≡ true) × (c ² < exp2 (2 * n) * y ≡ true)))
+-- diffsq' x zero ()
+-- diffsq' x (succ y) p with (diffsq x y p)
+-- ... | n , (c , (α , β)) = n , (c , (α , {!!}))
+
+-- diffsq'' : ∀ x y
+--   → x < y ≡ true
+--   → Σ ℕ (λ n → Σ ℕ (λ c → (exp2 (2 * n) * x < c ² ≡ true) × (c ² < exp2 (2 * n) * y ≡ true)))
+-- diffsq'' x y p with diffsq' (2 * x) (2 * y) {!!}
+-- ... | w = {!!}

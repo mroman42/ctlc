@@ -1,5 +1,4 @@
-{-# OPTIONS --allow-unsolved-metas #-} 
-
+{-# OPTIONS --without-K #-}
 module Dyadics-Ordering where
 
 open import Naturals
@@ -106,7 +105,21 @@ ltevd (dyadic n e x) (dyadic n' e' x') p with <evd (n * exp2 e') (n' * exp2 e) p
       = dmk≡ (n * exp2 (e + e') + k * exp2 e) (e + (e + e')) n' e' sublemma
       where
         sublemma : (n * exp2 (e + e') + k * exp2 e) * exp2 e' ≡ n' * exp2 (e + (e + e'))
-        sublemma = {!!}
+        sublemma rewrite
+          exp2plus e e'
+          | *comm (exp2 e) (exp2 e')
+          | *assoc n (exp2 e') (exp2 e)
+          | *comm (n * exp2 e') (exp2 e)
+          | *comm k (exp2 e)
+          | inv (*distr (exp2 e) (n * exp2 e') k)
+          | α
+          | *assoc (exp2 e) n' (exp2 e)
+          | *comm (exp2 e) n'
+          | inv (*assoc (n' * exp2 e) (exp2 e) (exp2 e'))
+          | inv (exp2plus e e')
+          | inv (*assoc n' (exp2 e) (exp2 (e + e')))
+          | inv (exp2plus e (e + e'))
+          = refl
 
     lemma2 : dyadic 0 0 refl <d mkd k (e + e') ≡ true
     lemma2 rewrite ltmk 0 0 k (e + e') | *runit k = β
@@ -123,7 +136,21 @@ leevd (dyadic n e x) (dyadic n₁ e₁ x₁) p with <nevd (n * exp2 e₁) (n₁ 
       = dmk≡ (n₁ * exp2 (e + e₁) + k * exp2 e₁) (e₁ + (e + e₁)) n e sublemma
       where
         sublemma : (n₁ * exp2 (e + e₁) + k * exp2 e₁) * exp2 e ≡ n * exp2 (e₁ + (e + e₁))
-        sublemma = {!!}
+        sublemma rewrite
+          exp2plus e e₁
+          | *assoc n₁ (exp2 e) (exp2 e₁)
+          | *comm (n₁ * exp2 e) (exp2 e₁) 
+          | *comm k (exp2 e₁)
+          | inv (*distr (exp2 e₁) (n₁ * exp2 e) k)
+          | α
+          | *comm (exp2 e₁) (n * exp2 e₁)
+          | inv (*assoc (n * exp2 e₁) (exp2 e₁) (exp2 e))
+          | inv (exp2plus e₁ e)
+          | inv (*assoc n (exp2 e₁) (exp2 (e₁ + e)))
+          | inv (exp2plus e₁ (e₁ + e))
+          | +comm e₁ e
+          = refl
+
 
 
 +nonzero : (a b : D)
@@ -133,41 +160,149 @@ leevd (dyadic n e x) (dyadic n₁ e₁ x₁) p with <nevd (n * exp2 e₁) (n₁ 
   ltmk 0 0 (n₁ * exp2 e + n * exp2 e₁) (e₁ + e)
   | *runit (n₁ * exp2 e + n * exp2 e₁)
   | *runit n₁
-  = {!!}
-
-*nonzero : (a b : D)
-  → zer <d a ≡ true
-  → zer <d b ≡ true  
-  → zer <d a *d b ≡ true
-*nonzero (dyadic n₁ e₁ x₁) (dyadic n e x) p q rewrite
-  ltmk 0 0 (n₁ * n) (e₁ + e)
-  | *runit n
-  | *runit n₁
-  | *runit (n₁ * n)
-  | inv (*rzero n₁)
-  | inv (*rzero n)
-  | *assoc n₁ n 0
-  | inv (*runit (n₁ * n))
-  | inv (*assoc (n₁ * n) 1 0)
-  | <mult-inj 0 1 (n₁ * n) {!!}
-  = refl
+  = <bound+ 0 (n₁ * exp2 e) _ (<bound* zero n₁ (exp2 e) (exp2>zero e) p)
 
 alwayspos : (a : D) → a <d zer ≡ false
 alwayspos (dyadic n e x) = refl
 
-ε-lemma : (a b : D)
-  → zer <d b ≡ true
-  → Σ D (λ s → (a *d s <d b ≡ true) × (zer <d s ≡ true))
-ε-lemma (dyadic n e x) (dyadic zero e₁ x₁) ()
-ε-lemma (dyadic n e x) (dyadic (succ n₁) e₁ x₁) p = mkd 1 (e₁ + n) , (lemma1 , lemma2)
+<sqbt0 : ∀ c
+  → (zer <d c ≡ true)
+  → Σ D (λ u → (zer <d u ≡ true) × (u *d u <d c ≡ true))
+<sqbt0 (dyadic zero e x) ()
+<sqbt0 (dyadic (succ n) e x) p = mkd 1 (succ e) , (refl , lemma e)
   where
-    lemma1 : dyadic n e x *d mkd 1 (e₁ + n) <d dyadic (succ n₁) e₁ x₁ ≡ true
+    lemma : ∀ e → exp2 e + zero < (succ n) * (exp2 (succ e + succ e)) ≡ true
+    lemma e rewrite
+      +rzero (exp2 e)
+      | *comm (succ n) (exp2 (succ e + succ e))
+      | exp2plus e (succ e)
+      | inv (*distr (exp2 e) (exp2 (succ e)) (exp2 (succ e)))
+      | inv (*runit (exp2 e))
+      | inv (*assoc (exp2 e) 1 (exp2 e * 1 + exp2 e * 1 + (exp2 e * 1 + exp2 e * 1)))
+      | inv (*assoc (exp2 e) (exp2 e * 1 + exp2 e * 1 + (exp2 e * 1 + exp2 e * 1) + 0) (succ n))
+      | <mult-inj 1 ((exp2 e * 1 + exp2 e * 1 + (exp2 e * 1 + exp2 e * 1) + 0) * succ n) (exp2 e) (exp2-notzero e)
+      | *runit (exp2 e)
+      | +rzero (exp2 e + exp2 e + (exp2 e + exp2 e))
+      = sublemma e
+      where
+        slemma2 : ∀ a b c → 0 < c ≡ true → a < b ≡ true → a < b * c ≡ true
+        slemma2 a b zero () q
+        slemma2 a b (succ c) p q rewrite
+          *comm b (succ c)
+          = <bound+ a b (c * b) q
+      
+        sublemma : ∀ e → 1 < (exp2 (succ e) + exp2 (succ e)) * succ n ≡ true
+        sublemma e = slemma2 1 (exp2 e + exp2 e + (exp2 e + exp2 e)) (succ n) refl
+          (<bound+ 1 (exp2 e + exp2 e) (exp2 e + exp2 e) (u e))
+          where
+            u : ∀ e → 1 < exp2 e + exp2 e ≡ true
+            u zero = refl
+            u (succ e) = <bound+ 1 (exp2 e + exp2 e) (exp2 e + exp2 e) (u e)
+
+<sqbetween-integers : ∀ n x n' x'
+  → dyadic n 0 x <d dyadic n' 0 x' ≡ true
+  → Σ D (λ c → ((dyadic n 0 x) <d c *d c ≡ true) × ((dyadic n' 0 x') <d c *d c ≡ false))
+<sqbetween-integers n x n' x' p rewrite
+  *runit n
+  | *runit n'
+  with (diffsq n n' p)
+... | (m , (d , (u , v))) = mkd d m , (lemma1 , lemma2)
+  where
+    lemma1 : dyadic n 0 x <d mkd d m *d mkd d m ≡ true
     lemma1 rewrite
-      mkd-norm n e x
-      | mkd-norm (succ n₁) e₁ x₁
-      | mult-mk n e 1 (e₁ + n)
-      | ltmk (n * 1) (e + (e₁ + n)) (succ n₁) e₁
-      | *runit n
-      = {!!}
-    lemma2 : zer <d mkd 1 (e₁ + n) ≡ true
-    lemma2 = {!!}
+      mult-mk d m d m
+      | mkd-norm n 0 x
+      | ltmk n 0 (d * d) (m + m)
+      | *runit (d * d)
+      | *comm n (exp2 (m + m))
+      | +rzero m
+      = u
+    lemma2 : dyadic n' 0 x' <d mkd d m *d mkd d m ≡ false
+    lemma2 rewrite
+      mult-mk d m d m
+      | mkd-norm n' 0 x'
+      | ltmk n' 0 (d * d) (m + m)
+      | *runit (d * d)
+      | *comm n' (exp2 (m + m))
+      | +rzero m      
+      = v  
+
+lemma : ∀ n n₁ e e₁ → n * exp2 e₁ < n₁ * exp2 e ≡ true → 
+      exp2 e * exp2 e₁ * exp2 e₁ * n < exp2 e₁ * exp2 e * exp2 e * n₁ ≡ true
+lemma n n₁ e e₁ p rewrite
+  *comm (exp2 e₁) (exp2 e)
+  | inv (*assoc (exp2 e * exp2 e₁) (exp2 e₁) n)
+  | inv (*assoc (exp2 e * exp2 e₁) (exp2 e) n₁)
+  | inv (*assoc (exp2 e) (exp2 e₁) (exp2 e₁ * n))
+  | inv (*assoc (exp2 e) (exp2 e₁) (exp2 e * n₁))
+  | <mult-inj (exp2 e₁ * (exp2 e₁ * n)) (exp2 e₁ * (exp2 e * n₁)) (exp2 e) (exp2-notzero e)
+  | <mult-inj (exp2 e₁ * n) (exp2 e * n₁) (exp2 e₁) (exp2-notzero e₁)
+  | *comm (exp2 e₁) n
+  | *comm (exp2 e) n₁ 
+  = p      
+
+<sqbetween-almost : (a b : D)
+  → a <d b ≡ true
+  → Σ D (λ c → (a <d c *d c ≡ true) × (b <d c *d c ≡ false))
+<sqbetween-almost (dyadic n e x) (dyadic n₁ e₁ x₁) p
+  with diffsq (exp2 e * exp2 e₁ * exp2 e₁ * n) (exp2 e₁ * exp2 e * exp2 e * n₁) (lemma n n₁ e e₁ p)
+... | (ec , (c , (α , β))) = mkd c (e + e₁ + ec) , (lemma1 , lemma2)
+  where
+    lemma1 : dyadic n e x <d mkd c (e + e₁ + ec) *d mkd c (e + e₁ + ec) ≡ true
+    lemma1 rewrite
+      mult-mk c (e + e₁ + ec) c (e + e₁ + ec)
+      | mkd-norm n e x
+      | ltmk n e (c * c) (e + e₁ + ec + (e + e₁ + ec))
+      | +rzero ec
+      | *comm n (exp2 (e + e₁ + ec + (e + e₁ + ec)))
+      | *comm (c * c) (exp2 e)
+      | inv (+assoc e e₁ ec)
+      | inv (+assoc e (e₁ + ec) (e + (e₁ + ec)))
+      | exp2plus e (e₁ + ec + (e + (e₁ + ec)))
+      | inv (*assoc (exp2 e) (exp2 (e₁ + ec + (e + (e₁ + ec)))) n)
+      | <mult-inj (exp2 (e₁ + ec + (e + (e₁ + ec))) * n) (c * c) (exp2 e) (exp2-notzero e)
+      | +comm e₁ ec
+      | +assoc e ec e₁
+      | +comm e ec
+      | inv (+assoc ec e₁ (ec + e + e₁))
+      | +comm e₁ (ec + e + e₁)
+      | inv (+assoc (ec + e) e₁ e₁)
+      | inv (+assoc ec e (e₁ + e₁))
+      | +assoc ec ec (e + (e₁ + e₁))
+      | exp2plus (ec + ec) (e + (e₁ + e₁))
+      | exp2plus e (e₁ + e₁)
+      | exp2plus e₁ e₁
+      | *assoc (exp2 e) (exp2 e₁)  (exp2 e₁)
+      | inv (*assoc (exp2 (ec + ec)) (exp2 e * exp2 e₁ * exp2 e₁) n)
+      = α
+    lemma2 : dyadic n₁ e₁ x₁ <d mkd c (e + e₁ + ec) *d mkd c (e + e₁ + ec) ≡ false
+    lemma2 rewrite
+      mult-mk c (e + e₁ + ec) c (e + e₁ + ec)
+      | mkd-norm n₁ e₁ x₁
+      | ltmk n₁ e₁ (c * c) (e + e₁ + ec + (e + e₁ + ec))
+      | +comm e e₁
+      | inv (+assoc (e₁ + e) ec (e₁ + e + ec))
+      | inv (+assoc e₁ e (ec + (e₁ + e + ec)))
+      | exp2plus e₁ (e + (ec + (e₁ + e + ec)))
+      | *assoc n₁ (exp2 e₁) (exp2 (e + (ec + (e₁ + e + ec))))
+      | *comm n₁ (exp2 e₁)
+      | *comm (c * c) (exp2 e₁)
+      | inv (*assoc (exp2 e₁) n₁ (exp2 (e + (ec + (e₁ + e + ec)))))
+      | <mult-inj (n₁ * exp2 (e + (ec + (e₁ + e + ec)))) (c * c) (exp2 e₁) (exp2-notzero e₁)
+      | *comm n₁ (exp2 (e + (ec + (e₁ + e + ec))))
+      | +comm (e₁ + e) ec
+      | +assoc ec ec (e₁ + e)
+      | +assoc e (ec + ec)  (e₁ + e)
+      | +comm e (ec + ec)
+      | inv (+assoc (ec + ec) e (e₁ + e))
+      | exp2plus (ec + ec) (e + (e₁ + e))
+      | +assoc e e₁ e
+      | +comm e e₁
+      | exp2plus (e₁ + e) e
+      | exp2plus e₁ e
+      | +rzero ec
+      | *assoc (exp2 (ec + ec)) (exp2 e₁ * exp2 e * exp2 e) n₁
+      = β
+
+
+    

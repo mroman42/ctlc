@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K #-}
 module Dyadics-Properties where
 
 open import Base
@@ -29,7 +29,8 @@ open import Dyadics public using (half) renaming
   ; add-assoc to +assoc
   ; mult-assoc to *assoc
   ; mustbezero to mustbezero
-  ; mp-distr to *distr)
+  ; mp-distr to *distr
+  )
 open import Dyadics-Ordering public using () renaming
   ( ltplus to <plus'
   ; ltmult to <mult
@@ -37,18 +38,13 @@ open import Dyadics-Ordering public using () renaming
   ; ltevd to <evd
   ; leevd to <eevd
   ; +nonzero to +nonzero
-  ; *nonzero to *nonzero
   ; alwayspos to <apos
-  ; ε-lemma to ε-lemma
+  ; <sqbt0 to <sqbt0
+  ; <sqbetween-almost to <sqbetween-almost
   )
 
 <plus : (a b c : F) → (a + c) < (b + c) ≡ a < b
 <plus a b c rewrite +comm a c | +comm b c = <plus' c a b
-
-
-<sqbetween : (a b : F) → a < b ≡ true → Σ F (λ c → (a < c * c ≡ true) × (c * c < b ≡ true))
-<sqbetween a b = {!!}
-
 
 
 <trans : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
@@ -379,32 +375,6 @@ F-lemma4 : (u f r : F)
 F-lemma4 u f r p q = <trans u (r * r) (f * f) p (<sqcrec r f q)
 
 
-F-lemma5 : (y' z' y z f : F)
-  → y' < y ≡ true
-  → z' < z ≡ true
-  → y * z ≡ f
-  → y' * z' < f ≡ true
-F-lemma5 y' z' y z .(y * z) α β refl with (zero < y')?? | (zero < z)??
-F-lemma5 y' z' y z .(y * z) α β refl | inl x | inl v =
-  <trans (y' * z') (y' * z) (y * z) (<mult y' z' z x · β) lemma
-  where
-    lemma : y' * z < y * z ≡ true
-    lemma rewrite *comm y' z | *comm y z | <mult z y' y v = α
-F-lemma5 y' z' y z .(y * z) α β refl | inl x | inr v = exfalso (lemma β v)
-  where
-    lemma : z' < z ≡ true → F.dyadic 0 0 refl < z ≡ false → ⊥
-    lemma p q = <zeroref z' (<ltrans zero z z' q p)
-F-lemma5 y' z' y z .(y * z) α β refl | inr x | inl q rewrite
-  mustbezero y' x
-  | *zero z'
-  = *nonzero y z α q
-F-lemma5 y' z' y z .(y * z) α β refl | inr x | inr q = <trans (y' * z') (y * z') (y * z) sublemma1 sublemma2
-  where
-    sublemma1 : y' * z' < y * z' ≡ true
-    sublemma1 rewrite mustbezero z q = exfalso (<zeroref z' β)
-    sublemma2 : y * z' < y * z ≡ true
-    sublemma2 rewrite mustbezero y' x | <mult y z' z α = β
-
 F-lemma6 : (a g g' : F)
   → a < g * g ≡ true
   → a < g' * g' ≡ true
@@ -417,3 +387,10 @@ F-lemma6 a g g' p q | inr x with (zero < g')??
 F-lemma6 a g g' p q | inr x | inl x₁ rewrite inv (<mult g' g g' x₁) | *comm g g'
   = <ltrans (g' * g) (g' * g') a x q
 F-lemma6 a g g' p q | inr x | inr x₁ rewrite mustbezero g' x₁ | *comm g zero | *zero g = q
+
+
+<sqbetween : (a b : F)
+  → a < b ≡ true
+  → Σ F (λ c → (a < c * c ≡ true) × (c * c < b ≡ true))
+<sqbetween a b p with <sqbetween-almost a (mean a b) (inv (<mean-max a b) · p)
+... | c , (α , β) = c , (α , (<etrans (mean a b) b (c * c) (<mean-min' a b p) β))
