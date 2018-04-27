@@ -128,7 +128,7 @@ r+comm a b = real-eq (a +ᵣ b) (b +ᵣ a) (lemma a b) (lemma b a)
         sublemma x y f p rewrite +comm x y | p = refl
 
 
--- Every number has a square root.
+-- Every positive real has a square root.
 sqrt : ℝ⁺ → ℝ⁺
 sqrt a = record
   { cut = λ f → ∃ g ∈ F , (cut {{a}} g × (g < f * f ≡ true))
