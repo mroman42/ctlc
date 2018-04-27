@@ -1,0 +1,47 @@
+#+Title: Teoría de categorías y cálculo lambda
+#+Author: Mario Román
+#+Latex_header: \institute{Grado en Ingeniería Informática y Matemáticas}
+#+Options: H:3
+#+Language: es
+#+Latex_class: beamer
+#+Latex_class_options: [usenames,dvipsnames]
+#+Latex_header: \input{_preamble.tex}
+#+Latex_cmd: xelatex
+
+* Una sección
+** Una subsección
+*** Introducción
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+
+Configura esta *presentación* mediante el archivo 
+~\_preamble.tex~.
+
+#+begin_theorem
+No hay números naturales mayores de 7.
+#+end_theorem
+
+*** Otra diapositiva
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+
+#+begin_example
+$ git clone git@github.com:libreim/templates
+$ cd templates
+#+end_example
+
+* Conclusiones
+** Conclusiones
+*** Conclusiones
+:PROPERTIES:
+:END:
+¡Muchas gracias!
+
+* Local variables                                                    :ignore:
+# Local Variables:
+# org-latex-pdf-process: ("xelatex -interaction nonstopmode %f" "xelatex -interaction nonstopmode %f")
+# org-latex-packages-alist: nil
+# org-latex-default-packages-alist: (("T1" "fontenc" t) ("" "fixltx2e" nil) ("" "graphicx" t) ("" "grffile" t) ("" "longtable" nil) ("" "wrapfig" nil) ("" "rotating" nil) ("normalem" "ulem" t) ("" "amsmath" t) ("" "textcomp" t) ("" "amssymb" t) ("" "capt-of" nil))
+# End:
