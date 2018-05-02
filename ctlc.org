@@ -6,21 +6,27 @@
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
 #+LATEX_HEADER_EXTRA: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
 
-# Escribir mucho menos, usar muchos menos teoremas, tener una versión
-# larga con todos los teoremas y recomendaciones y una versión corta
 
-# No usar definiciones en un entorno cuando no sea estrictamente necesario.
 
-# Usar adyacencia para la composición -> No parece buena idea porque crea ambigüedad a veces
-# Tener un cuerpo común de código en Agda que exportar a HTML como documentación
-# Sacar árbol de dependencias de Agda
-# Colorear reglas del cálculo lambda simplemente tipado
+** To-do list                                                     :noexport:
+*** TODO Añadir lista de referencias principales
+  - Selinger
+  - MacLane, Categories for the working mathematician
+  - Homotopy type theory book
+  - nLab
 
-# Referencias principales
-#  - Selinger
-#  - MacLane, Categories for the working mathematician
-#  - Homotopy type theory book
-#  - nLab
+*** TODO Repasar todo sustituyendo definiciones de entorno por negrita
+*** TODO Quote Lawvere
+Buscar en el libro de Conceptual Mathematics
+*** TODO Colorear reglas del cálculo lambda simplemente tipado
+Especialmente en la parte de deducción natural, evitarlo en otros
+puntos o usarlo consistentemente.
+
+*** TODO Considerar sólo un caso de límites con su dual, en lugar de dos.
+*** TODO Añadir interpretación de Prop como subobjeto clasificador.
+*** TODO Reescribir parte de teoría de tipos, añadir univalencia solo al final.
+*** TODO Citas en cada capítulo
+*** TODO Agda exportado a HTML.
 
 ** Macros and libraries                                             :ignore:
 *** Classic thesis setup                                           :ignore:
@@ -190,15 +196,115 @@
 This is the abstract.
 # There is no claim of originality (?)
 
-** Acknowlegments                                                 :noexport:
-# David Charte and Ignacio Cordón, testing the first versions of Mikrokosmos.
-# Alejandro García, Adrián Ranea and David Charte, template usage.
+** Sinopsis
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+Empezamos exponiendo el cálculo lambda de Church como modelo de
+computación, prestando especial interés a la relación de sus variantes
+tipadas con la lógica proposicional intuicionista. Desarrollamos un
+intérprete basado en estas ideas y utilidades para combinarlo con
+Jupyter Notebook y con Javascript que lo hacen apto para la docencia.
+
+La perspectiva de la teoría de categorías y en especial la noción de
+Lawvere de las adjunciones como elemento fundacional nos permiten
+primero formalizar la estructura lógica del cálculo lambda como el
+lenguaje interno de las categorías cartesianas cerradas e,
+inmediatamente después, enriquecer esta estructura en categorías
+localmente cartesianas cerradas hacia la noción de tipos dependientes.
+Los tipos dependientes nos proveen un marco lógico de orden superior
+con una interpretación computacional natural. Categorías, lógica y
+computación aparecen como tres manifestaciones de una misma noción.
+
+La lógica interna de estas categorías es suficientemente rica como
+para permitirnos desarrollar teorías matemáticas que además pueden
+expresarse en un lenguaje de programación con un sistema de tipos
+suficientemente fuerte que sirve como asistente de demostraciones.
+Para demostrar el potencial de esta perspectiva, usamos el lenguaje de
+programación Agda para formalizar los reales positivos con cortes de
+Dedekind en teoría de tipos de Martin-Löf y proponemos un ejemplo de
+topología sintética usando el axioma de Univalencia de Voevodsky.
+
+Nuestras referencias principales son la exposición del cálculo lambda
+de Selinger cite:selinger13 en la primera parte, los textos de teoría
+de categorías de MacLane cite:maclane78 y Awodey cite:awodey10 en la
+segunda, y el libro fundacional de la teoría homotópica de tipos
+cite:hottbook en la parte final. El proyecto nLab cite:nlab ha sido útil para
+encontrar la bibliografía relevante.
+
+** Acknowlegments
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+The opportunity of devoting my bachelor's thesis to this fascinating
+subject has been made possible by Prof. Pedro García-Sánchez and
+Prof. Manuel Bullejos.  They have provided me with corrections and
+useful guidelines for the text and they have gone beyond their
+obligation in their efforts to instruct me on how to expose these
+ideas clearly.  Any deviation from this goal must be attributed to
+my own inexperience.
+
+I would like to thank the LibreIM community in general and Ignacio
+Cordón, David Charte, Marta Andrés, Pablo Baeyens, Antonio Checa,
+Daniel Pozo, and Sofía Almeida in particular, for testing the
+interpreter and providing useful discussion and questions on the
+topics of this text. Prof. Luis Merino, Prof. Juan Julián Merelo and
+Braulio Valdivielso have made possible and participated on the
+organization of meetings and workshops on these ideas.
+
+Finally, I would like to express my gratitude to Benedikt Ahrens and
+the organizers of the School and Workshop on Univalent Mathematics at
+the University of Birmingham, whose effort has given me the
+opportunity to learn the fundaments of type theory and the Univalent
+Foundations program.
 
 This document has been written with Emacs26 and org-mode 9, using the
 =org= file format and LaTeX as intermediate format. The document
-follows the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by *André Miede*. The =minted=
+follows the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by *André Miede* and uses modifications
+by Adrián Ranea, Alejandro García and David Charte. The =minted=
 package has been used for code listings and the =tikzcd= package has
-been used for commutative diagrams.
+been used for commutative diagrams. The document is released under a Creative Commons
+BY-SA 3.0 license, while the source code can be redistributed under
+the terms of the GNU General Public License.
+
+** Quote                                                            :ignore:
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+*** Quote: Lawvere                                                 :ignore:
+#+latex: \newpage
+#+latex: \vspace*{\fill}
+#+begin_quote
+\centering
+\raggedleft
+What is the primary tool for such summing up of \\
+the essence of ongoing mathematics? Algebra! \\
+Nodal points in the progress of this kind of \\
+research occur when, as in the case with the \\
+finite number of axioms for the metacategory \\
+of categories, all that we know so far can be \\
+expressed in a single sort of algebra.
+
+  -- *F. William Lawvere*
+#+end_quote
+#+latex: \vspace*{\fill}
+
+*** Quote: McBride                                               :noexport:
+#+latex: \newpage
+#+latex: \vspace*{\fill}
+#+begin_quote
+\centering
+\raggedleft
+Mathematics has serious cultural issues. \\
+Too much fame for climbing mountains; \\
+not enough for flattening them.
+
+   -- *Conor McBride*, \\
+#+end_quote
+#+latex: \vspace*{\fill}
 
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
@@ -3650,7 +3756,7 @@ the successor function with a finite number.
 head = fold const false
 head (fix (cons 0))
 -- Compare infinity with other numbers
-infinity != fix succ
+infinity := fix succ
 leq infinity 6
 ---- [1]: 0
 ---- [2]: false
@@ -5501,7 +5607,7 @@ arrows. Given an adjunction $F \dashv G$, we define
    for each $Y$.
 
 Diagramatically, they can be obtained by taking $Y$ to be $FX$ and $X$ to be $GY$,
-respectively in the definition of adjunction.
+respectively, in the definition of adjunction.
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FX \rar{\id}\& FX \end{tikzcd}}
 \doubleLine
@@ -5858,21 +5964,21 @@ The adjunction can be seen diagramatically as
 \UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] A \rar{f}\& UM \end{tikzcd}}
 \end{prooftree}
 where each monoid homormorphism from the free monoid, $FA \to M$ can
-be seen as the unique possible extension of a function from the set
+be seen as the unique extension of a function from the set
 of generators $f \colon A \to UM$ to a full monoid homomorphism, $\overline{f}$.
 
 Note how, while this characterizes the notion of free monoid, it does
-not provide an explicit construction of it. Indeed, given $f \colon A \to UM$,
-if we take the free monoid $FA$ to consist on words over the elements of
+not provide an explicit construction. Indeed, given $f \colon A \to UM$,
+we can take the free monoid $FA$ to consist on the words over the elements of
 $A$ endowed with the concatenation operator; the only way to extend $f$ to
 an homomorphism is to define
 \[
-\overline{f}(a_1a_2\dots a_n) = f(a_1)f(a_2)\dots f(a_n);
+\overline{f}(a_1a_2\dots a_n) = f(a_1)f(a_2)\dots f(a_n).
 \]
-and note how every homomorphism from the free monoid is determined by how
+Note how every homomorphism from the free monoid is determined by how
 it acts on the generator set.
 
-The notion of forgetful and free functors can be generalized to
+This notion of forgetful and free functors can be generalized to
 algebraic structures other than monoids.
 #+END_exampleth
 
@@ -5942,7 +6048,7 @@ where the first diagram is commutative by Proposition [[prop-interchangelaw]]
 and the second one is obtained by applying functors $G$ and $F$. Unit laws
 follow from the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
-*** Kleisli categories
+*** OLD Kleisli categories
 #+ATTR_LATEX: :options [Kleisli category]
 #+BEGIN_definition
 The *Kleisli category* of a monad $T \colon {\cal X} \to {\cal X}$ is written as ${\cal X}_T$ 
@@ -6034,7 +6140,7 @@ X
 \end{tikzcd}\]
 Let $X$ be an $F\text{-algebra}$ given by $x \colon 1 \to X$ and $f \colon X \to X$; by induction over
 the natural numbers we can show that a morphism of algebras $\varphi$ making that diagram
-commute must follow $\varphi(0) = x$ and $\varphi(\mathrm{succ}(n)) = f(\varphi(n))$. Thus, in a certain sense, the 
+commute must follow $\varphi(0) = x$ and $\varphi(\mathrm{succ}(n)) = f(\varphi(n))$. Thus, in a certain sense, 
 initiality captures the principle of induction.
 
 For instance, we can define addition $+ \colon \mathbb{N} \times \mathbb{N} \to \mathbb{N}$, interpreted
@@ -6042,12 +6148,12 @@ as a unary operation $+ \colon \mathbb{N} \to \hom(\mathbb{N},\mathbb{N})$, as t
 from the initial algebra to the algebra given by $\hom(\mathbb{N},\mathbb{N})$ with $\id$
 and postcomposition with $\mathrm{succ}$.
 \[\begin{tikzcd}
-1+\mathbb{N}\rar{} \dar[swap]{\pair{0,succ}} & 
+1+\mathbb{N}\rar{} \dar[swap]{\pair{0,\mathrm{succ}}} & 
 1+\hom(\mathbb{N},\mathbb{N}) \dar{\pair{\id, \mathrm{succ}\,\circ\, -}} \\
 \mathbb{N}\rar{+} &
 \hom(\mathbb{N},\mathbb{N})
 \end{tikzcd}\]
-This definition immediatly implies the equalities $0+m = \id(m) = m$
+This definition immediately implies the equalities $0+m = \id(m) = m$
 and $\mathrm{succ}(n) + m = (\mathrm{succ}\circ (n+\_))(m) = \mathrm{succ}(n+m)$.
 #+END_exampleth
 
@@ -6875,17 +6981,6 @@ forcing techniques with allowed to construct new models of ZFC.
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
 *** Lawvere theories
-# TODO: Cambiar el orden aquí! Primero la noción clásica, luego la
-# noción de Lawvere.
-
-#+ATTR_LATEX: :options [Lawvere algebraic theory]
-#+BEGIN_definition
-An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
-whose objects form a sequence $A^0,A^1,A^2, \dots$ such that $A^m \times A^n = A^{m+n}$
-for any $m, n$.
-#+END_definition
-# From this definition, it follows that $A^0$ must be the terminal object.
-
 **** Signature to category                                        :ignore:
 The usual notion of algebraic theory is given by a set of /k-ary operations/
 for each $k \in \mathbb{N}$ and certain axioms between the terms that can be constructed
@@ -6915,6 +7010,15 @@ information of a theory -- all operations, constants and axioms --
 into a category. Differently presented but equivalent signatures and
 axioms will give rise to the same category.
 
+**** Definition                                                   :ignore:
+#+ATTR_LATEX: :options [Lawvere algebraic theory]
+#+BEGIN_definition
+An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
+whose objects form a sequence $A^0,A^1,A^2, \dots$ such that $A^m \times A^n = A^{m+n}$
+for any $m, n$.
+#+END_definition
+# From this definition, it follows that $A^0$ must be the terminal object.
+
 An algebraic theory can be built from a signature as follows: objects represent
 natural numbers, $A^0,A^1,A^2,\dots$, and morphisms from $A^n$ to $A^m$ are given by a tuple
 of $m$ terms $t_1,\dots,t_m$ depending on $n$ free variables $x_1,\dots,x_n$, written as
@@ -6924,12 +7028,12 @@ A^n \to A^m.
 \]
 Composition is defined componentwise as the substitution of the terms of the first
 morphism into the variables of the second one; that is, given $(x_1\dots x_k \vdash \pair{t_1,\dots,t_m}) \colon A^k \to A^{m}$
-and $(x_1\dots x_m \vdash\pair{u_1,\dots,u_n}) \colon A^m \to A^n$, composition is defined as
+and $(x_1\dots x_m \vdash\pair{u_1,\dots,u_n}) \colon A^m \to A^n$, their composition is
 $(x_1\dots x_k\vdash \pair{s_1,\dots,s_n})$, where $s_i = u_i[t_1,\dots,t_m / x_1,\dots,x_m]$. Two
 morphisms are considered equal, $(x_1\dots x_n \vdash \pair{t_1,\dots,t_k}) = (x_1\dots x_n \vdash \pair{t'_1,\dots,t'_k})$
-if componentwise equality of terms $t_i = t'_i$ follows from the axioms of the theory.
+if componentwise equality of terms, $t_i = t'_i$, follows from the axioms of the theory.
 Identity is the morphism $(x_1\dots x_n \vdash \pair{x_1,\dots, x_n})$. The kth-projection from $A^n$ is the
-term $(x_1\dots x_n \vdash x_k)$, and it is easy to check that these projections make it the n-fold
+term $(x_1\dots x_n \vdash x_k)$, and it is easy to check that these projections make $A^n$ the n-fold
 product of $A$.
 
 **** Models                                                       :ignore:
@@ -8196,8 +8300,9 @@ such that $R(a,b)$, then we can use that rule to define a function
 $g : A \to B$ such that for each $a:A$, $R(a,g(a))$."
 #+end_quote
 and this trivial-sounding theorem is known as the *theorem of choice*.
-The moral of this example is that when we work in type theory, we
-are working in constructivist mathematics. Later, we will see a
+The moral of this example is that, when we work in type theory, we
+are working inside constructivist mathematics and the existential quantifier
+has a fundamentally different meaning. Later, we will see a
 technique that will allow us to recreate the classical existential
 quantifier.
 #+END_exampleth
@@ -8281,6 +8386,7 @@ parametrized over $p$, of the form $C(x,y,p)$.
 \end{prooftree}
 The corresponding computation rule would be $\J_C(c,\refl)\equiv c[a/x]$.
 
+*** TODO Subobject classifier
 *** TODO Soundness up to isomorphism
 ** TODO Beyond locally cartesian closed categories
 *** TODO Table of correspondences                                  :ignore:
@@ -8450,7 +8556,9 @@ in cite:maclane94.
 # goes back to Brower. (Shulman 17)
 
 # Types vs sets, la pertenencia a un tipo es juzgamental. Es la
-# perspectiva de etcs, estructural end vez de material.
+# perspectiva de etcs, estructural en vez de material.
+
+# TODO: Diccionario categorías/agda
 
 ** Martin-Löf type theory
 In this chapter, we will exclusively work internally in dependent type
@@ -8771,6 +8879,7 @@ $\mathsf{qinv}(f) \to \mathsf{isContrMap}(f)$, and so, it is easier to use it to
 equivalences.
 *** Function extensionality and Univalence
 ** Synthetic topology
+# Synthetic computability: cite Bauer
 *** Higher inductive types
 A *higher inductive type* is the type freely generated by a set of
 constructors and a set of /equalities/ between its freely generated
@@ -8811,6 +8920,7 @@ $\ap_f(\mathsf{loop}) = s$.
 
 *** The fundamental group of the circle
 ** Constructive analysis
+# Comparar con Coquelicot https://hal.inria.fr/file/index/docid/860648/filename/article.pdf
 ** Computer verification
 # Sprinkles of extensionality for your vanilla type theory
 
