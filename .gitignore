@@ -11,3 +11,7 @@ _minted-ctlc/*
 /ctlc (copy).pdf
 /ctlc2.pdf
 *MAlonzo*
+slides/slides.tex
+slides/*.log
+slides/*.bbl
+
