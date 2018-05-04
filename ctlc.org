@@ -1,12 +1,7 @@
-#+TITLE: Category Theory and Lambda Calculus
-#+AUTHOR: Mario Román
-#+OPTIONS: broken-links:ignore toc:t tasks:nil num:3
-#+TODO: TODO(t) OLD(o) | DONE(d)
-#+latex_class: scrreprt
-#+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+LATEX_HEADER_EXTRA: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
-
-
+#+Title: Category Theory and Lambda Calculus
+#+Author: Mario Román
+#+Options: broken-links:ignore toc:t tasks:nil num:3
+#+Todo: TODO(t) OLD(o) | DONE(d)
 
 ** To-do list                                                     :noexport:
 *** TODO Añadir lista de referencias principales
@@ -29,6 +24,10 @@ puntos o usarlo consistentemente.
 *** TODO Agda exportado a HTML.
 
 ** Macros and libraries                                             :ignore:
+#+latex_class: scrreprt
+#+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
+#+latex_header_extra: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
+
 *** Classic thesis setup                                           :ignore:
 #+latex_header_extra: \usepackage[T1]{fontenc}
 #+latex_header_extra: \usepackage[beramono,eulerchapternumbers,linedheaders,parts,a5paper,dottedtoc,manychapters]{classicthesis}
@@ -5986,14 +5985,6 @@ algebraic structures other than monoids.
 **** TODO Limits in general?                                      :ignore:
 **** TODO Equivalence of categories                               :ignore:
 **** TODO Adjoints for preorders (Galois connections)             :ignore:
-*** TODO Adjoints and limits
-**** Freyd adjoint functor theorem                                :ignore:
-#+ATTR_LATEX: :options [Freyd adjoint functor theorem]
-#+BEGIN_theorem
-A functor $G \colon {\cal C} \to {\cal D}$ from a small and locally small complete category ${\cal C}$
-has a left adjoint if and only if it preserves small limits and satisfies
-the solution set condition.
-#+END_theorem
 *** Monads
 **** Motivation                                                   :ignore:
 The notion of /monads/ is pervasive in category theory. A monad is
@@ -6048,41 +6039,6 @@ where the first diagram is commutative by Proposition [[prop-interchangelaw]]
 and the second one is obtained by applying functors $G$ and $F$. Unit laws
 follow from the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
-*** OLD Kleisli categories
-#+ATTR_LATEX: :options [Kleisli category]
-#+BEGIN_definition
-The *Kleisli category* of a monad $T \colon {\cal X} \to {\cal X}$ is written as ${\cal X}_T$ 
-and is given by
-
- * an object $x_T$ for every $x \in {\cal X}$; and
-
- * an arrow $f^{\flat} \colon x_T \to y_T$ for every $f \colon x \to T y$.
-
-And the composite of two morphisms is defined as
-\[
-g^{\flat} \circ f^{\flat} = (\mu \circ Tg \circ f)^{\flat}.
-\]
-#+END_definition
-
-#+ATTR_LATEX: :options [Adjunction on a Kleisli category]
-#+BEGIN_theorem
-The functors $F_T \colon {\cal X} \to {\cal X}_T$ and $G \colon {\cal X}_T \to {\cal X}$ from and
-to the Kleisli category which are defined on objects as $F_T(x) = x_T$ and
-$G_T(x_T) = Tx$, and defined on morphisms as
-
-\[\begin{aligned}
-F_T \colon& (k \colon x \to y)             &\mapsto&\ (\eta_y \circ k)^{\flat} \colon x_T \to y_T \\
-G_T \colon& (f^{\flat} \colon x_T \to y_T) &\mapsto&\ (\eta_y \circ Tf) \colon Tx \to Ty \\
-\end{aligned}\]
-
-form an adjunction $\flat \colon \hom(x,Ty) \to \hom(x_T,y_T)$ whose monad
-is precisely $T$.
-#+END_theorem
-#+BEGIN_proof
-# TODO
-# Theorem 1 pag 147 MacLane
-#+END_proof
-
 *** Algebras
 Let $F \colon {\cal C} \to {\cal C}$ be a functor. An $F\textbf{-algebra}$ is an object $X$ with a
 map $\mu \colon FX \to X$ called /structure map/. A morphism between two
@@ -6190,7 +6146,7 @@ This definition immediately implies the equalities $\mathrm{sum}(\mathrm{nil}) =
 and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
 #+END_exampleth
 
-**** OLD T-algebras
+*** OLD T-algebras
 # TODO: Algebras para cualquier endofuntor
 For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
 /structure map/ making this diagram commute.
@@ -6224,6 +6180,48 @@ commutes.
 #+end_proof
 
 # TODO: Initial algebras: Wellfounded trees in categories
+*** TODO Adjoints and limits
+**** Freyd adjoint functor theorem                                :ignore:
+#+ATTR_LATEX: :options [Freyd adjoint functor theorem]
+#+BEGIN_theorem
+A functor $G \colon {\cal C} \to {\cal D}$ from a small and locally small complete category ${\cal C}$
+has a left adjoint if and only if it preserves small limits and satisfies
+the solution set condition.
+#+END_theorem
+*** OLD Kleisli categories
+#+ATTR_LATEX: :options [Kleisli category]
+#+BEGIN_definition
+The *Kleisli category* of a monad $T \colon {\cal X} \to {\cal X}$ is written as ${\cal X}_T$ 
+and is given by
+
+ * an object $x_T$ for every $x \in {\cal X}$; and
+
+ * an arrow $f^{\flat} \colon x_T \to y_T$ for every $f \colon x \to T y$.
+
+And the composite of two morphisms is defined as
+\[
+g^{\flat} \circ f^{\flat} = (\mu \circ Tg \circ f)^{\flat}.
+\]
+#+END_definition
+
+#+ATTR_LATEX: :options [Adjunction on a Kleisli category]
+#+BEGIN_theorem
+The functors $F_T \colon {\cal X} \to {\cal X}_T$ and $G \colon {\cal X}_T \to {\cal X}$ from and
+to the Kleisli category which are defined on objects as $F_T(x) = x_T$ and
+$G_T(x_T) = Tx$, and defined on morphisms as
+
+\[\begin{aligned}
+F_T \colon& (k \colon x \to y)             &\mapsto&\ (\eta_y \circ k)^{\flat} \colon x_T \to y_T \\
+G_T \colon& (f^{\flat} \colon x_T \to y_T) &\mapsto&\ (\eta_y \circ Tf) \colon Tx \to Ty \\
+\end{aligned}\]
+
+form an adjunction $\flat \colon \hom(x,Ty) \to \hom(x_T,y_T)$ whose monad
+is precisely $T$.
+#+END_theorem
+#+BEGIN_proof
+# TODO
+# Theorem 1 pag 147 MacLane
+#+END_proof
 *** TODO Free algebras for a monad
 *** TODO Beck's theorem
 #+ATTR_LATEX: :options [Beck's theorem]
@@ -6235,724 +6233,6 @@ commutes.
 # to the Lawvere theory of commutative monoids, that is, to the category
 # of finitely generated free commutative monoids.
 *** TODO Continuity
-** TODO Monoidal and enriched categories
-# Linear logic = Monoidal categories = Quantum computation
-# Proof net = String diagram = Quantum circuit
-*** TODO String diagrams
-# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
-*** Enriched categories
-# https://www.youtube.com/watch?v=be7rx29eMr4
-
-**** Motivation                                                   :ignore:
-When we defined categories for the first time, we implicitly assumed
-a set of morphisms between every two objects, that is, for every two
-$a,b \in {\cal C}$, there exists a set $\hom(a,b)$. Composition is
-then a function
-\[
-\circ : \hom(b,c) \times \hom(a,b) \to \hom(a,c),
-\]
-and the identity morphism can be represented as a function from the
-terminal object into the morphisms from an object to itself,
-\[
-\id : 1 \to \hom(a,a).
-\]
-Associativity and identity axioms can be expressed as commutative
-diagrams,
-# TODO: Diagrams
-
-In this definition, we are only using the monoidal structure of the
-category $\Set$; thus, we could generalize the notion of a category into
-that of an *enriched category* over a monoidal category ${\cal V}$, a category
-whose hom-sets would be objects of ${\cal V}$, and the composition and identities
-would be morphisms in that category.
-
-**** Definition                                                   :ignore:
-**** Example: metric spaces                                       :ignore:
-#+ATTR_LATEX: :options [Metric spaces]
-#+BEGIN_exampleth
-If we consider the ordered set $(\mathbb{R}^{+}, \geq)$ as a category, it
-can be given a monoidal structure with the addition of numbers.
-Note that, in this category, objects are real numbers $r \in \mathbb{R}$ and
-\[
-\hom(r,r') = \left\{ \begin{array}{ll}
-  \{\ast\} & \mbox{ if } r \geq r', \\
-  \varnothing & \mbox{ otherwise; }
-\end{array}\right.
-\]
-thus, morphisms are usually written as $r \leq r'$.
-
-A *metric space* endowed with a distance function $d$ can be defined
-as a category enriched over $(\mathbb{R}^+,\geq)$. Note that the composition
-must be a morphism of the form
-\[
-\circ : d(b,c) + d(a,b) \geq d(a,c),
-\]
-which is the exact statement of the triangle inequality; while,
-knowing that $0$ is the initial object of the category, the identity
-is of the form
-\[
-\id : 0 \geq d(a,a),
-\]
-which is the statement of indiscernibility of identical elements.
-The rest of the axioms of the category hold trivially due to the
-fact that there is, at most, a unique morphism between any two
-objects.
-#+END_exampleth
-
-*** TODO Abelian categories
-** TODO Kan extensions
-*** Dinatural transformations
-# Extension of the concept of naturality to a special type of
-# bifunctors.
-# Natural diagonal between functors.
-
-#+ATTR_LATEX: :options [Dinatural transformation]
-#+BEGIN_definition
-A *dinatural transformation* between functors $F,G \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$
-is a family of morphisms $\alpha_x \colon F(x,x) \to G(x,x)$ for each $x \in {\cal C}$,
-called /components/, such that for every $f \colon x \to y$,
-\[\begin{tikzcd} &
-F(x,x) \rar{\alpha_{x}} &
-G(x,x) \drar{G(\id,f)} & \\
-F(y,x) \urar{F(f,\id)}\drar[swap]{F(\id,f)} & & &
-G(x,y) \\
-&
-F(y,y) \rar{\alpha_{y}} &
-G(y,y) \urar[swap]{G(f,\id)} &
-\end{tikzcd}\]
-
-commutes
-#+END_definition
-
-# TODO: Every natural transformation gives a dinatural transformation.
-
-**** TODO Natural transformation of covariant to contravariant functor :ignore:
-**** Extranatural transformations (wedges)                        :ignore:
-#+ATTR_LATEX: :options [Wedge]
-#+BEGIN_definition
-A *wedge* (also called *extranatural transformation*) is a dinatural
-transformation from a constant functor.
-
-That is, given a functor $T \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$, a *wedge* $\alpha \colon x \toddot T$ is a
-family of morphisms $\alpha_c \colon x \to T(c,c)$ such that
-
-\[\begin{tikzcd}
-x        \dar[swap]{\alpha_{c'}} \rar{\alpha_{c}} &
-T(c,c)   \dar{T(\id,f)} \\
-T(c',c') \rar[swap]{T(f,\id)} &
-T(c,c')
-\end{tikzcd}\]
-
-commutes for every $f \colon c \to c'$. 
-#+END_definition
-
-# Wedges or cowedges?
-# #+ATTR_LATEX: :options [Cowedge]
-# #+BEGIN_definition
-# A *wedge* (also called *extranatural transformation*) is a dinatural
-# transformation from a constant functor. We write wedges as $\alpha \colon F \toddot b$.
-# #+END_definition
-
-# That is, given a functor $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$, a wedge $\alpha \colon F \toddot b$ is a
-# family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
-
-# \[\begin{tikzcd}
-# F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
-# F(x,x)\rar[swap]{\alpha_{x}} & b
-# \end{tikzcd}\]
-
-# commutes for every $f \colon x \to y$. 
-
-**** TODO Examples of dinatural transformations                   :ignore:
-*** Ends
-**** Definition of Ends                                           :ignore:
-#+ATTR_LATEX: :options [End]
-#+BEGIN_definition
-An *end* of $T \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is its universal wedge.
-That is, a wedge $\alpha \colon e \toddot T$ such that for every other $\beta \colon k \toddot T$,
-there exists a unique $u \colon k \to e$ such that $\alpha_c \circ u = \beta_c$ for
-each $c \in {\cal C}$.
-#+END_definition
-
-Diagramatically,
-
-\[\begin{tikzcd}
-k \ar[dashed]{dr}{\exists! u} \ar[bend left]{drr}{\beta_{c}} \ar[swap,bend right]{ddr}{\beta_{c'}} & &\\
-&e        \dar[swap]{\alpha_{c'}} \rar{\alpha_{c}} &
-T(c,c)   \dar{T(\id,f)} \\
-&T(c',c') \rar[swap]{T(f,\id)} &
-T(c,c')
-\end{tikzcd}\]
-
-
-We usually call /end/ to the object $e$, and we use the following integral
-notation
-\[
-e = \int_{c \in {\cal C}} T(c,c).
-\]
-
-**** Examples of ends 1                                           :ignore:
-We present some examples of Ends, taken mainly from cite:thecatsters.
-
-#+ATTR_LATEX: :options [Natural transformations as Ends]
-#+BEGIN_exampleth
-Natural transformations are ends; they can be written as
-\[
-\Nat(F,G) = \int_{c\in {\cal C}} \hom(Fc,Gc)\ .
-\]
-
-Take $T = \hom(F-,G-) \colon {\cal C}^{op} \times {\cal C} \to \Sets$, where $F,G \colon {\cal C} \to {\cal E}$ are
-two arbitrary functors. A wedge $x \toddot T$ would be defined by a set $x \in \Sets$
-and a family of functions $\omega_c \colon x \to \hom(Fc,Gc)$ such that
-\[\begin{tikzcd}
-x        \dar[swap]{\omega_{c'}} \rar{\omega_{c}} &
-\hom(Fc,Gc)   \dar{Gf \circ -} \\
-\hom(Fc',Gc') \rar[swap]{- \circ Ff} &
-\hom(Fc,Gc')
-\end{tikzcd}\]
-commutes for each $f \colon c \to c'$. That is, for each element of the
-set, $a \in x$, we get $\omega_c(a) \colon Fc \to Gc$ such that $Gf \circ \omega_c(a) = \omega_{c'}(a) \circ Ff$;
-in other words, the following square is natural
-\[\begin{tikzcd}
-Fc \rar{\omega_c(a)}\dar[swap]{Ff} & Gc \dar{Gf} \\
-Fc' \rar[swap]{\omega_{c'}(a)} & Gc' \\
-\end{tikzcd}\]
-and $\omega_c(a)$ is a natural transformation from $F$ to $G$, for each $a \in x$. 
-
-Thus, we have proved that a wedge $x \toddot T$ is a set $x$ mapping to the
-set of natural transformations. The universal set with this property
-is clearly (it can be seen as the terminal object of the slice
-category) the set of natural transformations. That is,
-\[
-\Nat(F,G) = \int_{c\in {\cal C}} \hom_{{\cal E}}(Fc,Gc)\ .
-\]
-
-The particular case
-\[
-\Nat(\id,\id) = \int_{c\in{\cal C}} \hom_{{\cal C}}(c,c)
-\]
-is sometimes known as the center of the category.
-#+END_exampleth
-
-**** Examples of ends 2                                           :ignore:
-#+ATTR_LATEX: :options [Tannakian reconstruction]
-#+BEGIN_exampleth
-Let $M$ be a monoid in $\Sets$. We consider $M\mhyphen\Sets$, the category of sets
-in which $M$ acts; that is, pairs $(S,\sigma)$, where $s$ is an arbitrary
-set and $\sigma \colon M \times S \to S$ is an action of the monoid on the set.
-Morphisms are of the form $f \colon (S,\sigma) \to (R,\rho)$ where $f \circ \sigma = \rho \circ f$.
-
-There is
-a forgetful functor $U \colon M\mhyphen\Sets \to \Sets$ that simply forgets the $M\mhyphen\text{action}$
-on the set; and we can recover the monoid from this functor as
-\[
-\int_{(s,\sigma) \in M\mhyphen\Sets} \hom(U(s,\sigma), U(s,\sigma)) =
-\Nat(U,U) = M.
-\]
-This is a very particular instance of the idea of Tannakian reconstruction,
-as described in cite:joyal91.
-
-The forgetful functor $U \colon M\mhyphen\Sets \to \Sets$ is a representable functor;
-represented by $(M,\mu) \in M\mhyphen\Sets$. There exists a function
-\[
-g \colon \hom_{M\mhyphen\Sets}((M,\mu), (S,\sigma)) \to S = U(S,\sigma)
-\]
-sending $g(f) = f(e)$. Note that $f$ is completely determined by $f(e)$; as
-$f(m) = f(\mu(m,e)) = \sigma(m,f(e))$; and this $g$ is a bijection. We have
-proved that $U \cong \hom((M,\mu),-)$.
-
-Now, using this fact and the dual Yoneda lemma,
-\[\begin{aligned}
-\Nat(U,U) &\cong \Nat(\hom((M,\mu),-), \hom((M,\mu),-)) \\
-          &= \hom_{M\mhyphen\Sets}((M,\mu),(M,\mu)) = M;
-\end{aligned}\]
-and the components of the natural transformation are simply
-multiplication by $m$ for some fixed $m \in M$. Diagramatically, for
-any given $\psi \in \Nat(U,U)$,
-\[\begin{tikzcd}[row sep={4mm,between origins},column sep={8mm,between origins}]
-(M,\mu) \arrow[rrrr, "\psi_{(S,\sigma)}"] \arrow[ddd, "{\sigma(-,s)}", swap] 
-    & & & & (M,\mu) \arrow[ddd, "{\sigma(-,s)}"] \\  
-    & e \arrow[rr, |->] \arrow[d, |->] & & m \arrow[d, |->] & \\[1cm]
-    & s \arrow[rr, |->] & & \sigma(m,s) \\
-(S,\sigma) \arrow[rrrr, "\psi_{(S,\sigma)}", swap] & & & & (S,\sigma)\\  
-\end{tikzcd}\]
-it must be the case that $\psi_{(S,\sigma)}(s) = ms$.
-#+END_exampleth
-
-**** Examples of ends 3                                           :ignore:
-#+ATTR_LATEX: :options [Reconstruction of the center]
-#+BEGIN_exampleth
-A variant on the previous example is to use identity functors
-to recover
-\[
-\int_{(s,\sigma) \in M\mhyphen\Sets} \hom((s,\sigma),(s,\sigma)) = \Nat(\id,\id) = {\cal Z}(M)
-\]
-the center of the monoid.
-
-If $\psi \in \Nat(\id,\id)$, we can apply the forgetful functor to get
-$U\psi \in \Nat(U,U)$. By the previous example, the natural transformation
-must be of the form $\psi_{(S,\sigma)}(s) = \sigma(m,s)$ for each $(S,\sigma)$, given some
-fixed $m \in M$.
-
-However, further restrictions apply in this case. In particular,
-$\psi_{(M,\mu)}$ must be a morphism in $M\mhyphen\Sets$, therefore, for any $n \in M$,
-\[
-nm = \mu(n,\mu(m,e)) = \mu(m,\mu(n,e)) = mn,
-\]
-and $m \in {\cal Z}(M)$. The fact that any $m \in {\cal Z}(M)$ defines a natural
-transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
-#+END_exampleth
-
-*** Coends
-*** TODO Profunctors, distributors
-# https://ncatlab.org/nlab/show/profunctor
-**** Composition
-**** Heteromorphisms
-**** https://ncatlab.org/nlab/show/anafunctor
-*** Kan extensions
-** TODO Higher categories
-# TODO: Bicategories are weak 2-categories
-# TODO: 2-categories are strict 2-categories
-
-*** Strict 2-categories
-**** 2-categories: introduction                                   :ignore:
-# TODO: The category of two categories
-In a 2-category, instead of having sets of morphisms; we have a
-category of morphisms between any two objects. It has objects,
-called */0-cells/*; morphisms between objects, called */1-cells/*; and
-morphisms between morphisms, called */2-cells/*.
-\[\begin{tikzcd}
-x
-&
-x \rar{f}&y 
-&
-x\phantom{y} 
-\arrow[bend left=50]{r}[name=U,below]{}{f}
-\arrow[bend right=50]{r}[name=D]{}[swap]{g}
-& 
-\phantom{x}y \arrow[Rightarrow,from=U,to=D]{}{\alpha}
-\end{tikzcd}\]
-As, morphisms between two objects form a category, morphisms between
-morphisms can be composed vertically in their category; 
-\[\begin{tikzcd}
-x\phantom{y}
-\arrow[bend left=80]{rr}[name=U2,below]{}{f}
-\arrow[]{rr}[name=C2,below]{}[name=C1,above]{}[above=2mm, left=3mm]{g}
-\arrow[bend right=80]{rr}[name=D2]{}[swap]{h}
-&& 
-\phantom{x}y
-\arrow[Rightarrow,from=U2,to=C1]{}{\alpha}
-\arrow[Rightarrow,from=C2,to=D2]{}{\beta}
-&
-x\phantom{y} 
-\arrow[bend left=50]{r}[name=U,below]{}{f}
-\arrow[bend right=50]{r}[name=D]{}[swap]{h}
-& 
-\phantom{x}y \arrow[Rightarrow,from=U,to=D]{}{\beta \circ \alpha}
-\end{tikzcd}\]
-but the 2-category will also provide a horizontal composition of
-morphisms between two objects
-\[\begin{tikzcd}
-\makebox[0pt][l]{$x$}\phantom{y} 
-\arrow[bend left=50]{r}[name=U,below]{}{f}
-\arrow[bend right=50]{r}[name=D]{}[swap]{f'}
-& 
-\phantom{}y
-\arrow[Rightarrow,from=U,to=D]{}{\alpha}
-\arrow[bend left=50]{r}[name=U,below]{}{g}
-\arrow[bend right=50]{r}[name=D]{}[swap]{g'}
-& 
-\makebox[0pt][l]{$z$}\phantom{y}
-\arrow[Rightarrow,from=U,to=D]{}{\beta}
-&
-x
-\arrow[bend left=50]{rr}[name=U,below]{}{g \circ f}
-\arrow[bend right=50]{rr}[name=D]{}[swap]{g' \circ f'}
-&&
-z
-\arrow[Rightarrow,from=U,to=D]{}{\beta \ast \alpha}
-\end{tikzcd}\]
-which, as we will formalize, will act functorially with respect to
-vertical composition. An interchange law which will act as a
-generalization of Proposition <<prop-interchangelaw>> will follow
-from functoriality. In fact, the category of small categories, with
-functors and natural transformations between them will be an example
-of 2-category.
-
-**** 2-category: definition                                       :ignore:
-#+ATTR_LATEX: :options [2-category]
-#+BEGIN_definition
-A *2-category* is given by
-
-  * a collection of objects;
-  * a category $T(a,b)$ for every pair of objects $a,b$, called
-    /vertical category/ between $a,b$;
-  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$;
-  * a horizontal composition functor $K_{a,b,c}\colon T(b,c) \times T(a,b) \to T(a,c)$
-    for every triple of objects $a,b,c$;
-
-where we usually write the action of $K$ on morphisms as $K(\beta,\alpha) = \beta \ast \alpha$.
-The functor $K_{a,b,c}$ must be associative and $U_a$ must provide a left and
-right identity.
-#+END_definition
-
-Associativity means that the two following composite functors are
-strictly equal,
-
-\[\begin{tikzcd}[row sep=huge, column sep=tiny]
-&
-T(c,d) \times T(b,c) \times T(a,b)
-\ar[bend left=60]{dd}[name=U,left]{}{}
-\ar[bend right=60]{dd}[name=D]{}[swap]{}
-\drar{K_{a,b,c} \times \id}
-\dlar[swap]{K_{b,c,d} \times \id} & \\
-T(b,d) \times T(a,b) \drar[swap]{K_{a,b,d}} &&
-T(c,d) \times T(a,c) \dlar{K_{a,c,d}} \\
-& T(a,d) & 
-\arrow[phantom,from=U,to=D]{}{=}
-\end{tikzcd}\]
-
-This is a particular case of an *enriched category*.
-
-**** Interchange law                                              :ignore:
-#+ATTR_LATEX: :options [Interchange law]
-#+BEGIN_proposition
-Given any $\alpha,\alpha',\beta,\beta'$ composable 2-cells,
-\[
-(\beta' \circ \beta) \ast (\alpha' \circ \alpha) =
-(\beta' \ast \alpha') \circ (\beta \ast \alpha).
-\]
-#+END_proposition
-#+BEGIN_proof
-Unfolding the definition in the product category and applying
-the functoriality of $K$, we get
-\[\begin{aligned}
-(\beta' \circ \beta) \ast (\alpha' \circ \alpha) &=
-K(\beta' \circ \beta, \alpha' \circ \alpha)  = K((\beta' , \alpha') \circ (\beta , \alpha)) \\
-&= K(\beta', \alpha') \circ K(\beta, \alpha) = (\beta' \ast \alpha') \circ (\beta \ast \alpha).
-\end{aligned}\]
-#+END_proof
-
-**** TODO 2-cat                                                   :ignore:
-# Describe 2-cat as a 3-cat
-**** TODO Eckmann-Hilton                                          :ignore:
-**** TODO Double categories                                       :ignore:
-*** Weak 2-categories
-In the definition of strict 2-categories, we have postulated that the
-horizontal composition of 2-cells should be associative, but we could
-relax this condition and write a similar definition in which the
-horizontal composition is not associative but
-/associative up to isomorphism/. This new definition gives us the
-notion of *bicategories*, which are also called *2-categories*.
-
-**** Formal definition: bicategory                                :ignore:
-#+ATTR_LATEX: :options [Bicategory]
-#+BEGIN_definition
-A *bicategory* is given by
-
-  * a collection of objects;
-  * a category $B(a,b)$ for every pair of objects $a,b$, called
-    /vertical category/ between $a,b$;
-  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$;
-  * a horizontal composition functor $\ast \colon T(b,c) \times T(a,b) \to T(a,c)$
-    for every triple of objects $a,b,c$;
-
-such that, whenever we find the following configuration,
-\[\begin{tikzcd}[]
-a\phantom{b}
-\ar[bend left=60]{r}[name=U1,below]{}{}
-\ar[bend right=60]{r}[name=U2,above]{}{} &
-b\phantom{a}
-\ar[bend left=60]{r}[name=V1,below]{}{}
-\ar[bend right=60]{r}[name=V2,above]{}{} &
-c\phantom{b}
-\ar[bend left=60]{r}[name=W1,below]{}{}
-\ar[bend right=60]{r}[name=W2,above]{}{} &
-d\phantom{c}
-\arrow[Rightarrow,from=U1,to=U2]{}{}
-\arrow[Rightarrow,from=V1,to=V2]{}{}
-\arrow[Rightarrow,from=W1,to=W2]{}{}
-\end{tikzcd}\]
-associativity holds up to natural isomorphism, that is, there exists
-an isomorphism $\alpha$ between the following composite functors
-\[\begin{tikzcd}[row sep=huge, column sep=tiny]
-&
-B(c,d) \times B(b,c) \times B(a,b)
-\ar[bend left=60]{dd}[name=U,left]{\phantom{as}}{}
-\ar[bend right=60]{dd}[name=D,right]{\phantom{as}}[swap]{}
-\drar{\ast \times \id}
-\dlar[swap]{\ast \times \id} & \\
-B(b,d) \times B(a,b) \drar[swap]{\ast} &&
-B(c,d) \times B(a,c) \dlar{\ast} \\
-& B(a,d) & 
-\arrow[Rightarrow,from=D,to=U]{}{\alpha}
-\end{tikzcd}\]
-#+END_definition
-
-**** TODO Coherence theorem for bicategories                      :ignore:
-# https://ncatlab.org/nlab/show/pentagon+identity
-# https://ncatlab.org/nlab/show/bicategory
-
-*** Simplicial sets
-# [Goerss], [nLab], [Jardine] and [Riehl]
-This section follows cite:goerss09 and cite:riehl11.
-
-# https://golem.ph.utexas.edu/category/2017/08/simplicial_sets_vs_simplicial.html
-
-**** Simplicial sets                                              :ignore:
-#+ATTR_LATEX: :options [Simplex category]
-#+BEGIN_definition
-The *simplex category* $\Delta$ is the category of finite ordinals of the
-form
-\[
-[n] = (0 < \dots < n),
-\]
-for any $n \in \mathbb{N}$, and order-preserving maps between them.
-#+END_definition
-
-All the morphisms simplex category are generated by composition of
-morphisms of the following two families:
-
- * *coface maps*, maps of the form $d^k \colon [n-1] \to [n]$ defined as the
-   only injective map not having $k$ in its image; and
- * *codegeneracy maps*, maps of the form $s^k \colon [n+1] \to [n]$ defined as
-   the only surjective map such that $k$ has two preimages.
-
-From the definition of these functions, the following equations follow
-\begin{aligned}
-d^id^j = d^{j+1}d^i, & \quad & \text{for each }\ i \leq j, \\
-s^js^i = s^is^{j+1}, & \quad & \text{for each }\ i \leq j, \\
-\end{aligned}
-\[
-s^jd^i =  \left\{
-	\begin{array}{ll}
-		d^is^{j-1}  & \mbox{if } i < j, \\
-		1 & \mbox{if } i = j, \mbox{ or } j+1, \\
-                d^{i-1}s^j & \mbox{otherwise}.
-	\end{array} \right.
-\]
-
-#+ATTR_LATEX: :options [Representation of a morphism]
-#+BEGIN_lemma
-Any morphism in $\Delta$ can be written as
-\[
-f = d^{i_k}\dots d^{i_1}s^{j_1} \dots s^{j_k} : [n] \to [n'],
-\]
-where $0 \leq i_1 < \dots < i_k < n'$ and $0 \leq j_1 < \dots < j_k < n$.
-#+END_lemma
-#+BEGIN_proof
-# TODO
-#+END_proof
-
-
-#+ATTR_LATEX: :options [Simplicial set]
-#+BEGIN_definition
-A *simplicial set* is a contravariant functor from $\Delta$ to the
-category of sets. The category of *simplicial sets*, $\sSets{}$, is the functor
-category $\Sets^{\Delta^{op}}$.
-#+END_definition
-
-If $X \in \sSets$ is a simplicial set, we call
-
- * $X_n$ to the image of $[n]$ under the functor $X$;
- * $d_k$ to the *face maps*, the images of the coface maps under the
-   contravariant functor $X$;
- * $s_k$ to the *degeneracy maps*, the images of the codegeneracy maps
-   under the contravariant functor $X$.
-
-The following identities follow from the previous identities in the
-category and the contravariance of the functor
-\begin{aligned}
-d_jd_i = d_id_{j+1}, & \quad & \text{for each }\ i \leq j, \\
-s_is_j = s_{j+1}s_i, & \quad & \text{for each }\ i \leq j, \\
-\end{aligned}
-\[
-d_is_j =  \left\{
-	\begin{array}{ll}
-		s_{j-1}d_i  & \mbox{if } i < j, \\
-		1 & \mbox{if } i = j,\mbox{ or } j+1, \\
-                s_jd_{i-1} & \mbox{otherwise}.
-	\end{array} \right.
-\]
-
-**** Nerve                                                        :ignore:
-#+ATTR_LATEX: :options [Nerve of a category]
-#+BEGIN_definition
-The *nerve* of a category ${\cal C}$ is a simplicial set $N({\cal C}) \in \sSets$ given
-by the functor category $N({\cal C})_n = {\cal C}^{[n]}$, where $[n]$ is the ordinal $(0 < \dots < n)$
-interpreted as a category, that is, $N({\cal C})_n$ is the set of paths of
-composable morphisms of length $n$.
-#+END_definition
-
-# Face map
-
-#+ATTR_LATEX: :options [Nerve functor]
-#+BEGIN_lemma
-The *nerve functor* $N \colon \Cats \to \sSets$ is fully faithful.
-#+END_lemma
-
-**** Standard n-simplex                                           :ignore:
-#+ATTR_LATEX: :options [Standard n-simplex]
-#+BEGIN_definition
-The *standard n-simplex*, $\Delta^n$, is defined as the nerve of $[n]$,
-$\Delta^n = N([n])$. In fact, it can be seen as the covariant functor
-\[
-\Delta^n = \hom_{\Delta}(-,[n]).
-\]
-#+END_definition
-
-# TODO check
-By Yoneda Lemma, natural transformations between standard n-simplices
-correspond to maps between ordinals
-\[
-\Nat(\hom(-,[n]), \hom(-,[m])) \cong \hom([n],[m]).
-\]
-Thus, coface and codegeracy maps can be defined between n-simplices.
-In particular, the i-th face of $\Delta^n$, written as $\partial_i \Delta^n$ is defined as the image of
-$d^i : \Delta^{n-1} \to \Delta^n$.
-
-**** Boundaries                                                   :ignore:
-The boundary is the smallest subsimplicial set of $\Delta^n$
-containing all of his faces, that is, the union of the faces 
-$\partial_0\Delta^n, \dots, \partial_n\Delta^n$.
-
-From the simplicial identities, it follows that
-\[\begin{tikzcd}
-\Delta^{n-2}\rar{d^{j-1}} \dar[swap]{d^{i}} & \Delta^{n-1} \dar{d^{i}} \\
-\Delta^{n-1}\rar[swap]{d^{j}} & \Delta^{n}
-\end{tikzcd}\]
-and this is a pullback square. This allows us to define the
-boundary of a simplicial set as a coequalizer.
-
-#+ATTR_LATEX: :options [Boundary]
-#+BEGIN_definition
-The *boundary* of the n-simplex, $\partial \Delta^n$ is the subobject of $\Delta^n$ generated
-by its $(n-1)\mhyphen\mathrm{simplices}$. Formally, it is the coequalizer given by the
-following diagram
-\[\begin{tikzcd}
-\bigsqcup_{0 \leq i < j \leq n} \Delta^{n-2} \rar[yshift=0.5ex] \rar[yshift=-0.5ex] &
-\bigsqcup_{0 \leq i \leq n} \Delta^{n-1} \rar&
-\partial \Delta^n.
-\end{tikzcd}\]
-#+END_definition
-
-**** Horns                                                        :ignore:
-The simplicial horn is the union of all the faces of an n-simplex except
-for one. Formally, it can be described as a coequalizer, as we did with
-the boundary.
-
-#+ATTR_LATEX: :options [Horns]
-#+BEGIN_definition
-The *n-horn* $\Lambda^n_k \subset \partial \Delta^n$ for $0 \leq k \leq n$ is defined as the coequalizer
-\[\begin{tikzcd}
-\bigsqcup_{0 \leq i < j \leq n} \Delta^{n-2} \rar[yshift=0.5ex] \rar[yshift=-0.5ex] &
-\bigsqcup_{i \neq k} \Delta^{n-1} \rar&
-\Lambda^n_k.
-\end{tikzcd}\]
-#+END_definition
-
-The horns $\Lambda_k^n$ for $0 < k < n$ are called *inner horns* while $\Lambda_0^n$ and $\Lambda_n^n$
-are *outer horns*. For instance, in dimension 2, we have two outer horns
-$\Lambda^2_0, \Lambda^2_2$ and one inner horn $\Lambda^2_1$ that can be drawn as
-\[\begin{tikzcd}[column sep=tiny]
-& \cdot &                    & & \cdot \drar &      & & \cdot \ar{dr} &\\
-\cdot \urar \ar{rr} && \cdot & \cdot \urar && \cdot & \cdot \ar{rr} && \cdot
-\end{tikzcd}\]
-with the inner horn being the one in the middle.
-
-Note that the inner horn can be extended by composition to a
-simplex. This property of certain horns is what will define Kan
-complexes and \infty-categories.
-
-**** Kan complex                                                  :ignore:
-#+ATTR_LATEX: :options [Kan complex]
-#+BEGIN_definition
-A *Kan complex* is a simplicial set $X \in \sSets$ such that any horn $\Lambda^n_k \to X$
-can be extended to an n-simplex $\Delta^n \to X$. That is, the following diagram
-has a solution, which needs not to be unique.
-\[\begin{tikzcd}
-\Lambda^n_k \rar \dar[hook] & X \\
-\Delta^n \ar[dashed, swap]{ur}{\exists} & \\
-\end{tikzcd}\]
-#+END_definition
-
-*** (\infty,1)-categories
-# https://ncatlab.org/nlab/show/%28n%2Cr%29-category
-# https://ncatlab.org/nlab/show/higher+category+theory
-# https://arxiv.org/pdf/1007.2925.pdf Short course on infty-categories
-
-There is no consensus on the definition of a *(\infty,1)-category*
-yet, but whenever we talk of (\infty,1)-categories, we expect them to
-have
-
- - a collection of objects;
-
- - morphisms between objects, invertible 2-morphisms between
-   morphisms, invertible 3-morphisms between 2-morphisms, invertible
-   morphisms between 4-morphisms, and so forth;
-
- - composition of morphisms, with suitably associative and identity
-   laws.
-
-In general, a *(n,k)-category* has morphisms, 2-morphisms, \dots and
-n-morphisms, and all morphisms above the k-th dimension are
-invertible. This section will follow cite:groth10.
-
-**** \infty-categories                                            :ignore:
-#+ATTR_LATEX: :options [\infty-category]
-#+BEGIN_definition
-An *\infty-category* is a simplicial set ${\cal C} \in \sSets$ such that every
-/inner/ horn $\Lambda^n_k \to {\cal C}$ can be extended to an n-simplex $\Delta^n \to {\cal C}$.
-#+END_definition
-
-# Spaces and categories give rise to \infty-categories
-
-In particular, we call 
-
- - *objects* to the vertices of the simplicial set ${\cal C}_0$;
-
- - *morphisms* to the 1-simplices $f \in {\cal C}_1$; the /source map/ is given
-   by the first face map $d_1 : {\cal C}_1 \to {\cal C}_0$ and the /target map/ is given
-   by the second face map $d_2 : {\cal C}_1 \to {\cal C}_0$.
-
- - *identity map* to the degeneracy map $s_0 \colon {\cal C}_0 \to {\cal C}_1$;
-   # it is an endomorphism
-
- - *composition* of two morphisms $f : x \to y$ and $g : y \to z$ to the morphism
-   that we obtain by extending an inner horn $l : \Lambda^2_1 \to {\cal C}$ such that $d_0(l) = g$
-   and $d_2(l) = f$ to a 2-simplex $\sigma : \Delta^2 \to {\cal C}$. Note that this, however, does
-   not provide a unique candidate for composition.
-
-
-**** Functors of \infty-categories                                :ignore:
-A functor between two \infty-categories ${\cal C},{\cal D}$ is just a map of
-simplicial sets between them; a natural transformation is defined
-as a map $\Delta^1 \times {\cal C} \to {\cal D}$.
-
-**** \infty-groupoids                                             :ignore:
-# http://www.cs.nott.ac.uk/~psztxa/publ/weakomega2.pdf
-# https://arxiv.org/pdf/1709.09519.pdf
-# https://arxiv.org/pdf/1007.2925.pdf Groth, course on infty-categories
-
-#+ATTR_LATEX: :options [Infinity-groupoids]
-#+BEGIN_definition
-An *\infty-groupoid* is a \infty-category in which the homotopy category
-is a groupoid.
-#+END_definition
-
-#+ATTR_LATEX: :options [Characterization of groupoids]
-#+BEGIN_theorem
-An *\infty-category* is an \infty-groupoid if and only if it is a Kan
-complex.
-#+END_theorem
-
-**** TODO Fundamental \infty-groupoid                             :ignore:
-# Grothendieck homotopy hypothesis
-
-*** TODO Higher-order categories and homotopy
-# From chapter 2 of HoTT
-*** TODO Weak \infty-groupoids
-
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
@@ -6963,8 +6243,6 @@ forcing techniques with allowed to construct new models of ZFC.
 #+LATEX: \end{center}}
 
 * Categorical logic
-# [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
-
 ** TODO Presheaves
 # [Moerdijk]
 # TODO: Comma category is equivalent to a presheaf category
@@ -8255,6 +7533,7 @@ $(\lambda m. (a_0,\overset{m}{\dots},a_0))$ sending each $m$ to a vector of repe
 **** Theorem of choice                                            :ignore:
 #+ATTR_LATEX: :options [The theorem of choice]
 #+BEGIN_exampleth
+<<theorem-choice>>
 A proposition $P$ could be given as a family of types parametrized
 over another type $A$, where $P(a)$ is inhabited if and only if
 the proposition holds for $a : A$.
@@ -8272,14 +7551,14 @@ over two types $A,B$. We will prove the following theorem
 \left( \sum_{(g : A \to B)}\prod_{(a:A)} R(a,g(a)) \right).
 \]
 
-#+BEGIN_proof
+#+begin_proof
 In order to prove the implication, we assume that we have a term
 $f : \prod_{a:A}\sum_{b:B}R(a,b)$, and construct a term of type
 $\sum_{g:A\to B}\prod_{a:A}R(a,g(a))$. The first step is to provide a function
 of type $A \to B$, and $g :\equiv \lambda a.\fst(f(a))$ is exactly of this type. The
 second step is to provide a term $\prod_{a:A}R(a,\fst(f(a)))$, but now
 the function $\lambda a.\snd(f(a))$ is exactly of this type.
-#+END_proof
+#+end_proof
 # TODO: Annotate each term with its type
 
 Surprisingly, the theorem we have just proved reads clasically as
@@ -8306,7 +7585,7 @@ has a fundamentally different meaning. Later, we will see a
 technique that will allow us to recreate the classical existential
 quantifier.
 #+END_exampleth
-
+*** TODO Soundness up to isomorphism
 *** Equality types
 *Equality* in our theory comes from an adjunction, as was first proposed
 in cite:lawvere70. The equality type
@@ -8369,7 +7648,7 @@ for each $x:A$, and corresponds to the following introduction rule.
 \begin{prooftree}
 \AXC{$\Gamma \vdash a : A$}
 \UIC{$\Gamma \vdash \refl_a : a = a$}
-\end{prooftree} 
+\end{prooftree}
 Introduction and elimination rules are related by $\J_C(c,\refl_a) \equiv c[x/a]$;
 that is, the J-eliminator can return $c$ in the reflexivity case.
 
@@ -8386,8 +7665,205 @@ parametrized over $p$, of the form $C(x,y,p)$.
 \end{prooftree}
 The corresponding computation rule would be $\J_C(c,\refl)\equiv c[a/x]$.
 
-*** TODO Subobject classifier
-*** TODO Soundness up to isomorphism
+*** Subobject classifier and propositions
+# [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
+
+A *subobject classifier* is an object $\Omega$ with a monomorphism $\mathrm{true} \colon 1 \to \Omega$
+such that, for every monomorphism $m : S \to X$, there exists a unique $\chi$
+such that
+\[\begin{tikzcd}
+S\rar{} \dar[swap, hook]{m} & 
+1 \dar{\mathrm{true}} \\
+X\rar[dashed]{\chi} & \Omega
+\end{tikzcd}\]
+is a pullback square.
+
+# Characteristic function; notion of sets. Subobject classifiers do not need to exist.
+
+Now, if we have a type given by a monomorphism, $\intr{\Gamma , x : P} \to \intr{\Gamma}$,
+by the defining property of the subobject classifier,
+we have a unique characteristic morphism $P \colon \intr{\Gamma} \to \intr{\Omega}$, which can
+be read as $\Gamma \vdash P \colon \Omega$, meaning that $\Omega$ is a type whose elements are
+themselves types (see cite:shulman17).
+\[\begin{tikzcd}
+\intr{\Gamma , x : P}\rar{} \dar[swap, hook]{} & 
+1 \dar{\mathrm{true}} \\
+\intr{\Gamma} \rar[dashed]{\chi_P} & \intr{\Omega}
+\end{tikzcd}\]
+A type $P$ is determined by a monomorphism if, equivalently, any
+two of its elements are equal. Thus, the elements of $\Omega$ are the
+types with at most one element; these types are usually called
+*propositions* in type theory. This can be expressed by the
+following rule.
+\begin{prooftree}
+\AXC{$\Gamma \vdash P : \Omega$}
+\AXC{$\Gamma \vdash a : P$}
+\AXC{$\Gamma \vdash b : P$}
+\TIC{$\Gamma \vdash \mathrm{isProp}_P(a,b) : a = b$}
+\end{prooftree} 
+Any two proofs of a proposition (in the sense of type theory) must be
+equal, and thus, propositions allow us to reintroduce the notion of
+proof irrelevance.
+
+*** Propositional truncation
+Propositions are types, but not all types are propositions; a type $A$
+may have multiple distinct elements, witnessing different proofs of
+the same fact. We could, however, /truncate/ a type into a proposition
+$\|A\|$ by postulating that two of its proofs $p,q : \|A\|$ should be equal,
+$p = q$. In this case, to provide an element of $A$ would mean to explicitly
+construct a proof of $A$; whereas to provide an element of $\|A\|$ would mean
+to witness that $A$ can be proved, without constructing any proof.
+
+As an example, there are four distinct elements of
+\[
+\sum_{(n,m) : \mathbb{N} \times \mathbb{N}} (n + m = 3),
+\]
+each one of them providing an ordered pair of naturals that add up to $3$.
+In contrast, there is a unique element of
+\[
+\left\|\sum_{(n,m) : \mathbb{N} \times \mathbb{N}} (n + m = 3) \right\|,
+\]
+that simply witnesses the existence of some pair of naturals that add
+up to $3$, without explicitly pointing to it. In this sense, the truncated
+version resembles more the existential quantifier of classical logic; while
+the untrucated version demands the explicit construction of an example.
+
+As a second example, we can reformulate a nontrivial version of the
+axiom of choice we discussed previously in Example [[theorem-choice]].
+Note that
+\[
+\left(\prod_{(a:A)} \left\|\sum_{(b : B)} R(a,b) \right\|\right) \to 
+\left\| \sum_{(g : A \to B)}\prod_{(a:A)} R(a,g(a)) \right\|,
+\]
+now represents the fact that we want to obtain evidence of the existence
+of a function only knowing that for each $a$ there exists an element $b$ related
+to it, but (crucially) without knowing which $b$ is related to $a$. This
+new version of the Axiom of Choice is indeed independent of our theory
+(see Chapter 3 of cite:hottbook).
+
+How can we build truncations inside our theory? It can be proved (see cite:awodey04)
+that propositional truncation is the left adjoint to the inclusion of propositions
+into general types; and, if we assume the existence of this adjoint into the category
+we are working into, we can use propositional truncations. That is, if $P$ is a
+proposition and $A$ is an arbitrary type, we have the following adjunction
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] A \rar{}\& P \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] \|A\| \rar{}\& P \end{tikzcd}}
+\end{prooftree}
+which in practical terms means that, if we want to prove $\|A\| \to P$, where $P$
+is a proposition, it suffices to prove $A \to P$, that is, to assume a particular
+proof for $A$. Note that this corresponds to usual mathematical practice, where
+having a proof of existence can be used to assume that we have explicitly
+constructed the element and to prove a different proposition using it, with
+the condition that we cannot refer later to the explicit element we used during
+the proof.
+
+* Type theory and topoi
+** Universes of mathematics
+*** Topoi
+A *topos* (plural /topoi/) is a locally cartesian closed category with
+a subobject classifier where every finite limit exists. Usually,
+*W-topoi*, or topoi with a natural numbers object (in the sense of
+Example [[example-naturalnumbersobj]]), are considered cite:leinster10.
+
+Each topos is a model of constructive mathematics; and we can reason
+in its internal logic and rebuild mathematics internally in its
+language. Each topos is thus an universe of mathematics with different
+axioms and interpretations cite:bauer2017five; for example,
+
+ * inside the Hayland's *realizability topos*, every function is computable
+   and we can study Kleene's realizability theory cite:vanoosten08;
+
+ * the *Dubuc topos* provides a non paradoxical formalization of notion of 
+   "infinitesimal" used by Newton and Leibniz, and we can study synthetic
+   differential geometry inside it cite:dubuc89;
+
+ * inside the Johnstone's *topological topos*, we can reason with topological
+   spaces and continuous functions between them cite:johnstone79, and under
+   certain assumptions, it is safe to assume that all the functions we can
+   build are automatically continuous cite:escardo15.
+
+The study of any of these theories is beyond the scope of this text.
+However, as we have been relating type theory to the internal language
+of locally closed cartesian categories with enough structure; we know
+that type theory (depending on what constructions we assume) will have
+models in categories like these.
+
+In this chapter, we will exclusively work internally in dependent type
+theory and use it as a constructive foundation of mathematics. This
+will have the added benefit that every formal proof in the system will
+be a closed lambda term and checking that a proof is correct amounts to
+typechecking the term. Explicitly, the type theory we have been
+studying corresponds to *Martin-Löf type theory* cite:nordstrom90.
+
+*** Programming inside Martin-Löf type theory
+Martin-Löf type theory and the internal language we have been
+describing so far can also be regarded as a programming language in
+which is possible to formally specify and prove theorems about the
+code itself.  Formal proofs in this theory can be written in any
+programming language with a powerful enough type system; examples
+of these include
+
+ * *Agda*, a programming language which implements a variant of
+   Martin-Löf type theory;
+
+ * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements Calculus of
+   Constructions and was used, for example, to check a proof of the
+   Four Color Theorem;
+   # http://www.ams.org/notices/200811/tx081101382p.pdf
+   # https://coq.inria.fr/about-coq
+
+ * *Idris*, a programming language, which implements a different
+   version of identity types than that in standard type theory;
+
+ * *NuPRL* cite:nuprl86 a proof assistant implementing Martin-Löf
+   /extensional/ Type Theory, which is different from the intensional
+   one in how it treats equality types;
+
+ * *Cubical* cite:cohen16 and *RedPRL* cite:redprl provide experimental implementations
+   of Cubical Type Theory, a different variant of type theory.
+
+In this text, we will use Agda to write mathematics, taking ideas
+from cite:Conor17. We will check proofs in Martin-Löf type theory
+using its type system.
+
+*** Dedekind reals
+*** Homotopy type theory I: Univalence
+# cite Voevodsky
+
+We know that, for any pair of types $A,B : {\cal U}$, there exists a function
+of type $\mathrm{idtoeqv} : (A =_{\cal U} B) \to (A \sim B)$, defined
+# TODO
+
+#+ATTR_LATEX: :options [Univalence]
+#+BEGIN_definition
+For any pair of types $A,B : {\cal U}$, $\mathrm{ideqv} : (A =_U B) \to (A \sim B)$ is
+an equivalence. In particular, $A = B$ is equivalent to $A \sim B$.
+#+END_definition
+
+*** Homotopy type theory II: synthetic topology
+# Voevodsky's univalence
+
+Fundamental groups can be defined as truncations
+\[
+\pi_n(A,a) :\equiv \Big\|\Omega^n(A,a)\Big\|_0.
+\]
+
+We will show that the loop space of the sphere is equivalent to the
+integers; that is $\Omega(\mathbb{S}^1) \simeq \mathbb{Z}$, and, consequently, $\pi_1(\mathbb{S}^1)$ will be also
+$\mathbb{Z}$, as it is a type-theoretical set.
+
+
+* OLD Type theory
+# The connection between constructivity, computability and continuity
+# goes back to Brower. (Shulman 17)
+
+# Types vs sets, la pertenencia a un tipo es juzgamental. Es la
+# perspectiva de etcs, estructural en vez de material.
+
+# TODO: Diccionario categorías/agda
+
 ** TODO Beyond locally cartesian closed categories
 *** TODO Table of correspondences                                  :ignore:
 [[https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory][relation between type theory and category theory in nLab]]
@@ -8519,7 +7995,6 @@ ZFC, the category $\Set$ satisfies the axiom of choice, that is,
 given any surjective function $f : A \to B$, there exists a 
 function $k : B \to A$ such that $f \circ k = \id_B$.
 
-
 **** ETCS                                                         :ignore:
 #+ATTR_LATEX: :options [Category of sets]
 #+BEGIN_definition
@@ -8551,21 +8026,8 @@ in cite:maclane94.
 # then the result holds in any Heyting pretopos.
 
 *** TODO (\infty,1)-toposes
-* Type theory
-# The connection between constructivity, computability and continuity
-# goes back to Brower. (Shulman 17)
+** TODO Martin-Löf type theory
 
-# Types vs sets, la pertenencia a un tipo es juzgamental. Es la
-# perspectiva de etcs, estructural en vez de material.
-
-# TODO: Diccionario categorías/agda
-
-** Martin-Löf type theory
-In this chapter, we will exclusively work internally in dependent type
-theory and use it as a constructive foundation of mathematics. This
-will have the added benefit that every formal proof in the system will
-be a closed lambda term and checking that a proof is correct amounts to
-typechecking the term.
 
 The type theory we are using in this text is due to Martin-Löf
 *Martin-Löf type theory* was developed [...]
@@ -8584,8 +8046,8 @@ the Agda proof assistant.
 The connection between constructivity, computability and continuity
 goes back to Brower.
 
-** Universe hierarchy
-** Intensional equality and Equivalences
+** OLD Universe hierarchy
+** OLD Intensional equality and Equivalences
 *** Propositional equality
 Given any type $A : {\cal U}$ and two elements $x,y : A$, we can consider the
 type of proofs of equality between the two, $x = y$. Note that this
@@ -8878,7 +8340,7 @@ This type is not a proposition, but we can prove that
 $\mathsf{qinv}(f) \to \mathsf{isContrMap}(f)$, and so, it is easier to use it to create
 equivalences.
 *** Function extensionality and Univalence
-** Synthetic topology
+** OLD Synthetic topology
 # Synthetic computability: cite Bauer
 *** Higher inductive types
 A *higher inductive type* is the type freely generated by a set of
@@ -8919,9 +8381,9 @@ $\ap_f(\mathsf{loop}) = s$.
 #+END_exampleth
 
 *** The fundamental group of the circle
-** Constructive analysis
+** OLD Constructive analysis
 # Comparar con Coquelicot https://hal.inria.fr/file/index/docid/860648/filename/article.pdf
-** Computer verification
+** OLD Computer verification
 # Sprinkles of extensionality for your vanilla type theory
 
 # Higher inductive types using Dan Licata's trick
@@ -8946,6 +8408,724 @@ http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Notes
 This text defines $\mathbb{N}$ with a zero.
 * OLD Removed                                               :noexport:ignore:
+** OLD Monoidal and enriched categories
+# Linear logic = Monoidal categories = Quantum computation
+# Proof net = String diagram = Quantum circuit
+*** TODO String diagrams
+# Peter Selinger - A survey of graphical languages https://arxiv.org/pdf/0908.3347.pdf
+*** Enriched categories
+# https://www.youtube.com/watch?v=be7rx29eMr4
+
+**** Motivation                                                   :ignore:
+When we defined categories for the first time, we implicitly assumed
+a set of morphisms between every two objects, that is, for every two
+$a,b \in {\cal C}$, there exists a set $\hom(a,b)$. Composition is
+then a function
+\[
+\circ : \hom(b,c) \times \hom(a,b) \to \hom(a,c),
+\]
+and the identity morphism can be represented as a function from the
+terminal object into the morphisms from an object to itself,
+\[
+\id : 1 \to \hom(a,a).
+\]
+Associativity and identity axioms can be expressed as commutative
+diagrams,
+# TODO: Diagrams
+
+In this definition, we are only using the monoidal structure of the
+category $\Set$; thus, we could generalize the notion of a category into
+that of an *enriched category* over a monoidal category ${\cal V}$, a category
+whose hom-sets would be objects of ${\cal V}$, and the composition and identities
+would be morphisms in that category.
+
+**** Definition                                                   :ignore:
+**** Example: metric spaces                                       :ignore:
+#+ATTR_LATEX: :options [Metric spaces]
+#+BEGIN_exampleth
+If we consider the ordered set $(\mathbb{R}^{+}, \geq)$ as a category, it
+can be given a monoidal structure with the addition of numbers.
+Note that, in this category, objects are real numbers $r \in \mathbb{R}$ and
+\[
+\hom(r,r') = \left\{ \begin{array}{ll}
+  \{\ast\} & \mbox{ if } r \geq r', \\
+  \varnothing & \mbox{ otherwise; }
+\end{array}\right.
+\]
+thus, morphisms are usually written as $r \leq r'$.
+
+A *metric space* endowed with a distance function $d$ can be defined
+as a category enriched over $(\mathbb{R}^+,\geq)$. Note that the composition
+must be a morphism of the form
+\[
+\circ : d(b,c) + d(a,b) \geq d(a,c),
+\]
+which is the exact statement of the triangle inequality; while,
+knowing that $0$ is the initial object of the category, the identity
+is of the form
+\[
+\id : 0 \geq d(a,a),
+\]
+which is the statement of indiscernibility of identical elements.
+The rest of the axioms of the category hold trivially due to the
+fact that there is, at most, a unique morphism between any two
+objects.
+#+END_exampleth
+
+*** TODO Abelian categories
+** OLD Kan extensions
+*** Dinatural transformations
+# Extension of the concept of naturality to a special type of
+# bifunctors.
+# Natural diagonal between functors.
+
+#+ATTR_LATEX: :options [Dinatural transformation]
+#+BEGIN_definition
+A *dinatural transformation* between functors $F,G \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$
+is a family of morphisms $\alpha_x \colon F(x,x) \to G(x,x)$ for each $x \in {\cal C}$,
+called /components/, such that for every $f \colon x \to y$,
+\[\begin{tikzcd} &
+F(x,x) \rar{\alpha_{x}} &
+G(x,x) \drar{G(\id,f)} & \\
+F(y,x) \urar{F(f,\id)}\drar[swap]{F(\id,f)} & & &
+G(x,y) \\
+&
+F(y,y) \rar{\alpha_{y}} &
+G(y,y) \urar[swap]{G(f,\id)} &
+\end{tikzcd}\]
+
+commutes
+#+END_definition
+
+# TODO: Every natural transformation gives a dinatural transformation.
+
+**** TODO Natural transformation of covariant to contravariant functor :ignore:
+**** Extranatural transformations (wedges)                        :ignore:
+#+ATTR_LATEX: :options [Wedge]
+#+BEGIN_definition
+A *wedge* (also called *extranatural transformation*) is a dinatural
+transformation from a constant functor.
+
+That is, given a functor $T \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$, a *wedge* $\alpha \colon x \toddot T$ is a
+family of morphisms $\alpha_c \colon x \to T(c,c)$ such that
+
+\[\begin{tikzcd}
+x        \dar[swap]{\alpha_{c'}} \rar{\alpha_{c}} &
+T(c,c)   \dar{T(\id,f)} \\
+T(c',c') \rar[swap]{T(f,\id)} &
+T(c,c')
+\end{tikzcd}\]
+
+commutes for every $f \colon c \to c'$. 
+#+END_definition
+
+# Wedges or cowedges?
+# #+ATTR_LATEX: :options [Cowedge]
+# #+BEGIN_definition
+# A *wedge* (also called *extranatural transformation*) is a dinatural
+# transformation from a constant functor. We write wedges as $\alpha \colon F \toddot b$.
+# #+END_definition
+
+# That is, given a functor $F \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$, a wedge $\alpha \colon F \toddot b$ is a
+# family of morphisms $\alpha_x \colon F(x,x) \to b$ such that
+
+# \[\begin{tikzcd}
+# F(y,x)\rar{F(\id,f)} \dar[swap]{F(f,\id)} & F(y,y) \dar{\alpha_{y}} \\
+# F(x,x)\rar[swap]{\alpha_{x}} & b
+# \end{tikzcd}\]
+
+# commutes for every $f \colon x \to y$. 
+
+**** TODO Examples of dinatural transformations                   :ignore:
+*** Ends
+**** Definition of Ends                                           :ignore:
+#+ATTR_LATEX: :options [End]
+#+BEGIN_definition
+An *end* of $T \colon {\cal C}^{op} \times {\cal C} \to {\cal B}$ is its universal wedge.
+That is, a wedge $\alpha \colon e \toddot T$ such that for every other $\beta \colon k \toddot T$,
+there exists a unique $u \colon k \to e$ such that $\alpha_c \circ u = \beta_c$ for
+each $c \in {\cal C}$.
+#+END_definition
+
+Diagramatically,
+
+\[\begin{tikzcd}
+k \ar[dashed]{dr}{\exists! u} \ar[bend left]{drr}{\beta_{c}} \ar[swap,bend right]{ddr}{\beta_{c'}} & &\\
+&e        \dar[swap]{\alpha_{c'}} \rar{\alpha_{c}} &
+T(c,c)   \dar{T(\id,f)} \\
+&T(c',c') \rar[swap]{T(f,\id)} &
+T(c,c')
+\end{tikzcd}\]
+
+
+We usually call /end/ to the object $e$, and we use the following integral
+notation
+\[
+e = \int_{c \in {\cal C}} T(c,c).
+\]
+
+**** Examples of ends 1                                           :ignore:
+We present some examples of Ends, taken mainly from cite:thecatsters.
+
+#+ATTR_LATEX: :options [Natural transformations as Ends]
+#+BEGIN_exampleth
+Natural transformations are ends; they can be written as
+\[
+\Nat(F,G) = \int_{c\in {\cal C}} \hom(Fc,Gc)\ .
+\]
+
+Take $T = \hom(F-,G-) \colon {\cal C}^{op} \times {\cal C} \to \Sets$, where $F,G \colon {\cal C} \to {\cal E}$ are
+two arbitrary functors. A wedge $x \toddot T$ would be defined by a set $x \in \Sets$
+and a family of functions $\omega_c \colon x \to \hom(Fc,Gc)$ such that
+\[\begin{tikzcd}
+x        \dar[swap]{\omega_{c'}} \rar{\omega_{c}} &
+\hom(Fc,Gc)   \dar{Gf \circ -} \\
+\hom(Fc',Gc') \rar[swap]{- \circ Ff} &
+\hom(Fc,Gc')
+\end{tikzcd}\]
+commutes for each $f \colon c \to c'$. That is, for each element of the
+set, $a \in x$, we get $\omega_c(a) \colon Fc \to Gc$ such that $Gf \circ \omega_c(a) = \omega_{c'}(a) \circ Ff$;
+in other words, the following square is natural
+\[\begin{tikzcd}
+Fc \rar{\omega_c(a)}\dar[swap]{Ff} & Gc \dar{Gf} \\
+Fc' \rar[swap]{\omega_{c'}(a)} & Gc' \\
+\end{tikzcd}\]
+and $\omega_c(a)$ is a natural transformation from $F$ to $G$, for each $a \in x$. 
+
+Thus, we have proved that a wedge $x \toddot T$ is a set $x$ mapping to the
+set of natural transformations. The universal set with this property
+is clearly (it can be seen as the terminal object of the slice
+category) the set of natural transformations. That is,
+\[
+\Nat(F,G) = \int_{c\in {\cal C}} \hom_{{\cal E}}(Fc,Gc)\ .
+\]
+
+The particular case
+\[
+\Nat(\id,\id) = \int_{c\in{\cal C}} \hom_{{\cal C}}(c,c)
+\]
+is sometimes known as the center of the category.
+#+END_exampleth
+
+**** Examples of ends 2                                           :ignore:
+#+ATTR_LATEX: :options [Tannakian reconstruction]
+#+BEGIN_exampleth
+Let $M$ be a monoid in $\Sets$. We consider $M\mhyphen\Sets$, the category of sets
+in which $M$ acts; that is, pairs $(S,\sigma)$, where $s$ is an arbitrary
+set and $\sigma \colon M \times S \to S$ is an action of the monoid on the set.
+Morphisms are of the form $f \colon (S,\sigma) \to (R,\rho)$ where $f \circ \sigma = \rho \circ f$.
+
+There is
+a forgetful functor $U \colon M\mhyphen\Sets \to \Sets$ that simply forgets the $M\mhyphen\text{action}$
+on the set; and we can recover the monoid from this functor as
+\[
+\int_{(s,\sigma) \in M\mhyphen\Sets} \hom(U(s,\sigma), U(s,\sigma)) =
+\Nat(U,U) = M.
+\]
+This is a very particular instance of the idea of Tannakian reconstruction,
+as described in cite:joyal91.
+
+The forgetful functor $U \colon M\mhyphen\Sets \to \Sets$ is a representable functor;
+represented by $(M,\mu) \in M\mhyphen\Sets$. There exists a function
+\[
+g \colon \hom_{M\mhyphen\Sets}((M,\mu), (S,\sigma)) \to S = U(S,\sigma)
+\]
+sending $g(f) = f(e)$. Note that $f$ is completely determined by $f(e)$; as
+$f(m) = f(\mu(m,e)) = \sigma(m,f(e))$; and this $g$ is a bijection. We have
+proved that $U \cong \hom((M,\mu),-)$.
+
+Now, using this fact and the dual Yoneda lemma,
+\[\begin{aligned}
+\Nat(U,U) &\cong \Nat(\hom((M,\mu),-), \hom((M,\mu),-)) \\
+          &= \hom_{M\mhyphen\Sets}((M,\mu),(M,\mu)) = M;
+\end{aligned}\]
+and the components of the natural transformation are simply
+multiplication by $m$ for some fixed $m \in M$. Diagramatically, for
+any given $\psi \in \Nat(U,U)$,
+\[\begin{tikzcd}[row sep={4mm,between origins},column sep={8mm,between origins}]
+(M,\mu) \arrow[rrrr, "\psi_{(S,\sigma)}"] \arrow[ddd, "{\sigma(-,s)}", swap] 
+    & & & & (M,\mu) \arrow[ddd, "{\sigma(-,s)}"] \\  
+    & e \arrow[rr, |->] \arrow[d, |->] & & m \arrow[d, |->] & \\[1cm]
+    & s \arrow[rr, |->] & & \sigma(m,s) \\
+(S,\sigma) \arrow[rrrr, "\psi_{(S,\sigma)}", swap] & & & & (S,\sigma)\\  
+\end{tikzcd}\]
+it must be the case that $\psi_{(S,\sigma)}(s) = ms$.
+#+END_exampleth
+
+**** Examples of ends 3                                           :ignore:
+#+ATTR_LATEX: :options [Reconstruction of the center]
+#+BEGIN_exampleth
+A variant on the previous example is to use identity functors
+to recover
+\[
+\int_{(s,\sigma) \in M\mhyphen\Sets} \hom((s,\sigma),(s,\sigma)) = \Nat(\id,\id) = {\cal Z}(M)
+\]
+the center of the monoid.
+
+If $\psi \in \Nat(\id,\id)$, we can apply the forgetful functor to get
+$U\psi \in \Nat(U,U)$. By the previous example, the natural transformation
+must be of the form $\psi_{(S,\sigma)}(s) = \sigma(m,s)$ for each $(S,\sigma)$, given some
+fixed $m \in M$.
+
+However, further restrictions apply in this case. In particular,
+$\psi_{(M,\mu)}$ must be a morphism in $M\mhyphen\Sets$, therefore, for any $n \in M$,
+\[
+nm = \mu(n,\mu(m,e)) = \mu(m,\mu(n,e)) = mn,
+\]
+and $m \in {\cal Z}(M)$. The fact that any $m \in {\cal Z}(M)$ defines a natural
+transformation follows from the axioms of the $M\mhyphen\Sets$ structure.
+#+END_exampleth
+
+*** Coends
+*** TODO Profunctors, distributors
+# https://ncatlab.org/nlab/show/profunctor
+**** Composition
+**** Heteromorphisms
+**** https://ncatlab.org/nlab/show/anafunctor
+*** Kan extensions
+** OLD Higher categories
+# TODO: Bicategories are weak 2-categories
+# TODO: 2-categories are strict 2-categories
+
+*** Strict 2-categories
+**** 2-categories: introduction                                   :ignore:
+# TODO: The category of two categories
+In a 2-category, instead of having sets of morphisms; we have a
+category of morphisms between any two objects. It has objects,
+called */0-cells/*; morphisms between objects, called */1-cells/*; and
+morphisms between morphisms, called */2-cells/*.
+\[\begin{tikzcd}
+x
+&
+x \rar{f}&y 
+&
+x\phantom{y} 
+\arrow[bend left=50]{r}[name=U,below]{}{f}
+\arrow[bend right=50]{r}[name=D]{}[swap]{g}
+& 
+\phantom{x}y \arrow[Rightarrow,from=U,to=D]{}{\alpha}
+\end{tikzcd}\]
+As, morphisms between two objects form a category, morphisms between
+morphisms can be composed vertically in their category; 
+\[\begin{tikzcd}
+x\phantom{y}
+\arrow[bend left=80]{rr}[name=U2,below]{}{f}
+\arrow[]{rr}[name=C2,below]{}[name=C1,above]{}[above=2mm, left=3mm]{g}
+\arrow[bend right=80]{rr}[name=D2]{}[swap]{h}
+&& 
+\phantom{x}y
+\arrow[Rightarrow,from=U2,to=C1]{}{\alpha}
+\arrow[Rightarrow,from=C2,to=D2]{}{\beta}
+&
+x\phantom{y} 
+\arrow[bend left=50]{r}[name=U,below]{}{f}
+\arrow[bend right=50]{r}[name=D]{}[swap]{h}
+& 
+\phantom{x}y \arrow[Rightarrow,from=U,to=D]{}{\beta \circ \alpha}
+\end{tikzcd}\]
+but the 2-category will also provide a horizontal composition of
+morphisms between two objects
+\[\begin{tikzcd}
+\makebox[0pt][l]{$x$}\phantom{y} 
+\arrow[bend left=50]{r}[name=U,below]{}{f}
+\arrow[bend right=50]{r}[name=D]{}[swap]{f'}
+& 
+\phantom{}y
+\arrow[Rightarrow,from=U,to=D]{}{\alpha}
+\arrow[bend left=50]{r}[name=U,below]{}{g}
+\arrow[bend right=50]{r}[name=D]{}[swap]{g'}
+& 
+\makebox[0pt][l]{$z$}\phantom{y}
+\arrow[Rightarrow,from=U,to=D]{}{\beta}
+&
+x
+\arrow[bend left=50]{rr}[name=U,below]{}{g \circ f}
+\arrow[bend right=50]{rr}[name=D]{}[swap]{g' \circ f'}
+&&
+z
+\arrow[Rightarrow,from=U,to=D]{}{\beta \ast \alpha}
+\end{tikzcd}\]
+which, as we will formalize, will act functorially with respect to
+vertical composition. An interchange law which will act as a
+generalization of Proposition <<prop-interchangelaw>> will follow
+from functoriality. In fact, the category of small categories, with
+functors and natural transformations between them will be an example
+of 2-category.
+
+**** 2-category: definition                                       :ignore:
+#+ATTR_LATEX: :options [2-category]
+#+BEGIN_definition
+A *2-category* is given by
+
+  * a collection of objects;
+  * a category $T(a,b)$ for every pair of objects $a,b$, called
+    /vertical category/ between $a,b$;
+  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$;
+  * a horizontal composition functor $K_{a,b,c}\colon T(b,c) \times T(a,b) \to T(a,c)$
+    for every triple of objects $a,b,c$;
+
+where we usually write the action of $K$ on morphisms as $K(\beta,\alpha) = \beta \ast \alpha$.
+The functor $K_{a,b,c}$ must be associative and $U_a$ must provide a left and
+right identity.
+#+END_definition
+
+Associativity means that the two following composite functors are
+strictly equal,
+
+\[\begin{tikzcd}[row sep=huge, column sep=tiny]
+&
+T(c,d) \times T(b,c) \times T(a,b)
+\ar[bend left=60]{dd}[name=U,left]{}{}
+\ar[bend right=60]{dd}[name=D]{}[swap]{}
+\drar{K_{a,b,c} \times \id}
+\dlar[swap]{K_{b,c,d} \times \id} & \\
+T(b,d) \times T(a,b) \drar[swap]{K_{a,b,d}} &&
+T(c,d) \times T(a,c) \dlar{K_{a,c,d}} \\
+& T(a,d) & 
+\arrow[phantom,from=U,to=D]{}{=}
+\end{tikzcd}\]
+
+This is a particular case of an *enriched category*.
+
+**** Interchange law                                              :ignore:
+#+ATTR_LATEX: :options [Interchange law]
+#+BEGIN_proposition
+Given any $\alpha,\alpha',\beta,\beta'$ composable 2-cells,
+\[
+(\beta' \circ \beta) \ast (\alpha' \circ \alpha) =
+(\beta' \ast \alpha') \circ (\beta \ast \alpha).
+\]
+#+END_proposition
+#+BEGIN_proof
+Unfolding the definition in the product category and applying
+the functoriality of $K$, we get
+\[\begin{aligned}
+(\beta' \circ \beta) \ast (\alpha' \circ \alpha) &=
+K(\beta' \circ \beta, \alpha' \circ \alpha)  = K((\beta' , \alpha') \circ (\beta , \alpha)) \\
+&= K(\beta', \alpha') \circ K(\beta, \alpha) = (\beta' \ast \alpha') \circ (\beta \ast \alpha).
+\end{aligned}\]
+#+END_proof
+
+**** TODO 2-cat                                                   :ignore:
+# Describe 2-cat as a 3-cat
+**** TODO Eckmann-Hilton                                          :ignore:
+**** TODO Double categories                                       :ignore:
+*** Weak 2-categories
+In the definition of strict 2-categories, we have postulated that the
+horizontal composition of 2-cells should be associative, but we could
+relax this condition and write a similar definition in which the
+horizontal composition is not associative but
+/associative up to isomorphism/. This new definition gives us the
+notion of *bicategories*, which are also called *2-categories*.
+
+**** Formal definition: bicategory                                :ignore:
+#+ATTR_LATEX: :options [Bicategory]
+#+BEGIN_definition
+A *bicategory* is given by
+
+  * a collection of objects;
+  * a category $B(a,b)$ for every pair of objects $a,b$, called
+    /vertical category/ between $a,b$;
+  * a identity arrow $U_a \colon 1 \to T(a,a)$ for every object $a$;
+  * a horizontal composition functor $\ast \colon T(b,c) \times T(a,b) \to T(a,c)$
+    for every triple of objects $a,b,c$;
+
+such that, whenever we find the following configuration,
+\[\begin{tikzcd}[]
+a\phantom{b}
+\ar[bend left=60]{r}[name=U1,below]{}{}
+\ar[bend right=60]{r}[name=U2,above]{}{} &
+b\phantom{a}
+\ar[bend left=60]{r}[name=V1,below]{}{}
+\ar[bend right=60]{r}[name=V2,above]{}{} &
+c\phantom{b}
+\ar[bend left=60]{r}[name=W1,below]{}{}
+\ar[bend right=60]{r}[name=W2,above]{}{} &
+d\phantom{c}
+\arrow[Rightarrow,from=U1,to=U2]{}{}
+\arrow[Rightarrow,from=V1,to=V2]{}{}
+\arrow[Rightarrow,from=W1,to=W2]{}{}
+\end{tikzcd}\]
+associativity holds up to natural isomorphism, that is, there exists
+an isomorphism $\alpha$ between the following composite functors
+\[\begin{tikzcd}[row sep=huge, column sep=tiny]
+&
+B(c,d) \times B(b,c) \times B(a,b)
+\ar[bend left=60]{dd}[name=U,left]{\phantom{as}}{}
+\ar[bend right=60]{dd}[name=D,right]{\phantom{as}}[swap]{}
+\drar{\ast \times \id}
+\dlar[swap]{\ast \times \id} & \\
+B(b,d) \times B(a,b) \drar[swap]{\ast} &&
+B(c,d) \times B(a,c) \dlar{\ast} \\
+& B(a,d) & 
+\arrow[Rightarrow,from=D,to=U]{}{\alpha}
+\end{tikzcd}\]
+#+END_definition
+
+**** TODO Coherence theorem for bicategories                      :ignore:
+# https://ncatlab.org/nlab/show/pentagon+identity
+# https://ncatlab.org/nlab/show/bicategory
+
+*** Simplicial sets
+# [Goerss], [nLab], [Jardine] and [Riehl]
+This section follows cite:goerss09 and cite:riehl11.
+
+# https://golem.ph.utexas.edu/category/2017/08/simplicial_sets_vs_simplicial.html
+
+**** Simplicial sets                                              :ignore:
+#+ATTR_LATEX: :options [Simplex category]
+#+BEGIN_definition
+The *simplex category* $\Delta$ is the category of finite ordinals of the
+form
+\[
+[n] = (0 < \dots < n),
+\]
+for any $n \in \mathbb{N}$, and order-preserving maps between them.
+#+END_definition
+
+All the morphisms simplex category are generated by composition of
+morphisms of the following two families:
+
+ * *coface maps*, maps of the form $d^k \colon [n-1] \to [n]$ defined as the
+   only injective map not having $k$ in its image; and
+ * *codegeneracy maps*, maps of the form $s^k \colon [n+1] \to [n]$ defined as
+   the only surjective map such that $k$ has two preimages.
+
+From the definition of these functions, the following equations follow
+\begin{aligned}
+d^id^j = d^{j+1}d^i, & \quad & \text{for each }\ i \leq j, \\
+s^js^i = s^is^{j+1}, & \quad & \text{for each }\ i \leq j, \\
+\end{aligned}
+\[
+s^jd^i =  \left\{
+	\begin{array}{ll}
+		d^is^{j-1}  & \mbox{if } i < j, \\
+		1 & \mbox{if } i = j, \mbox{ or } j+1, \\
+                d^{i-1}s^j & \mbox{otherwise}.
+	\end{array} \right.
+\]
+
+#+ATTR_LATEX: :options [Representation of a morphism]
+#+BEGIN_lemma
+Any morphism in $\Delta$ can be written as
+\[
+f = d^{i_k}\dots d^{i_1}s^{j_1} \dots s^{j_k} : [n] \to [n'],
+\]
+where $0 \leq i_1 < \dots < i_k < n'$ and $0 \leq j_1 < \dots < j_k < n$.
+#+END_lemma
+#+BEGIN_proof
+# TODO
+#+END_proof
+
+
+#+ATTR_LATEX: :options [Simplicial set]
+#+BEGIN_definition
+A *simplicial set* is a contravariant functor from $\Delta$ to the
+category of sets. The category of *simplicial sets*, $\sSets{}$, is the functor
+category $\Sets^{\Delta^{op}}$.
+#+END_definition
+
+If $X \in \sSets$ is a simplicial set, we call
+
+ * $X_n$ to the image of $[n]$ under the functor $X$;
+ * $d_k$ to the *face maps*, the images of the coface maps under the
+   contravariant functor $X$;
+ * $s_k$ to the *degeneracy maps*, the images of the codegeneracy maps
+   under the contravariant functor $X$.
+
+The following identities follow from the previous identities in the
+category and the contravariance of the functor
+\begin{aligned}
+d_jd_i = d_id_{j+1}, & \quad & \text{for each }\ i \leq j, \\
+s_is_j = s_{j+1}s_i, & \quad & \text{for each }\ i \leq j, \\
+\end{aligned}
+\[
+d_is_j =  \left\{
+	\begin{array}{ll}
+		s_{j-1}d_i  & \mbox{if } i < j, \\
+		1 & \mbox{if } i = j,\mbox{ or } j+1, \\
+                s_jd_{i-1} & \mbox{otherwise}.
+	\end{array} \right.
+\]
+
+**** Nerve                                                        :ignore:
+#+ATTR_LATEX: :options [Nerve of a category]
+#+BEGIN_definition
+The *nerve* of a category ${\cal C}$ is a simplicial set $N({\cal C}) \in \sSets$ given
+by the functor category $N({\cal C})_n = {\cal C}^{[n]}$, where $[n]$ is the ordinal $(0 < \dots < n)$
+interpreted as a category, that is, $N({\cal C})_n$ is the set of paths of
+composable morphisms of length $n$.
+#+END_definition
+
+# Face map
+
+#+ATTR_LATEX: :options [Nerve functor]
+#+BEGIN_lemma
+The *nerve functor* $N \colon \Cats \to \sSets$ is fully faithful.
+#+END_lemma
+
+**** Standard n-simplex                                           :ignore:
+#+ATTR_LATEX: :options [Standard n-simplex]
+#+BEGIN_definition
+The *standard n-simplex*, $\Delta^n$, is defined as the nerve of $[n]$,
+$\Delta^n = N([n])$. In fact, it can be seen as the covariant functor
+\[
+\Delta^n = \hom_{\Delta}(-,[n]).
+\]
+#+END_definition
+
+# TODO check
+By Yoneda Lemma, natural transformations between standard n-simplices
+correspond to maps between ordinals
+\[
+\Nat(\hom(-,[n]), \hom(-,[m])) \cong \hom([n],[m]).
+\]
+Thus, coface and codegeracy maps can be defined between n-simplices.
+In particular, the i-th face of $\Delta^n$, written as $\partial_i \Delta^n$ is defined as the image of
+$d^i : \Delta^{n-1} \to \Delta^n$.
+
+**** Boundaries                                                   :ignore:
+The boundary is the smallest subsimplicial set of $\Delta^n$
+containing all of his faces, that is, the union of the faces 
+$\partial_0\Delta^n, \dots, \partial_n\Delta^n$.
+
+From the simplicial identities, it follows that
+\[\begin{tikzcd}
+\Delta^{n-2}\rar{d^{j-1}} \dar[swap]{d^{i}} & \Delta^{n-1} \dar{d^{i}} \\
+\Delta^{n-1}\rar[swap]{d^{j}} & \Delta^{n}
+\end{tikzcd}\]
+and this is a pullback square. This allows us to define the
+boundary of a simplicial set as a coequalizer.
+
+#+ATTR_LATEX: :options [Boundary]
+#+BEGIN_definition
+The *boundary* of the n-simplex, $\partial \Delta^n$ is the subobject of $\Delta^n$ generated
+by its $(n-1)\mhyphen\mathrm{simplices}$. Formally, it is the coequalizer given by the
+following diagram
+\[\begin{tikzcd}
+\bigsqcup_{0 \leq i < j \leq n} \Delta^{n-2} \rar[yshift=0.5ex] \rar[yshift=-0.5ex] &
+\bigsqcup_{0 \leq i \leq n} \Delta^{n-1} \rar&
+\partial \Delta^n.
+\end{tikzcd}\]
+#+END_definition
+
+**** Horns                                                        :ignore:
+The simplicial horn is the union of all the faces of an n-simplex except
+for one. Formally, it can be described as a coequalizer, as we did with
+the boundary.
+
+#+ATTR_LATEX: :options [Horns]
+#+BEGIN_definition
+The *n-horn* $\Lambda^n_k \subset \partial \Delta^n$ for $0 \leq k \leq n$ is defined as the coequalizer
+\[\begin{tikzcd}
+\bigsqcup_{0 \leq i < j \leq n} \Delta^{n-2} \rar[yshift=0.5ex] \rar[yshift=-0.5ex] &
+\bigsqcup_{i \neq k} \Delta^{n-1} \rar&
+\Lambda^n_k.
+\end{tikzcd}\]
+#+END_definition
+
+The horns $\Lambda_k^n$ for $0 < k < n$ are called *inner horns* while $\Lambda_0^n$ and $\Lambda_n^n$
+are *outer horns*. For instance, in dimension 2, we have two outer horns
+$\Lambda^2_0, \Lambda^2_2$ and one inner horn $\Lambda^2_1$ that can be drawn as
+\[\begin{tikzcd}[column sep=tiny]
+& \cdot &                    & & \cdot \drar &      & & \cdot \ar{dr} &\\
+\cdot \urar \ar{rr} && \cdot & \cdot \urar && \cdot & \cdot \ar{rr} && \cdot
+\end{tikzcd}\]
+with the inner horn being the one in the middle.
+
+Note that the inner horn can be extended by composition to a
+simplex. This property of certain horns is what will define Kan
+complexes and \infty-categories.
+
+**** Kan complex                                                  :ignore:
+#+ATTR_LATEX: :options [Kan complex]
+#+BEGIN_definition
+A *Kan complex* is a simplicial set $X \in \sSets$ such that any horn $\Lambda^n_k \to X$
+can be extended to an n-simplex $\Delta^n \to X$. That is, the following diagram
+has a solution, which needs not to be unique.
+\[\begin{tikzcd}
+\Lambda^n_k \rar \dar[hook] & X \\
+\Delta^n \ar[dashed, swap]{ur}{\exists} & \\
+\end{tikzcd}\]
+#+END_definition
+
+*** (\infty,1)-categories
+# https://ncatlab.org/nlab/show/%28n%2Cr%29-category
+# https://ncatlab.org/nlab/show/higher+category+theory
+# https://arxiv.org/pdf/1007.2925.pdf Short course on infty-categories
+
+There is no consensus on the definition of a *(\infty,1)-category*
+yet, but whenever we talk of (\infty,1)-categories, we expect them to
+have
+
+ - a collection of objects;
+
+ - morphisms between objects, invertible 2-morphisms between
+   morphisms, invertible 3-morphisms between 2-morphisms, invertible
+   morphisms between 4-morphisms, and so forth;
+
+ - composition of morphisms, with suitably associative and identity
+   laws.
+
+In general, a *(n,k)-category* has morphisms, 2-morphisms, \dots and
+n-morphisms, and all morphisms above the k-th dimension are
+invertible. This section will follow cite:groth10.
+
+**** \infty-categories                                            :ignore:
+#+ATTR_LATEX: :options [\infty-category]
+#+BEGIN_definition
+An *\infty-category* is a simplicial set ${\cal C} \in \sSets$ such that every
+/inner/ horn $\Lambda^n_k \to {\cal C}$ can be extended to an n-simplex $\Delta^n \to {\cal C}$.
+#+END_definition
+
+# Spaces and categories give rise to \infty-categories
+
+In particular, we call 
+
+ - *objects* to the vertices of the simplicial set ${\cal C}_0$;
+
+ - *morphisms* to the 1-simplices $f \in {\cal C}_1$; the /source map/ is given
+   by the first face map $d_1 : {\cal C}_1 \to {\cal C}_0$ and the /target map/ is given
+   by the second face map $d_2 : {\cal C}_1 \to {\cal C}_0$.
+
+ - *identity map* to the degeneracy map $s_0 \colon {\cal C}_0 \to {\cal C}_1$;
+   # it is an endomorphism
+
+ - *composition* of two morphisms $f : x \to y$ and $g : y \to z$ to the morphism
+   that we obtain by extending an inner horn $l : \Lambda^2_1 \to {\cal C}$ such that $d_0(l) = g$
+   and $d_2(l) = f$ to a 2-simplex $\sigma : \Delta^2 \to {\cal C}$. Note that this, however, does
+   not provide a unique candidate for composition.
+
+
+**** Functors of \infty-categories                                :ignore:
+A functor between two \infty-categories ${\cal C},{\cal D}$ is just a map of
+simplicial sets between them; a natural transformation is defined
+as a map $\Delta^1 \times {\cal C} \to {\cal D}$.
+
+**** \infty-groupoids                                             :ignore:
+# http://www.cs.nott.ac.uk/~psztxa/publ/weakomega2.pdf
+# https://arxiv.org/pdf/1709.09519.pdf
+# https://arxiv.org/pdf/1007.2925.pdf Groth, course on infty-categories
+
+#+ATTR_LATEX: :options [Infinity-groupoids]
+#+BEGIN_definition
+An *\infty-groupoid* is a \infty-category in which the homotopy category
+is a groupoid.
+#+END_definition
+
+#+ATTR_LATEX: :options [Characterization of groupoids]
+#+BEGIN_theorem
+An *\infty-category* is an \infty-groupoid if and only if it is a Kan
+complex.
+#+END_theorem
+
+**** TODO Fundamental \infty-groupoid                             :ignore:
+# Grothendieck homotopy hypothesis
+
+*** TODO Higher-order categories and homotopy
+# From chapter 2 of HoTT
+*** TODO Weak \infty-groupoids
+
 ** OLD First chapters
 **** OLD Beta rules for STLC                             :noexport:ignore:
 # These rules are not necessary, we are only using function types.
@@ -11065,17 +11245,6 @@ quasi-inverse
 #+END_definition
 
 **** Univalence axiom
-# cite Voevodsky
-
-We know that, for any pair of types $A,B : {\cal U}$, there exists a function
-of type $\mathrm{idtoeqv} : (A =_{\cal U} B) \to (A \sim B)$, defined
-# TODO
-
-#+ATTR_LATEX: :options [Univalence]
-#+BEGIN_definition
-For any pair of types $A,B : {\cal U}$, $\mathrm{ideqv} : (A =_U B) \to (A \sim B)$ is
-an equivalence. In particular, $A = B$ is equivalent to $A \sim B$.
-#+END_definition
 
 ***** Univalent universes
 ***** TODO [#C] Naturals and Naturals'
@@ -11116,23 +11285,12 @@ In particular, it can be proved that every *n-type* is an
 # as free \infty-groupoids
 
 *** Homotopy Type Theory II: Mathematics
-**** TODO Homotopy theory
-
 \begin{tikzcd}[column sep=large]
   \tikz\draw[{[-]},yshift=0.5ex] (0,0)node[below]{$0$} -- (2,0)node[below]{$1$};
   \arrow[r, "\textrm{gluing}"]
 & \tikz\draw (0,0) circle (1cm)  (0.8,0) -- (1.2,0) node[right]{$\mathbb Z$};
 \end{tikzcd}
 
-**** TODO Fundamental group of the circle
-Fundamental groups can be defined as truncations
-\[
-\pi_n(A,a) :\equiv \Big\|\Omega^n(A,a)\Big\|_0.
-\]
-
-We will show that the loop space of the sphere is equivalent to the
-integers; that is $\Omega(\mathbb{S}^1) \simeq \mathbb{Z}$, and, consequently, $\pi_1(\mathbb{S}^1)$ will be also
-$\mathbb{Z}$, as it is a type-theoretical set.
 
 
 **** TODO Categories
@@ -11143,39 +11301,6 @@ $\mathbb{Z}$, as it is a type-theoretical set.
 # Cite Connor's course in Agda
 # Cite Altenkirch's notes on HoTT
 
-Martin-Löf type theory can also be regarded as a programming language in
-which is possible to formally specify and prove theorems about the
-code itself. It is similar to the Calculus of Constructions that we 
-mentioned earlier.
-
-Formal proofs in MLTT can be written in this programming language and
-checked by a machine. Some programming languages offering this complex
-type system are
-
- * *Agda* implements a variant of MLTT and can be used as a programming
-   language or a proof assistant;
-
- * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements Calculus of
-   Constructions and was used, for example, to check a proof of the
-   Four Color Theorem;
-   # http://www.ams.org/notices/200811/tx081101382p.pdf
-   # https://coq.inria.fr/about-coq
-
- * *Idris* implements a different version of identity types than that in
-   MLTT and aims to be a useful programming language instead of a proof
-   assistant;
-
- * *NuPRL* cite:nuprl86 implements Extensional Type Theory;
-
- * *Cubical* cite:cohen16 provides an implementation of Cubical Type
-   Theory;
-
- * *RedPRL* is still in beta and provides an implementation of Cubical
-   Type Theory in the NuPRL style.
-
-In this text, we will use Agda as our proof assistant and we will mechanize
-proofs in Martin-Löf type theory using it. We will introduce Agda using
-ideas from cite:Conor17.
 
 **** Martin-Löf type theory in Agda
 In this chapter, we will describe how to program in MLTT using Agda as
