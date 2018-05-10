@@ -1669,18 +1669,18 @@ set of typing rules.
     \begin{prooftree}
     \LeftLabel{($var$)}
     \AXC{}
-    \UIC{$\Gamma, x:A \vdash x:A$}
+    \UIC{$\Gamma, \red{x}:\blue{A} \vdash \red{x}:\blue{A}$}
     \end{prooftree}
 
  2) The $(abs)$ and $(app)$ rules construct and apply function terms.
     \begin{prooftree}
     \LeftLabel{$(abs)$}
-    \AXC{$\Gamma, x:A \vdash m : B$}
-    \UIC{$\Gamma \vdash \lambda x.m : A \to B$}
+    \AXC{$\Gamma, \red{x}:\blue{A} \vdash \red{m} : \blue{B}$}
+    \UIC{$\Gamma \vdash \red{\lambda x.m} : \blue{A \to B}$}
     \LeftLabel{$(app)$}
-    \AXC{$\Gamma \vdash f : A \to B$}
-    \AXC{$\Gamma \vdash a : A$}
-    \BIC{$\Gamma \vdash f\ a : B$}
+    \AXC{$\Gamma \vdash \red{f} : \blue{A \to B}$}
+    \AXC{$\Gamma \vdash \red{a} : \blue{A}$}
+    \BIC{$\Gamma \vdash \red{f\ a} : \blue{B}$}
     \noLine
     \BIC{}
     \end{prooftree}
@@ -1689,15 +1689,15 @@ set of typing rules.
     rules destruct a pair into its projections.
     \begin{prooftree}
     \LeftLabel{$(pair)$}
-    \AXC{$\Gamma \vdash a : A$}
-    \AXC{$\Gamma \vdash b :  B$}
-    \BIC{$\Gamma \vdash \pair{a,b} : A \times B$}
+    \AXC{$\Gamma \vdash \red{a} : \blue{A}$}
+    \AXC{$\Gamma \vdash \red{b} : \blue{B}$}
+    \BIC{$\Gamma \vdash \red{\pair{a,b}} : \blue{A \times B}$}
     \LeftLabel{$(\pi_1)$}
-    \AXC{$\Gamma \vdash m : A \times B$}
-    \UIC{$\Gamma \vdash \pi_1\ m : A$}
+    \AXC{$\Gamma \vdash \red{m} : \blue{A \times B}$}
+    \UIC{$\Gamma \vdash \red{\pi_1\ m} : \blue{A}$}
     \LeftLabel{$(\pi_2)$}
-    \AXC{$\Gamma \vdash m : A \times B$}
-    \UIC{$\Gamma \vdash \pi_2\ m : B$}
+    \AXC{$\Gamma \vdash \red{m} : \blue{A \times B}$}
+    \UIC{$\Gamma \vdash \red{\pi_2\ m} : \blue{B}$}
     \noLine
     \TIC{}
     \end{prooftree}
@@ -1708,27 +1708,27 @@ set of typing rules.
     explicitly indicate that $n$ and $p$ can depend on $a$ and $b$, respectively.
     \begin{prooftree}
     \LeftLabel{$(inl)$}
-    \AXC{$\Gamma \vdash a : A$}
-    \UIC{$\Gamma \vdash \mathrm{inl}\ a : A + B$}
+    \AXC{$\Gamma \vdash \red{a} : \blue{A}$}
+    \UIC{$\Gamma \vdash \red{\mathrm{inl}\ a} : \blue{A + B}$}
     \LeftLabel{$(inr)$}
-    \AXC{$\Gamma \vdash b : B$}
-    \UIC{$\Gamma \vdash \mathrm{inr}\ b : A + B$}
+    \AXC{$\Gamma \vdash \red{b} : \blue{B}$}
+    \UIC{$\Gamma \vdash \red{\mathrm{inr}\ b} : \blue{A + B}$}
     \noLine
     \BIC{}
     \end{prooftree}
     \begin{prooftree}
     \LeftLabel{$(case)$}
-    \AXC{$\Gamma \vdash m : A + B$}
-    \AXC{$\Gamma, a:A \vdash n : C$}
-    \AXC{$\Gamma, b:B \vdash p : C$}
-    \TIC{$\Gamma \vdash (\mathrm{case}\ m\ \mathrm{of}\ [a].n;\ [b].p) : C$}
+    \AXC{$\Gamma \vdash \red{m} : \blue{A + B}$}
+    \AXC{$\Gamma, \red{a}:\blue{A} \vdash \red{n} : \blue{C}$}
+    \AXC{$\Gamma, \red{b}:\blue{B} \vdash \red{p} : \blue{C}$}
+    \TIC{$\Gamma \vdash (\red{\mathrm{case}\ m\ \mathrm{of}\ [a].n;\ [b].p}) : \blue{C}$}
     \end{prooftree}
     
  5) The $(\ast)$ rule simply creates the only element of type $1$.
     \begin{prooftree}
     \LeftLabel{$(\ast)$}
     \AXC{$$}
-    \UIC{$\Gamma \vdash \ast : 1$}
+    \UIC{$\Gamma \vdash \red{\ast} : \blue{1}$}
     \end{prooftree}
 
  6) The $(abort)$ rule extracts a term of any type from the void type.
@@ -1736,8 +1736,8 @@ set of typing rules.
     can throw any typed exception.
     \begin{prooftree}
     \LeftLabel{$(abort)$}
-    \AXC{$\Gamma \vdash m : 0$}
-    \UIC{$\Gamma \vdash \mathrm{abort}_A\ m : A$}
+    \AXC{$\Gamma \vdash \red{m} : \blue{0}$}
+    \UIC{$\Gamma \vdash \red{\mathrm{abort}_A\ m} : \blue{A}$}
     \end{prooftree}
 
 **** Beta-eta reductions in extended typed lambda calculus        :ignore:
