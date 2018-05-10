@@ -17,9 +17,11 @@ open import equality.FunctionExtensionality
 
 module topology.FundGroupCircle where
 
+  -- Winds a loop n times.
   loops : ℤ → Ω S¹ base
   loops n = z-act (Ω-st S¹ base) n loop
 
+  -- Uses univalence to wind a path on the circle over the integers.
   code : S¹ → Type0
   code = S¹-ind Type0 ℤ (ua zequiv-succ)
 
@@ -108,8 +110,5 @@ module topology.FundGroupCircle where
   fundamental-group-of-the-circle : Ω S¹ base ≃ ℤ
   fundamental-group-of-the-circle = equiv-family base
 
-  -- PathtoZ : Ω S¹ base → ℤ
-  -- PathtoZ p = transport (λ x → x) (apc p) zer
-  --   where
-  --     apc : base == base → ℤ == ℤ
-  --     apc p = ap code p
+  preserves-composition : ∀ n m → loops (n +ᶻ m) == loops n · loops m
+  preserves-composition n m = z-act+ (Ω-st S¹ base) n m loop
