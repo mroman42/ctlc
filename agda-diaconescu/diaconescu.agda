@@ -149,4 +149,5 @@ AC =
   → ((x : X) → ∃ a ∈ (A x), R x a) → ∃ g ∈ ((x : X) → A x), ((x : X) → R x (g x))
 
 diaconescu : AC → LEM
-diaconescu ac = {!!}
+diaconescu ac =
+  {!!}

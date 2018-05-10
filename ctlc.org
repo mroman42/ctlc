@@ -26,7 +26,7 @@ puntos o usarlo consistentemente.
 ** Macros and libraries                                             :ignore:
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+latex_header_extra: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
+#+latex_header_extra: %\input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
 
 *** Classic thesis setup                                           :ignore:
 #+latex_header_extra: \usepackage[T1]{fontenc}
@@ -186,6 +186,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\ap{\mathsf{ap}}
 #+latex_header: \newcommand\apd{\mathsf{apd}}
 #+latex_header: \newcommand\J{\mathsf{J}}
+#+latex_header: \usepackage{scalefnt}\DeclareMathOperator*\bigexists{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\scalefont{2}$\exists$}}}{\vcenter{\hbox{\scalefont{1.4}$\exists$}}}{\vcenter{\hbox{\scalefont{1}$\exists$}}}{\vcenter{\hbox{\scalefont{0.75}$\exists$}}}}
 
 ** Abstract
 :PROPERTIES:
@@ -1864,22 +1865,22 @@ of dots represents any given part of the deduction tree.
      antecedent directly on the implication.
      #+latex: \\[-40pt]
      \begin{prooftree}
-     \AXC{$[A]$}\noLine
+     \AXC{$[\blue{A}]$}\noLine
      \UIC{$\vdots^{1}$}\noLine
-     \UIC{$B$}
-     \UIC{$A \to B$}
+     \UIC{$\blue{B}$}
+     \UIC{$\blue{A} \to \blue{B}$}
      \AXC{$\vdots^2$}\noLine
-     \UIC{$A$}
-     \BIC{$B$}
+     \UIC{$\blue{A}$}
+     \BIC{$\blue{B}$}
  
      \UIC{$\vdots$}\noLine
      \AXC{$\Longrightarrow$}
      \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
  
      \AXC{$\vdots^{2}$}\noLine
-     \UIC{$A$}\noLine
+     \UIC{$\blue{A}$}\noLine
      \UIC{$\vdots^{1}$}\noLine
-     \UIC{$B$}
+     \UIC{$\blue{B}$}
      \UIC{$\vdots$}\noLine
      \noLine
      \TIC{}
@@ -1889,16 +1890,16 @@ of dots represents any given part of the deduction tree.
      as
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
-    \UIC{$A$}
+    \UIC{$\blue{A}$}
     \AXC{$\vdots^{2}$}\noLine
-    \UIC{$B$}
-    \BIC{$A \land B$}
-    \UIC{$A$}
+    \UIC{$\blue{B}$}
+    \BIC{$\blue{A} \land \blue{B}$}
+    \UIC{$\blue{A}$}
     \UIC{$\vdots$}\noLine
     \AXC{$\Longrightarrow$}
     \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
     \AXC{$\vdots^{1}$}\noLine
-    \UIC{$A$}
+    \UIC{$\blue{A}$}
     \UIC{$\vdots$}\noLine
     \noLine
     \TIC{}
@@ -1907,16 +1908,16 @@ of dots represents any given part of the deduction tree.
     and, similarly, on the other side as
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
-    \UIC{$A$}
+    \UIC{$\blue{A}$}
     \AXC{$\vdots^{2}$}\noLine
-    \UIC{$B$}
-    \BIC{$A \land B$}
-    \UIC{$B$}
+    \UIC{$\blue{B}$}
+    \BIC{$\blue{A} \land \blue{B}$}
+    \UIC{$\blue{B}$}
     \UIC{$\vdots$}\noLine
     \AXC{$\Longrightarrow$}
     \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
     \AXC{$\vdots^{2}$}\noLine
-    \UIC{$B$}
+    \UIC{$\blue{B}$}
     \UIC{$\vdots$}\noLine
     \noLine
     \TIC{}
@@ -1927,24 +1928,24 @@ of dots represents any given part of the deduction tree.
      #+latex: \\[-40pt]
      \begin{prooftree}
      \AXC{$\vdots^{1}$}\noLine
-     \UIC{$A$}
-     \UIC{$A \vee B$}
-     \AXC{$[A]$}\noLine
+     \UIC{$\blue{A}$}
+     \UIC{$\blue{A} \vee \blue{B}$}
+     \AXC{$[\blue{A}]$}\noLine
      \UIC{$\vdots^2$}\noLine
-     \UIC{$C$}
-     \AXC{$[B]$}\noLine
+     \UIC{$\blue{C}$}
+     \AXC{$[\blue{B}]$}\noLine
      \UIC{$\vdots^3$}\noLine
-     \UIC{$C$}
-     \TIC{$C$}
+     \UIC{$\blue{C}$}
+     \TIC{$\blue{C}$}
  
      \UIC{$\vdots$}\noLine
      \AXC{$\Longrightarrow$}
      \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
  
      \AXC{$\vdots^{1}$}\noLine
-     \UIC{$A$}\noLine
+     \UIC{$\blue{A}$}\noLine
      \UIC{$\vdots^{2}$}\noLine
-     \UIC{$C$}
+     \UIC{$\blue{C}$}
      \UIC{$\vdots$}\noLine
      \noLine
      \TIC{}
@@ -1954,24 +1955,24 @@ of dots represents any given part of the deduction tree.
      #+latex: \\[-40pt]
      \begin{prooftree}
      \AXC{$\vdots^{1}$}\noLine
-     \UIC{$B$}
-     \UIC{$A \vee B$}
-     \AXC{$[A]$}\noLine
+     \UIC{$\blue{B}$}
+     \UIC{$\blue{A} \vee \blue{B}$}
+     \AXC{$[\blue{A}]$}\noLine
      \UIC{$\vdots^2$}\noLine
-     \UIC{$C$}
-     \AXC{$[B]$}\noLine
+     \UIC{$\blue{C}$}
+     \AXC{$[\blue{B}]$}\noLine
      \UIC{$\vdots^3$}\noLine
-     \UIC{$C$}
-     \TIC{$C$}
+     \UIC{$\blue{C}$}
+     \TIC{$\blue{C}$}
  
      \UIC{$\vdots$}\noLine
      \AXC{$\Longrightarrow$}
      \UIC{}\noLine\UIC{}\noLine\UIC{}\noLine
  
      \AXC{$\vdots^{1}$}\noLine
-     \UIC{$B$}\noLine
+     \UIC{$\blue{B}$}\noLine
      \UIC{$\vdots^{3}$}\noLine
-     \UIC{$C$}
+     \UIC{$\blue{C}$}
      \UIC{$\vdots$}\noLine
      \noLine
      \TIC{}
@@ -1979,12 +1980,12 @@ of dots represents any given part of the deduction tree.
 
 *** Propositions as types
 In 1934, Curry observed in cite:curry34 that the type of a function
-$(A \to B)$ could be read as an implication and that the existence of a
+$(\blue{A \to B})$ could be read as an implication and that the existence of a
 function of that type was equivalent to the provability of the proposition.
 Previously, the *Brouwer-Heyting-Kolmogorov interpretation* of intuitionistic
 logic had given a definition of what it meant to be a proof of an intuinistic
-formula, where a proof of the implication $(A \to B)$ was a function converting
-a proof of $A$ into a proof of $B$. It was not until 1969 that Howard pointed
+formula, where a proof of the implication $(\blue{A \to B})$ was a function converting
+a proof of $\blue{A}$ into a proof of $\blue{B}$. It was not until 1969 that Howard pointed
 a deep correspondence between the simply-typed \lambda-calculus and the
 natural deduction at three levels
 
@@ -1999,16 +2000,16 @@ relation between types and propositions.
 \begin{center}\begin{tabular}{c|c}
 Types & Propositions \\
 \hline
-Unit type ($1$) & Truth ($\top$) \\
-Product type ($\times$) & Conjunction ($\land$) \\
-Union type ($+$) & Disjunction ($\lor$) \\
-Function type ($\to$) & Implication ($\to$) \\
-Empty type ($0$) & False ($\bot$) \\
+Unit type ($\blue{1}$) & Truth ($\blue{\top}$) \\
+Product type ($\blue{\times}$) & Conjunction ($\blue{\land}$) \\
+Union type ($\blue{+}$) & Disjunction ($\blue{\lor}$) \\
+Function type ($\blue{\to}$) & Implication ($\blue{\to}$) \\
+Empty type ($\blue{0}$) & False ($\blue{\bot}$) \\
 \end{tabular}\end{center}
 
-Where, in particular, the negation of a proposition $\neg A$ is interpreted
-as the fact that that proposition implies falsehood, $A \to \bot$; and its
-corresponding type is a function from the type $A$ to the empty type, $A \to 0$.
+Where, in particular, the negation of a proposition $\blue{\neg A}$ is interpreted
+as the fact that that proposition implies falsehood, $\blue{A \to \bot}$; and its
+corresponding type is a function from the type $\blue{A}$ to the empty type, $\blue{A \to 0}$.
 
 Now it is easy to notice that every deduction rule of Section [[Natural deduction]] 
 has a correspondence with a typing rule of Section [[Extending the simply typed \lambda-calculus]].
@@ -2022,9 +2023,9 @@ terms are proofs of the propositions represented by their types.
 #+BEGIN_exampleth
 In particular, the typing derivation of the term
 \[
-\lambda a. \lambda b. \pair{a,b}
+\red{\lambda a. \lambda b. \pair{a,b}}
 \]
-can be seen as a deduction tree proving $A \to B \to A \wedge B$; as
+can be seen as a deduction tree proving $\blue{A \to B \to A \wedge B}$; as
 the following diagram shows.
 \begin{prooftree}
 \EnableBpAbbreviations
@@ -2061,7 +2062,7 @@ way they are constructed, used in derivations, and simplified.
 #+attr_latex: :options [Curry-Howard simplification example]
 #+begin_exampleth
 As an example of this duality, we will write a proof/term of the proposition/type 
-$A \to B + A$ and we are going to simplify/compute it using proof simplification
+$\blue{A \to B + A}$ and we are going to simplify/compute it using proof simplification
 rules/\beta-rules. Similar examples can be found in cite:wadler15.
 
 We start with the following derivation tree;
@@ -2088,7 +2089,7 @@ We start with the following derivation tree;
 \UIC{$\red{\lambda a.((\lambda m.\mathrm{case}\ m\ \mathrm{of}\ [c].\mathrm{inr}\ c; [c].\mathrm{inl}\ c)\ (\mathrm{inl}\ a)) } : \blue{ A \to B + A}$}
 \end{prooftree}
 
-which is encoded by the term $\lambda a.(\lambda c.\mathrm{case}\ c\ \mathrm{of}\ [a].\mathrm{inr}\ a; [b].\mathrm{inl}\ b)\ (\lambda z.\mathrm{inl}\ z)$.
+which is encoded by the term $\red{\lambda a.(\lambda m.\mathrm{case}\ m\ \mathrm{of}\ [c].\mathrm{inr}\ c; [c].\mathrm{inl}\ c)\ (\lambda a.\mathrm{inl}\ a)}$.
 We apply the simplification rule/\beta-rule of the implication/function application
 to get
 \begin{prooftree}\EnableBpAbbreviations
@@ -2107,7 +2108,7 @@ to get
 \UIC{$\red{\lambda z.\mathrm{case}\ (\mathrm{inl}\  z)\ \mathrm{of}\ [a].\mathrm{inr}\ a; [b].\mathrm{inl}\  b} : \blue{ A \to B +A}$}
 \end{prooftree}
 
-which is encoded by the term $\lambda a.\mathrm{case}\ (\mathrm{inl}\ a)\ \mathrm{of}\ \mathrm{inr}\ \mathrm{inl}$. We finally
+which is encoded by the term $\red{\lambda z.\mathrm{case}\ (\mathrm{inl}\  z)\ \mathrm{of}\ [a].\mathrm{inr}\ a; [b].\mathrm{inl}\ b}$. We finally
 apply the case simplification/reduction rule to get
 \begin{prooftree}\EnableBpAbbreviations
 \AXC{$\red{a } : \blue{ A}$}
@@ -2117,7 +2118,7 @@ apply the case simplification/reduction rule to get
 \UIC{$\red{\lambda a.\mathrm{inr}\ a} : \blue{ A \to B + A}$}
 \end{prooftree}
 
-which is encoded by =λa.(inr a)=.
+which is encoded by $\red{\lambda a.\mathrm{inr}\ a}$.
 
 On Chapter [[Implementation of \lambda-expressions]], we develop a \lambda-calculus interpreter
 which is able to check and simplify proofs in intuitionistic logic.
@@ -3948,6 +3949,10 @@ can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 [[./images/mikrogentzen2.png]]
 
 * Category theory (abstract)                                         :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
+This section is based on cite:maclane78.
+#+LATEX: \end{center}}
+
 * Category theory
 ** Categories
 A *category* is an algebraic structure that captures the notion of
@@ -4053,7 +4058,7 @@ Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
 \[
 g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) = 
 (g_1 \circ f) \circ g_2 =
-\id \circ g_2 = g_2.
+\id \circ g_2 = g_2.\qedhere
 \]
 #+end_proof
 
@@ -4072,7 +4077,6 @@ symmetric and transitive.
 **** TODO Automorphisms                                           :ignore:
 We call *automorphisms* to the morphisms which are both endomorphisms
 and isomorphisms.
-
 
 **** Monomorphisms and epimorphisms                               :ignore:
 Morphisms are an abstraction of the notion of structure-preserving
@@ -6236,10 +6240,6 @@ is precisely $T$.
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
-
-Topos theory arises independently with Grothendieck and sheaf theory,
-Lawvere and the axiomatization of set theory and Paul Cohen with the
-forcing techniques with allowed to construct new models of ZFC.
 #+LATEX: \end{center}}
 
 * Categorical logic
@@ -6248,6 +6248,9 @@ forcing techniques with allowed to construct new models of ZFC.
 # TODO: Comma category is equivalent to a presheaf category
 # TODO: Pullbacks (in particular, products) always exist on presheaf cats
 # TODO: Terminal and pullbacks imply all finite limits
+
+Presheaves can be thought as sets parametrized by a category.
+
 
 *** Has \omega-colimits
 # Proposition 10.12 in Awodey gives initial algebras for presheaves.
@@ -6393,9 +6396,6 @@ This proof feels rather disappointing because this model is not even
 set-theoretic in general; but we can go further and assert the
 existence of a universal model in a presheaf category via the Yoneda
 embedding.
-
-# TODO: Escribir esta frase cuando hable de presheaves siguiendo Moerdijk
-# Presheaves can be thought as sets parametrized by a category.
 
 #+ATTR_LATEX: :options [Completeness on presheaves]
 #+BEGIN_corollary 
@@ -7728,6 +7728,11 @@ up to $3$, without explicitly pointing to it. In this sense, the truncated
 version resembles more the existential quantifier of classical logic; while
 the untrucated version demands the explicit construction of an example.
 
+# Because of this, we write the combination $\| \sum \dots \|$ as $\exists \dots$, like in 
+# \[
+# \bigexists_{(n,m) :\mathbb{N} \times \mathbb{N}} (n + m = 3).
+# \]
+
 As a second example, we can reformulate a nontrivial version of the
 axiom of choice we discussed previously in Example [[theorem-choice]].
 Note that
@@ -7758,6 +7763,13 @@ having a proof of existence can be used to assume that we have explicitly
 constructed the element and to prove a different proposition using it, with
 the condition that we cannot refer later to the explicit element we used during
 the proof.
+
+* Type theory and topoi (abstract)                                   :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
+Topos theory arises independently with Grothendieck and sheaf theory,
+Lawvere and the axiomatization of set theory and Paul Cohen with the
+forcing techniques with allowed to construct new models of ZFC.
+#+LATEX: \end{center}}
 
 * Type theory and topoi
 ** Universes of mathematics
@@ -7805,12 +7817,13 @@ code itself.  Formal proofs in this theory can be written in any
 programming language with a powerful enough type system; examples
 of these include
 
- * *Agda*, a programming language which implements a variant of
+ * *Agda*, a programming language that implements a variant of
    Martin-Löf type theory;
 
- * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements Calculus of
-   Constructions and was used, for example, to check a proof of the
-   Four Color Theorem;
+ * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements
+   Calculus of Constructions and was used, for example, to check a
+   proof of the Four Color Theorem;
+
    # http://www.ams.org/notices/200811/tx081101382p.pdf
    # https://coq.inria.fr/about-coq
 
@@ -7821,38 +7834,191 @@ of these include
    /extensional/ Type Theory, which is different from the intensional
    one in how it treats equality types;
 
- * *Cubical* cite:cohen16 and *RedPRL* cite:redprl provide experimental implementations
-   of Cubical Type Theory, a different variant of type theory.
+ * *Cubical* cite:cohen16 and *RedPRL* cite:redprl provide
+   experimental implementations of Cubical Type Theory, a different
+   variant of type theory.
 
-In this text, we will use Agda to write mathematics, taking ideas
-from cite:Conor17. We will check proofs in Martin-Löf type theory
-using its type system.
+In this text, we will use Agda to write mathematics, taking ideas from
+cite:Conor17. We will check proofs in Martin-Löf type theory using its
+type system.
 
 *** Dedekind reals
-*** Homotopy type theory I: Univalence
-# cite Voevodsky
+In =Reals.agda=, we provide a formalized construction of the Dedekind
+positive reals in intensional Martin-Löf type theory, implemented in
+Agda. This implementation constructs reals as Dedekind cuts over the
+*dyadic* positive rationals $D$; that is, over the rationals of the form
+$a / 2^b : D$ for some $a,b : \mathbb{N}$. We have also written a library of lemmas and
+theorems about the natural numbers and the dyadic numbers necessary to
+prove that our constructions are well-defined.
 
-We know that, for any pair of types $A,B : {\cal U}$, there exists a function
-of type $\mathrm{idtoeqv} : (A =_{\cal U} B) \to (A \sim B)$, defined
-# TODO
+Natural numbers are constructed as initial algebras and dyadic rationals
+are constructed as pairs of naturals with a normalization property that
+ensures unique representation of each rational. A fraction $a/2^b$ is
+/normalized/ if $a$ is an odd number or if $b$ is exactly zero.
+\[
+D = \sum_{(a,b) : \mathbb{N} \times \mathbb{N}} \left\|\mathrm{odd}(a) + \mathrm{isZero}(b) \right\|
+\]
+
+A real number $r : \mathbb{R}^+$ is thus interpreted as
+
+ * a *Dedekind cut* over the positive dyadic rationals, $\mathrm{cut}_r : D \to \Omega$,
+   where $\mathrm{cut}(q)$ is true for some $q : D$ when $r < q$;
+
+ * some proof witnessing that it is *inhabited*, $\| \sum_{q : D} \mathrm{cut}_r(q) \|$;
+
+ * and functions that witness that the cut is /round/ (open lower-bounded interval);
+   that is, for each $q : D$ in the cut, there is a smaller $p : D$ in the cut;
+   and, if some $p,q : D$ we have $p < q$ and $p$ in the cut, $q$ must also be in the cut;
+   symbolically
+   \small
+   \[
+   \left( \prod_{q : D} \mathrm{cut}_r(q) \to 
+   \left\| \sum_{p : D} (p < q) \times \mathrm{cut}_r(p) \right\| 
+   \right)
+   \times
+   \left( \prod_{q : D}
+   \left\| \sum_{p : D} (p < q) \times \mathrm{cut}_r(p) \right\| \to 
+   \mathrm{cut}_r(q) \right).
+   \]
+   \normalsize
+
+Note that, under the intuitionistic interpretation, it is not the case 
+in general that $\prod_{q : D} \mathrm{cut}_r(q) + \neg\, \mathrm{cut}_r(q)$ for an arbitrary $r : \mathbb{R}^+$; in fact,
+numbers that are neither
+equal nor distinct from zero could exist! as we mentioned earlier, a
+formalization of infinitesimals is possible using this property, see
+cite:bauer13. However, even if we cannot prove it in general, we can
+prove $\mathrm{cut}_r(q) + \neg\, \mathrm{cut}_r(q)$ for some particular real numbers. We call these
+numbers *located*, and, for these numbers, the computational nature of the
+proof provides an algorithm that produces an infinite stream with the digits
+of the number.
+
+As a proof of concept, we define square roots, $\sqrt{-} : \mathbb{R}^{+}\to \mathbb{R}^{+}$, as
+\[
+\mathrm{cut}_{\sqrt{r}}(q) = 
+\left\| \sum_{p : D} ( \mathrm{cut}_r(p)) \times \left(p < q^2\right) \right\|.
+\]
+We prove they are well-defined using several lemmas about the dyadic numbers
+and we prove that $\sqrt{2}$ is located.  The Agda compiler is then able to
+produce the first binary digits of $\sqrt{2} = 1.01101010000\dots$. Note that
+this construction is thus being formalized in any locally cartesian closed
+category with enough structure.
+
+Dedekind cuts are not the only path we can take in order to define
+the real numbers in type theory. Reals can be also defined in terms
+of Cauchy sequences, but the resulting construction is not in general
+equivalent to ours. Only when we assume excluded middle, both Dedekind
+and Cauchy reals become equivalent and the classical notion of real
+number is recovered. A detailed discussion can be found in the last
+chapters of cite:hottbook.
+
+*** Homotopy type theory I: equality
+We have already discussed how, given any $x,y:A$, we can interpret
+the equality type $(x = y)$, whose terms are witnesses of the equality.
+For each $x : A$, there is a reflexivity element, $\refl : x = x$; and the
+J-eliminator is interpreted as the following induction principle over
+the type.
+\[
+\prod_{(C : \prod_{(x,y : A)}(x=y) \to {\cal U})} \left(
+\left( \prod_{a:A} C(a,a,\mathsf{refl}) \right) \to
+\prod_{(x,y : A)}\prod_{(p:x=y)} C(x,y,p)
+\right).
+\]
+This induction principle allows us to prove symmetry, transitivity
+and other properties of equality (we explicitly do so in =Base.agda=
+and =Equality.agda=). However, it is not posible to prove by path
+induction that every path is equal to the reflexivity path, that is,
+\[
+\prod_{(x : A)}\prod_{(p : x = x)} (p = \refl),
+\]
+is not derivable from the induction principle. This is called the
+principle of *uniqueness of identity proofs*, it is equivalent to
+Streicher's Axiom K cite:streicher93, which is independent from
+Martin-Löf type theory.
+
+If we do not assume this axiom, we open the possibility to the
+existence of multiple different proofs of the same equality.
+The structure of these proofs, endowed with symmetry and
+transitivity, could be modeled into a groupoid cite:hofmann98.
+If we also consider equalities between proofs of equality,
+and equalities between proof of equalities between equalities
+and so on, we would get a weak \omega-groupoid structure
+cite:berg11. Following the *Grothendieck's Homotopy Hypothesis*,
+groupoids can be regarded as an homotopical spaces, where equalities are
+paths, equalities between equalities are homotopies between paths
+and so on (some work on this hypothesis can be read in cite:tamsamani96).
+
+In any case, as the existence of these non-trivial structure is
+independent of the theory, we need to introduce a new axiom or types
+with nontrivial equalities if we want to profit from this interpretation. 
+The introduction of Voevodsky's
+Univalence Axiom will lead to Homotopy Type theory, an extension of
+Martin-Löf type theory where we can work with this groupoid structure.
+Under the identification of higher groupoids and homotopical types,
+the new axiom allows us to reason in some sort of synthetic homotopy
+theory, where paths and homotopies are primitive notions. For instance,
+we can define the *fundamental group* (fundamental groupoid, if we also
+want to consider higher structure) of a type $A$ in a point $a : A$ as
+the type of loops $\pi_1(A,a) :\equiv a = a$, endowed with reflexivity and
+transitivity. The *circle* can be defined as the freely generated
+type with a single element $\mathsf{p} : \mathbb{S}^1$ and a nontrivial equality
+$\mathsf{loop} : \mathsf{p} = \mathsf{p}$. Because it is freely generated, we can apply symmetry
+to get a different proof $p = p$ which we will call $\mathsf{loop}^{-1}$; moreover,
+we can transitivity $n$ times to $\mathsf{loop}$ for an arbitrary $n$, to get a new proof
+of $p = p$ which we will call $\mathsf{loop}^n$, these loops are the elements
+of $\pi_1(\mathbb{S}^1, \mathsf{p})$.
+
+In this setting, results such as the Van Kampen theorem
+or the construction of Eilenberg-MacLane spaces have been formalized
+(see cite:hottbook).
+
+*** Homotopy type theory II: univalence
+We say that there is an equivalence between two types $A$ and $B$
+and we write it as $(A \simeq B)$ if there
+is a /biinvertible/ map between them. Explicitly,
+\small
+\[
+(A \simeq B) = \sum_{f : A \to B} \left(  
+\left( \sum_{g : B \to A}\prod_{a : A} g(f(a)) = a \right)
+\times
+\left( \sum_{g : B \to A}\prod_{b : B} f(g(b)) = b \right)
+\right).
+\]
+\normalsize
+It can be shown that, for any pair of types $A,B : {\cal U}$, there exists
+a function of type $\mathrm{idtoeqv} : (A =_{\cal U} B) \to (A \simeq B)$ that uses
+identity functions to construct an equivalence from an equality.
+The Univalence axiom states that this function is itself an
+equivalence.
 
 #+ATTR_LATEX: :options [Univalence]
 #+BEGIN_definition
-For any pair of types $A,B : {\cal U}$, $\mathrm{ideqv} : (A =_U B) \to (A \sim B)$ is
-an equivalence. In particular, $A = B$ is equivalent to $A \sim B$.
+For any pair of types $A,B : {\cal U}$, $\mathrm{idtoeqv} : (A =_U B) \to (A \simeq B)$ is
+an equivalence. In particular, $(A = B) \simeq (A \simeq B)$.
 #+END_definition
 
-*** Homotopy type theory II: synthetic topology
-# Voevodsky's univalence
+In practical terms, this implies that isomorphic structures can
+be identified. For example, we could consider the type of the
+integers $\mathbb{Z}$ with the successor and predecessor functions and
+create an equivalence $\mathbb{Z} \simeq \mathbb{Z}$ which can be turned into a nontrivial
+equality $\mathbb{Z} = \mathbb{Z}$ via the Univalence axiom, representing that
+integers, as a type, are equivalent to themselves after shifting
+them by the successor function. In the file =FundGroupCircle.agda=, we
+use this fact to prove, inside type theory, that $\mathbb{Z} = \pi_1(\mathbb{S}^1)$, 
+(following cite:hottbook and cite:licata13). This result is
+as a proof, inside this synthetic homotopical setting, of the fact
+that the foundamental group of the circle is $\mathbb{Z}$.
 
-Fundamental groups can be defined as truncations
-\[
-\pi_n(A,a) :\equiv \Big\|\Omega^n(A,a)\Big\|_0.
-\]
+**** Note on the proof                                          :noexport:
+We could think that this only proves that Z is the free group
+over a single generator. After all, this is what the circle
+is, when interpreted as a groupoid.
 
-We will show that the loop space of the sphere is equivalent to the
-integers; that is $\Omega(\mathbb{S}^1) \simeq \mathbb{Z}$, and, consequently, $\pi_1(\mathbb{S}^1)$ will be also
-$\mathbb{Z}$, as it is a type-theoretical set.
+I think that the main problem with that view is that the
+groupoid structure is not present inside the theory, it is
+only visible from outside. When we prove this we need univalence
+to internalize the structure of groupoid inside the theory,
+using Z as a bridge.
 
 
 * OLD Type theory
@@ -8048,6 +8214,18 @@ goes back to Brower.
 
 ** OLD Universe hierarchy
 ** OLD Intensional equality and Equivalences
+*** OLD Homotopy type theory III: synthetic topology
+# Voevodsky's univalence
+
+Fundamental groups can be defined as truncations
+\[
+\pi_n(A,a) :\equiv \Big\|\Omega^n(A,a)\Big\|_0.
+\]
+
+We will show that the loop space of the sphere is equivalent to the
+integers; that is $\Omega(\mathbb{S}^1) \simeq \mathbb{Z}$, and, consequently, $\pi_1(\mathbb{S}^1)$ will be also
+$\mathbb{Z}$, as it is a type-theoretical set.
+
 *** Propositional equality
 Given any type $A : {\cal U}$ and two elements $x,y : A$, we can consider the
 type of proofs of equality between the two, $x = y$. Note that this
@@ -8076,6 +8254,7 @@ written in type theory as
 \prod_{(x,y : A)}\prod_{(p:x=y)} C(x,y,p)
 \right).
 \]
+
 
 **** Symmetry                                                     :ignore:
 #+ATTR_LATEX: :options [Symmetry]
@@ -8263,6 +8442,9 @@ logic, as we show in the following example.
 #+END_exampleth
 
 **** Diaconescu's theorem                                         :ignore:
+# We would need to talk about the category Set of set types in Hott.
+# It satisfies the ETCS axioms.
+
 *** h-Sets
 **** h-Sets                                                       :ignore:
 A type $A$ is a *h-set* or simply a *set* if every two parallel paths

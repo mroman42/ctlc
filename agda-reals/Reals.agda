@@ -15,17 +15,18 @@ open import Dyadics-Properties
 -- numbers that determines which rationals are greater or equal than the
 -- real number. A real number must be
 --   * bounded, meaning that the cut must be inhabited;
---   * rounded, meaning that the cut must be "open".
+--   * rounded, meaning that the cut must be an upper-unbounded and
+--     nonclosed interval.
 record ℝ⁺ : Set where
   constructor real
   field
     -- Dedekind cut
     cut : F → Set
-    isprop : (f : F) → isProp (cut f)
+    isprop : (q : F) → isProp (cut q)
 
-    bound : ∃ f ∈ F , cut f
-    round1 : (f : F) → cut f → ∃ r ∈ F , ((r < f ≡ true) × cut r)
-    round2 : (f : F) → (∃ r ∈ F , ((r < f ≡ true) × cut r)) → cut f
+    bound : ∃ q ∈ F , cut q
+    round1 : (q : F) → cut q → ∃ p ∈ F , ((p < q ≡ true) × cut p)
+    round2 : (q : F) → (∃ p ∈ F , ((p < q ≡ true) × cut p)) → cut q
 open ℝ⁺ {{...}} public
 
 
