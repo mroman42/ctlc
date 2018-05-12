@@ -8,6 +8,15 @@
 #+Latex_header: \input{_preamble.tex}
 #+Latex_cmd: xelatex
 
+* Ideas                                                            :noexport:
+No seguir el orden del trabajo es más sensato, me deja jugar con la
+idea de que estamos haciendo paralelamente lo mismo en matemáticas y
+programación.  Pueden usarse interpretaciones derivadas de BHK.
+
+ - Tipos son teoremas.
+ - Términos son demostraciones.
+ - Inferencia de tipos es matemática inversa.
+
 * Una sección
 ** Una subsección
 *** Introducción
@@ -34,7 +43,15 @@ $ cd templates
 
 * Cálculo lambda
 ** Cálculo lambda no tipado
-** Mikrokosmos
+** Cálculo lambda tipado
+** Interpretación de Brouwer-Heyting-Kolmogorov
+* Mikrokosmos
+** Implementación
+** Interacción
+** Uso
+** Entorno de programación
+** Programando en el cálculo lambda sin tipos
+** Programando en el cálculo lambda simplemente tipado
 * Categorías cartesianas
 ** Cálculo lambda con tipos
 ** Categorías cartesianas

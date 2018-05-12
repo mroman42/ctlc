@@ -4,6 +4,9 @@
 #+Todo: TODO(t) OLD(o) | DONE(d)
 
 ** To-do list                                                     :noexport:
+*** TODO Teorema de Hedberg y cómo recuperar conjuntos con ETCS
+*** TODO Añadir paradoja de Escardó para motivar topología y computación
+*** TODO Añadir ejemplo topológico de nudo que no se cierra
 *** TODO Añadir lista de referencias principales
   - Selinger
   - MacLane, Categories for the working mathematician
@@ -318,22 +321,21 @@ logic.
 * Lambda calculus
 ** Untyped \lambda-calculus
 When are two functions equal? Classically in mathematics, /functions are graphs/.
-A function from a
-domain to a codomain, $f \colon X \to Y$, is seen as a subset of the product
-space: $f \subset X \times Y$.
+A function from a domain to a codomain, $f \colon X \to Y$, is seen as a subset 
+of the product space: $f \subset X \times Y$.
 Any two functions are identical if they map equal inputs to equal outputs;
 and a function it is completely determined by what its outputs are.
-This vision is called */extensional/*.
+This vision is called */extensional/* (see cite:selinger13).
 
-From a computational point of view, this perspective could seem incomplete
-in some cases. Computationally, we usually care not only about the result but,
-crucially, about /how/ it can be computed. 
-Classically in computer science, /functions are formulae/; and two functions 
-mapping equal inputs to equal outputs need not to be equal. For instance, two sorting algorithms
-can have a different efficiency or different memory requisites, even if 
-they output the same sorted list. This vision, where two functions are
-equal if and only if they are given by essentially the same formula is
-called */intensional/*.
+From a computational point of view, this perspective could seem
+incomplete in some cases; we usually care not only about the result
+but, crucially, about /how/ it can be computed.  Classically in
+computer science, /functions are formulae/; and two functions mapping
+equal inputs to equal outputs need not to be equal. For instance, two
+sorting algorithms can have different efficiency or different memory
+requisites, even if they output the same sorted list. This vision,
+where two functions are equal if and only if they are given by
+essentially the same formula, is called */intensional/*.
 
 The *\lambda-calculus* is a collection of formal systems, all of them
 based on the lambda notation introduced by Alonzo Church in the 1930s
@@ -355,8 +357,8 @@ f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 \]
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
 set theory (see, for example, cite:kunen11).
-In constrast, untyped \lambda-calculus presents some problems such as non-terminating
-functions.
+In constrast, untyped \lambda-calculus presents some problems such as
+non-terminating functions.
 
 This presentation of the untyped lambda calculus will follow
 cite:Hindley08 and cite:selinger13.
@@ -2427,8 +2429,7 @@ roots (a,b,c) = do
 #+END_SRC
 
 For a more detailed treatment of monads, and their relation to
-categorical monads, see the chapter on Category Theory and the chapter
-on Type Theory, where we will program with monads in Agda.
+categorical monads, see the chapter on Category Theory.
 
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
 *** De Bruijn indexes
@@ -6897,7 +6898,7 @@ C \end{tikzcd} &  \qquad &
 Although this induction principle is weaker than the recursion
 principle System T offered, $\mathrm{rec} : D\to (\mathbb{N} \to D \to D) \to \mathbb{N} \to D$,
 it can be recovered using the cartesian closed structure and
-taking $C = \mathbb{N} \times D$ in when applying the induction principle in
+taking $C = \mathbb{N} \times D$ when applying the induction principle in
 \[
 \mathrm{rec}\ c_0\ c_s\ n \equiv
 \pi_1\ (\mathrm{ind}\ \pair{c_0,0}\ (\lambda m.\ \pair{c_s\ m\ d, \mathrm{succ}\ m})\ n).
@@ -7746,7 +7747,7 @@ to it, but (crucially) without knowing which $b$ is related to $a$. This
 new version of the Axiom of Choice is indeed independent of our theory
 (see Chapter 3 of cite:hottbook).
 
-How can we build truncations inside our theory? It can be proved (see cite:awodey04)
+How should we represent truncations inside our theory? It can be proved (see cite:awodey04)
 that propositional truncation is the left adjoint to the inclusion of propositions
 into general types; and, if we assume the existence of this adjoint into the category
 we are working into, we can use propositional truncations. That is, if $P$ is a
@@ -7764,16 +7765,20 @@ constructed the element and to prove a different proposition using it, with
 the condition that we cannot refer later to the explicit element we used during
 the proof.
 
-* Type theory and topoi (abstract)                                   :ignore:
+* Type theory (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 Topos theory arises independently with Grothendieck and sheaf theory,
-Lawvere and the axiomatization of set theory and Paul Cohen with the
-forcing techniques with allowed to construct new models of ZFC.
+Lawvere and the axiomatization of set theory. It has allowed to
+construct new models of ZFC and many different models of constructive
+mathematics. Martin-Löf type theory provides a language to study and
+to program inside categories with enough structure.
 #+LATEX: \end{center}}
 
-* Type theory and topoi
+# WONTFIX?: Cite Paul Cohen and the forcing technique.
+
+* Type theory
 ** Universes of mathematics
-*** Topoi
+*** Motivation: Topoi
 A *topos* (plural /topoi/) is a locally cartesian closed category with
 a subobject classifier where every finite limit exists. Usually,
 *W-topoi*, or topoi with a natural numbers object (in the sense of
@@ -7793,7 +7798,7 @@ axioms and interpretations cite:bauer2017five; for example,
 
  * inside the Johnstone's *topological topos*, we can reason with topological
    spaces and continuous functions between them cite:johnstone79, and under
-   certain assumptions, it is safe to assume that all the functions we can
+   certain hypothesis, it is safe to assume that all the functions we can
    build are automatically continuous cite:escardo15.
 
 The study of any of these theories is beyond the scope of this text.
@@ -7807,7 +7812,8 @@ theory and use it as a constructive foundation of mathematics. This
 will have the added benefit that every formal proof in the system will
 be a closed lambda term and checking that a proof is correct amounts to
 typechecking the term. Explicitly, the type theory we have been
-studying corresponds to *Martin-Löf type theory* cite:nordstrom90.
+describing in the previous sections corresponds to *Martin-Löf type theory*
+cite:nordstrom90.
 
 *** Programming inside Martin-Löf type theory
 Martin-Löf type theory and the internal language we have been
@@ -7933,26 +7939,27 @@ induction that every path is equal to the reflexivity path, that is,
 \]
 is not derivable from the induction principle. This is called the
 principle of *uniqueness of identity proofs*, it is equivalent to
-Streicher's Axiom K cite:streicher93, which is independent from
-Martin-Löf type theory.
+Streicher's Axiom K cite:streicher93 and it is independent
+from Martin-Löf type theory.
 
 If we do not assume this axiom, we open the possibility to the
 existence of multiple different proofs of the same equality.
 The structure of these proofs, endowed with symmetry and
-transitivity, could be modeled into a groupoid cite:hofmann98.
+transitivity, could be modeled into a groupoid; and this idea
+allows us to construct models of type theory where the principle
+of uniqueness of identity proofs does not hold (see cite:hofmann98).
 If we also consider equalities between proofs of equality,
-and equalities between proof of equalities between equalities
+and equalities between proofs of equalities between equalities,
 and so on, we would get a weak \omega-groupoid structure
 cite:berg11. Following the *Grothendieck's Homotopy Hypothesis*,
 groupoids can be regarded as an homotopical spaces, where equalities are
-paths, equalities between equalities are homotopies between paths
-and so on (some work on this hypothesis can be read in cite:tamsamani96).
+paths and equalities between equalities are homotopies between paths
+(some work on this hypothesis can be read in cite:tamsamani96).
 
-In any case, as the existence of these non-trivial structure is
-independent of the theory, we need to introduce a new axiom or types
+In any case, as the existence of this non-trivial structure is
+independent of the theory, we need to introduce new axioms or new types
 with nontrivial equalities if we want to profit from this interpretation. 
-The introduction of Voevodsky's
-Univalence Axiom will lead to Homotopy Type theory, an extension of
+The introduction of Voevodsky's Univalence Axiom leads to Homotopy Type theory, an extension of
 Martin-Löf type theory where we can work with this groupoid structure.
 Under the identification of higher groupoids and homotopical types,
 the new axiom allows us to reason in some sort of synthetic homotopy
@@ -7965,12 +7972,12 @@ type with a single element $\mathsf{p} : \mathbb{S}^1$ and a nontrivial equality
 $\mathsf{loop} : \mathsf{p} = \mathsf{p}$. Because it is freely generated, we can apply symmetry
 to get a different proof $p = p$ which we will call $\mathsf{loop}^{-1}$; moreover,
 we can transitivity $n$ times to $\mathsf{loop}$ for an arbitrary $n$, to get a new proof
-of $p = p$ which we will call $\mathsf{loop}^n$, these loops are the elements
-of $\pi_1(\mathbb{S}^1, \mathsf{p})$.
+of $p = p$ which we will call $\mathsf{loop}^n$; these are the elements
+of its fundamental group $\pi_1(\mathbb{S}^1, \mathsf{p})$.
 
-In this setting, results such as the Van Kampen theorem
-or the construction of Eilenberg-MacLane spaces have been formalized
-(see cite:hottbook).
+In this setting, results such as the Van Kampen theorem or the
+construction of Eilenberg-MacLane spaces have been formalized (see
+cite:hottbook).
 
 *** Homotopy type theory II: univalence
 We say that there is an equivalence between two types $A$ and $B$
@@ -7985,7 +7992,7 @@ is a /biinvertible/ map between them. Explicitly,
 \right).
 \]
 \normalsize
-It can be shown that, for any pair of types $A,B : {\cal U}$, there exists
+It can be shown that, for any pair of types $A$ and $B$, there exists
 a function of type $\mathrm{idtoeqv} : (A =_{\cal U} B) \to (A \simeq B)$ that uses
 identity functions to construct an equivalence from an equality.
 The Univalence axiom states that this function is itself an
@@ -7993,7 +8000,7 @@ equivalence.
 
 #+ATTR_LATEX: :options [Univalence]
 #+BEGIN_definition
-For any pair of types $A,B : {\cal U}$, $\mathrm{idtoeqv} : (A =_U B) \to (A \simeq B)$ is
+For any pair of types $A,B : {\cal U}$, $\mathrm{idtoeqv} : (A = B) \to (A \simeq B)$ is
 an equivalence. In particular, $(A = B) \simeq (A \simeq B)$.
 #+END_definition
 
@@ -8007,7 +8014,7 @@ them by the successor function. In the file =FundGroupCircle.agda=, we
 use this fact to prove, inside type theory, that $\mathbb{Z} = \pi_1(\mathbb{S}^1)$, 
 (following cite:hottbook and cite:licata13). This result is
 as a proof, inside this synthetic homotopical setting, of the fact
-that the foundamental group of the circle is $\mathbb{Z}$.
+that the fundamental group of the circle is $\mathbb{Z}$.
 
 **** Note on the proof                                          :noexport:
 We could think that this only proves that Z is the free group
@@ -8020,8 +8027,28 @@ only visible from outside. When we prove this we need univalence
 to internalize the structure of groupoid inside the theory,
 using Z as a bridge.
 
+* Conclusions
+** Further
+ * https://arxiv.org/abs/quant-ph/0312174
 
-* OLD Type theory
+* Appendices
+bibliographystyle:alpha
+bibliography:Bibliography.bib
+
+** TODO A note on structural induction
+http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
+** TODO Mikrokosmos complete code
+** TODO Mikrokosmos user's guide
+** TODO Agda formalizations
+** TODO Quotes
+# These quotes can be placed on the partial abstracts or in the general one.
+
+"" [Shulman17]
+
+** TODO Notes
+This text defines $\mathbb{N}$ with a zero.
+* OLD Removed                                               :noexport:ignore:
+** OLD Type theory
 # The connection between constructivity, computability and continuity
 # goes back to Brower. (Shulman 17)
 
@@ -8030,8 +8057,8 @@ using Z as a bridge.
 
 # TODO: Diccionario categorías/agda
 
-** TODO Beyond locally cartesian closed categories
-*** TODO Table of correspondences                                  :ignore:
+*** TODO Beyond locally cartesian closed categories
+**** TODO Table of correspondences                                :ignore:
 [[https://ncatlab.org/nlab/show/relation+between+type+theory+and+category+theory][relation between type theory and category theory in nLab]]
 
 More complex and more sophisticated languages can express a wider
@@ -8047,11 +8074,11 @@ to take models for these languages is narrower.
 | Homotopy type theory               | Elementary (\infty,1)-topos                    |
 |------------------------------------+------------------------------------------------|
 
-** TODO Topoi
+*** TODO Topoi
 Follows [Leinster] and [Moerdijk]
 
-*** Subobject classifier
-**** Definition of subobject classifier                           :ignore:
+**** Subobject classifier
+***** Definition of subobject classifier                         :ignore:
 #+attr_latex: :options [Subobject classifier]
 #+begin_definition
 A *subobject classifier* is an object $\Omega$ with a monomorphism $\mathrm{true} \colon 1 \to \Omega$
@@ -8070,7 +8097,7 @@ monomorphism $m$.
 # TODO: The pullback of a mono is a mono.
 # TODO: Every map from 1 is a mono.
 
-**** Subobjects                                                   :ignore:
+***** Subobjects                                                 :ignore:
 #+ATTR_LATEX: :options [Subobjects]
 #+BEGIN_definition
 A *subobject* of an object $X$ is a monomorphism under the equivalence class
@@ -8107,7 +8134,7 @@ we can define the functor $\Sub : {\cal E}^{op} \to \Set$.
 
 # Examples of subobject classifier
 
-*** Definition of a topos
+**** Definition of a topos
 #+attr_latex: :options [Topos]
 #+begin_definition
 An *elementary topos* (plural /topoi/) is a cartesian closed category
@@ -8123,14 +8150,14 @@ preserving finite limits, exponentials and the subobject classifier,
 up to isomorphism.
 #+END_definition
 
-**** Examples of topoi :ignore:
+***** Examples of topoi                                          :ignore:
 The category of finite sets and morphisms between them, $\FinSet$,
 
 
 # https://ncatlab.org/nlab/show/Beck-Chevalley+condition
 
-*** TODO Paré: every topos has colimits
-*** Elementary theory of the category of sets
+**** TODO Paré: every topos has colimits
+**** Elementary theory of the category of sets
 # 1. Well-pointed
 # 2. Natural numbers object (definition from initial algebras)
 # 3. Axiom of choice
@@ -8139,7 +8166,7 @@ In cite:lawvere64, Lawvere proposed an elementary theory of sets based
 on category theory by adjoining a set of axioms to the usual category
 theory axioms.
 
-**** Generators                                                   :ignore:
+***** Generators                                                 :ignore:
 In $\Set$, the terminal object $\{\ast\}$ is a generator. That is, given two
 functions $f,g : X \to Y$, if $f \circ x = g \circ x$ for all $x : \{\ast\} \to X$,
 then $f = g$. In other words, if $f(x) = g(x)$ for all $x \in X$, then
@@ -8147,28 +8174,28 @@ both functions must be the same.
 
 \\
 
-**** Well-pointed                                                 :ignore:
+***** Well-pointed                                               :ignore:
 Moreover, the terminal and the initial objects in $\Set$ are not
 isomorphic. A category where the terminal object is a generator
 and is not a zero object is a *well-pointed* category.
 
-**** TODO Natural numbers                                         :ignore:
+***** TODO Natural numbers                                       :ignore:
 
-**** Choice in a category                                         :ignore:
+***** Choice in a category                                       :ignore:
 A category is said to satisfy the *Axiom of choice* if every
 epimorphism has a right-side inverse. If we define sets using
 ZFC, the category $\Set$ satisfies the axiom of choice, that is,
 given any surjective function $f : A \to B$, there exists a 
 function $k : B \to A$ such that $f \circ k = \id_B$.
 
-**** ETCS                                                         :ignore:
+***** ETCS                                                       :ignore:
 #+ATTR_LATEX: :options [Category of sets]
 #+BEGIN_definition
 A *category of sets* is a well-pointed topos with natural numbers
 satisfying the Axiom of Choice.
 #+END_definition
 
-**** Relation to ZFC                                              :ignore:
+***** Relation to ZFC                                            :ignore:
 # We could take ETCS as our axioms.
 
 ZFC is stronger than ETCS: every provable theorem in ETCS is provable
@@ -8176,8 +8203,8 @@ in ZFC, but the converse is not true. In particular, ETCS is equivalent
 to a fragment of ZFC, called /restricted ZFC/. This relation is detailed
 in cite:maclane94.
 
-*** TODO The Continuum Hypothesis
-*** TODO Reasoning in a topos
+**** TODO The Continuum Hypothesis
+**** TODO Reasoning in a topos
 # From the nLab: topos
 #
 # Any result in ordinary mathematics whose proof is finitist and
@@ -8191,8 +8218,8 @@ in cite:maclane94.
 # add the restriction that the proof be predicative in a stronger sense,
 # then the result holds in any Heyting pretopos.
 
-*** TODO (\infty,1)-toposes
-** TODO Martin-Löf type theory
+**** TODO (\infty,1)-toposes
+*** TODO Martin-Löf type theory
 
 
 The type theory we are using in this text is due to Martin-Löf
@@ -8208,13 +8235,13 @@ Two variants can be considered.
 We will work in intensional type theory. Proofs will be formalized in
 the Agda proof assistant.
 
-**** TODO Types as spaces                                         :ignore:
+***** TODO Types as spaces                                       :ignore:
 The connection between constructivity, computability and continuity
 goes back to Brower.
 
-** OLD Universe hierarchy
-** OLD Intensional equality and Equivalences
-*** OLD Homotopy type theory III: synthetic topology
+*** OLD Universe hierarchy
+*** OLD Intensional equality and Equivalences
+**** OLD Homotopy type theory III: synthetic topology
 # Voevodsky's univalence
 
 Fundamental groups can be defined as truncations
@@ -8226,7 +8253,7 @@ We will show that the loop space of the sphere is equivalent to the
 integers; that is $\Omega(\mathbb{S}^1) \simeq \mathbb{Z}$, and, consequently, $\pi_1(\mathbb{S}^1)$ will be also
 $\mathbb{Z}$, as it is a type-theoretical set.
 
-*** Propositional equality
+**** Propositional equality
 Given any type $A : {\cal U}$ and two elements $x,y : A$, we can consider the
 type of proofs of equality between the two, $x = y$. Note that this
 *propositional equality* $x = y$ is conceptually different from the
@@ -8256,7 +8283,7 @@ written in type theory as
 \]
 
 
-**** Symmetry                                                     :ignore:
+***** Symmetry                                                   :ignore:
 #+ATTR_LATEX: :options [Symmetry]
 #+BEGIN_exampleth
 The usual properties of equality can be proved from the principle of
@@ -8275,7 +8302,7 @@ This way, we have created a function
 that inverts paths. Given $p : x =y$, we can construct $p^{-1} : y = x$.
 #+END_exampleth
 
-**** Transitivity                                                 :ignore:
+***** Transitivity                                               :ignore:
 #+ATTR_LATEX: :options [Transitivity]
 #+BEGIN_exampleth
 As a second example, we will prove *transitivity of equality*:
@@ -8305,7 +8332,7 @@ $x,y : A$,
 The details of these proofs are swept under the rug here, but they are
 fully available on the computer formalization.
 
-**** Transport                                                    :ignore:
+***** Transport                                                  :ignore:
 #+ATTR_LATEX: :options [Transport]
 #+BEGIN_exampleth
 We want a principle of /indiscernibility of identicals/, that is,
@@ -8326,7 +8353,7 @@ P(x) \to P(y).
 \]
 #+END_exampleth
 
-**** Functoriality                                                :ignore:
+***** Functoriality                                              :ignore:
 #+ATTR_LATEX: :options [Functoriality]
 #+BEGIN_exampleth
 Functions can be applied to both sides of equalities, this is known as
@@ -8357,7 +8384,7 @@ we have constructed is
 \]
 #+END_exampleth
 
-**** Uniqueness of identity proofs                                :ignore:
+***** Uniqueness of identity proofs                              :ignore:
 From these examples, it would seem that the path induction principle
 is very strong and makes the identity type almost trivial. In particular,
 it would seem easy to prove by path induction that every path is equal to
@@ -8395,12 +8422,12 @@ but as spaces where there exist paths, paths between paths, paths
 between paths between paths, and so on. Types have a homotopical
 structure.
 
-*** h-Propositions
+**** h-Propositions
 In this section, we explore the homotopical structure a type may
 present and we will translate some notions from homotopy theory to
 type theory.
 
-**** h-Propositions                                               :ignore:
+***** h-Propositions                                             :ignore:
 A type $A$ is an *h-proposition* or simply a *proposition* if a path
 exists between any two elements of the type. That is,
 \[
@@ -8412,7 +8439,7 @@ be seen as types; now we see that some types can be seen as
 propositions in a more classical sense without proof relevance: any
 two proofs of a proposition are equal.
 
-**** Truncation                                                   :ignore:
+***** Truncation                                                 :ignore:
 Once we have defined propositions, a natural notion to consider is
 *propositional truncations* that "truncate" each type into a
 proposition. Propositional truncations are left adjoints to the
@@ -8441,12 +8468,12 @@ logic, as we show in the following example.
 
 #+END_exampleth
 
-**** Diaconescu's theorem                                         :ignore:
+***** Diaconescu's theorem                                       :ignore:
 # We would need to talk about the category Set of set types in Hott.
 # It satisfies the ETCS axioms.
 
-*** h-Sets
-**** h-Sets                                                       :ignore:
+**** h-Sets
+***** h-Sets                                                     :ignore:
 A type $A$ is a *h-set* or simply a *set* if every two parallel paths
 are equal. That is,
 \[
@@ -8472,7 +8499,7 @@ A \rar\& S
 \end{tikzcd}}
 \end{prooftree}
 
-**** Hedberg's theorem                                            :ignore:
+***** Hedberg's theorem                                          :ignore:
 What follows is a useful sufficient condition for a type to be a
 set.
 
@@ -8488,19 +8515,19 @@ is a set.
 
 #+END_proof
 
-**** Naturals and integers are sets                               :ignore:
+***** Naturals and integers are sets                             :ignore:
 #+ATTR_LATEX: :options [Naturals and integers are sets]
 #+BEGIN_exampleth
 
 #+END_exampleth
 
-**** Relation to ETCS                                             :ignore:
-**** Groupoids and n-types                                        :ignore:
+***** Relation to ETCS                                           :ignore:
+***** Groupoids and n-types                                      :ignore:
 We will classify types into levels parametrized by the
 natural numbers, where a n-type will be a type with no nontrivial
 equalities above dimension n.
-**** Types are groupoids
-*** Equivalences
+***** Types are groupoids
+**** Equivalences
 
 \[
 \mathsf{isContrMap}(f) :\equiv \prod_{b:B} \mathsf{isContr}(\mathsf{fib}(f,y)).
@@ -8521,10 +8548,10 @@ means to be an equivalence: namely, having a two-sided inverse.
 This type is not a proposition, but we can prove that
 $\mathsf{qinv}(f) \to \mathsf{isContrMap}(f)$, and so, it is easier to use it to create
 equivalences.
-*** Function extensionality and Univalence
-** OLD Synthetic topology
+**** Function extensionality and Univalence
+*** OLD Synthetic topology
 # Synthetic computability: cite Bauer
-*** Higher inductive types
+**** Higher inductive types
 A *higher inductive type* is the type freely generated by a set of
 constructors and a set of /equalities/ between its freely generated
 elements. If inductive types are freely generated, higher inductive
@@ -8562,34 +8589,13 @@ $\ap_f(\mathsf{loop}) = s$.
 
 #+END_exampleth
 
-*** The fundamental group of the circle
-** OLD Constructive analysis
+**** The fundamental group of the circle
+*** OLD Constructive analysis
 # Comparar con Coquelicot https://hal.inria.fr/file/index/docid/860648/filename/article.pdf
-** OLD Computer verification
+*** OLD Computer verification
 # Sprinkles of extensionality for your vanilla type theory
 
 # Higher inductive types using Dan Licata's trick
-* Conclusions
-** Further
- * https://arxiv.org/abs/quant-ph/0312174
-
-* Appendices
-bibliographystyle:alpha
-bibliography:Bibliography.bib
-
-** TODO A note on structural induction
-http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
-** TODO Mikrokosmos complete code
-** TODO Mikrokosmos user's guide
-** TODO Agda formalizations
-** TODO Quotes
-# These quotes can be placed on the partial abstracts or in the general one.
-
-"" [Shulman17]
-
-** TODO Notes
-This text defines $\mathbb{N}$ with a zero.
-* OLD Removed                                               :noexport:ignore:
 ** OLD Monoidal and enriched categories
 # Linear logic = Monoidal categories = Quantum computation
 # Proof net = String diagram = Quantum circuit
