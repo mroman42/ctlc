@@ -107,6 +107,10 @@ module topology.FundGroupCircle where
   equiv-family : (x : S¹) → (base == x) ≃ code x
   equiv-family x = qinv-≃ (encode x) (decode x , (encode-decode x , decode-encode x))
 
+
+  -- The fundamental group of the circle is the integers.  In this
+  -- proof, univalence is crucial. The next lemma will prove that the
+  -- equivalence in fact preserves the group structure.
   fundamental-group-of-the-circle : Ω S¹ base ≃ ℤ
   fundamental-group-of-the-circle = equiv-family base
 

@@ -10,15 +10,16 @@ open import equality.CartesianProduct
 
 module logic.Sets where
 
-  -- A type is a set if any two equalities on the type are equal
+  -- A type is a "set" by definition if any two equalities on the type
+  -- are equal.
   isSet : ∀{ℓ}  (A : Type ℓ) → Type ℓ
   isSet A = (x y : A) → isProp (x == y)
 
-  -- The type of sets
+  -- The type of sets.
   hSet : ∀{ℓ} → Type (lsuc ℓ)
   hSet {ℓ} = Σ (Type ℓ) isSet
 
-  -- Product of sets is a set
+  -- Product of sets is a set.
   isSet-prod : ∀{ℓᵢ ℓⱼ}  {A : Type ℓᵢ} → {B : Type ℓⱼ}
              → isSet A → isSet B → isSet (A × B)
   isSet-prod sa sb (a , b) (c , d) p q = begin

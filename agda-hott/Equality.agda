@@ -5,18 +5,23 @@ open import EquationalReasoning
 
 module Equality where
 
-  -- Types are higher groupoids.
-  -- Inverse of a path
-  inv : ∀{ℓ} {A : Type ℓ}  {a b : A} → a == b → b == a
+  -- Types are higher groupoids.  If we see equalities as paths, this
+  -- is the inverse of a path. If we see equalities classically, this
+  -- is the symmetric property of equality.
+  inv : ∀{ℓ} {A : Type ℓ}  {a b : A}
+    → a == b
+    → b == a
   inv (refl a) = refl a
-
   
-  -- Functions are functors to equalities
-  ap : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ}  {a b : A} → (f : A → B) →
-       a == b → f a == f b
+  -- Functions are functors to equalities.  In other words, functions
+  -- preserve equalities.
+  ap : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ}  {a b : A} → (f : A → B)
+    →   a == b
+    → f a == f b
   ap f (refl a) = refl (f a)
 
 
+  -- Some properties on the groupoid structure of equalities.
   module ·-Properties {ℓ} {A : Type ℓ} where
     ·-runit : {a b : A} (p : a == b) → p == p · (refl b)
     ·-runit (refl a) = refl (refl a)
@@ -46,12 +51,17 @@ module Equality where
   open ·-Properties public
 
 
+  -- When we transport a proof of (P a) over an equality (a == b), we
+  -- get a proof of (P b).
   module Transport {ℓᵢ} {A : Type ℓᵢ} where
     -- Transport
-    transport : ∀{ℓⱼ} (P : A → Type ℓⱼ) {a b : A} → a == b → P a → P b
+    transport : ∀{ℓⱼ} (P : A → Type ℓⱼ) {a b : A}
+      → a == b
+      → P a
+      → P b
     transport P (refl a) = id
 
-    -- Lemmas on transport
+    -- Some lemmas on the transport operation.
     transport-concat-r : {a : A} {x y : A} → (p : x == y) → (q : a == x) →
       transport (λ x → a == x) p q == q · p
     transport-concat-r (refl a) q = ·-runit q
@@ -76,14 +86,13 @@ module Equality where
                      → ((transport P q) ∘ (transport P p)) x == transport P (p · q) x
     transport-comp-h {P = P} (refl a) q x = refl (transport P q x)
 
-    
-
-    -- Notation for transport
+    -- A shorter notation for transport.
     _✶ : ∀{ℓⱼ} {P : A → Type ℓⱼ} {a b : A} → a == b → P a → P b
     _✶ = transport _
   open Transport public
 
-  -- Functorial nature of ap
+  -- More properties and lemmas on equality, transporting and function
+  -- application.
   ap-id : ∀{ℓᵢ} {A : Type ℓᵢ} {a b : A} (p : a == b) → ap id p == p
   ap-id (refl a) = refl (refl a)
 
