@@ -7779,15 +7779,11 @@ to program inside categories with enough structure.
 * Type theory
 ** Universes of mathematics
 *** Motivation: Topoi
-A *topos* (plural /topoi/) is a locally cartesian closed category with
-a subobject classifier where every finite limit exists. Usually,
-*W-topoi*, or topoi with a natural numbers object (in the sense of
-Example [[example-naturalnumbersobj]]), are considered cite:leinster10.
-
-Each topos is a model of constructive mathematics; and we can reason
-in its internal logic and rebuild mathematics internally in its
-language. Each topos is thus an universe of mathematics with different
-axioms and interpretations cite:bauer2017five; for example,
+*Topoi* (singular /topos/) are category-theoretic models of
+constructive mathematics; we can reason in its internal logic and
+rebuild large parts of mathematics inside their structure using an
+internal language.  Each topos is thus an universe of mathematics with
+different axioms and interpretations cite:bauer2017five; for example,
 
  * inside the Hayland's *realizability topos*, every function is computable
    and we can study Kleene's realizability theory cite:vanoosten08;
@@ -7801,6 +7797,11 @@ axioms and interpretations cite:bauer2017five; for example,
    certain hypothesis, it is safe to assume that all the functions we can
    build are automatically continuous cite:escardo15.
 
+Topoi can be defined as locally cartesian closed categories with
+a subobject classifier in which every finite limit exists. Usually,
+*W-topoi*, or topoi with a natural numbers object (in the sense of
+Example [[example-naturalnumbersobj]]), are considered cite:leinster10.
+
 The study of any of these theories is beyond the scope of this text.
 However, as we have been relating type theory to the internal language
 of locally closed cartesian categories with enough structure; we know
@@ -7808,10 +7809,10 @@ that type theory (depending on what constructions we assume) will have
 models in categories like these.
 
 In this chapter, we will exclusively work internally in dependent type
-theory and use it as a constructive foundation of mathematics. This
+theory and use it as a constructive foundation of mathematics.  This
 will have the added benefit that every formal proof in the system will
-be a closed lambda term and checking that a proof is correct amounts to
-typechecking the term. Explicitly, the type theory we have been
+be a closed lambda term and checking that a proof is correct will amount to
+typechecking the term.  Explicitly, the type theory we have been
 describing in the previous sections corresponds to *Martin-Löf type theory*
 cite:nordstrom90.
 
@@ -7845,7 +7846,7 @@ of these include
    variant of type theory.
 
 In this text, we will use Agda to write mathematics, taking ideas from
-cite:Conor17. We will check proofs in Martin-Löf type theory using its
+cite:Conor17.  We will check proofs in Martin-Löf type theory using its
 type system.
 
 *** Dedekind reals
@@ -7918,7 +7919,7 @@ and Cauchy reals become equivalent and the classical notion of real
 number is recovered. A detailed discussion can be found in the last
 chapters of cite:hottbook.
 
-*** Homotopy type theory I: equality
+*** Homotopy type theory I: Equality
 We have already discussed how, given any $x,y:A$, we can interpret
 the equality type $(x = y)$, whose terms are witnesses of the equality.
 For each $x : A$, there is a reflexivity element, $\refl : x = x$; and the
@@ -7970,16 +7971,17 @@ the type of loops $\pi_1(A,a) :\equiv a = a$, endowed with reflexivity and
 transitivity. The *circle* can be defined as the freely generated
 type with a single element $\mathsf{p} : \mathbb{S}^1$ and a nontrivial equality
 $\mathsf{loop} : \mathsf{p} = \mathsf{p}$. Because it is freely generated, we can apply symmetry
-to get a different proof $p = p$ which we will call $\mathsf{loop}^{-1}$; moreover,
+to get a different proof $\mathsf{p} = \mathsf{p}$ which we will call $\mathsf{loop}^{-1}$; moreover,
 we can transitivity $n$ times to $\mathsf{loop}$ for an arbitrary $n$, to get a new proof
-of $p = p$ which we will call $\mathsf{loop}^n$; these are the elements
+of $\mathsf{p} = \mathsf{p}$ which we will call $\mathsf{loop}^n$; these are the elements
 of its fundamental group $\pi_1(\mathbb{S}^1, \mathsf{p})$.
 
 In this setting, results such as the Van Kampen theorem or the
 construction of Eilenberg-MacLane spaces have been formalized (see
 cite:hottbook).
 
-*** Homotopy type theory II: univalence
+*** TODO Homotopy type theory II: Sets
+*** Homotopy type theory III: Univalence
 We say that there is an equivalence between two types $A$ and $B$
 and we write it as $(A \simeq B)$ if there
 is a /biinvertible/ map between them. Explicitly,
@@ -8030,6 +8032,13 @@ using Z as a bridge.
 * Conclusions
 ** Further
  * https://arxiv.org/abs/quant-ph/0312174
+
+# It is conceivable that, in the future, mathematicians will be able
+# to write and check their proofs directly into a computer as part of
+# their routine. Reaching that ... will require a massive effort into
+# the study of foundations and implementation of languages, coupled
+# with the creation of tools and software easing the task for the
+# working mathematician.
 
 * Appendices
 bibliographystyle:alpha
