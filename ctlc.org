@@ -7790,29 +7790,8 @@ constructed the element and to prove a different proposition using it, with
 the condition that we cannot refer later to the explicit element we used during
 the proof.
 
-* Type theory (abstract)                                             :ignore:
-#+LATEX: \ctparttext{\color{black}\begin{center}
-Topos theory arises independently with Grothendieck and sheaf theory,
-Lawvere and the axiomatization of set theory. It has allowed to
-construct new models of ZFC and many different models of constructive
-mathematics. Martin-Löf type theory provides a language to study and
-to program inside categories with enough structure.
-#+LATEX: \end{center}}
-
-# WONTFIX?: Cite Paul Cohen and the forcing technique.
-
-* Type theory
-** Universes of mathematics
-# The primary challenge that needed to be addressed was that the
-# foundations of mathematics were unprepared for the requirements of
-# the task. Formulating mathematical reasoning in a language precise
-# enough for a computer to follow meant using a foundational system of
-# mathematics not as a standard of consistency to establish a few
-# fundamental theorems, but as a tool that can be employed in
-# everyday mathematical work.
-#  -- Vladimir Voevodsky. The origins and motivations of Univalent Foundations.
-
-*** Motivation: Topoi
+** Topoi
+*** Motivation
 *Topoi* (singular /topos/) are category-theoretic models of
 constructive mathematics; we can reason in its internal logic and
 rebuild large parts of mathematics inside their structure. 
@@ -7831,16 +7810,42 @@ different axioms and interpretations cite:bauer2017five; for example,
    certain hypothesis, we can assume that all functions we can
    build are automatically continuous (see cite:escardo15).
 
-Topoi can be defined as locally cartesian closed categories with
+Topoi are defined as locally cartesian closed categories with
 a subobject classifier in which every finite limit exists. Usually,
-*W-topoi*, or topoi with a natural numbers object (in the sense of
-Example [[example-naturalnumbersobj]]), are considered cite:leinster10.
+we will be interested in *W-topoi*, or topoi with a natural numbers
+object (in the sense of Example [[example-naturalnumbersobj]]) cite:leinster10.
 
 The study of any of these theories is beyond the scope of this text.
 However, as we have been relating type theory to the internal language
 of locally closed cartesian categories with enough structure; we know
 that type theory (depending on what constructions we assume) will have
 models in categories like these.
+
+*** TODO Elementary Theory of the Category of Sets
+* Type theory (abstract)                                             :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
+Topos theory arises independently with Grothendieck and sheaf theory,
+Lawvere and the axiomatization of set theory. It has allowed to
+construct new models of ZFC and many different models of constructive
+mathematics. Martin-Löf type theory provides a language to study and
+to program inside categories with enough structure.
+#+LATEX: \end{center}}
+
+# WONTFIX?: Cite Paul Cohen and the forcing technique.
+
+* Type theory
+** Martin-Löf type theory
+#+begin_quote
+And it soon became clear that the only long-term solution was somehow
+to make it possible for me to use computers to verify my abstract,
+logical, and mathematical constructions. When I first started to
+explore the possibility, computer proof verification was almost a
+forbidden subject among mathematicians.  The primary challenge that
+needed to be addressed was that the foundations of mathematics were
+unprepared for the requirements of the task. 
+
+  -- *Vladimir Voevodsky*, cite:voevodsky14.
+#+end_quote
 
 In this chapter, we will exclusively work internally in dependent type
 theory and use it as a constructive foundation of mathematics.  This
@@ -7850,7 +7855,7 @@ typechecking the term.  Explicitly, the type theory we have been
 describing in the previous sections corresponds to *Martin-Löf type theory*
 cite:nordstrom90.
 
-*** Programming inside Martin-Löf type theory
+*** Programming in Martin-Löf type theory
 Martin-Löf type theory and the internal language we have been
 describing so far can also be regarded as a programming language in
 which is possible to formally specify and prove theorems about the
@@ -7883,7 +7888,9 @@ In this text, we will use Agda to write mathematics, taking ideas from
 cite:Conor17.  We will check proofs in Martin-Löf type theory using its
 type system.
 
-*** TODO Proofs and categories
+*** TODO Explicit translation
+*** TODO Avoiding the law of excluded middle
+*** TODO Diaconescu's theorem
 *** Dedekind reals
 In =Reals.agda=, we provide a formalized construction of the Dedekind
 positive reals in intensional Martin-Löf type theory, implemented in
@@ -7924,6 +7931,8 @@ constructed as the sum of the following data.
    \mathrm{cut}_r(q) \right).
    \]
    \normalsize
+
+#+latex: \ExecuteMetaData[latex/Ctlc.tex]{reals}
 
 Note that, under the intuitionistic interpretation, it is not the case 
 in general that $\prod_{q : D} \mathrm{cut}_r(q) + \neg\, \mathrm{cut}_r(q)$ for an arbitrary $r : \mathbb{R}^+$; in fact,
@@ -11396,7 +11405,7 @@ This presentation of Homotopy Type Theory will follow cite:hottbook.
 Types and identity types between their elements are groupoids.
 # Higher Identity types give them a structure of higher groupoids.
 
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{groupoids}
+
 
 ***** Functions as functors                                      :ignore:
 Functions can be seen as functors between groupoids.

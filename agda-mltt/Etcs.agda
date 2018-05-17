@@ -16,12 +16,16 @@ open import Naturals
 -- version by Altenkirch.
 -- http://www.cs.nott.ac.uk/~psztxa/ewscs-17/notes.pdf
 
-wellPointed : {A : Set} {B : A → Set} → {f g : (a : A) → B a} → ((x : A) → f x ≡ g x) → f ≡ g
+wellPointed : {A : Set} {B : A → Set} → {f g : (a : A) → B a}
+  → ((x : A) → f x ≡ g x)
+  ------------------------
+  → f ≡ g
 wellPointed = funext
 
 postulate 
   AxiomOfChoice : {A : Set} {B : Set} {R : A → B → Set}
     → ((a : A) → Ex B (λ b → R a b))
+    ------------------------------------------
     → Ex (A → B) (λ f → (a : A) → R a (f a))
 
 LawOfExcludedMiddle : {P : Set} → P ∨ ¬ P
