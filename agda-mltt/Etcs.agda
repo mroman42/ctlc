@@ -1,6 +1,6 @@
-{-# OPTIONS --type-in-type #-}
+{-# OPTIONS --exact-split --type-in-type #-}
 
-module etcs.Etcs where
+module Etcs where
 
 open import Base
 open import Prop
@@ -15,6 +15,9 @@ open import Naturals
 -- This proof has been adapted from Diaconescu's theorem in the
 -- version by Altenkirch.
 -- http://www.cs.nott.ac.uk/~psztxa/ewscs-17/notes.pdf
+
+wellPointed : {A : Set} {B : A → Set} → {f g : (a : A) → B a} → ((x : A) → f x ≡ g x) → f ≡ g
+wellPointed = funext
 
 postulate
   prop-univ : {A B : Set} → isProp A → isProp B → (A → B) → (B → A) → A ≡ B
@@ -52,7 +55,7 @@ LawOfExcludedMiddle {P} = Ex-elim
 
       eqf : (p : P) → f Ua ≡ f Va 
       eqf p = ap f (Σ-eq Ua Va (
-        funext λ
+        wellPointed λ
           { false → prop-univ ∨-isProp ∨-isProp (λ _ → rinr p) (λ _ → rinr p)
           ; true  → prop-univ ∨-isProp ∨-isProp (λ _ → rinr p) (λ _ → rinr p)
           }) (Ex-isProp _ _))

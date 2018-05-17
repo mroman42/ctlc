@@ -4,27 +4,28 @@
 #+Todo: TODO(t) OLD(o) | DONE(d)
 
 ** To-do list                                                     :noexport:
-*** TODO Teorema de Hedberg y cómo recuperar conjuntos con ETCS
-*** TODO Añadir paradoja de Escardó para motivar topología y computación
-*** TODO Añadir ejemplo topológico de nudo que no se cierra
-*** TODO Añadir lista de referencias principales
+*** Revisión
+
+- [X] 11. Categories
+- [X] 12. Functors and natural transformations
+- [X] 13. Constructions on categories
+
+*** TODO [#A] Añadir lista de referencias principales
   - Selinger
   - MacLane, Categories for the working mathematician
   - Homotopy type theory book
   - nLab
-
-*** TODO Repasar todo sustituyendo definiciones de entorno por negrita
-*** TODO Quote Lawvere
-Buscar en el libro de Conceptual Mathematics
-*** TODO Colorear reglas del cálculo lambda simplemente tipado
+*** TODO [#B] Teorema de Hedberg y cómo recuperar conjuntos con ETCS
+*** TODO [#C] Añadir paradoja de Escardó para motivar topología y computación
+*** TODO [#B] Añadir ejemplo topológico de nudo que no se cierra
+*** TODO [#B] Repasar todo sustituyendo definiciones de entorno por negrita
+*** TODO [#C] Repasar coloreado de reglas del cálculo lambda simplemente tipado
 Especialmente en la parte de deducción natural, evitarlo en otros
 puntos o usarlo consistentemente.
 
-*** TODO Considerar sólo un caso de límites con su dual, en lugar de dos.
-*** TODO Añadir interpretación de Prop como subobjeto clasificador.
-*** TODO Reescribir parte de teoría de tipos, añadir univalencia solo al final.
-*** TODO Citas en cada capítulo
-*** TODO Agda exportado a HTML.
+*** TODO [#C] Considerar sólo un caso de límites con su dual, en lugar de dos.
+*** TODO [#C] Citas en cada capítulo
+*** TODO Agda exportado a HTML. Enlazar código o apéndices
 
 ** Macros and libraries                                             :ignore:
 #+latex_class: scrreprt
@@ -250,8 +251,8 @@ ideas clearly.  Any deviation from this goal must be attributed to
 my own inexperience.
 
 I would like to thank the LibreIM community in general and Ignacio
-Cordón, David Charte, Marta Andrés, Pablo Baeyens, Antonio Checa,
-Daniel Pozo, and Sofía Almeida in particular, for testing the
+Cordón, David Charte, Marta Andrés, José Carlos Entrena, Pablo Baeyens,
+Antonio Checa, Daniel Pozo, and Sofía Almeida in particular, for testing the
 interpreter and providing useful discussion and questions on the
 topics of this text. Prof. Luis Merino, Prof. Juan Julián Merelo and
 Braulio Valdivielso have made possible and participated on the
@@ -314,8 +315,8 @@ not enough for flattening them.
 The \lambda-calculus is a collection of systems formalizing the notion
 of functions. They can be seen as programming languages and formal
 logics at the same time. We focus on the properties of the untyped
-\lambda-calculus and simply typed \lambda-calculus and its relation to
-logic.
+\lambda-calculus and simply typed \lambda-calculus, and we study their
+logical interpretation.
 #+LATEX: \end{center}}
 
 * Lambda calculus
@@ -2238,10 +2239,12 @@ In particular *System F* is equivalent to the single-sorted pure system $\lambda
 *** TODO Inductive and coinductive definitions
 * Mikrokosmos (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
-We have developed *Mikrokosmos*, an untyped and simply typed \lambda-calculus interpreter
-written in the purely functional programming language Haskell cite:hudak07_haskell.
-It aims to provide students with a tool to learn and understand \lambda-calculus
-and the relation between logic and types.
+We have developed *Mikrokosmos*, an untyped and simply typed
+\lambda-calculus interpreter written in the purely functional
+programming language Haskell cite:hudak07_haskell.  It aims to provide
+students with a tool to learn and understand \lambda-calculus and the
+relation between logic and types. We show how to program and prove
+statements of intuitionistic propositional logic inside it.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
@@ -3951,22 +3954,28 @@ can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 
 * Category theory (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
-This section is based on cite:maclane78.
+Categories will be the framework we will use to study the fundamental
+notion of function composition inside mathematics. They provide a
+useful language to talk about theories, mathematic and logic. In
+particular, adjoint functors will be one of the key insights we will
+use to understand and expand the connection between computation and
+logic we have described so far.  This section is based on cite:maclane78.
 #+LATEX: \end{center}}
 
 * Category theory
 ** Categories
-A *category* is an algebraic structure that captures the notion of
-composition. It consists of objects linked by composable arrows; to
+*Categories* are algebraic structures that capture the notion of
+composition. They consist of objects linked by composable arrows; to
 which associativity and identity laws will apply.
 
 Thus, a category has to rely in some notion of /collection of
 objects/.  When interpreted inside set-theory, this term can denote
-sets or proper classes. We will want to define categories whose
-objects are all the possible sets and we will need the objects to form
-a proper class in order to avoid inconsistent results such as the
-Russell's paradox. This is why we will consider a particular class of
-categories of small set-theoretical size to be specially well-behaved.
+sets or proper classes.  We want to talk about categories containing
+subsets of the class of all sets, and thus it is necessary to allow
+the objects to form a proper class (which is not itself a set) in
+order to avoid inconsistent results such as the Russell's paradox.
+This is why we will consider a particular class of categories of small
+set-theoretical size to be specially well-behaved.
 
 #+attr_latex: :options [Small and locally small categories]
 #+begin_definition
@@ -3988,31 +3997,28 @@ open to both interpretations.
 #+begin_definition
 A *category* ${\cal C}$, as defined in cite:maclane78 or cite:awodey10, is given by
 
- * ${\cal C}_0$ (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), a /collection/ whose
-   elements are called *objects*, and
- * ${\cal C}_1$, a /collection/ whose elements are called *morphisms*.
+ * a collection (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), whose
+   elements are called *objects*; and
+ * a collection, whose elements are called *morphisms*.
 
-Every morphism $f \in {\cal C}_1$ is assigned two objects: a *domain* $\mathrm{dom}(f) \in {\cal C}_0$,
-and a *codomain* $\mathrm{cod}(f) \in {\cal C}_0$; a common notation to indicate $A = \mathrm{dom}(f)$
-and $B = \mathrm{cod}(f)$ is to write $f \colon A \to B$.
+Every morphism $f$ is assigned two objects: a *domain*
+and a *codomain*; a common notation to indicate that $f$
+has domain $A$ and codomain $B$ is to write $f \colon A \to B$.
 
 Given two morphisms $f \colon A \to B$ and $g \colon B \to C$, there exists a 
-*composition* morphism $g \circ f \colon A \to C$. Morphism composition is a 
-binary associative operation with an identity element $\id_{A}\colon A \to A$
-for every object $A$, that is,
-\[
-h \circ (g \circ f) = (h \circ g) \circ f
-\quad\text{ and }\quad
-f \circ \id_A = f = \id_B \circ f,
-\]
-for any $f,g,h$, composable morphisms.
+*composition* morphism $g \circ f \colon A \to C$. Composition of morphisms
+is a partially defined binary operation satisfying the following
+two axioms. It must be /associative/,
+verifying that $h \circ (g \circ f) = (h \circ g) \circ f$ for any composable morphisms
+$f,g,h$; and it must have an /identity/ morphism $\id_{A}\colon A \to A$ for each
+object $A$, verifying that $f \circ \id_A = f = \id_B \circ f$ for all $f \colon A \to B$.
 #+end_definition
 
 **** Definition of hom-sets                                       :ignore:
-The *hom-set* of two objects $A,B$ on a category is the collection of
-morphisms between them. It is written as $\hom(A,B)$. We can use a
-subscript, as in $\hom_{{\cal C}}(A,B)$, to explicitly specify the
-category we are working in when necessary.
+The collection of morphisms between two objects $A$ and $B$ is called
+an *hom-set* and it is written as $\hom(A,B)$. When necessary, we can
+use a subscript, as in $\hom_{{\cal C}}(A,B)$, to explicitly specify the
+category we are working in.
 
 ***** OLD Endomorphisms
 The set of *endomorphisms*
@@ -4021,38 +4027,33 @@ of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
 *** Morphisms
 **** Morphisms: introduction                                      :ignore:
 Objects in category theory are an atomic concept and can be only
-studied by their morphisms; that is, by how they are related to all
-the objects of the category. Thus, the essence of a category is given
-not by its objects, but by the morphisms between them and how
-composition is defined.
+studied by their morphisms; that is, by how they relate to each other.
+In other words, the essence of a category is given not by its objects,
+but by the morphisms between them and how composition is defined.
 
 It is so much so, that we will consider two objects essentially
-equivalent (and we will call them /*isomorphic*/) whenever they relate
-to other objects in the exact same way; that is, whenever an
-invertible morphism between them exists. This will constitute an
-equivalence relation on the category.
+equivalent (and we will call them /isomorphic/) whenever they relate
+to other objects in the exact same way. This occurs if we can find
+an invertible morphism connecting both: composition by this morphism
+or its inverse will translate arrows from one object to the other.
 
 **** Isomorphisms                                                 :ignore:
 #+attr_latex: :options [Isomorphisms]
 #+begin_definition
-A morphism $f : A \to B$ is an *isomorphism* if there exist a morphism
-$f^{-1} : B \to A$ such that
-
-  * $f^{-1} \circ f = \id_{A}$,
-  * $f \circ f^{-1} = \id_{B}$.
-
-This morphism is called an *inverse* of $f$. Two objects are *isomorphic*
-if an isomorphism between them exists.  We write $A \cong B$ when $A$
-and $B$ are isomorphic.
+A morphism $f : A \to B$ is an *isomorphism* if there exists a morphism
+$f^{-1} : B \to A$ such that $f^{-1} \circ f = \id_{A}$ and $f \circ f^{-1} = \id_{B}$.
+This morphism is called an *inverse* of $f$. When an isomorphism between
+two objects $A$ and $B$ exists, we say they are /isomorphic/, and we write
+$A \cong B$.
 #+end_definition
 
 **** Unicity of inverses                                          :ignore:
 #+attr_latex: :options [Unicity of inverses]
 #+begin_proposition
 <<prop-unicityinverse>>
-If the inverse of a morphism exists, it is unique. In fact, if a
-morphism has a left-side inverse and a right-side inverse, they are
-both-sided inverses and they are equal.
+There is, at most, a single way to invert a morphism.  If the inverse of a
+morphism exists, it is unique. In fact, if a morphism has a left-side
+inverse and a right-side inverse, they must be equal.
 #+end_proposition
 #+begin_proof
 Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
@@ -4064,35 +4065,31 @@ g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) =
 #+end_proof
 
 **** Equivalence relation                                         :ignore:
-The relation of being isomorphic is an equivalence relation. In
-particular,
-
- * the identity, $\id = \id^{-1}$;
- * the inverse of an isomorphism, $(f^{-1})^{-1} = f$;
- * and the composition of isomorphisms, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$;
-
-are all isomorphisms. We can check that these are in fact their inverses
-and from their existence, it follows that the relation is reflexive,
-symmetric and transitive.
-
-**** TODO Automorphisms                                           :ignore:
-We call *automorphisms* to the morphisms which are both endomorphisms
-and isomorphisms.
+As we promised, /to be isomorphic to/ is an equivalence
+relation. In particular, reflexivity follows from the fact that the
+identity is its own inverse, $\id = \id^{-1}$; symmetry follows from the
+inverse of an isomorphism being itself an isomorphism, $(f^{-1})^{-1} = f$;
+and transitivity follows by the fact that the composition of isomorphisms
+is itself an isomorphism, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$.
 
 **** Monomorphisms and epimorphisms                               :ignore:
-Morphisms are an abstraction of the notion of structure-preserving
-homomorphisms between algebraic structures. From this perspective,
-*monomorphisms* and *epimorphisms* will be abstractions of the usual
+We can notice that morphisms are an abstraction of the notion of
+structure-preserving maps between mathematical structures.  Two
+structures can be identified if they are related by an isomorphism.
+From this perspective, it seems natural to ask how injective and
+surjective can be described only in terms of composition.
+/Monomorphisms/ and /epimorphisms/ will be abstractions of the usual
 injective and surjective homomorphisms, respectively.
 
 #+attr_latex: :options [Monomorphisms and epimorphisms]
 #+begin_definition
 A *monomorphism* is a left-cancellable morphism, that is, $f : A \to B$ is
-a monomorphism if, for every $g,h : B \to A$, 
-\[ f \circ g = f \circ h  \implies g = h. \]
-An *epimorphism* is a right-cancellable morphism, that is, $f : A \to B$ is
-an epimorphism if, for every $g,h : B \to A$,
-\[ g \circ f = h \circ f \implies g = h. \]
+a monomorphism if, for every pair of morphisms $g,h : B \to A$, the
+equality $f \circ g = f \circ h$ implies $g = h$.
+
+Dually, an *epimorphism* is a right-cancellable morphism, that is, $f : A \to B$ is
+an epimorphism if, for every $g,h : B \to A$, the equality $g \circ f = h \circ f$
+implies $g = h$.
 #+end_definition
 
 ***** TODO Bimorphisms
@@ -4110,44 +4107,48 @@ to generalize the notions of injective and surjective functions.
 
 #+attr_latex: :options [Retractions and sections]
 #+begin_definition
-A *retraction* is a left inverse, that is, a morphism that has a right inverse;
-conversely, a *section* is a right inverse, a morphism that has a left inverse.
+A *retraction* is a left inverse, that is, a morphism that has a right
+inverse; conversely, a *section* is a right inverse or, in other
+words, a morphism that has a left inverse.
 #+end_definition
 
 By virtue of Proposition [[prop-unicityinverse]], a morphism that is both
 a retraction and a section is an isomorphism. In general, however, not
 every epimorphism is a section and not every monomorphism is a
-retraction.
+retraction. Consider for instance a category with two objects and a
+single morphism connecting them; it is a monomorphism and an
+epimorphism, but it has no inverse. In any case, we will usually work
+with the more general notion of monomorphisms and epimorphisms.
 
 *** Products and sums
 **** Motivation                                                   :ignore:
 /Products and sums/ are very widespread notions in mathematics.
-Whenever a new structure is defined, it is common to wonder what the
+Whenever a new structure is defined, it is common to ask what the
 product or sum of two of these structures would be. Examples of
 products are the cartesian product of sets, the product topology or
 the product of abelian groups; examples of sums are the disjoint
-union of sets, topological sum or the free product of groups. With
-them, we can consider certain structures to constitute a $0$ or a $1$
+union of sets, topological sum or the free product of groups.  Following
+this idea, we can consider certain structures to constitute a $0$ or a $1$
 for these operations; these are called /initial and final objects/.
 
 We will abstract categorically these notions in terms of /universal/
-/properties/. This viewpoint, however, is an important shift with
-respect to how these properties are usually defined. We will not
-define the product of two objects in terms of its internal structure
+/properties/. This point of view, however, is an important shift with
+respect to how these properties are classicallys defined. We will not
+define the product of two objects in terms of their internal structure
 (categorically, objects are atomic and do not have any); but in terms
 of all the other objects, that is, in terms of the complete structure
 of the category. This turns inside-out the focus of the definitions.
 Moreover, objects defined in terms of universal properties are usually
 not uniquely determined, but only determined /up to isomorphism/. This
 reinforces our previous idea of considering two isomorphic objects in
-a category as /essentialy/ the same object.
+a category as /essentially/ the same object.
 
 **** Terminal and initial objects                                 :ignore:
 #+attr_latex: :options [Initial and terminal objects]
 #+begin_definition
 An object $0$ is an *initial object* if for every object $A$ exists an 
 unique morphism of the form $o_A \colon 0 \to A$. An object $1$ is a *terminal object* if
-for every object $A$ exists an unique morphism of the form $\ast_A \colon A \to T$.
+for every object $A$ exists an unique morphism of the form $\ast_A \colon A \to 1$.
 #+end_definition
 
 **** Unicity                                                      :ignore:
@@ -4155,8 +4156,8 @@ Note that these objects may not exist in any given category;
 but when they do, they are essentially unique. If $A,B$ are initial
 objects, by definition, there are a unique morphism $f : A \to B$, a
 unique morphism $g : B \to A$, and two unique morphisms $A \to A$ and $B \to B$.
-This implies $f \circ g = \id$ and $g \circ f = \id$, so $A \cong B$.
-A similar proof can be written for terminal objects.
+By uniqueness, $f \circ g = \id$ and $g \circ f = \id$, hence $A \cong B$.
+An analogous proof can be written for terminal objects.
 
 **** Products and sums                                            :ignore:
 # TODO: The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
@@ -4184,24 +4185,29 @@ B \ar[bend right,swap]{ul}{f_2}\lar{i_2}
 \end{tikzcd}\]
 #+end_definition
 
-Note that neither the product nor the sum of two objects have to exist
+Note that neither the product nor the sum of two objects necessarily exist
 on a category; but when they do, they are essentially unique. This
 justifies writing them as $A \times B$ and $A+B$.  The proof is
 similar to that of the unicity of initial and terminal objects.
 
 *** Examples of categories
+Many mathematical structures, such as sets, groups, or partial orders,
+are particular cases of a category.  Apart from these, we will be also
+interested in categories whose /objects/ are known mathematical
+structures (the category of all groups, the category of all sets, and
+so on). The following are examples on how general the definition of a
+category is.
+
 **** Discrete categories                                          :ignore:
-#+attr_latex: :options [Discrete categories]
 #+begin_exampleth
 A category is *discrete* if it has no other morphisms than the
-identities.  A discrete small category is uniquely defined by its
-underlying set of objects and every class of objects defines a
-discrete category. Thus, small discrete categories are sets
-without any additional categorical structure.
+identities.  A discrete small category is uniquely defined by the
+underlying set of its objects and every class of objects defines a
+discrete category. Thus, small discrete categories can be regarded
+as sets.
 #+end_exampleth
 
 **** Monoids, groups, groupoids                                   :ignore:
-#+attr_latex: :options [Monoids, groups]
 #+begin_exampleth
 A single-object category is a *monoid*. A category in which every
 morphism is an isomorphism is a *groupoid*. A *group* is a category
@@ -4211,7 +4217,6 @@ elements and composition as the binary operation.
 #+end_exampleth
 
 **** Posets                                                       :ignore:
-#+attr_latex: :options [Partially ordered sets]
 #+begin_exampleth
 *Partial ordered sets* are categories with, at most, one morphism
 between any two objects. We say $a \leq b$ whenever $\rho_{a,b} \colon a \to b$ exists.
@@ -4232,7 +4237,6 @@ n \arrow[loop above]
 \end{tikzcd}\]
 #+end_exampleth
 
-**** TODO Concrete categories                                     :ignore:
 **** Category of Sets                                             :ignore:
 #+attr_latex: :options [The category of sets]
 #+begin_exampleth
@@ -4321,16 +4325,15 @@ composition and identity arrows. A functor between two categories, $F : {\cal C}
 is given by
 
   * an *object function*, $F : \mathrm{obj}({\cal C}) \to \mathrm{obj}({\cal D})$;
-  * and an *arrow function*, $F : \hom(A, B) \to \hom(FA, FB)$ for any two
+  * and an *arrow function*, $F : \hom(A, B) \to \hom(FA, FB)$, for any two
     objects $A,B$ of the category;
 
 such that $F(\id) = \id$, and $F(f \circ g) = Ff \circ Fg$. We can arrange functors,
-at least in the case of small categories, into a category.
+at least in the case of small categories, into a category of categories.
 
 \\
 
 **** Composition of functors                                      :ignore:
-#+ATTR_LATEX: :options [The category of small categories]
 #+BEGIN_definition
 The category $\Cats$ is defined as the category of (small) categories as
 objects and functors as morphisms.
@@ -4344,45 +4347,66 @@ objects and functors as morphisms.
 #+END_definition
 
 **** Full and faithfull functors                                  :ignore:
+We now consider certain properties of functors in this category.
 We say that a functor $F$ is *full* if every $g\colon FA \to FB$ is of
 the form $Ff$ for some morphism $f \colon A \to B$. We say $F$ is *faithful*
 if, for every two arrows $f_1,f_2\colon A \to B$, $Ff_1 = Ff_2$ implies $f_1 = f_2$.
 It is easy to notice that the composition of faithful (respectively,
 full) functors is again a faithful functor (respectively, full).
 
+These notions are equivalent to notions of injectivity and surjectivity
+on the arrow function between any two objects.
 Note, however, that a faithful functor needs not to be injective on objects nor
 on morphisms. In particular, if $A,A',B,B'$ are four different objects,
 it could be the case that $FA = FA'$ and $FB = FB'$; and, if $f : A \to B$ and
 $f' : A' \to B'$ were two morphisms, it could be the case that $Ff = Ff'$.
+The following notion of isomorphism does require the complete functor
+to have an inverse.
 
 **** Isomorphisms of categories                                   :ignore:
-#+attr_latex: :options [Isomorphism of categories]
 #+begin_definition
+<<def-isomorphismcategories>>
 An *isomorphism of categories* is a functor $F$ whose object and arrow functions
 are bijections. Equivalently, it is a functor $F$ such that there exists an /inverse/
-functor $G$ such that $F \circ G = \Id$ and $G \circ F = \Id$.
+functor $G$ such that $F \circ G$ and $G \circ F$ are the identity functor.
 #+end_definition
 
-However, the notion of isomorphism of categories is too strict in some
-cases.  Sometimes, the two compositions $F \circ G$ and $G \circ F$
-are not exactly the identity functor, but isomorphic in some sense
-yet to be made precise. We develop weaker notions in the next section.
+Unfortunately, this notion of isomorphism of categories is too strict in
+some cases.  Sometimes, the two compositions $F \circ G$ and $G \circ F$
+are not exactly the identity functor, but isomorphic to it in some
+sense yet to be made precise. We develop weaker notions in the next
+section.
 
 *** Natural transformations
 **** Natural transformations                                      :ignore:
+We have defined functors relating structures on different categories,
+and now, we could consider if any two given functors can be related in
+a /canonical/ way, involving no arbitrary choices.  An example is the
+relation between the identity functor and the double dual functor in
+vector spaces. They are related by the canonical isomorphism that
+sends each vector to the operator that evaluates a function over
+it. In this case, the isomorphism can be described without making any
+explicit reference to the space. On the other hand, the isomorphism
+relating a vector space to its dual depends on the choice of a basis.
+A family of /canonical/ linear isomorphisms $\sigma_V \colon V \to V^{\ast}$ translating between
+an space and its dual, should be invariant to linear maps $\mu \colon V \to W$, so
+it should satisfy $\sigma_V(v)(w) = \sigma_W(\mu(v))(\mu(w))$, but this is not possible
+for all $\mu$ at the same time.  The notion of /natural transformation/ formalizes
+this intuitive idea.
+
 A *natural transformation* between two functors $F$ and $G$ with the same domain
-and codomain, $\alpha\colon F \tonat G$, is a family of morphisms parameterized by 
-the objects of the domain category, $\{\alpha_C\colon FC \to GC\}_{C \in {\cal C}}$, such that the
-following diagram commutes
+and codomain, written as $\alpha\colon F \tonat G$, is a family of morphisms parameterized by
+the objects of the domain category, $\{\alpha_C\colon FC \to GC\}_{C \in {\cal C}}$, such that,
+for every arrow $f \colon C \to C'$, the following diagram commutes.
 \[\begin{tikzcd}
 C \dar{f} & & FC \rar{\alpha_C}\dar[swap]{Ff} & GC \dar{Gf} \\
 C' & & FC' \rar{\alpha_{C'}} & GC'
 \end{tikzcd}\]
-for every arrow $f : C \to C'$.
 
 Sometimes, we also say that the family of morphisms $\alpha$ is /natural/ in its
 argument. This naturality property is what allows us to "translate" a
-commutative diagram from a functor to another, as in the picture.
+commutative diagram from a functor to another, as in the following example
+diagram.
 \[\begin{tikzcd}
 A\arrow{dd}{h}\drar{f} &   & & F A\arrow{dd}{F h}\drar{F f} \arrow{rrr}{\alpha_A} &     & & G A\arrow{dd}{}\drar{G f} &     \\
   & B \dlar{g} & &     & F B \dlar{F g} \arrow{rrr}{\alpha_B} & &     & G B \dlar{G g} \\
@@ -4390,29 +4414,30 @@ C &   & & F C \arrow{rrr}{\alpha_C} &     & & G C &     \\
 \end{tikzcd}\]
 
 **** Natural isomorphisms                                         :ignore:
-A *natural isomorphism* is a natural transformation in which every
+*Natural isomorphisms* are natural transformations in which every
 component, every morphism of the parameterized family, is
-invertible. In this case, the inverses form themselves a natural
+invertible. In this case, the inverses form themselves a new
 transformation, whose naturality follows from the naturality of the
 original transformation. We say that $F$ and $G$ are
-*naturally isomorphic*, $F \cong G$, when there is a natural isomorphism
+/naturally isomorphic/, $F \cong G$, when there is a natural isomorphism
 between them.
 
 \\
 
 **** Equivalence of categories                                    :ignore:
-The notion of a natural isomorphism between allows us to
+The notion of a natural isomorphism between functors allows us to
 weaken the condition of strict equality we imposed when talking about
-isomorphisms of categories into a notion of *equivalence of categories*.
-We say that two categories ${\cal C}$ and ${\cal D}$ are equivalent if there exist two
+isomorphisms of categories (Definition [[def-isomorphismcategories]]).
+We say that two categories ${\cal C}$ and ${\cal D}$ are *equivalent* if there exist two
 functors $F \colon {\cal C} \to {\cal D}$ and $G \colon {\cal D} \to {\cal C}$ such that $G \circ F \cong \Id_{{\cal C}}$ and
-$F \circ G \cong \Id_{{\cal D}}$.
+$F \circ G \cong \Id_{{\cal D}}$. The pair of functors endowed with the two natural
+isomorphisms is called an /equivalence of categories/
 
 *** Composition of natural transformations
 **** Vertical and horizontal                                      :ignore:
+The next reasonable step is to ask how natural transformations compose.
 If we draw natural transformations between functors as double arrows,
-as in the following diagram, we notice that two different notions of
-composition arise;
+as in the following diagram,
 \[\begin{tikzcd}
 {\cal C} 
 \arrow[bend left=50]{r}[name=U,below]{}{F}
@@ -4420,9 +4445,11 @@ composition arise;
 & 
 {\cal D} \arrow[Rightarrow,from=U,to=D]{}{\alpha}
 \end{tikzcd}\]
-we have a /vertical/ composition of natural transformations, which,
+we notice that two different notions of composition arise; we have a 
+/vertical/ composition of natural transformations, which,
 diagramatically, composes the two sequential natural transformations
-of the left diagram into a single transformation in the right one,
+on the left side into a single transformation on the right side of the
+following diagram;
 \[\begin{tikzcd}[column sep=large]
 {\cal C} 
 \arrow[bend left=80]{r}[name=U,below]{}{F}
@@ -4441,8 +4468,9 @@ of the left diagram into a single transformation in the right one,
 {\cal D} \arrow[Rightarrow,from=U,to=D]{}{\alpha\cdot\beta}
 \end{tikzcd}\]
 and we have a /horizontal/ composition of natural transformations,
-which composes the two parallel natural transformations of the left
-diagram into a single transformation in the right one.
+which composes the two parallel natural transformations on the left
+side into a single transformation on the right side of the following
+diagram.
 \[\begin{tikzcd}[column sep=large]
 {\cal C} 
 \arrow[bend left=50]{r}[name=U,below]{}{F}
@@ -4462,12 +4490,11 @@ diagram into a single transformation in the right one.
 \end{tikzcd}\]
 
 **** Vertical composition                                         :ignore:
-#+attr_latex: :options [Vertical composition of natural transformations]
 #+begin_definition
 The *vertical composition* of two natural transformations $\alpha : F \tonat G$ and
 $\beta : G\tonat H$, denoted by $\beta \cdot \alpha$ is the family of morphisms defined by the
-objectwise composition of the components of the two natural transformations,
-$(\beta \cdot \alpha) = \{\beta_C \circ \alpha_C\}_{C \in {\cal C}}$.
+objectwise composition of the morphisms of the two natural transformations.
+That is, $(\beta \cdot \alpha) = \{\beta_C \circ \alpha_C\}_{C \in {\cal C}}$.
 #+end_definition
 
 Naturality of this family follows from the naturality of its two
@@ -4533,7 +4560,7 @@ G'GB
 #+BEGIN_proposition
 <<prop-interchangelaw>>
 The two possible ways of composing vertical and horizontal transformations
-in a diagram like the following
+in a diagram like the following one
 \[\begin{tikzcd}[column sep=large]
 {\cal C} 
 \arrow[bend left=80]{r}[name=U,below]{}{F}
@@ -4553,10 +4580,10 @@ in a diagram like the following
 \arrow[Rightarrow,from=U3,to=C3]{}{\alpha'}
 \arrow[Rightarrow,from=C23,to=D3]{}{\beta'}
 \end{tikzcd}\]
-are actually equivalent and we have $(\beta' \cdot \alpha') \circ (\beta \cdot \alpha) = (\beta' \circ \beta) \cdot (\alpha' \circ \alpha)$.
+are actually equivalent. That is, $(\beta' \cdot \alpha') \circ (\beta \cdot \alpha) = (\beta' \circ \beta) \cdot (\alpha' \circ \alpha)$.
 #+END_proposition
 #+BEGIN_proof
-Crucially applying naturality of $\alpha'$,
+Crucially applying naturality of $\alpha'$, we have
 \[\begin{aligned}
 (\beta' \cdot \alpha') \circ (\beta \cdot \alpha) &=
 \{\beta'_{HC} \circ \alpha'_{HC} \circ F'\beta_{C} \circ F'\alpha_C\}_{C \in {\cal C}} \\
@@ -4566,28 +4593,30 @@ Crucially applying naturality of $\alpha'$,
 #+END_proof
 
 ** Constructions on categories
+Before continuing our study of functors and universal properties, we
+provide some constructions and examples of categories we will need in
+the future.  In particular, we consider some variations on the definition
+of functors and we use them to construct new categories.
+
 *** Product categories
 **** Product category                                             :ignore:
-The *product category* (see cite:eilenberg45) of two categories ${\cal C}$ and ${\cal D}$, 
-denoted by ${\cal C} \times {\cal D}$ is a category having
+The *product category* (see cite:eilenberg45) of two categories ${\cal C}$ and ${\cal D}$,
+denoted by ${\cal C} \times {\cal D}$, is their product object in the category $\mathsf{Cat}$. Explicitly,
+it is given by
 
-  * pairs $\left\langle C,D \right\rangle$ as objects, where $C \in {\cal C}$ and $D \in {\cal D}$;
-  * and pairs $\pair{f,g} : \pair{C,D} \to \pair{C',D'}$ as morphisms, where $f \colon C \to C'$ and
+  * objects of the form $\left\langle C,D \right\rangle$, where $C \in {\cal C}$ and $D \in {\cal D}$;
+  * and morphisms of the form $\pair{f,g} : \pair{C,D} \to \pair{C',D'}$, where $f \colon C \to C'$ and
     $g \colon D \to D'$ are morphisms in their respective categories.
 
 The identity morphism of any object $\pair{C,D}$ is $\pair{\id_C, \id_D}$, and composition is
-defined componentwise as
-\[
-\pair{f',g'} \circ \pair{f,g} = \pair{f' \circ f,g' \circ g}.
-\]
-We also define *projection functors* $P\colon {\cal C} \times {\cal D} \to {\cal C}$ and $Q : {\cal C} \times {\cal D} \to {\cal D}$
-on arrows as $P\pair{f,g} = f$ and $Q\pair{f,g} = g$. Note that this definition of
-product, using these projections, would be the product of two categories on a
-category of categories with functors as morphisms.
+defined componentwise as $\pair{f',g'} \circ \pair{f,g} = \pair{f' \circ f,g' \circ g}$.
+The definition of the product also provides /projection functors/ $P\colon {\cal C} \times {\cal D} \to {\cal C}$
+and $Q : {\cal C} \times {\cal D} \to {\cal D}$ on arrows as $P\pair{f,g} = f$ and $Q\pair{f,g} = g$.
+\\
 
 **** Product of functors                                          :ignore:
 The *product functor* of two functors $F\colon {\cal C} \to {\cal C}'$ and $G \colon {\cal D} \to {\cal D}'$ 
-is the unique functor $F \times G \colon {\cal C} \times {\cal D} \to {\cal C}' \times {\cal D}'$ that makes the
+is the unique functor $F \times G \colon {\cal C} \times {\cal D} \to {\cal C}' \times {\cal D}'$ making the
 following diagram commute.
 \[\begin{tikzcd}
 {\cal C} \dar{F} &
@@ -4598,54 +4627,54 @@ following diagram commute.
 {\cal D}'
 \end{tikzcd}\]
 Explicitly, it acts on arrows as $(F \times G)\pair{f,g} = \pair{Ff,Gg}$.
-In this sense, the $\times$ operation can be seen as a functor acting on objects
-and morphisms of the $\Cats$ category of all categories.
+In this sense, the $\times$ operation could be seen as a /functor/ /with/
+/two arguments/ acting on objects and morphisms of the $\Cats$ category.
+We now formalize this idea of a functor in two variables.
+\\
 
 **** Bifunctors                                                   :ignore:
-A *bifunctor* is a functor from a product category; and it also can be
-seen as a functor on two variables. As we will show in the following
-proposition, it is completely determined by the two families of functors
-that we obtain when we fix any of the elements.
+*Bifunctors* are functors from a product category, but they can also be
+regarded as functors on two variables. As we will show in the following
+proposition, they are completely determined by the two families of functors
+we obtain when we fix any of the arguments. We will also study a
+characterization of naturality between these functors.
 
-# TODO: Argumentos implícitos quizá funcionarían mejor aquí
 #+ATTR_LATEX: :options [Conditions for the existence of bifunctors]
 #+BEGIN_proposition
 <<prop-existence-bifunctor>>
 Let ${\cal B}, {\cal C}, {\cal D}$ categories with two families of functors
 \[
-\{L_C \colon {\cal B} \to {\cal D}\}_{C \in {\cal C}}
+\{F_C \colon {\cal B} \to {\cal D}\}_{C \in {\cal C}}
 \quad\text{ and }\quad
-\{M_B \colon {\cal C} \to {\cal D}\}_{B \in {\cal B}},
+\{G_B \colon {\cal C} \to {\cal D}\}_{B \in {\cal B}},
 \]
-such that $M_B(C) = L_C(B)$ for all $B,C$.
-A bifunctor $S \colon {\cal B} \times {\cal C} \to {\cal D}$ such that $S(-,C) = L_C$ and $S(B,-) = M_B$ 
+such that $G_B(C) = F_C(B)$ for all $B,C$.
+A bifunctor $S \colon {\cal B} \times {\cal C} \to {\cal D}$ such that $S(-,C) = F_C$ and $S(B,-) = G_B$ 
 for all $B \in {\cal B}$ and $C \in {\cal C}$ exists if and only if for every $f \colon B \to B'$ and $g \colon C \to C'$,
 \[
-M_{B'}g \circ L_Cf = L_{C'}f \circ M_Bg.
+G_{B'}g \circ F_Cf = F_{C'}f \circ G_Bg.
 \]
 #+END_proposition
 #+BEGIN_proof
-If the equality holds, the bifunctor can be defined as $S(b,c) = M_B(c) = L_C(b)$
-in objects and as $S(f,g) = M_{B'}g \circ L_Cf = L_{C'}f \circ M_Bg$ on morphisms. This
-bifunctor preserves identities, as 
-\[
-S(\id_B,\id_C) = M_B(\id_C) \circ L_C(\id_B) = \id_{M_B(C)} \circ \id_{L_C(B)} = \id,
-\]
-and it preserves composition, as
+If the equality holds, the bifunctor can be defined as $S(b,c) = G_B(c) = F_C(b)$
+in objects and as $S(f,g) = G_{B'}g \circ F_Cf = F_{C'}f \circ G_Bg$ on morphisms. This
+bifunctor preserves identities, as $S(\id,\id) = G_B(\id) \circ F_C(\id) = \id \circ \id = \id$;
+and it preserves composition, as, for any morphisms $f,f',g,g'$ with suitable
+domain and codomain, we have
 \[
 S(f',g') \circ S(f,g) =
-Mg' \circ Lf' \circ Mg \circ Lf =
-Mg' \circ Mg \circ Lf' \circ Lf =
-S(f'\circ f, g' \circ g)
+Gg' \circ Ff' \circ Gg \circ Ff =
+Gg' \circ Gg \circ Ff' \circ Ff =
+S(f'\circ f, g' \circ g).
 \]
-for any composable morphisms $f,f',g,g'$. On the other hand, if a bifunctor exists,
+On the other hand, if a bifunctor exists, the condition is satisfied because
 \[\begin{aligned}
-M_{B'}(g) \circ L_C(f) 
+G_{B'}(g) \circ F_C(f) 
 &= S(\id_{B'}, g) \circ S(f, \id_C)
 = S(\id_{B'} \circ f, g \circ \id_C) \\
 &= S(f \circ \id_B, \id_{C'} \circ g)
 = S(f,\id_{C'}) \circ S(\id_B,g) \\
-&= L_{C'}(f) \circ M_B(f).
+&= F_{C'}(f) \circ G_B(f).\qedhere
 \end{aligned}\]
 #+END_proof
 
@@ -4653,8 +4682,10 @@ M_{B'}(g) \circ L_C(f)
 #+ATTR_LATEX: :options [Naturality for bifunctors]
 #+BEGIN_proposition
 <<prop-naturality-bifunctor>>
-Given $S,S'$ bifunctors, $\alpha_{B,C} \colon S(B,C) \to S'(B,C)$ is a natural transformation
-if and only if $\alpha_{B,C}$ is natural in $B$ for each $C$ and natural in $C$ for each $B$.
+Naturality on both components of a bifunctor is equivalent to naturality
+in the usual sense. Given $S,S'$ bifunctors, the family $\alpha_{B,C} \colon S(B,C) \to S'(B,C)$ is a natural 
+transformation if and only if $\alpha_{B,C}$ is natural in $B$ for each $C$ and natural
+in $C$ for each $B$.
 #+END_proposition
 #+BEGIN_proof
 If $\alpha$ is natural, in particular, we can use the identities to prove that
@@ -4683,16 +4714,16 @@ where each square is commutative by the naturality of each component
 of $\alpha$.
 #+END_proof
 
-**** TODO [#C] Examples of product categories
 *** Opposite categories and contravariant functors
+For many constructions in categories, it makes sense to consider how
+the process of /reverting all the arrows/ yields a new construction.
+\\
+
 **** Opposite category                                            :ignore:
 The *opposite category* ${\cal C}^{op}$ of a category ${\cal C}$ is a category with the
 same objects as ${\cal C}$ but with all its arrows reversed. That is, for each
 morphism $f : A \to B$, there exists a morphism $f^{op} : B \to A$ in ${\cal C}^{op}$.
-Composition is defined as
-\[
-f^{op} \circ g^{op} = (g\circ f)^{op},
-\]
+Composition is defined as $f^{op} \circ g^{op} = (g\circ f)^{op}$,
 exactly when the composite $g \circ f$ is defined in ${\cal C}$.
 
 Reversing all the arrows is a process that directly translates every
@@ -4700,7 +4731,7 @@ property of the category into its /dual/ property. A morphism $f$ is a
 monomorphism if and only if $f^{op}$ is an epimorphism; a terminal object
 in ${\cal C}$ is an initial object in ${\cal C}^{op}$ and a right inverse becomes a left
 inverse on the opposite category. This process is also an /involution/,
-where $(f^{op})^{op}$ can be seen as $f$ and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
+where $(f^{op})^{op}$ can be seen as $f$, and $({\cal C}^{op})^{op}$ is trivially isomorphic to ${\cal C}$.
 
 **** Contravariant functors                                       :ignore:
 #+attr_latex: :options [Contravariant functor]
@@ -4713,26 +4744,21 @@ functors, to emphasize the difference.
 #+ATTR_LATEX: :options [Hom functors]
 #+BEGIN_exampleth
 In a locally small category ${\cal C}$, the *Hom-functor* is the bifunctor
-\[
-\hom \colon {\cal C}^{op} \times {\cal C} \to \Sets,
-\]
-defined as $\hom(A,B)$ for any two objects $A,B \in {\cal C}$. Given $f \colon A \to A'$
-and $g \colon B \to B'$, this functor is defined on any $p \in \hom(A,B)$ as
-\[
-\hom(f,g)(p) = f \circ p \circ g \in \hom(A',B').
-\]
-Partial applications of the functors give rise to
+$\hom \colon {\cal C}^{op} \times {\cal C} \to \Sets$, defined as $\hom(A,B)$ for any two objects $A,B \in {\cal C}$.
+Given $f \colon A \to A'$ and $g \colon B \to B'$, this functor is defined on any
+$p \in \hom(A,B)$ as postcomposition and precomposition, $\hom(f,g)(p) = f \circ p \circ g \in \hom(A',B')$.
+Partial applications of the functor give rise to
 
  * $\hom(A,-)$, a covariant functor for any fixed $A \in {\cal C}$ that maps $g \colon B \to B'$
-   to the partial composition $- \circ g \colon \hom(A,B) \to \hom(A,B')$;
+   to the precomposition $- \circ g \colon \hom(A,B) \to \hom(A,B')$;
 
  * $\hom(-,B)$, a contravariant functor for any fixed $B \in {\cal C}$ that maps $f \colon A \to A'$
-   to the partial precomposition $f\circ - \colon \hom(A',B) \to \hom(A,B)$.
+   to the postcomposition $f\circ - \colon \hom(A',B) \to \hom(A,B)$.
 
 Note that this is a well-defined bifunctor by virtue of Proposition
-[[prop-existence-bifunctor]] and the fact that $(-\circ g)\circ(f\circ -) = (f\circ -)\circ(-\circ g)$.
-This kind of functor, contravariant on the first variable and covariant on
-the second, is usually called a *profunctor*.
+[[prop-existence-bifunctor]] and the fact that $(-\circ g)\circ(f\circ -) = (f\circ -)\circ(-\circ g)$
+by associativity. This kind of functor, contravariant on the first variable
+and covariant on the second, is usually called a *profunctor*.
 #+END_exampleth
 
 *** Functor categories
@@ -4740,7 +4766,8 @@ Given two categories ${\cal B},{\cal C}$, the *functor category* ${\cal B}^{{\ca
 ${\cal C} \to {\cal B}$ as objects and natural transformations between them as morphisms.
 If we consider the category of small categories $\Cats$, there is
 a hom-profunctor $-^{-} \colon \Cats^{op} \times \Cats \to \Cats$ sending any two categories
-to their functor category.
+${\cal B}$ and ${\cal C}$ to their functor category ${\cal B}^{{\cal C}}$. Many mathematical constructions
+are examples of functor catgeories.
 
 **** Category of graphs                                           :ignore:
 In cite:lawvere09, multiple examples of usual mathematical
@@ -4786,16 +4813,17 @@ by the endomorphism. That is, if we start at an initial state $s \in S$ and
 the transition function is given by $\alpha \colon S \to S$, the evolution of the
 system will be given by
 \[
-s,\ \alpha(s),\ \alpha(\alpha(s)),\ \dots
+s,\ \alpha(s),\ \alpha(\alpha(s)),\ \alpha(\alpha(\alpha(s))),\dots
 \]
 and we could say that it evolves discretely over time, being $\alpha^t(s)$ the
 state of the system at the instant $t$.
 
 This structure can be described as a functor from the monoid of natural
-numbers under addition. Note that any functor $D\colon\mathbb{N} \to \Set$ has to choose a
-set, and an image for the $1 : \mathbb{N} \to \mathbb{N}$, the only generator of the monoid.
-The image of any natural number $n$ is determined by the image of $1$; if
-$D(1) = \alpha$, it follows that $D(t) = \alpha^t$, where $\alpha^0 = \id$.
+numbers with addition, seen as a category.  Note that any functor $D\colon\mathbb{N} \to \Set$ has to choose a
+set $S$, and an image for the morphism $(1+) : \mathbb{N} \to \mathbb{N}$, of the form $\alpha \colon S \to S$.
+The image of any natural number $n$ is now determined by the image of $(1+)$
+because the functor must preserve composition and identities; if $D(1+) = \alpha$,
+it follows that $D(t+) = \alpha^t$, where $\alpha^0 = \id$.
 
 Once the structure has been described as a functor, the homomorphisms
 preserving this kind of structure can be described as natural
@@ -4811,110 +4839,15 @@ T
 that is, $f \circ \alpha = \beta \circ f$. A natural notion of homomorphism has arisen from
 the categorical interpretation of the structure.
 
-A further generalization is now possible, if we want to consider
+A further generalization is now possible: if we want to consider
 continuously-evolving dynamical systems, we can define functors from the
-monoid of real numbers under adition instead of naturals, that is, considering
-functors $\mathbb{R} \to \Set$. Note that these functors are given by a set $S$ and a family
-of morphisms $\{\alpha_r\}_{r \in \mathbb{R}}$ such that
-\[
-\alpha_r \circ \alpha_s = \alpha_{r+s} \qquad \forall r,s \in \mathbb{R}.
-\]
-This example is described in detail in cite:lawvere09.
+monoid of real numbers under adition, that is, functors $\mathbb{R} \to \Set$.
+Note that these functors are given by a set $S$ and a family
+of morphisms $\{\alpha_r\}_{r \in \mathbb{R}}$ such that $\alpha_r \circ \alpha_s = \alpha_{r+s}$ 
+for all $r,s \in \mathbb{R}$. This example is discussed in cite:lawvere09.
 #+END_exampleth
 
-**** TODO Pointed Sets (?)
-**** TODO The category of all categories
-**** TODO Sheaves!
-# Gluing
-*** Comma categories
-The idea of functor categories leads us to think about categories
-whose objects are themselves diagrams on a category. The most relevant
-examples, which will be useful in our development of categorical logic,
-are the *comma categories*, and specially the particular case of a
-*slice categories*.
-
-#+ATTR_LATEX: :options [Comma category]
-#+BEGIN_definition
-Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $F \colon {\cal C} \to {\cal E}$ and $G \colon {\cal D} \to {\cal E}$.
-The *comma category* $(F \downarrow G)$ has
-
-  * morphisms of the form $f \colon FC \to GD$ as objects, for $C \in {\cal C}$
-    and $D \in {\cal D}$;
-  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon C \to C'$ and $h \colon D \to D'$ are morphisms
-    in ${\cal C}$ and ${\cal D}$ respectively such that $f' \circ Fk = Gh \circ f$.
-
-Diagramatically, a morphism in this category is a commutative diagram
-\[\begin{tikzcd}
-\color{black!50}{FC} \rar{Fk} \dar[swap,color=black!50]{f} & 
-\color{black!50}{FC'}\dar[,color=black!50]{f'} \\
-\color{black!50}{GD} \rar{Gh} &
-\color{black!50}{GD'}
-\end{tikzcd}\]
-where the objects of the category are drawn in grey.
-#+END_definition
-
-**** Slice category                                               :ignore:
-#+ATTR_LATEX: :options [Slice and coslice categories]
-#+BEGIN_definition
-A *slice category* is a particular case of a comma category $(F \downarrow G)$
-in which $F = \mathrm{Id}$ is the identity functor and $G$ is a functor from the
-terminal category, a category with only one object and its identity
-morphism.
-#+END_definition
-
-A functor from the terminal category simply chooses an object
-of the category. If we call $A = G(\ast)$, objects of this category
-are morphisms $f \colon C \to A$, where $C \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$,
-where $k \colon C \to C'$ such that $f' \circ k = f$, as in the following diagram.
-\[\begin{tikzcd}[remember picture, column sep=tiny]
-\color{black!50}{C} \ar{rr}{k}\drar[swap,color=black!50]{f} &&
-\color{black!50}{C'} \dlar[color=black!50]{f'} \\&
-\color{black!50}{A} &
-\end{tikzcd}\]
-This slice category is conventionally written as ${\cal C}/A$. In general,
-we can write $(F \downarrow A)$ when $G$ is a functor from the terminal category
-picking an object $A$.
-
-\\
-
-***** TODO Old notation                                        :noexport:
-This slice category is conventionally written as $({\cal C} \downarrow A)$. In
-general, we write $(F \downarrow A)$ when $G$ is a functor from the terminal
-category picking an object $A$; and we write $({\cal C} \downarrow G)$ when $F$ is
-the identity functor.
-
-**** Coslice category                                             :ignore:
-*Coslice categories* are the categorical dual of slice categories.
-Objects of this category are morphisms $f \colon C \to A$, where $C \in {\cal C}$;
-and morphisms are $\pair{k} \colon f \to f'$, where $k \colon C \to C'$ such that $k \circ f' = f$,
-as in the following diagram.
-\[\begin{tikzcd}[remember picture, column sep=tiny]
-& \color{black!50}{A} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
-\color{black!50}{C} \ar{rr}{k} & & \color{black!50}{C'}
-\end{tikzcd}\]
-This coslice category is conventionally written as $(A \setminus {\cal C})$.
-In general, we can write $(A \downarrow G)$ when $F$ is a functor
-from the terminal category picking an object $A$.
-
-**** OLD Arrow category                                           :ignore:
-#+ATTR_LATEX: :options [Arrow category]
-#+BEGIN_definition
-*Arrow categories* are a particular case of comma categories $(F \downarrow G)$
-in which both functors are the identity. They are usually written as ${\cal C}^{\to}$.
-Objects in this category are morphisms in ${\cal C}$, and morphisms in this
-category are commutative squares in ${\cal C}$ as in the following diagram.
-\[\begin{tikzcd}
-\color{black!50}{A}\rar{k}\dar[swap,color=black!50]{f} & 
-\color{black!50}{B} \dar[color=black!50]{f'} \\
-\color{black!50}{A'}\rar{h} &
-\color{black!50}{B'}
-\end{tikzcd}\]
-#+END_definition
-
-*** OLD Examples of comma categories
-**** TODO Pointed sets
 ** Universality and limits
-# TODO: Example: quotients
 *** Universal arrows
 A *universal property* is commonly given in mathematics by some
 conditions of existence and uniqueness on morphisms, representing some
@@ -6258,6 +6191,97 @@ Presheaves can be thought as sets parametrized by a category.
 
 # Yoneda embedding preserves colimits and limits (?), that is why
 # presheaves have colimits.
+**** TODO Pointed Sets (?)
+**** TODO The category of all categories
+**** TODO Sheaves!
+# Gluing
+*** Comma categories
+The idea of functor categories leads us to think about categories
+whose objects are themselves diagrams on a category. The most relevant
+examples, which will be useful in our development of categorical logic,
+are the *comma categories*, and specially the particular case of a
+*slice categories*.
+
+#+ATTR_LATEX: :options [Comma category]
+#+BEGIN_definition
+Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $F \colon {\cal C} \to {\cal E}$ and $G \colon {\cal D} \to {\cal E}$.
+The *comma category* $(F \downarrow G)$ has
+
+  * morphisms of the form $f \colon FC \to GD$ as objects, for $C \in {\cal C}$
+    and $D \in {\cal D}$;
+  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon C \to C'$ and $h \colon D \to D'$ are morphisms
+    in ${\cal C}$ and ${\cal D}$ respectively such that $f' \circ Fk = Gh \circ f$.
+
+Diagramatically, a morphism in this category is a commutative diagram
+\[\begin{tikzcd}
+\color{black!50}{FC} \rar{Fk} \dar[swap,color=black!50]{f} & 
+\color{black!50}{FC'}\dar[,color=black!50]{f'} \\
+\color{black!50}{GD} \rar{Gh} &
+\color{black!50}{GD'}
+\end{tikzcd}\]
+where the objects of the category are drawn in grey.
+#+END_definition
+
+**** Slice category                                               :ignore:
+#+ATTR_LATEX: :options [Slice and coslice categories]
+#+BEGIN_definition
+A *slice category* is a particular case of a comma category $(F \downarrow G)$
+in which $F = \mathrm{Id}$ is the identity functor and $G$ is a functor from the
+terminal category, a category with only one object and its identity
+morphism.
+#+END_definition
+
+A functor from the terminal category simply chooses an object
+of the category. If we call $A = G(\ast)$, objects of this category
+are morphisms $f \colon C \to A$, where $C \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$,
+where $k \colon C \to C'$ such that $f' \circ k = f$, as in the following diagram.
+\[\begin{tikzcd}[remember picture, column sep=tiny]
+\color{black!50}{C} \ar{rr}{k}\drar[swap,color=black!50]{f} &&
+\color{black!50}{C'} \dlar[color=black!50]{f'} \\&
+\color{black!50}{A} &
+\end{tikzcd}\]
+This slice category is conventionally written as ${\cal C}/A$. In general,
+we can write $(F \downarrow A)$ when $G$ is a functor from the terminal category
+picking an object $A$.
+
+\\
+
+***** TODO Old notation                                        :noexport:
+This slice category is conventionally written as $({\cal C} \downarrow A)$. In
+general, we write $(F \downarrow A)$ when $G$ is a functor from the terminal
+category picking an object $A$; and we write $({\cal C} \downarrow G)$ when $F$ is
+the identity functor.
+
+**** Coslice category                                             :ignore:
+*Coslice categories* are the categorical dual of slice categories.
+Objects of this category are morphisms $f \colon C \to A$, where $C \in {\cal C}$;
+and morphisms are $\pair{k} \colon f \to f'$, where $k \colon C \to C'$ such that $k \circ f' = f$,
+as in the following diagram.
+\[\begin{tikzcd}[remember picture, column sep=tiny]
+& \color{black!50}{A} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
+\color{black!50}{C} \ar{rr}{k} & & \color{black!50}{C'}
+\end{tikzcd}\]
+This coslice category is conventionally written as $(A \setminus {\cal C})$.
+In general, we can write $(A \downarrow G)$ when $F$ is a functor
+from the terminal category picking an object $A$.
+
+**** OLD Arrow category                                           :ignore:
+#+ATTR_LATEX: :options [Arrow category]
+#+BEGIN_definition
+*Arrow categories* are a particular case of comma categories $(F \downarrow G)$
+in which both functors are the identity. They are usually written as ${\cal C}^{\to}$.
+Objects in this category are morphisms in ${\cal C}$, and morphisms in this
+category are commutative squares in ${\cal C}$ as in the following diagram.
+\[\begin{tikzcd}
+\color{black!50}{A}\rar{k}\dar[swap,color=black!50]{f} & 
+\color{black!50}{B} \dar[color=black!50]{f'} \\
+\color{black!50}{A'}\rar{h} &
+\color{black!50}{B'}
+\end{tikzcd}\]
+#+END_definition
+
+*** OLD Examples of comma categories
+**** TODO Pointed sets
 ** Cartesian closed categories and lambda calculus
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
@@ -7228,7 +7252,6 @@ faithfully embedded inside $\Set^{{\cal C}^{op}}/A$ with a functor $I \colon {\c
 A functor $\varPhi \colon \Set^{{\cal C}^{op}}/A \to \Set^{{\cal D}^{op}}$ can be now defined on objects
 as $\varPhi(q) = \hom_{\Set^{{\cal C}^{op}}/A}(I(-),q)$, which is a composition of functors.
 It remains to show that this functor in fact determines an equivalence.
-
 # TODO: Show that it is an equivalence
 #+END_proof
 
@@ -7669,6 +7692,7 @@ The corresponding computation rule would be $\J_C(c,\refl)\equiv c[a/x]$.
 *** Subobject classifier and propositions
 # [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
+# TODO: Rewrite this as "Subobject classifiers are ..."
 A *subobject classifier* is an object $\Omega$ with a monomorphism $\mathrm{true} \colon 1 \to \Omega$
 such that, for every monomorphism $m : S \to X$, there exists a unique $\chi$
 such that
@@ -7778,24 +7802,33 @@ to program inside categories with enough structure.
 
 * Type theory
 ** Universes of mathematics
+# The primary challenge that needed to be addressed was that the
+# foundations of mathematics were unprepared for the requirements of
+# the task. Formulating mathematical reasoning in a language precise
+# enough for a computer to follow meant using a foundational system of
+# mathematics not as a standard of consistency to establish a few
+# fundamental theorems, but as a tool that can be employed in
+# everyday mathematical work.
+#  -- Vladimir Voevodsky. The origins and motivations of Univalent Foundations.
+
 *** Motivation: Topoi
 *Topoi* (singular /topos/) are category-theoretic models of
 constructive mathematics; we can reason in its internal logic and
-rebuild large parts of mathematics inside their structure using an
-internal language.  Each topos is thus an universe of mathematics with
+rebuild large parts of mathematics inside their structure. 
+Each topos is thus an universe of mathematics with
 different axioms and interpretations cite:bauer2017five; for example,
 
  * inside the Hayland's *realizability topos*, every function is computable
-   and we can study Kleene's realizability theory cite:vanoosten08;
+   and we can study Kleene's realizability theory (see cite:vanoosten08);
 
  * the *Dubuc topos* provides a non paradoxical formalization of notion of 
    "infinitesimal" used by Newton and Leibniz, and we can study synthetic
-   differential geometry inside it cite:dubuc89;
+   differential geometry inside it (see cite:dubuc89);
 
  * inside the Johnstone's *topological topos*, we can reason with topological
-   spaces and continuous functions between them cite:johnstone79, and under
-   certain hypothesis, it is safe to assume that all the functions we can
-   build are automatically continuous cite:escardo15.
+   spaces and continuous functions between them (see cite:johnstone79), and under
+   certain hypothesis, we can assume that all functions we can
+   build are automatically continuous (see cite:escardo15).
 
 Topoi can be defined as locally cartesian closed categories with
 a subobject classifier in which every finite limit exists. Usually,
@@ -7849,34 +7882,36 @@ In this text, we will use Agda to write mathematics, taking ideas from
 cite:Conor17.  We will check proofs in Martin-Löf type theory using its
 type system.
 
+*** TODO Proofs and categories
 *** Dedekind reals
 In =Reals.agda=, we provide a formalized construction of the Dedekind
 positive reals in intensional Martin-Löf type theory, implemented in
 Agda. This implementation constructs reals as Dedekind cuts over the
-*dyadic* positive rationals $D$; that is, over the rationals of the form
-$a / 2^b : D$ for some $a,b : \mathbb{N}$. We have also written a library of lemmas and
-theorems about the natural numbers and the dyadic numbers necessary to
-prove that our constructions are well-defined.
+*positive dyadic rationals* $D$; that is, over the rationals of the
+form $a / 2^b$ for some $a,b : \mathbb{N}$. We also provide a library with all the
+necessary lemmas proving that our constructions are well-defined.
 
-Natural numbers are constructed as initial algebras and dyadic rationals
-are constructed as pairs of naturals with a normalization property that
-ensures unique representation of each rational. A fraction $a/2^b$ is
-/normalized/ if $a$ is an odd number or if $b$ is exactly zero.
+Natural numbers are constructed as initial algebras (as described in
+Example [[example-naturalnumbersobj]]). Dyadic rationals
+are constructed as pairs of naturals endowed with a normalization property:
+a fraction $a/2^b$ is /normalized/ if $a$ is an odd number or if $b$ is exactly zero.
 \[
 D = \sum_{(a,b) : \mathbb{N} \times \mathbb{N}} \left\|\mathrm{odd}(a) + \mathrm{isZero}(b) \right\|
 \]
+This technique ensures that each dyadic rational will be uniquely
+represented by a term of type $D$. Finally, a real number $r : \mathbb{R}^+$ is 
+constructed as the sum of the following data.
 
-A real number $r : \mathbb{R}^+$ is thus interpreted as
+ * A *Dedekind cut*, $\mathrm{cut}_r : D \to \Omega$, representing a proposition parametrized over
+   the positive dyadic rationals. Given $q : D$, the proposition $\mathrm{cut}_r(q)$ 
+   is true if and only if $r < q$.
 
- * a *Dedekind cut* over the positive dyadic rationals, $\mathrm{cut}_r : D \to \Omega$,
-   where $\mathrm{cut}(q)$ is true for some $q : D$ when $r < q$;
+ * A proof $\| \sum_{q : D} \mathrm{cut}_r(q) \|$ witnessing that the Dedekind cut is *inhabited*, that
+   is, there exists some $q$ such that $r < q$.
 
- * some proof witnessing that it is *inhabited*, $\| \sum_{q : D} \mathrm{cut}_r(q) \|$;
-
- * and functions that witness that the cut is /round/ (open lower-bounded interval);
-   that is, for each $q : D$ in the cut, there is a smaller $p : D$ in the cut;
-   and, if some $p,q : D$ we have $p < q$ and $p$ in the cut, $q$ must also be in the cut;
-   symbolically
+ * Two functions that witness that the cut is *round*. 
+   That is, a dyadic $q : D$ is in the cut if and only
+   if there is a smaller $p : D$ also in the cut. Symbolically,
    \small
    \[
    \left( \prod_{q : D} \mathrm{cut}_r(q) \to 
@@ -7960,7 +7995,7 @@ paths and equalities between equalities are homotopies between paths
 In any case, as the existence of this non-trivial structure is
 independent of the theory, we need to introduce new axioms or new types
 with nontrivial equalities if we want to profit from this interpretation. 
-The introduction of Voevodsky's Univalence Axiom leads to Homotopy Type theory, an extension of
+The introduction of Voevodsky's Univalence Axiom leads to *Homotopy Type theory*, an extension of
 Martin-Löf type theory where we can work with this groupoid structure.
 Under the identification of higher groupoids and homotopical types,
 the new axiom allows us to reason in some sort of synthetic homotopy
@@ -7970,8 +8005,9 @@ want to consider higher structure) of a type $A$ in a point $a : A$ as
 the type of loops $\pi_1(A,a) :\equiv a = a$, endowed with reflexivity and
 transitivity. The *circle* can be defined as the freely generated
 type with a single element $\mathsf{p} : \mathbb{S}^1$ and a nontrivial equality
-$\mathsf{loop} : \mathsf{p} = \mathsf{p}$. Because it is freely generated, we can apply symmetry
-to get a different proof $\mathsf{p} = \mathsf{p}$ which we will call $\mathsf{loop}^{-1}$; moreover,
+$\mathsf{loop} : \mathsf{p} = \mathsf{p}$. Because it is freely
+generated, we can apply symmetry to get a different proof $\mathsf{p} = \mathsf{p}$ which we
+will call $\mathsf{loop}^{-1}$; moreover,
 we can transitivity $n$ times to $\mathsf{loop}$ for an arbitrary $n$, to get a new proof
 of $\mathsf{p} = \mathsf{p}$ which we will call $\mathsf{loop}^n$; these are the elements
 of its fundamental group $\pi_1(\mathbb{S}^1, \mathsf{p})$.
@@ -7980,7 +8016,30 @@ In this setting, results such as the Van Kampen theorem or the
 construction of Eilenberg-MacLane spaces have been formalized (see
 cite:hottbook).
 
+**** Note on the circle                                         :noexport:
+Why isn't the circle a counterexample to Hedberg's theorem? When
+we build a function
+
+\[
+\prod_{x,y : \mathbb{S}^1} (x = y),
+\]
+
+we need to fix a $b : x = y$, and then, we should check
+
+\[\mathrm{transport}(loop)(b) = loop \cdot b = b.\]
+
+But this does not hold, trivially.
+
 *** TODO Homotopy type theory II: Sets
+Can we do usual set-theoretical mathematics inside Homotopy Type
+Theory? A type $A$ is a *h-set* or simply a *set* if every two parallel paths
+are equal. That is,
+\[
+\mathsf{isSet}(A) :\equiv \prod_{(x,y : A)}\prod_{(p,q: x=y)} p=q.
+\]
+With the homotopical interpretation, sets are precisely discrete
+homotopical spaces in which all homotopy groups are trivial.
+
 *** Homotopy type theory III: Univalence
 We say that there is an equivalence between two types $A$ and $B$
 and we write it as $(A \simeq B)$ if there
@@ -8057,6 +8116,13 @@ http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Notes
 This text defines $\mathbb{N}$ with a zero.
 * OLD Removed                                               :noexport:ignore:
+# TODO: Example: quotients
+** TODO [#C] Examples of product categories
+** TODO Concrete categories                                         :ignore:
+** TODO Automorphisms                                               :ignore:
+We call *automorphisms* to the morphisms which are both endomorphisms
+and isomorphisms.
+
 ** OLD Type theory
 # The connection between constructivity, computability and continuity
 # goes back to Brower. (Shulman 17)
