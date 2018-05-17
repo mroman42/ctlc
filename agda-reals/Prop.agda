@@ -34,6 +34,9 @@ module Truncation where
   -- Recursion principle
   trunc-rec : {A : Set} {P : Set} → isProp P → (A → P) → ∥ A ∥ → P
   trunc-rec _ f !∣ x ∣ = f x
+
+  trunc-elim : {A : Set} {P : Set} → ∥ A ∥ → isProp P → (A → P) → P
+  trunc-elim = λ z z₁ z₂ → trunc-rec z₁ z₂ z
 open Truncation public
   
 

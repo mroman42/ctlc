@@ -31,3 +31,9 @@ module Equality where
   infix  1 begin_
   begin_ : {A : Set} {x y : A} → x ≡ y → x ≡ y
   begin_ p = p
+
+  Σ-eq : {A : Set} {B : A → Set} → (u v : Σ A B)
+    → (p : fst u ≡ fst v)
+    → (transport B p (snd u) ≡ snd v)
+    → u ≡ v
+  Σ-eq (a , b) (.a , .b) refl refl = refl

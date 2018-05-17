@@ -17,9 +17,7 @@ module logic.Propositions where
   -- The type of mere propositions
   hProp : ∀{ℓ} → Type (lsuc ℓ)
   hProp {ℓ} = Σ (Type ℓ) isProp
-  
-  -- TODO: Truth is the only true mere proposition, any other true
-  -- proposition is equivalent to truth.
+
 
   piProp : ∀{ℓᵢ ℓⱼ} → {A : Type ℓᵢ} → {B : A → Type ℓⱼ}
          → ((a : A) → isProp (B a)) → isProp ((a : A) → B a)

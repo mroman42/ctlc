@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>logic.Relation</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Option">--without-K</a> <a id="25" class="Symbol">#-}</a>
+
+<a id="30" class="Keyword">open</a> <a id="35" class="Keyword">import</a> <a id="42" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>
+<a id="57" class="Keyword">open</a> <a id="62" class="Keyword">import</a> <a id="69" href="Base.html" class="Module">Base</a>
+<a id="74" class="Keyword">open</a> <a id="79" class="Keyword">import</a> <a id="86" href="Equality.html" class="Module">Equality</a>
+<a id="95" class="Keyword">open</a> <a id="100" class="Keyword">import</a> <a id="107" href="logic.Propositions.html" class="Module">logic.Propositions</a>
+<a id="126" class="Keyword">open</a> <a id="131" class="Keyword">import</a> <a id="138" href="logic.Sets.html" class="Module">logic.Sets</a>
+
+<a id="150" class="Keyword">module</a> <a id="157" href="logic.Relation.html" class="Module">logic.Relation</a> <a id="172" class="Keyword">where</a>
+
+  <a id="181" class="Keyword">record</a> <a id="Rel" href="logic.Relation.html#Rel" class="Record">Rel</a> <a id="192" class="Symbol">{</a><a id="193" href="logic.Relation.html#193" class="Bound">ℓ</a><a id="194" class="Symbol">}</a> <a id="196" class="Symbol">(</a><a id="197" href="logic.Relation.html#197" class="Bound">A</a> <a id="199" class="Symbol">:</a> <a id="201" href="base.Universes.html#Type" class="Function">Type</a> <a id="206" href="logic.Relation.html#193" class="Bound">ℓ</a><a id="207" class="Symbol">)</a> <a id="209" class="Symbol">:</a> <a id="211" href="base.Universes.html#Type" class="Function">Type</a> <a id="216" class="Symbol">(</a><a id="217" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="222" href="logic.Relation.html#193" class="Bound">ℓ</a><a id="223" class="Symbol">)</a> <a id="225" class="Keyword">where</a>
+    <a id="235" class="Keyword">field</a>
+      <a id="Rel.R" href="logic.Relation.html#Rel.R" class="Field">R</a> <a id="249" class="Symbol">:</a> <a id="251" href="logic.Relation.html#197" class="Bound">A</a> <a id="253" class="Symbol">→</a> <a id="255" href="logic.Relation.html#197" class="Bound">A</a> <a id="257" class="Symbol">→</a> <a id="259" href="base.Universes.html#Type" class="Function">Type</a> <a id="264" href="logic.Relation.html#193" class="Bound">ℓ</a>
+      <a id="Rel.Rprop" href="logic.Relation.html#Rel.Rprop" class="Field">Rprop</a> <a id="278" class="Symbol">:</a> <a id="280" class="Symbol">(</a><a id="281" href="logic.Relation.html#281" class="Bound">a</a> <a id="283" href="logic.Relation.html#283" class="Bound">b</a> <a id="285" class="Symbol">:</a> <a id="287" href="logic.Relation.html#197" class="Bound">A</a><a id="288" class="Symbol">)</a> <a id="290" class="Symbol">→</a> <a id="292" href="logic.Propositions.html#isProp" class="Function">isProp</a> <a id="299" class="Symbol">(</a><a id="300" href="logic.Relation.html#Rel.R" class="Field">R</a> <a id="302" href="logic.Relation.html#281" class="Bound">a</a> <a id="304" href="logic.Relation.html#283" class="Bound">b</a><a id="305" class="Symbol">)</a>
+  <a id="309" class="Keyword">open</a> <a id="314" href="logic.Relation.html#Rel" class="Module">Rel</a> <a id="318" class="Symbol">{{...}}</a> <a id="326" class="Keyword">public</a>
+</pre></body></html>

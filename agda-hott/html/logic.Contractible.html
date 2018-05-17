@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>logic.Contractible</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Option">--without-K</a> <a id="25" class="Symbol">#-}</a>
+
+<a id="30" class="Keyword">open</a> <a id="35" class="Keyword">import</a> <a id="42" href="Base.html" class="Module">Base</a>
+<a id="47" class="Keyword">open</a> <a id="52" class="Keyword">import</a> <a id="59" href="Equality.html" class="Module">Equality</a>
+<a id="68" class="Keyword">open</a> <a id="73" class="Keyword">import</a> <a id="80" href="logic.Fibers.html" class="Module">logic.Fibers</a>
+
+<a id="94" class="Keyword">module</a> <a id="101" href="logic.Contractible.html" class="Module">logic.Contractible</a> <a id="120" class="Keyword">where</a>
+
+  <a id="129" class="Comment">-- Contractible types. A contractible type is a type such that every</a>
+  <a id="200" class="Comment">-- element is equal to a center of contraction.</a>
+  <a id="isContr" href="logic.Contractible.html#isContr" class="Function">isContr</a> <a id="258" class="Symbol">:</a> <a id="260" class="Symbol">∀{</a><a id="262" href="logic.Contractible.html#262" class="Bound">ℓ</a><a id="263" class="Symbol">}</a>  <a id="266" class="Symbol">(</a><a id="267" href="logic.Contractible.html#267" class="Bound">A</a> <a id="269" class="Symbol">:</a> <a id="271" href="base.Universes.html#Type" class="Function">Type</a> <a id="276" href="logic.Contractible.html#262" class="Bound">ℓ</a><a id="277" class="Symbol">)</a> <a id="279" class="Symbol">→</a> <a id="281" href="base.Universes.html#Type" class="Function">Type</a> <a id="286" href="logic.Contractible.html#262" class="Bound">ℓ</a>
+  <a id="290" href="logic.Contractible.html#isContr" class="Function">isContr</a> <a id="298" href="logic.Contractible.html#298" class="Bound">A</a> <a id="300" class="Symbol">=</a> <a id="302" href="Base.html#Basic.%CE%A3" class="Record">Σ</a> <a id="304" href="logic.Contractible.html#298" class="Bound">A</a> <a id="306" class="Symbol">(λ</a> <a id="309" href="logic.Contractible.html#309" class="Bound">a</a> <a id="311" class="Symbol">→</a> <a id="313" class="Symbol">((</a><a id="315" href="logic.Contractible.html#315" class="Bound">x</a> <a id="317" class="Symbol">:</a> <a id="319" href="logic.Contractible.html#298" class="Bound">A</a><a id="320" class="Symbol">)</a> <a id="322" class="Symbol">→</a> <a id="324" href="logic.Contractible.html#309" class="Bound">a</a> <a id="326" href="Base.html#_%3D%3D_" class="Datatype Operator">==</a> <a id="329" href="logic.Contractible.html#315" class="Bound">x</a><a id="330" class="Symbol">))</a>
+</pre></body></html>
