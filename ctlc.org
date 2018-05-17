@@ -4391,8 +4391,9 @@ relating a vector space to its dual depends on the choice of a basis.
 A family of /canonical/ linear isomorphisms $\sigma_V \colon V \to V^{\ast}$ translating between
 an space and its dual, should be invariant to linear maps $\mu \colon V \to W$, so
 it should satisfy $\sigma_V(v)(w) = \sigma_W(\mu(v))(\mu(w))$, but this is not possible
-for all $\mu$ at the same time.  The notion of /natural transformation/ formalizes
+for all $\mu$ linear.  The notion of /natural transformation/ formalizes
 this intuitive idea.
+# https://www.ams.org/journals/tran/1945-058-00/S0002-9947-1945-0013131-6/S0002-9947-1945-0013131-6.pdf
 
 A *natural transformation* between two functors $F$ and $G$ with the same domain
 and codomain, written as $\alpha\colon F \tonat G$, is a family of morphisms parameterized by

@@ -15,6 +15,13 @@ pi-isProp p f g = funext λ x → p x (f x) (g x)
 not-isProp : {A : Set} → isProp (¬ A)
 not-isProp = pi-isProp (λ a x → λ ())
 
+
+-- Two propositions are equal if they follow from each other.  This
+-- notion of equality is called propositional extensionality.
+postulate
+  propext : {A B : Set} → isProp A → isProp B → (A → B) → (B → A) → A ≡ B
+
+
 module Truncation where
   private
     -- Higher inductive type, defined with equalities between any two
@@ -92,5 +99,6 @@ module Or where
   ∨-elim (!inr x) _ f = f (inr x)
 open Or public
 
+-- Uniqueness of identity proofs, or Axiom K.
 uip : {A : Set} → {a b : A} → isProp (a ≡ b)
 uip {A} {a} {.a} refl refl = refl

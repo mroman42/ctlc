@@ -1,4 +1,4 @@
-{-# OPTIONS --exact-split --type-in-type #-}
+{-# OPTIONS --exact-split --without-K --type-in-type #-}
 
 module Etcs where
 
@@ -18,9 +18,6 @@ open import Naturals
 
 wellPointed : {A : Set} {B : A → Set} → {f g : (a : A) → B a} → ((x : A) → f x ≡ g x) → f ≡ g
 wellPointed = funext
-
-postulate
-  prop-univ : {A B : Set} → isProp A → isProp B → (A → B) → (B → A) → A ≡ B
 
 postulate 
   AxiomOfChoice : {A : Set} {B : Set} {R : A → B → Set}
@@ -56,8 +53,8 @@ LawOfExcludedMiddle {P} = Ex-elim
       eqf : (p : P) → f Ua ≡ f Va 
       eqf p = ap f (Σ-eq Ua Va (
         wellPointed λ
-          { false → prop-univ ∨-isProp ∨-isProp (λ _ → rinr p) (λ _ → rinr p)
-          ; true  → prop-univ ∨-isProp ∨-isProp (λ _ → rinr p) (λ _ → rinr p)
+          { false → propext ∨-isProp ∨-isProp (λ _ → rinr p) (λ _ → rinr p)
+          ; true  → propext ∨-isProp ∨-isProp (λ _ → rinr p) (λ _ → rinr p)
           }) (Ex-isProp _ _))
         
       refute : true ≡ false → P ∨ ¬ P

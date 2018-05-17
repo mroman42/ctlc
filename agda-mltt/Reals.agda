@@ -29,12 +29,6 @@ record ℝ⁺ : Set where
     round2 : (q : F) → (∃ p ∈ F , ((p < q ≡ true) × cut p)) → cut q
 open ℝ⁺ {{...}} public
 
-
--- Two propositions are equal if they follow from each other.  This
--- notion of equality is necessary for two similar reals to be equal.
-postulate
-  prop-univ : {A B : Set} → isProp A → isProp B → (A → B) → (B → A) → A ≡ B
-
 real-eq' : (a b : ℝ⁺) → ((f : F) → cut {{a}} f ≡ cut {{b}} f) → a ≡ b
 real-eq' (real cuta ispropa bounda round1a round2a) (real cutb ispropb boundb round1b round2b) α with funext α
 real-eq' (real cuta ispropa bounda round1a round2a) (real .cuta ispropb boundb round1b round2b) α
@@ -58,7 +52,7 @@ real-eq : (a b : ℝ⁺)
 real-eq a b α β = real-eq' a b lemma
   where
     lemma : (f : F) → (cut {{a}} f ≡ cut {{b}} f)
-    lemma f = prop-univ (isprop {{a}} f) (isprop {{b}} f) (α f) (β f)
+    lemma f = propext (isprop {{a}} f) (isprop {{b}} f) (α f) (β f)
 
 
 -- Examples of real numbers. Zero is a real number. Each rational
