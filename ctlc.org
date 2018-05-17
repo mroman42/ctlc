@@ -100,6 +100,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newtheorem{corollary}{Corollary}
 #+latex_header: \theoremstyle{definition}
 #+latex_header: \newtheorem{definition}{Definition}
+#+latex_header: \newtheorem{axiom}{Axiom}
 #+latex_header: \newtheorem{proofs}{Proof}
 #+latex_header: \theoremstyle{remark}
 #+latex_header: \newtheorem{remark}{Remark}
@@ -114,11 +115,21 @@ puntos o usarlo consistentemente.
 #+latex_header: \DeclareUnicodeCharacter{22A4}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\top}}}}
 #+latex_header: \DeclareUnicodeCharacter{2192}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\to}}}}
 #+latex_header: \DeclareUnicodeCharacter{2200}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\forall}}}}
+#+latex_header: \DeclareUnicodeCharacter{2203}{\ensuremath{\scaleobj{0.85}{\boldsymbol{\exists}}}}
 #+latex_header: \DeclareUnicodeCharacter{21D2}{\ensuremath{\scaleobj{0.7}{\boldsymbol{\Rightarrow}}}}
 #+latex_header: \DeclareUnicodeCharacter{2115}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\mathbb{N}}}}}
+#+latex_header: \DeclareUnicodeCharacter{211D}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\mathbb{R}}}}}
+#+latex_header: \DeclareUnicodeCharacter{2124}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\mathbb{Z}}}}}
 #+latex_header: \DeclareUnicodeCharacter{2217}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\ast}}}}
 #+latex_header: \DeclareUnicodeCharacter{2218}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\circ}}}}
 #+latex_header: \DeclareUnicodeCharacter{2208}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\in}}}}
+#+latex_header: \DeclareUnicodeCharacter{207A}{\ensuremath{\scaleobj{0.8}{\boldsymbol{^{+}}}}}
+#+latex_header: \DeclareUnicodeCharacter{03B1}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\alpha}}}}
+#+latex_header: \DeclareUnicodeCharacter{03B2}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\beta}}}}
+#+latex_header: \DeclareUnicodeCharacter{03B3}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\gamma}}}}
+#+latex_header: \DeclareUnicodeCharacter{03B4}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\delta}}}}
+#+latex_header: \DeclareUnicodeCharacter{03A3}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\Sigma}}}}
+#+latex_header: \DeclareUnicodeCharacter{03A9}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\Omega}}}}
 #+latex_header: \DeclareUnicodeCharacter{2209}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\notin}}}}
 #+latex_header: % \mathchardef\mhyphen="2D % define a math hyphen
 
@@ -7915,7 +7926,8 @@ constructed as the sum of the following data.
    is true if and only if $r < q$.
 
  * A proof $\| \sum_{q : D} \mathrm{cut}_r(q) \|$ witnessing that the Dedekind cut is *inhabited*, that
-   is, there exists some $q$ such that $r < q$.
+   is, there exists some $q$ such that $r < q$, providing an upper bound on the real
+   number.
 
  * Two functions that witness that the cut is *round*. 
    That is, a dyadic $q : D$ is in the cut if and only
@@ -7932,7 +7944,11 @@ constructed as the sum of the following data.
    \]
    \normalsize
 
-#+latex: \ExecuteMetaData[latex/Ctlc.tex]{reals}
+The following code shows the implementation in Agda.
+
+#+latex: \small
+#+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{reals}
+#+latex: \normalsize
 
 Note that, under the intuitionistic interpretation, it is not the case 
 in general that $\prod_{q : D} \mathrm{cut}_r(q) + \neg\, \mathrm{cut}_r(q)$ for an arbitrary $r : \mathbb{R}^+$; in fact,
@@ -7954,7 +7970,14 @@ We prove they are well-defined using several lemmas about the dyadic numbers
 and we prove that $\sqrt{2}$ is located.  The Agda compiler is then able to
 produce the first binary digits of $\sqrt{2} = 1.01101010000\dots$. Note that
 this construction is thus being formalized in any locally cartesian closed
-category with enough structure.
+category with enough structure. Explicitly, we use the following Agda code;
+it calls to already defined lemmas on the natural numbers when necessary
+and it shows how existential elimination is written inside the language
+to prove the necessary properties of the Dedekind cut.
+
+#+latex: \small
+#+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{sqrt}
+#+latex: \normalsize
 
 Dedekind cuts are not the only path we can take in order to define
 the real numbers in type theory. Reals can be also defined in terms
@@ -8040,17 +8063,7 @@ we need to fix a $b : x = y$, and then, we should check
 
 But this does not hold, trivially.
 
-*** TODO Homotopy type theory II: Sets
-Can we do usual set-theoretical mathematics inside Homotopy Type
-Theory? A type $A$ is a *h-set* or simply a *set* if every two parallel paths
-are equal. That is,
-\[
-\mathsf{isSet}(A) :\equiv \prod_{(x,y : A)}\prod_{(p,q: x=y)} p=q.
-\]
-With the homotopical interpretation, sets are precisely discrete
-homotopical spaces in which all homotopy groups are trivial.
-
-*** Homotopy type theory III: Univalence
+*** Homotopy type theory II: Univalence
 We say that there is an equivalence between two types $A$ and $B$
 and we write it as $(A \simeq B)$ if there
 is a /biinvertible/ map between them. Explicitly,
@@ -8070,10 +8083,10 @@ The Univalence axiom states that this function is itself an
 equivalence.
 
 #+ATTR_LATEX: :options [Univalence]
-#+BEGIN_definition
+#+BEGIN_axiom
 For any pair of types $A,B : {\cal U}$, $\mathrm{idtoeqv} : (A = B) \to (A \simeq B)$ is
 an equivalence. In particular, $(A = B) \simeq (A \simeq B)$.
-#+END_definition
+#+END_axiom
 
 In practical terms, this implies that isomorphic structures can
 be identified. For example, we could consider the type of the
@@ -8084,8 +8097,12 @@ integers, as a type, are equivalent to themselves after shifting
 them by the successor function. In the file =FundGroupCircle.agda=, we
 use this fact to prove, inside type theory, that $\mathbb{Z} = \pi_1(\mathbb{S}^1)$, 
 (following cite:hottbook and cite:licata13). This result is
-as a proof, inside this synthetic homotopical setting, of the fact
+a proof, inside this synthetic homotopical setting, of the fact 
 that the fundamental group of the circle is $\mathbb{Z}$.
+
+#+latex: \small
+#+latex: \ExecuteMetaData[agda-hott/latex/Snippets.tex]{circle}
+#+latex: \normalsize
 
 **** Note on the proof                                          :noexport:
 We could think that this only proves that Z is the free group
@@ -8127,6 +8144,16 @@ http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 This text defines $\mathbb{N}$ with a zero.
 * OLD Removed                                               :noexport:ignore:
 # TODO: Example: quotients
+** TODO Homotopy type theory II: Sets
+Can we do usual set-theoretical mathematics inside Homotopy Type
+Theory? A type $A$ is a *h-set* or simply a *set* if every two parallel paths
+are equal. That is,
+\[
+\mathsf{isSet}(A) :\equiv \prod_{(x,y : A)}\prod_{(p,q: x=y)} p=q.
+\]
+With the homotopical interpretation, sets are precisely discrete
+homotopical spaces in which all homotopy groups are trivial.
+
 ** TODO [#C] Examples of product categories
 ** TODO Concrete categories                                         :ignore:
 ** TODO Automorphisms                                               :ignore:
