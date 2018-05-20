@@ -3,12 +3,32 @@
 #+Options: broken-links:ignore toc:t tasks:nil num:3
 #+Todo: TODO(t) OLD(o) | DONE(d)
 
-** To-do list                                                     :noexport:
+** Hidden: To-do list                                             :noexport:
 *** Revisión
 
+- [ ] 1. Untyped lambda calculus
+- [ ] 2. Simply typed lambda calculus
+- [ ] 3. The Curry-Howard correspondence
+- [ ] 4. Other type systems
+- [ ] 5. Implementation of Lambda-expressions
+- [ ] 6. User interaction
+- [ ] 7. Usage
+- [ ] 8. Programming environment
+- [ ] 9. Programming in the untyped lambda-calculus
+- [ ] 10. Programming in the simply typed lambda-calculus
 - [X] 11. Categories
 - [X] 12. Functors and natural transformations
 - [X] 13. Constructions on categories
+- [ ] 14. Universality and limits
+- [ ] 15. Adjoints, monads and algebras
+- [ ] 16. Presheaves
+- [ ] 17. Cartesian closed categories and lambda calculus
+- [ ] 18. Working in cartesian closed categories
+- [ ] 19. Locally cartesian closed categories and dependent types
+- [ ] 20. Working in locally cartesian closed categories
+- [ ] 21. Topoi
+- [ ] 22. Martin-Löf type theory
+- [ ] 23. Homotopy type theory
 
 *** TODO [#A] Añadir lista de referencias principales
   - Selinger
@@ -27,7 +47,7 @@ puntos o usarlo consistentemente.
 *** TODO [#C] Citas en cada capítulo
 *** TODO Agda exportado a HTML. Enlazar código o apéndices
 
-** Macros and libraries                                             :ignore:
+** Hidden: Macros and libraries                                     :ignore:
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
 #+latex_header_extra: %\input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
@@ -92,6 +112,9 @@ puntos o usarlo consistentemente.
 #+latex_header: \usepackage{scalerel}
 #+latex_header: \usepackage{stmaryrd}
 
+#+latex_header: \BeforeBeginEnvironment{minted}{\vspace{-0.3cm}}
+#+latex_header: \AfterEndEnvironment{minted}{\vspace{0cm}}
+
 *** Theorem styles                                                 :ignore:
 #+latex_header: \theoremstyle{plain}
 #+latex_header: \newtheorem{theorem}{Theorem}
@@ -122,6 +145,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \DeclareUnicodeCharacter{2124}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\mathbb{Z}}}}}
 #+latex_header: \DeclareUnicodeCharacter{2217}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\ast}}}}
 #+latex_header: \DeclareUnicodeCharacter{2218}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\circ}}}}
+#+latex_header: \DeclareUnicodeCharacter{2243}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\simeq}}}}
 #+latex_header: \DeclareUnicodeCharacter{2208}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\in}}}}
 #+latex_header: \DeclareUnicodeCharacter{207A}{\ensuremath{\scaleobj{0.8}{\boldsymbol{^{+}}}}}
 #+latex_header: \DeclareUnicodeCharacter{03B1}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\alpha}}}}
@@ -203,10 +227,14 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\J{\mathsf{J}}
 #+latex_header: \usepackage{scalefnt}\DeclareMathOperator*\bigexists{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\scalefont{2}$\exists$}}}{\vcenter{\hbox{\scalefont{1.4}$\exists$}}}{\vcenter{\hbox{\scalefont{1}$\exists$}}}{\vcenter{\hbox{\scalefont{0.75}$\exists$}}}}
 
-** Abstract
+** TODO Abstract
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
+
+# TODO: Resumen y palabras clave.  Breve resumen del trabajo realizado.  Se
+# incluirán seguidamente al menos cinco palabras clave que definan el
+# trabajo a criterio del autor
 
 This is the abstract.
 # There is no claim of originality (?)
@@ -215,6 +243,11 @@ This is the abstract.
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
+
+# Deberá estar escrito completamente en inglés y tener una longitud
+# mínima de 1500 palabras. Igualmente aparecerán las palabras clave en inglés.
+
+# TODO: Actualmente tiene 300 palabras
 
 Empezamos exponiendo el cálculo lambda de Church como modelo de
 computación, prestando especial interés a la relación de sus variantes
@@ -248,6 +281,7 @@ segunda, y el libro fundacional de la teoría homotópica de tipos
 cite:hottbook en la parte final. El proyecto nLab cite:nlab ha sido útil para
 encontrar la bibliografía relevante.
 
+** TODO Declaración
 ** Acknowlegments
 :PROPERTIES:
 :UNNUMBERED: t
@@ -320,6 +354,20 @@ not enough for flattening them.
    -- *Conor McBride*, \\
 #+end_quote
 #+latex: \vspace*{\fill}
+
+** TODO Preamble
+# La introducción deberá:
+# 
+# • Contextualizar   el   trabajo   explicando   antecedentes   importantes   para   el   desarrollo
+#   realizado y efectuando, en su caso, un estudio de los progresos recientes.
+# • Describir el problema abordado, de forma que el lector tenga desde este momento
+#   una  idea  clara  de  la  cuestión  a  resolver  o del  producto  a desarrollar  y una  visión
+#   general de la solución alcanzada.
+# • Exponer   con   claridad   las   técnicas   y  áreas   matemáticas,   así   como   los   conceptos   y
+#   herramientas de la ingeniería informática que se han empleado.
+# • Sintetizar el contenido de la memoria.
+# • Citar las principales fuentes consultadas.
+#
 
 * Lambda calculus (abstract)                                         :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
@@ -3116,7 +3164,7 @@ for line in code.split('\n'):
 #+END_SRC
 
 A =pip= installable package has been created following the
-Python Packaging Authority guidelines. [fn:pypaguide] This allows
+Python Packaging Authority guidelines[fn:pypaguide]. This allows
 the kernel to be installed directly using the =pip= python package manager.
 
 #+BEGIN_SRC bash
@@ -3169,18 +3217,20 @@ notebooks. We used it to serve Mikrokosmos notebooks and tutorials to
 students studying \lambda-calculus.
 
 In order to install Mikrokosmos on a server and use it as =root= user,
-we need
+we perform the following steps.
 
-  * to clone the libraries into =/usr/lib/mikrokosmos=. They should be
-    available system-wide;
+  * Cloning the libraries into =/usr/lib/mikrokosmos=. They should be
+    available system-wide.
 
-  * to install the Mikrokosmos interpreter into =/usr/local/bin=. In
-    this case, we chose not to install Mikrokosmos from source, but simply
-    copy the binaries and check the availability of the =ncurses= library;
+  * Installing the Mikrokosmos interpreter into =/usr/local/bin=. In
+    this case, we can choose not to install Mikrokosmos from source, but
+    simply copy the binaries and check the availability of the
+    =ncurses= library.
 
-  * and to install the Mikrokosmos Jupyter kernel as usual.
+  * Installing the Mikrokosmos Jupyter kernel as usual.
 
-Our server used a SSL certificate; and OAuth autentication via GitHub.
+A JupyterHub server was made available at =iemath1.ugr.es=.  Our
+server used a SSL certificate and OAuth autentication via GitHub.
 Mikrokosmos tutorials were installed for every student.
 
 *** Calling Mikrokosmos from Javascript
@@ -3233,6 +3283,11 @@ follows
 
 into a CodeMirror pad where Mikrokosmos can be executed. The Mikrokosmos
 tutorials are an example of this feature and can be seen on Figure [[mikrokosmosjstutorial]].
+They can be accessed directly from the following direction.
+
+#+begin_center
+https://m42.github.io/mikrokosmos/
+#+end_center
 
 #+caption: Mikrokosmos embedded into a web page.
 #+name: mikrokosmosjstutorial
@@ -3386,13 +3441,12 @@ discard = const id
 is a function that discards one argument and returns the identity, =id=.
 This way of defining multiple argument functions is called the *currying*
 of a function in honor to the american logician Haskell Curry in cite:haskell58.
-It is a particular instance of a deeper fact: exponentials are defined
-by the following adjunction
-\[
-\hom(A \times B, C) \cong \hom(A, \hom(B,C)).
-\]
+It is a particular instance of a deeper fact we will detail on the chapter
+on Categorical Logic: exponentials are defined by the adjunction
+$\hom(A \times B, C) \cong \hom(A, \hom(B,C))$.
 
 *** A technique on inductive data encoding
+<<technique-on-inductive>>
 We will implicitly use a technique on the majority of our data
 encodings that allows us to write an encoding for any algebraically
 inductive generated data. This technique is used without comment on
@@ -3421,10 +3475,7 @@ additional syntax for every new data structure.
 This technique, instead, defines a data term as a function on
 multiple arguments representing the missing constructors. In our example, 
 the number $2$, which would be written as $\mathtt{Succ}(\mathtt{Succ}(\mathtt{Zero}))$,
-would be encoded as
-\[
-2 = \lambda s.\ \lambda z.\ s (s (z)).
-\]
+would be encoded as $2 = \lambda s.\ \lambda z.\ s (s (z))$.
 
 In general, any instance of the data structure $\mathtt{D}$ would be encoded as a
 \lambda-expression depending on all its constuctors
@@ -3457,10 +3508,8 @@ Note that =true= and =const= are exactly the same term up to
 The absence of types prevents us to make any effort to discriminate
 between these two uses of the same \lambda-term. Another side-effect
 of this definition is that our =true= and =false= terms can be interpreted
-as binary functions choosing between two arguments, that is,
-
-  * $\mathtt{true}(a,b) = a$,
-  * $\mathtt{false}(a,b) = b$.
+as binary functions choosing between two arguments, that is, 
+$\mathtt{true}(a,b) = a$, and $\mathtt{false}(a,b) = b$.
 
 We can test this interpretation on the interpreter to get
 
@@ -3506,7 +3555,8 @@ We use two constructors
  * zero is a natural number, written as Z;
  * the successor of a natural number is a natural number, written as S;
 
-and the BNF we defined when discussing how to [[*A technique on inductive data encoding][encode inductive data]].
+and the BNF we defined when discussing how to encode inductive data
+in Section [[technique-on-inductive]].
 
 #+BEGIN_SRC haskell
 0    = \s.\z.z
@@ -3572,13 +3622,12 @@ how to write the predecessor function after thinking about it for a
 long time (and he only discovered it while a long visit at the
 dentist's, which is the reason why this definition is often called the
 */wisdom tooth trick/*, see cite:crossley75). We will use a slightly
-different version of the definition that does not depend on a pair
-datatype.
+different version of that definition, as we consider it to be simpler
+to understand.
 
 We will start defining a /reverse composition/ operator, called
 =rcomp=; and we will study what happens when it is composed to itself;
-that is
-
+that is, the operator we define in the following code
 #+BEGIN_SRC haskell
 rcomp = \f.\g.\h.h (g f)
 \f.3 (inc f)
@@ -3588,11 +3637,9 @@ rcomp = \f.\g.\h.h (g f)
 --- [2]: λa.λb.λc.c (a (a (a (b a))))
 --- [3]: λa.λb.λc.c (a (a (a (a (b a)))))
 #+END_SRC
-
-will allow us now to use the =b= argument to discard the first instance
-of the =a= argument and return the same number wihtout the last constructor.
+allows us to use the =b= argument to discard the first instance of the
+=a= argument and return the same number wihtout the last constructor.
 Thus, our definition of =pred= is
-
 #+BEGIN_SRC haskell
 pred = \n.\s.\z.(n (inc s) (\x.z) (\x.x))
 #+END_SRC
@@ -4229,7 +4276,7 @@ elements and composition as the binary operation.
 
 **** Posets                                                       :ignore:
 #+begin_exampleth
-*Partial ordered sets* are categories with, at most, one morphism
+*Partially ordered sets* are categories with, at most, one morphism
 between any two objects. We say $a \leq b$ whenever $\rho_{a,b} \colon a \to b$ exists.
 In a partially ordered set, the product of two objects would be its
 join, the coproduct would be its meet and the initial and terminal
@@ -4775,7 +4822,7 @@ and covariant on the second, is usually called a *profunctor*.
 
 *** Functor categories
 Given two categories ${\cal B},{\cal C}$, the *functor category* ${\cal B}^{{\cal C}}$ has all functors
-${\cal C} \to {\cal B}$ as objects and natural transformations between them as morphisms.
+from ${\cal C}$ to ${\cal B}$ as objects and natural transformations between them as morphisms.
 If we consider the category of small categories $\Cats$, there is
 a hom-profunctor $-^{-} \colon \Cats^{op} \times \Cats \to \Cats$ sending any two categories
 ${\cal B}$ and ${\cal C}$ to their functor category ${\cal B}^{{\cal C}}$. Many mathematical constructions
@@ -4789,6 +4836,7 @@ homomorphisms as the natural transformations between them.
 
 #+ATTR_LATEX: :options [Graphs as functors]
 #+BEGIN_exampleth
+<<example-functor-graphs>>
 We consider the category given by two objects and two non-identity
 morphisms,
 \[\begin{tikzcd}
@@ -4818,6 +4866,7 @@ preserving the incidence of edges. We can call $\mathtt{Graph}$ to this functor 
 **** Dynamical systems and continuous dynamical systems           :ignore:
 #+ATTR_LATEX: :options [Dynamical systems as functors]
 #+BEGIN_exampleth
+<<example-dynamical>>
 A set endowed with an endomorphism $(S,\alpha)$ can be regarded as a /dynamical/
 /system/ in an informal way. Each state of the system is represented
 by an element of the set and and the transition function is represented
@@ -4902,8 +4951,8 @@ from the definition of universal arrow; and naturality follows from
 the fact that $G(g\circ f)\circ u = Gg \circ Gf \circ u$.
 
 On the other hand, given a bijection $\varphi$, we define $u = \varphi(\id_{D_0})$.
-By naturality, we have the bijection $\varphi(f) = Gf \circ u$, and every arrow
-is written in this way.
+By naturality, we have the bijection $\varphi(f) = Gf \circ u$; and every arrow
+can be written in this form.
 #+end_proof
 
 **** Couniversal arrows                                           :ignore:
@@ -5041,6 +5090,8 @@ y\big(N\pair{f,F}(\alpha)\big)
 #+end_proof
 
 **** Yoneda functor                                               :ignore:
+#+begin_definition
+<<def-yoneda-functor>>
 In the conditions of the Yoneda Lemma (Lemma [[lemma-yoneda]]) the *Yoneda functor*,
 $Y \colon {\cal D}^{op} \to \Sets^{{\cal D}}$, is defined with the arrow function
 \[
@@ -5050,6 +5101,7 @@ $Y \colon {\cal D}^{op} \to \Sets^{{\cal D}}$, is defined with the arrow functio
 It can be also written as $Y\colon {\cal D} \to \Sets^{{\cal D}^{op}}$. By the Yoneda Lemma, there
 is a bijection $y \colon \Nat(\hom(r,-), \hom(s,-)) \cong \hom(s,r)$ given by
 $y(\hom(f,-)) = f$; making the Yoneda functor full and faithful.
+#+end_definition
 
 ***** OLD Full and faithful as proposition                       :ignore:
 #+begin_proposition
@@ -5087,9 +5139,8 @@ only two objects, called the /index category/.
 
 We will be able to create new constructions on categories by formalizing
 the notion of cone and generalizing to arbitrary bases, given as functors
-from arbitrariliy complex index categories.
-Constant functors are the first step into formalizing the notion of
-/cone/.
+from arbitrary index categories. Constant functors are the first step into
+formalizing the notion of /cone/.
 
 **** Constant functors                                            :ignore:
 #+ATTR_LATEX: :options [Constant functor]
@@ -5247,7 +5298,7 @@ D
 In the category of abelian groups, the kernel of a function $f$,
 $\mathrm{ker}(f)$, is the equalizer of $f \colon G \to H$ and a function sending
 each element to the zero element of $H$. The same notion of kernel
-can be defined in the category of $R\mhyphen\text{Modules}$, for any ring $R$.
+can be defined in the category of $R\text{-Modules}$, for any ring $R$.
 #+END_exampleth
 
 **** Pullbacks                                                    :ignore:
@@ -5269,12 +5320,11 @@ X\rar[swap]{f} & Z & Y\lar{g} \\
 Again, the central arrow of the diagram is determined as
 $f \circ q = g \circ p$; so it can be ommited in the diagram. The usual
 definition of a pullback for two morphisms $f \colon X \to Z$ and
-$g \colon Y \to Z$ is pair of morphisms $p \colon A \to X$ and $q \colon A \to Y$
-such that $f \circ q = g \circ p$ which are also universal, that is,
-given any pair of morphisms $p' \colon D \to X$ and $q' \colon D \to Y$,
-there exists a unique $u \colon D \to A$ making the diagram commute.
-Usually we write the pullback object as $X \times_Z Y$ and we write
-this property diagramatically as
+$g \colon Y \to Z$ is the universal pair of morphisms $p \colon A \to X$ and $q \colon A \to Y$
+such that $f \circ q = g \circ p$, that is, given any pair of morphisms
+$p' \colon D \to X$ and $q' \colon D \to Y$, there exists a unique $u \colon D \to A$ making
+the diagram commute.  Usually we write the pullback object as $X \times_Z Y$
+and we write this property diagramatically as
 \[\begin{tikzcd}
 D
 \ar[dashed]{dr}{\exists! u} 
@@ -5289,9 +5339,8 @@ X
 \rar[swap]{g} &
 Z
 \end{tikzcd}\]
-The square in this diagram is usually called a 
-/pullback square/, and the pullback object is usually called a
-/fibered product/.
+The square in this diagram is usually called a /pullback square/,
+and the pullback object is usually called a /fibered product/.
 
 # TODO: Example of pullback
 # TODO: Equalizers are a particular example of pullbacks
@@ -5470,9 +5519,7 @@ The square in this diagram is usually called a
 **** Definition of adjunction                                     :ignore:
 An *adjunction* from categories ${\cal X}$ to ${\cal Y}$ is a pair of functors
 $F\colon {\cal X} \to {\cal Y}$, $G\colon {\cal Y} \to {\cal X}$ with a bijection
-\[
-\varphi \colon \hom(FX,Y) \cong \hom(X,GY),
-\]
+$\varphi \colon \hom(FX,Y) \cong \hom(X,GY)$,
 natural in both $X\in {\cal X}$ and $Y \in {\cal Y}$. We say that $F$ is /left-adjoint/ to
 $G$ and that $G$ is /right-adjoint/ to $F$ and we denote this as $F \dashv G$.
 
@@ -5506,6 +5553,7 @@ $\varphi^{-1}(g) \circ Fh = \varphi^{-1}(g \circ h)$.
 A different and maybe more intuitive way to write adjunctions is by
 logical diagrams (see cite:lawvere309). An adjunction $F\dashv G$ can be
 written as
+#+latex: \\[-20pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FX \rar{f}\& Y \end{tikzcd}}
 \doubleLine
@@ -5557,6 +5605,7 @@ arrows. Given an adjunction $F \dashv G$, we define
 
 Diagramatically, they can be obtained by taking $Y$ to be $FX$ and $X$ to be $GY$,
 respectively, in the definition of adjunction.
+#+latex: \\[-20pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FX \rar{\id}\& FX \end{tikzcd}}
 \doubleLine
@@ -5573,9 +5622,9 @@ respectively, in the definition of adjunction.
 The *unit* and the *counit* are natural transformations such that
 
  1) for each $f \colon FX \to Y$, $\varphi(f) = Gf \circ \eta_x$;
- 2) for each $g \colon X \to GY$, $\varphi^{-1}(g) = \varepsilon_y \circ Fg$;
+ 2) for each $g \colon X \to GY$, $\varphi^{-1}(g) = \varepsilon_y \circ Fg$.
 
-that follow the *triangle identities*, $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
+Moreover, they follow the *triangle identities*, $G \varepsilon \circ \eta G = \id_G$ and $\varepsilon F \circ F\eta = \id_{F}$.
 \[\begin{tikzcd}
 G \drar[equal] \rar{\eta G} & GFG \dar{G \varepsilon} &
 FGF \dar[swap]{\varepsilon F} & F \lar[swap]{F\eta} \dlar[equal] \\
@@ -5590,6 +5639,7 @@ equations we gave in the definition of $\varphi$;
  * $\varepsilon_y \circ Fg = \varphi^{-1}(\id) \circ Fg = \varphi^{-1}(\id \circ g) = \varphi^{-1}(g)$;
 
 diagramatically,
+#+latex: \\[-20pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
 FX \ar[bend left=45]{rr}{\varepsilon \circ Fg} \rar{Fg}\& 
@@ -6066,6 +6116,7 @@ and $\mathrm{succ}(n) + m = (\mathrm{succ}\circ (n+\_))(m) = \mathrm{succ}(n+m)$
 **** Lists or free monoids                                        :ignore:
 #+ATTR_LATEX: :options [Free monoids]
 #+BEGIN_exampleth
+<<example-listalgebra>>
 Fixing a set $A$ and changing the functor slightly to $F(X) = 1 + A \times X$
 we get the set of lists of elements of $A$ as the initial algebra.  This
 algebra is written as $\mathrm{List}(A)$ with the empty list $\mathrm{nil} \colon 1 \to \mathrm{List}(A)$ and
@@ -6096,213 +6147,52 @@ This definition immediately implies the equalities $\mathrm{sum}(\mathrm{nil}) =
 and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
 #+END_exampleth
 
-*** OLD T-algebras
-# TODO: Algebras para cualquier endofuntor
-For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
-/structure map/ making this diagram commute.
-\[\begin{tikzcd}
-T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
-Tx\rar{h} & x
-\end{tikzcd}\]
-A *morphism of* $T\textbf{-algebras}$ is an arrow $f\colon x \to x'$ making the following diagram
-commute.
-\[\begin{tikzcd}
-Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
-Tx' \rar[swap]{h'} & Tx'
-\end{tikzcd}\]
-
-#+attr_latex: :options [Category of T-algebras]
-#+begin_proposition
-The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
-#+end_proposition
-#+begin_proof
-Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
-is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
-\[\begin{tikzcd}
-Tx \rar{h}\dar[swap]{Tf} & 
-x \dar{f}\\
-Tx' \dar[swap]{Tg} \rar{h'} &
-x' \dar{g}\\
-Tx'' \rar{h''}&
-x''
-\end{tikzcd}\]
-commutes.
-#+end_proof
-
-# TODO: Initial algebras: Wellfounded trees in categories
-*** TODO Adjoints and limits
-**** Freyd adjoint functor theorem                                :ignore:
-#+ATTR_LATEX: :options [Freyd adjoint functor theorem]
-#+BEGIN_theorem
-A functor $G \colon {\cal C} \to {\cal D}$ from a small and locally small complete category ${\cal C}$
-has a left adjoint if and only if it preserves small limits and satisfies
-the solution set condition.
-#+END_theorem
-*** OLD Kleisli categories
-#+ATTR_LATEX: :options [Kleisli category]
-#+BEGIN_definition
-The *Kleisli category* of a monad $T \colon {\cal X} \to {\cal X}$ is written as ${\cal X}_T$ 
-and is given by
-
- * an object $x_T$ for every $x \in {\cal X}$; and
-
- * an arrow $f^{\flat} \colon x_T \to y_T$ for every $f \colon x \to T y$.
-
-And the composite of two morphisms is defined as
-\[
-g^{\flat} \circ f^{\flat} = (\mu \circ Tg \circ f)^{\flat}.
-\]
-#+END_definition
-
-#+ATTR_LATEX: :options [Adjunction on a Kleisli category]
-#+BEGIN_theorem
-The functors $F_T \colon {\cal X} \to {\cal X}_T$ and $G \colon {\cal X}_T \to {\cal X}$ from and
-to the Kleisli category which are defined on objects as $F_T(x) = x_T$ and
-$G_T(x_T) = Tx$, and defined on morphisms as
-
-\[\begin{aligned}
-F_T \colon& (k \colon x \to y)             &\mapsto&\ (\eta_y \circ k)^{\flat} \colon x_T \to y_T \\
-G_T \colon& (f^{\flat} \colon x_T \to y_T) &\mapsto&\ (\eta_y \circ Tf) \colon Tx \to Ty \\
-\end{aligned}\]
-
-form an adjunction $\flat \colon \hom(x,Ty) \to \hom(x_T,y_T)$ whose monad
-is precisely $T$.
-#+END_theorem
-#+BEGIN_proof
-# TODO
-# Theorem 1 pag 147 MacLane
-#+END_proof
-*** TODO Free algebras for a monad
-*** TODO Beck's theorem
-#+ATTR_LATEX: :options [Beck's theorem]
-#+BEGIN_theorem
-
-#+END_theorem
-*** TODO Spans
-# This implies that the category of spans of finite sets is equivalent
-# to the Lawvere theory of commutative monoids, that is, to the category
-# of finitely generated free commutative monoids.
-*** TODO Continuity
 * Categorical logic (abstract)                                       :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
 #+LATEX: \end{center}}
 
 * Categorical logic
-** TODO Presheaves
+** Presheaves
 # [Moerdijk]
 # TODO: Comma category is equivalent to a presheaf category
 # TODO: Pullbacks (in particular, products) always exist on presheaf cats
 # TODO: Terminal and pullbacks imply all finite limits
 
-Presheaves can be thought as sets parametrized by a category.
+*Presheaves* can be thought as sets parametrized by a category or as
+/generalized sets/. As we will study in the following chapters,
+categories of presheaves share a lot of categorical structure with the
+category of Sets and can be used as non-standard models of lambda
+calculus. 
 
+Specifically, a /presheaf/ on the category ${\cal C}$ is a functor
+$S \colon {\cal C}^{op} \to \Sets$ from the opposite category to the category of sets.
+The category of presheaves on ${\cal C}$ is a functor category of the
+form $\Set^{{\cal C}^{op}}$. In particular, the examples we gave when
+talking about functor catgeories (Examples [[example-functor-graphs]] and
+[[example-dynamical]]) are presheaf categories.
 
-*** Has \omega-colimits
+*** TODO Presheaves
+**** TODO Pointed Sets (?)
+*** TODO Pullbacks, in particular products always exists, thus all finite limits
+# The product of two functors is the product functor
+*** TODO Has \omega-colimits
 # Proposition 10.12 in Awodey gives initial algebras for presheaves.
 
 # Yoneda embedding preserves colimits and limits (?), that is why
 # presheaves have colimits.
-**** TODO Pointed Sets (?)
-**** TODO The category of all categories
-**** TODO Sheaves!
-# Gluing
-*** Comma categories
-The idea of functor categories leads us to think about categories
-whose objects are themselves diagrams on a category. The most relevant
-examples, which will be useful in our development of categorical logic,
-are the *comma categories*, and specially the particular case of a
-*slice categories*.
 
-#+ATTR_LATEX: :options [Comma category]
-#+BEGIN_definition
-Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $F \colon {\cal C} \to {\cal E}$ and $G \colon {\cal D} \to {\cal E}$.
-The *comma category* $(F \downarrow G)$ has
+# Coproducts
 
-  * morphisms of the form $f \colon FC \to GD$ as objects, for $C \in {\cal C}$
-    and $D \in {\cal D}$;
-  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon C \to C'$ and $h \colon D \to D'$ are morphisms
-    in ${\cal C}$ and ${\cal D}$ respectively such that $f' \circ Fk = Gh \circ f$.
-
-Diagramatically, a morphism in this category is a commutative diagram
-\[\begin{tikzcd}
-\color{black!50}{FC} \rar{Fk} \dar[swap,color=black!50]{f} & 
-\color{black!50}{FC'}\dar[,color=black!50]{f'} \\
-\color{black!50}{GD} \rar{Gh} &
-\color{black!50}{GD'}
-\end{tikzcd}\]
-where the objects of the category are drawn in grey.
-#+END_definition
-
-**** Slice category                                               :ignore:
-#+ATTR_LATEX: :options [Slice and coslice categories]
-#+BEGIN_definition
-A *slice category* is a particular case of a comma category $(F \downarrow G)$
-in which $F = \mathrm{Id}$ is the identity functor and $G$ is a functor from the
-terminal category, a category with only one object and its identity
-morphism.
-#+END_definition
-
-A functor from the terminal category simply chooses an object
-of the category. If we call $A = G(\ast)$, objects of this category
-are morphisms $f \colon C \to A$, where $C \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$,
-where $k \colon C \to C'$ such that $f' \circ k = f$, as in the following diagram.
-\[\begin{tikzcd}[remember picture, column sep=tiny]
-\color{black!50}{C} \ar{rr}{k}\drar[swap,color=black!50]{f} &&
-\color{black!50}{C'} \dlar[color=black!50]{f'} \\&
-\color{black!50}{A} &
-\end{tikzcd}\]
-This slice category is conventionally written as ${\cal C}/A$. In general,
-we can write $(F \downarrow A)$ when $G$ is a functor from the terminal category
-picking an object $A$.
-
-\\
-
-***** TODO Old notation                                        :noexport:
-This slice category is conventionally written as $({\cal C} \downarrow A)$. In
-general, we write $(F \downarrow A)$ when $G$ is a functor from the terminal
-category picking an object $A$; and we write $({\cal C} \downarrow G)$ when $F$ is
-the identity functor.
-
-**** Coslice category                                             :ignore:
-*Coslice categories* are the categorical dual of slice categories.
-Objects of this category are morphisms $f \colon C \to A$, where $C \in {\cal C}$;
-and morphisms are $\pair{k} \colon f \to f'$, where $k \colon C \to C'$ such that $k \circ f' = f$,
-as in the following diagram.
-\[\begin{tikzcd}[remember picture, column sep=tiny]
-& \color{black!50}{A} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
-\color{black!50}{C} \ar{rr}{k} & & \color{black!50}{C'}
-\end{tikzcd}\]
-This coslice category is conventionally written as $(A \setminus {\cal C})$.
-In general, we can write $(A \downarrow G)$ when $F$ is a functor
-from the terminal category picking an object $A$.
-
-**** OLD Arrow category                                           :ignore:
-#+ATTR_LATEX: :options [Arrow category]
-#+BEGIN_definition
-*Arrow categories* are a particular case of comma categories $(F \downarrow G)$
-in which both functors are the identity. They are usually written as ${\cal C}^{\to}$.
-Objects in this category are morphisms in ${\cal C}$, and morphisms in this
-category are commutative squares in ${\cal C}$ as in the following diagram.
-\[\begin{tikzcd}
-\color{black!50}{A}\rar{k}\dar[swap,color=black!50]{f} & 
-\color{black!50}{B} \dar[color=black!50]{f'} \\
-\color{black!50}{A'}\rar{h} &
-\color{black!50}{B'}
-\end{tikzcd}\]
-#+END_definition
-
-*** OLD Examples of comma categories
-**** TODO Pointed sets
 ** Cartesian closed categories and lambda calculus
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
 *** Lawvere theories
 **** Signature to category                                        :ignore:
-The usual notion of algebraic theory is given by a set of /k-ary operations/
+The usual notion of /algebraic theory/ is given by a set of /k-ary operations/
 for each $k \in \mathbb{N}$ and certain axioms between the terms that can be constructed
-inductively from free veriables and our operations. For instance, the theory
+inductively using free veriables and these operations. For instance, the theory
 of groups is given by a binary operation $(\cdot)$, a unary operation $(^{-1})$, and a 
 constant or 0-ary operation $e$; satisfying the following axioms
 \[
@@ -6325,8 +6215,8 @@ x\ /\
 with the binary operation $/$, related to the usual multiplication as $x / y = x \cdot y^{-1}$.
 Our solution to this problem will be to capture all the algebraic
 information of a theory -- all operations, constants and axioms --
-into a category. Differently presented but equivalent signatures and
-axioms will give rise to the same category.
+into a category. Differently presented but equivalent axioms will give
+rise to the same category.
 
 **** Definition                                                   :ignore:
 #+ATTR_LATEX: :options [Lawvere algebraic theory]
@@ -6337,22 +6227,24 @@ for any $m, n$.
 #+END_definition
 # From this definition, it follows that $A^0$ must be the terminal object.
 
-An algebraic theory can be built from a signature as follows: objects represent
-natural numbers, $A^0,A^1,A^2,\dots$, and morphisms from $A^n$ to $A^m$ are given by a tuple
-of $m$ terms $t_1,\dots,t_m$ depending on $n$ free variables $x_1,\dots,x_n$, written as
+An algebraic theory can be built from its operations and axioms as
+follows: objects represent natural numbers, $A^0,A^1,A^2,\dots$, and morphisms
+from $A^n$ to $A^m$ are given by a tuple of $m$ terms $t_1,\dots,t_m$ depending on $n$
+free variables $x_1,\dots,x_n$, written as
 \[
 (x_1\dots x_n \vdash \pair{t_1,\dots,t_k}) \colon
 A^n \to A^m.
 \]
-Composition is defined componentwise as the substitution of the terms of the first
+Composition is defined as componentwise substitution of the terms of the first
 morphism into the variables of the second one; that is, given $(x_1\dots x_k \vdash \pair{t_1,\dots,t_m}) \colon A^k \to A^{m}$
 and $(x_1\dots x_m \vdash\pair{u_1,\dots,u_n}) \colon A^m \to A^n$, their composition is
 $(x_1\dots x_k\vdash \pair{s_1,\dots,s_n})$, where $s_i = u_i[t_1,\dots,t_m / x_1,\dots,x_m]$. Two
 morphisms are considered equal, $(x_1\dots x_n \vdash \pair{t_1,\dots,t_k}) = (x_1\dots x_n \vdash \pair{t'_1,\dots,t'_k})$
-if componentwise equality of terms, $t_i = t'_i$, follows from the axioms of the theory.
-Identity is the morphism $(x_1\dots x_n \vdash \pair{x_1,\dots, x_n})$. The kth-projection from $A^n$ is the
-term $(x_1\dots x_n \vdash x_k)$, and it is easy to check that these projections make $A^n$ the n-fold
-product of $A$.
+when componentwise equality of terms, $t_i = t'_i$, follows from the axioms of the theory.
+Note that identity is the morphism $(x_1\dots x_n \vdash \pair{x_1,\dots, x_n})$. The kth-projection
+from $A^n$ is the term $(x_1\dots x_n \vdash x_k)$, and it is easy to check that these projections
+make $A^n$ the n-fold product of $A$. We have built a category with the desired
+properties.
 
 **** Models                                                       :ignore:
 #+ATTR_LATEX: :options [Model]
@@ -6362,63 +6254,63 @@ $M \colon \mathbb{A} \to {\cal C}$ preserving all finite products.
 #+END_definition
 
 The *category of models*, $\Mod_{{\cal C}}(\mathbb{A})$, is the subcategory of the functor
-category ${\cal C}^{\mathbb{A}}$ given by the functors preserving all finite products, with natural
-transformations between them. We say that a category is *algebraic* if it is equivalent
-to a category of the form $\Mod_{{\cal C}}(\mathbb{A})$.
+category ${\cal C}^{\mathbb{A}}$ containing the functors that preserve all finite products,
+with the usual natural transformations between them. We say that a
+category is /algebraic/ if it is equivalent to a category of the
+form $\Mod_{{\cal C}}(\mathbb{A})$.
 
 **** Examples                                                     :ignore:
 #+ATTR_LATEX: :options [The algebraic theory of groups]
 #+BEGIN_exampleth
-Let $\mathbb{G}$ be the algebraic theory of groups built from its signature; we
+Let $\mathbb{G}$ be the algebraic theory of groups built from its axioms; we
 have all the tuples of terms that can be inductively built with
 \[(x,y \vdash x \cdot y) \colon G^2 \to G, \qquad
 (x \vdash x^{-1}) \colon G \to G, \qquad
 (\vdash e) \colon G,\]
-and the projections $(x_1\dots x_n \vdash x_k) \colon G^n\to G$, where the usual group axioms hold.
-A model $H \colon \mathbb{G} \to {\cal C}$ is be determined by an object of ${\cal C}$ and /morphisms of the catgeory/
-with the above signature for which the axioms hold; for instance,
+and the projections $(x_1\dots x_n \vdash x_k) \colon G^n\to G$, where the usual group
+axioms hold. A model $H \colon \mathbb{G} \to {\cal C}$ is determined by an object of ${\cal C}$
+and some /morphisms of the catgeory/ with the above signature
+for which the axioms hold; for instance,
 
  * a model of $\mathbb{G}$ in $\Set$ is a classical *group*,
-   a set with multiplication and inverse functions for which the axioms hold;
- * a model of $\mathbb{G}$ in $\Top{}$ is a *topological group*, a topological space with continuous
-   multiplication and inverse functions;
- * a model of $\mathbb{G}$ in $\mathsf{Mfd}$, the category of differentiable manifolds with smooth functions
-   between them, is a *Lie group*;
- * a model of $\mathbb{G}$ in $\mathsf{Grp}$ is an *abelian group*;
- * a model of $\mathbb{G}$ in $\mathsf{CRing}$, the category of commutative rings with homomorphisms, is
-   a *Hopf algebra*.
-   # The last one by Eckmann-Hilton.
+   a set with multiplication and inverse functions for which
+   the axioms hold;
+ * a model of $\mathbb{G}$ in $\Top{}$ is a *topological group*, a topological
+   space with continuous multiplication and inverse functions;
+ * a model of $\mathbb{G}$ in $\mathsf{Mfd}$, the category of differentiable manifolds
+   with smooth functions between them, is a *Lie group*;
+ * a model of $\mathbb{G}$ in $\mathsf{Grp}$ is an *abelian group*, by the Eckmann-Hilton
+   argument;
+ * a model of $\mathbb{G}$ in $\mathsf{CRing}$, the category of commutative rings with
+   homomorphisms, is a *Hopf algebra*.
 
-The category of models $\Mod_{\Set}(\mathbb{A})$ is the usual category of groups, $\mathsf{Grp}$; note that the natural
-transformations are precisely the group homomorphisms, as they have to preserve the unit,
-product and inverse of the group in order to be natural.
+The category of models $\Mod_{\Set}(\mathbb{A})$ is the usual category of groups, $\mathsf{Grp}$;
+note that natural transformations on this category are precisely group
+homomorphisms, as they have to preserve the unit, product and inverse
+of the group in order to be natural.
 #+END_exampleth
 
 # a model would be the
 # set of integers with the addition $(+)$, opposite $(-)$ and zero $(0)$ as operations. The
 # term $(x,y,z \vdash (x \cdot y^{-1}) \cdot (z^{-1} \cdot e))$ would be interpreted as
 
-# TODO: Monads are monoids in the category of endofunctors
+# Monads are monoids in the category of endofunctors
 
 \\
 
 **** Completeness of algebraic theories                           :ignore:
 By construction we know that, if an equation can be proved from the
-axioms, it will be valid in all models (our semantics are /sound/); but
-we will also like to prove that, if every model of the theory
+axioms, it is valid in all models (our semantics are /sound/); but
+we would like to also prove that, if every model of the theory
 satisfies a particular equation, it can actually be proved from the
 axioms of the theory (our semantics are /complete/). In general, we
-can actually prove a stronger result.
+can actually prove a stronger, but maybe unsatisfying, result.
 
 #+ATTR_LATEX: :options [Universal model]
 #+BEGIN_theorem
 Given $\mathbb{A}$ an algebraic theory, there exists a category ${\cal A}$ with
-a model $U \in \mathtt{Mod}_{{\cal A}}(\mathbb{A})$ such that, for every terms $u,v$,
-\[
-u = v \text{ is satisfied under } U
-\iff
-\mathbb{A} \text{ proves } u = v.
-\]
+a model $U \in \mathrm{Mod}_{{\cal A}}(\mathbb{A})$ such that, for every terms $u,v$, the
+equality $u = v$ is true in $U$ if and only if $\mathbb{A}$ proves $u = v$.
 A category with this property is called a *universal model*.
 #+END_theorem
 #+BEGIN_proof
@@ -6429,17 +6321,17 @@ it is satisfied in the original category.
 # Yes by construction (x,y \vdash x.y) is a representation
 #+END_proof
 
-This proof feels rather disappointing because this model is not even
-set-theoretic in general; but we can go further and assert the
-existence of a universal model in a presheaf category via the Yoneda
-embedding.
+This proof feels rather disappointing because this trivial model is
+not even set-theoretic in general; but we can go further and assert
+the existence of a universal model in a presheaf category via the
+Yoneda embedding (Definition [[def-yoneda-functor]]).
 
 #+ATTR_LATEX: :options [Completeness on presheaves]
 #+BEGIN_corollary 
 The Yoneda embedding $y \colon \mathbb{A} \to \Set^{\mathbb{A}^{op}}$ is a universal model for $\mathbb{A}$.
 #+END_corollary
 #+BEGIN_proof 
-It preserves finite products because it preserves all limits, hence
+It preserves finite products because it preserves all limits, and thus,
 it is a model. As it is a faithful functor, we know that any equation
 proved in the model is an equation proved by the theory.
 #+END_proof
@@ -6449,10 +6341,7 @@ proved in the model is an equation proved by the theory.
 #+ATTR_LATEX: :options [Universal group]
 #+BEGIN_exampleth
 For instance, a universal model of the group would be the Yoneda embedding
-of $\mathbb{G}$ in $\Set^{\mathbb{G}^{op}}$. The group object would be the functor
-\[
-U = \hom_{\mathbb{G}}(-,A^1);
-\]
+of $\mathbb{G}$ in $\Set^{\mathbb{G}^{op}}$. The group object would be the functor $U = \hom_{\mathbb{G}}(-,A^1)$;
 which can be thought as a family of sets parametrized over the naturals:
 for each $n$ we have $U_n = \hom_{\mathbb{G}}(A^n,A^1)$, which is the set of terms on
 $n$ variables under the axioms of a group. In other words, the universal model
@@ -6811,19 +6700,19 @@ seen as a morphism from the terminal object $1 \to A$.
 **** Point-surjective                                             :ignore:
 # Weak point-surjection suffices
 # Existence of products suffice
-We say that a morphism $f {:} A \to B$ in a cartesian closed category is
-*point-surjective* if, for every $b {:} B$, there exists an $a {:} A$ such that
+We say that a morphism $f : A \to B$ in a cartesian closed category is
+*point-surjective* if, for every $b : B$, there exists an $a : A$ such that
 $f\ a \equiv b$.
 
 **** Lawvere's fixed point theorem                                :ignore:
 #+ATTR_LATEX: :options [Lawvere's fixed point theorem]
 #+BEGIN_theorem
 In any cartesian closed category, if there exists a point-surjective
-$d {:} A \to B^A$, then each $f {:} B \to B$ has a fixed point, a $b {:} B$ such
+$d : A \to B^A$, then each $f : B \to B$ has a fixed point $b : B$ such
 that $f\ b \equiv b$. cite:lawvere06
 #+END_theorem
 #+BEGIN_proof
-As $d$ is point-surjective, there exists $x {:} A$ such that $d\ x \equiv \lambda a. f\ (d\ a\ a)$,
+As $d$ is point-surjective, there exists $x : A$ such that $d\ x \equiv \lambda a. f\ (d\ a\ a)$,
 but then, $d\ x\ x \equiv (\lambda a.f\ (d\ a\ a))\ x \equiv f\ (d\ x\ x)$ is a fixed point.
 #+END_proof
 
@@ -6835,7 +6724,7 @@ contexts:
    permutation of the two-element set, a point-surjective $A \to 2^A$ cannot
    exist;
 
- * *Russell's paradox* follows because $\in \colon \mathrm{Sets} \to 2^{\mathrm{Sets}}$ is point-surjective
+ * *Russell's paradox* follows because $\in \colon \mathrm{Sets} \to 2^{\mathrm{Sets}}$ would be point-surjective
    if we assume that for any property on the class of sets $P \colon \mathrm{Sets} \to 2$ 
    there exists a comprehension set $\left\{ y \in \mathrm{Sets} \mid P(y) \right\}$;
 
@@ -6844,16 +6733,16 @@ contexts:
    the fact that there exists a type isomorphism (in particular, a point-surjection)
    $\mathtt{D} \to (\mathtt{D}\to \mathtt{D})$;
 
-# Turing halting problem from yanofsky follows in a category of computations
-
  * *Gödel first incompleteness theorem* and *Tarski's theorem* follow a similar
    reasoning (see cite:yanofsky03 for details). Let our category be an (algebraic)
-   theory $A^0,A^1,A^2,\dots$ with a supplementary object $2$; we say that the theory is
+   theory $A^0,A^1,A^2,\dots$ with a supplementary object $2$. We say that the theory is
    *consistent* if there exists a morphism $\mathrm{not} \colon 2 \to 2$ such that $\mathrm{not}\circ \varphi \neq \varphi$ for
-   every $\varphi \colon A \to 2$; we say that *satisfiability* is definable if there exists a 
-   map $\mathrm{sat}\colon A \times A \to 2$ such that for every "predicate" $\varphi \colon A \to 2$, there exists
-   a "Gödel number" $c {:} A$ such that $\mathrm{sat}(c,a) = \varphi(a)$. We get that, if satisfiability
-   is definible in a theory, then it is inconsistent.
+   every $\varphi : A \to 2$. We say that *satisfiability* is definable if there exists a 
+   map $\mathrm{sat} : A \times A \to 2$ such that for every /predicate/ $\varphi \colon A \to 2$, there exists
+   a /Gödel number/ $c : A$ such that $\mathrm{sat}(c,a) = \varphi(a)$. The fixed point theorem says
+   that, if satisfiability is definible in a theory, it must be inconsistent.
+
+# Turing halting problem from yanofsky follows in a category of computations
 
 # Compactly generated Hausdorff spaces are cartesian closed
 # * there is no countinuous surjection from $\mathbb{R}$ to the Banach space ${\cal C}(\mathbb{R},\mathbb{R})$,
@@ -6893,14 +6782,20 @@ be rewritten to match the structure of these adjoints
 \BIC{}
 \end{prooftree}
 In a similar way to how our previous fragment of simply-typed lambda
-calculus was the internal language of cartesian closed categories, this
+calculus was the internal language of cartesian closed categories, the
 extended version is the internal language of bicartesian closed categories.
 
 *** Inductive types
 # We get System T when we assume Nats and Bools
 The existence of an initial algebra in a cartesian closed category is
-equivalent the existence a type with an elimination rule representing
-an induction principle.
+equivalent to the existence a type with an elimination rule
+representing an induction principle. Types generated by an inductive
+rule are called *inductive types* and are common constructs in
+functional programming languages. Inductive types and their properties
+can be encoded as initial algebras satisfying a certain universal
+property. In particular, we will see examples of inductive types and
+how all of them can be modeled as initial algebras over a certain
+class of functors.
 
 # Note that this definition [of natural numbers as initial algebra]
 # actually makes sense in any category E having finite
@@ -6909,6 +6804,30 @@ an induction principle.
 # parameters" (which follows automatically when E is cartesian closed,
 # such as when E is a topos).
 # https://ncatlab.org/nlab/show/natural+numbers+object#withparams
+
+**** Binary trees                                                 :ignore:
+#+ATTR_LATEX: :options [Binary tree data structure]
+#+BEGIN_exampleth
+<<example-bintree>>
+Let $T$ be a type generated by the constructors $\mathrm{nil} : T$ and
+$\mathrm{node} : \mathbb{N} \to T \to T \to T$. It can be seen as the data structure
+of a binary tree of naturals, where "$\mathrm{nil}$" is an empty leaf and "$\mathrm{node}$"
+builds a data structure with a natural number on top and two pointers
+to binary trees.
+\[\begin{tikzcd}[column sep=tiny]
+  &   &   & 5 \ar{dll}\drar &&   \\
+  & 3\drar\dlar &   &   & 4\drar & \\
+1 &   & 2 &   & & 6
+\end{tikzcd}\]
+For instance, the above diagram represents the term
+\[
+\mathrm{node}\ 5\ 
+(\mathrm{node}\ 3\ 
+(\mathrm{node}\ 1\ \mathrm{nil}\ \mathrm{nil})\ 
+(\mathrm{node}\ 2\ \mathrm{nil}\ \mathrm{nil}))\ 
+(\mathrm{node}\ 4\ \mathrm{nil}\ (\mathrm{node}\ 6\ \mathrm{nil}\ \mathrm{nil})).
+\]
+#+END_exampleth
 
 **** Semantics of System T                                        :ignore:
 #+ATTR_LATEX: :options [Semantics of System T]
@@ -6960,6 +6879,8 @@ it can take models in any category with this structure.
 **** Polynomial endofunctors and well-founded trees               :ignore:
 # Wellfounded trees
 
+#+ATTR_LATEX: :options [Polynomial endofunctors]
+#+BEGIN_exampleth
 Following cite:awodey10 and cite:moerdijk00, we can generalize these
 examples to initial algebras over *polynomial endofunctors* of the
 following form for some fixed objects $C_0,\dots,C_n$;
@@ -6968,33 +6889,14 @@ P(X) = C_0 + C_1 \times X + C_2 \times X^2 + \dots + C_n \times X^n.
 \]
 Where the initial algebra can be seen to correspond to an inductive
 branching type with n-ary nodes of type $C_n$ and leafs of type $C_0$.
-Natural numbers $(1+X)$ and lists $(1 + A \times X)$, for a fixed type
+Natural numbers $(1+X)$ and lists $(1 + A \times X)$ for a fixed type
 $A$, are particular examples of initial algebras of polynomial
-endofunctors.
-
-#+ATTR_LATEX: :options [Binary tree data structure]
-#+BEGIN_exampleth
-Let $T$ be a type generated by the constructors $\mathrm{nil} : T$ and
-$\mathrm{node} : \mathbb{N} \to T \to T \to T$. It can be seen as the data structure
-of a binary tree of naturals, where "$\mathrm{nil}$" is an empty leaf and "$\mathrm{node}$"
-builds a data structure with a natural number on top and two pointers
-to binary trees.
-\[\begin{tikzcd}[column sep=tiny]
-  &   &   & 5 \ar{dll}\drar &&   \\
-  & 3\drar\dlar &   &   & 4\drar & \\
-1 &   & 2 &   & & 6
-\end{tikzcd}\]
-For instance, the above diagram represents the term
-\[
-\mathrm{node}\ 5\ 
-(\mathrm{node}\ 3\ 
-(\mathrm{node}\ 1\ \mathrm{nil}\ \mathrm{nil})\ 
-(\mathrm{node}\ 2\ \mathrm{nil}\ \mathrm{nil}))\ 
-(\mathrm{node}\ 4\ \mathrm{nil}\ (\mathrm{node}\ 6\ \mathrm{nil}\ \mathrm{nil})).
-\]
+endofunctors (as seen in Examples [[example-naturalnumbersobj]] and[[
+example-listalgebra]]). Binary trees, as described in Example [[example-bintree]],
+are the initial algebra for $(1 + \mathbb{N} \times T \times T)$.
 #+END_exampleth
 
-**** Initial algebras in presheaves                               :ignore:
+**** TODO Initial algebras in presheaves                          :ignore:
 # TODO: Not all endofunctors exist (powerset in Sets), but all
 # polynomial endofunctors exist in Set and in all presheaves.
 #  1. Yoneda embedding preserves colimits.
@@ -7006,6 +6908,8 @@ For instance, the above diagram represents the term
 # the Curry-Howard correspondence we saw earlier.
 
 # Heyting algebras as bicartesian closed posets
+
+# Open subsets of a topological space.
 
 ** Locally cartesian closed categories and dependent types
 *** Quantifiers and subsets
@@ -7493,18 +7397,6 @@ which can be rewritten as introduction and elimination rules.
 We have the equalities $(\lambda a.b)\ a' \equiv b[a'/a]$ and $(\lambda a.f\ a) \equiv f$ as
 beta and eta rules.
 
-**** Eta rule                                            :ignore:noexport:
-\[\begin{prooftree}
-\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
-\& \Gamma,A \& \\ C,A \ar{r}{a,f} \urar[bend left] \& \prod_{a:A}B(a), A \rar{app} \& B \ular[bend right]
-\end{tikzcd}}
-\doubleLine
-\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
-\Gamma \ar{r}{f} \drar[bend right] \& \prod_{a:A}B(a) \rar{id}\& \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
-\end{tikzcd}}
-\end{prooftree}\]
-
-**** Beta rule                                           :noexport:ignore:
 ** Working in locally cartesian closed categories
 *** Examples of dependent types
 **** Vectors                                                      :ignore:
@@ -7871,8 +7763,7 @@ Martin-Löf type theory and the internal language we have been
 describing so far can also be regarded as a programming language in
 which is possible to formally specify and prove theorems about the
 code itself.  Formal proofs in this theory can be written in any
-programming language with a powerful enough type system; examples
-of these include
+language with a powerful enough type system; examples of these include
 
  * *Agda*, a programming language that implements a variant of
    Martin-Löf type theory;
@@ -7880,7 +7771,6 @@ of these include
  * *Coq* cite:coq04 was developed in 1984 in INRIA; it implements
    Calculus of Constructions and was used, for example, to check a
    proof of the Four Color Theorem;
-
    # http://www.ams.org/notices/200811/tx081101382p.pdf
    # https://coq.inria.fr/about-coq
 
@@ -7899,7 +7789,7 @@ In this text, we will use Agda to write mathematics, taking ideas from
 cite:Conor17.  We will check proofs in Martin-Löf type theory using its
 type system.
 
-*** TODO Explicit translation
+*** TODO Translation between categories and types
 *** TODO Avoiding the law of excluded middle
 *** TODO Diaconescu's theorem
 *** Dedekind reals
@@ -7944,7 +7834,8 @@ constructed as the sum of the following data.
    \]
    \normalsize
 
-The following code shows the implementation in Agda.
+The following code shows the core definition of the Agda
+implementation.
 
 #+latex: \small
 #+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{reals}
@@ -7987,6 +7878,7 @@ and Cauchy reals become equivalent and the classical notion of real
 number is recovered. A detailed discussion can be found in the last
 chapters of cite:hottbook.
 
+** Homotopy type theory
 *** Homotopy type theory I: Equality
 We have already discussed how, given any $x,y:A$, we can interpret
 the equality type $(x = y)$, whose terms are witnesses of the equality.
@@ -8130,20 +8022,119 @@ using Z as a bridge.
 bibliographystyle:alpha
 bibliography:Bibliography.bib
 
-** TODO A note on structural induction
-http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Mikrokosmos complete code
 ** TODO Mikrokosmos user's guide
-** TODO Agda formalizations
+** TODO Agda code
+* OLD Removed                                               :noexport:ignore:
+# TODO: Example: quotients
+** OLD Examples of comma categories
+*** TODO Pointed sets
+*** TODO The category of all categories
+*** TODO Sheaves!
+# Gluing
+** TODO Comma categories
+The idea of functor categories leads us to think about categories
+whose objects are themselves diagrams on a category. The most relevant
+examples, which will be useful in our development of categorical logic,
+are the *comma categories*, and specially the particular case of a
+*slice categories*.
+
+#+ATTR_LATEX: :options [Comma category]
+#+BEGIN_definition
+Let ${\cal C},{\cal D},{\cal E}$ be categories with functors $F \colon {\cal C} \to {\cal E}$ and $G \colon {\cal D} \to {\cal E}$.
+The *comma category* $(F \downarrow G)$ has
+
+  * morphisms of the form $f \colon FC \to GD$ as objects, for $C \in {\cal C}$
+    and $D \in {\cal D}$;
+  * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon C \to C'$ and $h \colon D \to D'$ are morphisms
+    in ${\cal C}$ and ${\cal D}$ respectively such that $f' \circ Fk = Gh \circ f$.
+
+Diagramatically, a morphism in this category is a commutative diagram
+\[\begin{tikzcd}
+\color{black!50}{FC} \rar{Fk} \dar[swap,color=black!50]{f} & 
+\color{black!50}{FC'}\dar[,color=black!50]{f'} \\
+\color{black!50}{GD} \rar{Gh} &
+\color{black!50}{GD'}
+\end{tikzcd}\]
+where the objects of the category are drawn in grey.
+#+END_definition
+
+*** Slice category                                                 :ignore:
+#+ATTR_LATEX: :options [Slice and coslice categories]
+#+BEGIN_definition
+A *slice category* is a particular case of a comma category $(F \downarrow G)$
+in which $F = \mathrm{Id}$ is the identity functor and $G$ is a functor from the
+terminal category, a category with only one object and its identity
+morphism.
+#+END_definition
+
+A functor from the terminal category simply chooses an object
+of the category. If we call $A = G(\ast)$, objects of this category
+are morphisms $f \colon C \to A$, where $C \in {\cal C}$; and morphisms are $\pair{k} \colon f \to f'$,
+where $k \colon C \to C'$ such that $f' \circ k = f$, as in the following diagram.
+\[\begin{tikzcd}[remember picture, column sep=tiny]
+\color{black!50}{C} \ar{rr}{k}\drar[swap,color=black!50]{f} &&
+\color{black!50}{C'} \dlar[color=black!50]{f'} \\&
+\color{black!50}{A} &
+\end{tikzcd}\]
+This slice category is conventionally written as ${\cal C}/A$. In general,
+we can write $(F \downarrow A)$ when $G$ is a functor from the terminal category
+picking an object $A$.
+
+\\
+
+**** TODO Old notation                                          :noexport:
+This slice category is conventionally written as $({\cal C} \downarrow A)$. In
+general, we write $(F \downarrow A)$ when $G$ is a functor from the terminal
+category picking an object $A$; and we write $({\cal C} \downarrow G)$ when $F$ is
+the identity functor.
+
+*** Coslice category                                               :ignore:
+*Coslice categories* are the categorical dual of slice categories.
+Objects of this category are morphisms $f \colon C \to A$, where $C \in {\cal C}$;
+and morphisms are $\pair{k} \colon f \to f'$, where $k \colon C \to C'$ such that $k \circ f' = f$,
+as in the following diagram.
+\[\begin{tikzcd}[remember picture, column sep=tiny]
+& \color{black!50}{A} \drar[color=black!50]{f}\dlar[swap,color=black!50]{f'} &\\
+\color{black!50}{C} \ar{rr}{k} & & \color{black!50}{C'}
+\end{tikzcd}\]
+This coslice category is conventionally written as $(A \setminus {\cal C})$.
+In general, we can write $(A \downarrow G)$ when $F$ is a functor
+from the terminal category picking an object $A$.
+
+*** OLD Arrow category                                             :ignore:
+#+ATTR_LATEX: :options [Arrow category]
+#+BEGIN_definition
+*Arrow categories* are a particular case of comma categories $(F \downarrow G)$
+in which both functors are the identity. They are usually written as ${\cal C}^{\to}$.
+Objects in this category are morphisms in ${\cal C}$, and morphisms in this
+category are commutative squares in ${\cal C}$ as in the following diagram.
+\[\begin{tikzcd}
+\color{black!50}{A}\rar{k}\dar[swap,color=black!50]{f} & 
+\color{black!50}{B} \dar[color=black!50]{f'} \\
+\color{black!50}{A'}\rar{h} &
+\color{black!50}{B'}
+\end{tikzcd}\]
+#+END_definition
+
+** TODO Eta rule                                           :ignore:noexport:
+\[\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+\& \Gamma,A \& \\ C,A \ar{r}{a,f} \urar[bend left] \& \prod_{a:A}B(a), A \rar{app} \& B \ular[bend right]
+\end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
+\Gamma \ar{r}{f} \drar[bend right] \& \prod_{a:A}B(a) \rar{id}\& \prod_{a:A}B \dlar[bend left] \\ \& \Gamma \&
+\end{tikzcd}}
+\end{prooftree}\]
+
+** TODO A note on structural induction
+http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.184.4173
 ** TODO Quotes
 # These quotes can be placed on the partial abstracts or in the general one.
 
 "" [Shulman17]
 
-** TODO Notes
-This text defines $\mathbb{N}$ with a zero.
-* OLD Removed                                               :noexport:ignore:
-# TODO: Example: quotients
 ** TODO Homotopy type theory II: Sets
 Can we do usual set-theoretical mathematics inside Homotopy Type
 Theory? A type $A$ is a *h-set* or simply a *set* if every two parallel paths
@@ -11700,3 +11691,90 @@ identicals.
 
 **** TODO Programming in extensional Martin-Löf type theory
 # Following Conor's course
+** TODO T-algebras
+# TODO: Algebras para cualquier endofuntor
+For a monad $T$, a $T\textbf{-algebra}$ is an object $x$ with an arrow $h \colon Tx \to x$ called 
+/structure map/ making this diagram commute.
+\[\begin{tikzcd}
+T^{2}x \rar{Th}\dar[swap]{\mu} & Tx \dar{h} \\
+Tx\rar{h} & x
+\end{tikzcd}\]
+A *morphism of* $T\textbf{-algebras}$ is an arrow $f\colon x \to x'$ making the following diagram
+commute.
+\[\begin{tikzcd}
+Tx \dar[swap]{Tf}\rar{h} & Tx \dar{f} \\
+Tx' \rar[swap]{h'} & Tx'
+\end{tikzcd}\]
+
+#+attr_latex: :options [Category of T-algebras]
+#+begin_proposition
+The set of all $T\text{-algebras}$ and their morphisms form a category $X^{T}$.
+#+end_proposition
+#+begin_proof
+Given $f\colon x \to x'$ and $g\colon x'\to x''$, $T\text{-algebra}$ morphisms, their composition
+is also a $T\text{-algebra}$ morphism, due to the fact that this diagram
+\[\begin{tikzcd}
+Tx \rar{h}\dar[swap]{Tf} & 
+x \dar{f}\\
+Tx' \dar[swap]{Tg} \rar{h'} &
+x' \dar{g}\\
+Tx'' \rar{h''}&
+x''
+\end{tikzcd}\]
+commutes.
+#+end_proof
+
+# TODO: Initial algebras: Wellfounded trees in categories
+** TODO Adjoints and limits
+*** Freyd adjoint functor theorem                                  :ignore:
+#+ATTR_LATEX: :options [Freyd adjoint functor theorem]
+#+BEGIN_theorem
+A functor $G \colon {\cal C} \to {\cal D}$ from a small and locally small complete category ${\cal C}$
+has a left adjoint if and only if it preserves small limits and satisfies
+the solution set condition.
+#+END_theorem
+** OLD Kleisli categories
+#+ATTR_LATEX: :options [Kleisli category]
+#+BEGIN_definition
+The *Kleisli category* of a monad $T \colon {\cal X} \to {\cal X}$ is written as ${\cal X}_T$ 
+and is given by
+
+ * an object $x_T$ for every $x \in {\cal X}$; and
+
+ * an arrow $f^{\flat} \colon x_T \to y_T$ for every $f \colon x \to T y$.
+
+And the composite of two morphisms is defined as
+\[
+g^{\flat} \circ f^{\flat} = (\mu \circ Tg \circ f)^{\flat}.
+\]
+#+END_definition
+
+#+ATTR_LATEX: :options [Adjunction on a Kleisli category]
+#+BEGIN_theorem
+The functors $F_T \colon {\cal X} \to {\cal X}_T$ and $G \colon {\cal X}_T \to {\cal X}$ from and
+to the Kleisli category which are defined on objects as $F_T(x) = x_T$ and
+$G_T(x_T) = Tx$, and defined on morphisms as
+
+\[\begin{aligned}
+F_T \colon& (k \colon x \to y)             &\mapsto&\ (\eta_y \circ k)^{\flat} \colon x_T \to y_T \\
+G_T \colon& (f^{\flat} \colon x_T \to y_T) &\mapsto&\ (\eta_y \circ Tf) \colon Tx \to Ty \\
+\end{aligned}\]
+
+form an adjunction $\flat \colon \hom(x,Ty) \to \hom(x_T,y_T)$ whose monad
+is precisely $T$.
+#+END_theorem
+#+BEGIN_proof
+# TODO
+# Theorem 1 pag 147 MacLane
+#+END_proof
+** TODO Free algebras for a monad
+** TODO Beck's theorem
+#+ATTR_LATEX: :options [Beck's theorem]
+#+BEGIN_theorem
+
+#+END_theorem
+** TODO Spans
+# This implies that the category of spans of finite sets is equivalent
+# to the Lawvere theory of commutative monoids, that is, to the category
+# of finitely generated free commutative monoids.
+** TODO Continuity
