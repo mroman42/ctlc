@@ -5,16 +5,11 @@ module Etcs where
 open import Base
 open import Prop
 open import Booleans
-
-
 open import Naturals
 
--- With prop as subobject classifier, we have a topos (?)
--- Well-pointed -> Function extensionality!
 
 -- This proof has been adapted from Diaconescu's theorem in the
--- version by Altenkirch.
--- http://www.cs.nott.ac.uk/~psztxa/ewscs-17/notes.pdf
+-- version by Altenkirch's notes on Homotopy type theory.
 
 wellPointed : {A : Set} {B : A → Set} → {f g : (a : A) → B a}
   → ((x : A) → f x ≡ g x)
@@ -22,11 +17,13 @@ wellPointed : {A : Set} {B : A → Set} → {f g : (a : A) → B a}
   → f ≡ g
 wellPointed = funext
 
+
 postulate 
   AxiomOfChoice : {A : Set} {B : Set} {R : A → B → Set}
-    → ((a : A) → Ex B (λ b → R a b))
+    → ((a : A) → (∃ b ∈ B , (R a b)))
     ------------------------------------------
-    → Ex (A → B) (λ f → (a : A) → R a (f a))
+    → (∃ g ∈ (A → B), ((a : A) → R a (g a)))
+    
 
 LawOfExcludedMiddle : {P : Set} → P ∨ ¬ P
 LawOfExcludedMiddle {P} = Ex-elim
@@ -49,11 +46,6 @@ LawOfExcludedMiddle {P} = Ex-elim
     Va = V , (false ,, rinl refl)
 
     module lemma (f : A → Bool) where
-      fU : Bool
-      fU = f Ua
-      fV : Bool
-      fV = f Va
-
       eqf : (p : P) → f Ua ≡ f Va 
       eqf p = ap f (Σ-eq Ua Va (
         wellPointed λ
@@ -63,9 +55,8 @@ LawOfExcludedMiddle {P} = Ex-elim
         
       refute : true ≡ false → P ∨ ¬ P
       refute ()
-
       byCases : (α : (x : A) → R x (f x)) → P ∨ ¬ P
-      byCases α with fU ?? | fV ??
+      byCases α with f Ua ?? | f Va ??
       byCases α | inl x | inr y = rinr λ p → true≢false (inv x · (eqf p · y))
       byCases α | inl x | inl y = ∨-elim (α Va) ∨-isProp λ { (inl q) → refute (inv y · q) ; (inr p) → rinl p }
       byCases α | inr x | inl y = ∨-elim (α Ua) ∨-isProp λ { (inl q) → refute (inv q · x) ; (inr p) → rinl p }

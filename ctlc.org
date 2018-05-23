@@ -30,23 +30,22 @@
 - [ ] 22. Martin-Löf type theory
 - [ ] 23. Homotopy type theory
 
+*** TODO [#A] Terminar Presheaves
+*** TODO [#A] Agda exportado a HTML. Enlazar código o apéndices
 *** TODO [#A] Añadir lista de referencias principales
   - Selinger
   - MacLane, Categories for the working mathematician
   - Homotopy type theory book
   - nLab
-*** TODO [#B] Teorema de Hedberg y cómo recuperar conjuntos con ETCS
-*** TODO [#C] Añadir paradoja de Escardó para motivar topología y computación
-*** TODO [#B] Añadir ejemplo topológico de nudo que no se cierra
 *** TODO [#B] Repasar todo sustituyendo definiciones de entorno por negrita
+*** TODO [#C] Añadir paradoja de Escardó para motivar topología y computación
+*** TODO [#C] Añadir ejemplo topológico de nudo que no se cierra
 *** TODO [#C] Repasar coloreado de reglas del cálculo lambda simplemente tipado
 Especialmente en la parte de deducción natural, evitarlo en otros
 puntos o usarlo consistentemente.
 
 *** TODO [#C] Considerar sólo un caso de límites con su dual, en lugar de dos.
 *** TODO [#C] Citas en cada capítulo
-*** TODO Agda exportado a HTML. Enlazar código o apéndices
-
 ** Hidden: Macros and libraries                                     :ignore:
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
@@ -86,6 +85,7 @@ puntos o usarlo consistentemente.
 #+latex_header_extra: % \usepackage[scale=MatchLowercase]{FiraMono}
 #+latex_header_extra: \usepackage[scale=0.85]{FiraMono}
 #+latex_header_extra: \usepackage[T1]{fontenc}
+#+latex_header_extra: \usepackage{multicol}
 
 *** Colors                                                         :ignore:
 #+latex_header: \definecolor{ugrColor}{HTML}{c6474b} % Title
@@ -114,6 +114,8 @@ puntos o usarlo consistentemente.
 
 #+latex_header: \BeforeBeginEnvironment{minted}{\vspace{-0.3cm}}
 #+latex_header: \AfterEndEnvironment{minted}{\vspace{0cm}}
+
+#+latex_header: \newenvironment{tightcenter}{\setlength\topsep{0pt}\setlength\bottomsep{0pt}\setlength\parskip{0pt}\begin{center}}{\end{center}}
 
 *** Theorem styles                                                 :ignore:
 #+latex_header: \theoremstyle{plain}
@@ -155,6 +157,10 @@ puntos o usarlo consistentemente.
 #+latex_header: \DeclareUnicodeCharacter{03A3}{\ensuremath{\scaleobj{0.9}{\boldsymbol{\Sigma}}}}
 #+latex_header: \DeclareUnicodeCharacter{03A9}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\Omega}}}}
 #+latex_header: \DeclareUnicodeCharacter{2209}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\notin}}}}
+#+latex_header: \DeclareUnicodeCharacter{2261}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\equiv}}}}
+#+latex_header: \DeclareUnicodeCharacter{2262}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\not\equiv}}}}
+#+latex_header: \DeclareUnicodeCharacter{2228}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\vee}}}}
+#+latex_header: \DeclareUnicodeCharacter{2225}{\ensuremath{\scaleobj{0.8}{\boldsymbol{\|}}}}
 #+latex_header: % \mathchardef\mhyphen="2D % define a math hyphen
 
 #+latex_header: \newcommand{\impl}{\Rightarrow} % Implication
@@ -282,42 +288,6 @@ cite:hottbook en la parte final. El proyecto nLab cite:nlab ha sido útil para
 encontrar la bibliografía relevante.
 
 ** TODO Declaración
-** Acknowlegments
-:PROPERTIES:
-:UNNUMBERED: t
-:END:
-
-The opportunity of devoting my bachelor's thesis to this fascinating
-subject has been made possible by Prof. Pedro García-Sánchez and
-Prof. Manuel Bullejos.  They have provided me with corrections and
-useful guidelines for the text and they have gone beyond their
-obligation in their efforts to instruct me on how to expose these
-ideas clearly.  Any deviation from this goal must be attributed to
-my own inexperience.
-
-I would like to thank the LibreIM community in general and Ignacio
-Cordón, David Charte, Marta Andrés, José Carlos Entrena, Pablo Baeyens,
-Antonio Checa, Daniel Pozo, and Sofía Almeida in particular, for testing the
-interpreter and providing useful discussion and questions on the
-topics of this text. Prof. Luis Merino, Prof. Juan Julián Merelo and
-Braulio Valdivielso have made possible and participated on the
-organization of meetings and workshops on these ideas.
-
-Finally, I would like to express my gratitude to Benedikt Ahrens and
-the organizers of the School and Workshop on Univalent Mathematics at
-the University of Birmingham, whose effort has given me the
-opportunity to learn the fundaments of type theory and the Univalent
-Foundations program.
-
-This document has been written with Emacs26 and org-mode 9, using the
-=org= file format and LaTeX as intermediate format. The document
-follows the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by *André Miede* and uses modifications
-by Adrián Ranea, Alejandro García and David Charte. The =minted=
-package has been used for code listings and the =tikzcd= package has
-been used for commutative diagrams. The document is released under a Creative Commons
-BY-SA 3.0 license, while the source code can be redistributed under
-the terms of the GNU General Public License.
-
 ** Quote                                                            :ignore:
 :PROPERTIES:
 :UNNUMBERED: t
@@ -380,11 +350,12 @@ logical interpretation.
 
 * Lambda calculus
 ** Untyped \lambda-calculus
+**** Introduction                                                 :ignore:
 When are two functions equal? Classically in mathematics, /functions are graphs/.
 A function from a domain to a codomain, $f \colon X \to Y$, is seen as a subset 
 of the product space: $f \subset X \times Y$.
 Any two functions are identical if they map equal inputs to equal outputs;
-and a function it is completely determined by what its outputs are.
+and a function is completely determined by what its outputs are.
 This vision is called */extensional/* (see cite:selinger13).
 
 From a computational point of view, this perspective could seem
@@ -433,10 +404,10 @@ abstractions and applications.
 
 The *\lambda-notation* allows a function to be written and inlined as any other element
 of the language, identifying it with the formula it represents and 
-admitting a more compact notation. For example, the polynomial function
+admitting a more succinct representation. For example, the polynomial function
 $p(x) = x^2 + x$
-would be written in \lambda-calculus as
-$\lambda x.\ x^2 + x$; and $p(2)$ would be written as $(\lambda x.\ x^2+x)(2)$. In general,
+is written in \lambda-calculus as
+$\lambda x.\ x^2 + x$; and $p(2)$ is written as $(\lambda x.\ x^2+x)(2)$. In general,
 $\lambda x.M$ is a function taking $x$ as an argument and returning $M$,
 which is a term where $x$ may appear in.
 
@@ -468,10 +439,10 @@ evaluates to $6$.
   * given a \lambda-term $M$ and a variable $x$, its */abstraction/*, $\lambda x.M$,
     is a \lambda-term;
 
-  * every possible \lambda-term can be constructed using these rules, no other
+  * every possible \lambda-term can be constructed using these rules: no other
     \lambda-term exists.
 
-Equivalently, they are given by the following Backus-Naur form,
+Equivalently, they are given by the Backus-Naur form
 \[
 \mathtt{Term} ::= x \mid (\mathtt{Term}\ \mathtt{Term}) \mid (\lambda x.\mathtt{Term}),
 \]
@@ -538,7 +509,7 @@ keeping $x$ free.
 #+attr_latex: :options [Substitution on lambda terms]
 #+begin_definition
 The *substitution* of a variable $x$ by a term $N$ on $M$ is
-written as $M[N/x]$ and is defined inductively as
+written as $M[N/x]$ and defined inductively as
 \[\begin{aligned}
 x[N/x] &\equiv N,\\
 y[N/x] &\equiv y, & \text{ if } y \neq x,\\
@@ -552,9 +523,8 @@ where, in the last clause, $z$ is a fresh unused variable.
 #+end_definition
 
 We could define a criterion for choosing exactly what this new
-variable should be, or simply accept that our definition will not be
-exactly well-defined, but only
-/well-defined up to a change on the name of the variables/.
+variable should be, or simply accept that this procedure is not
+/well-defined/, but only /well-defined up to a change on the name of the variables/.
 This equivalence relation will be defined formally on the next section.
 In practice, it is common to follow the /Barendregt's variable convention/,
 which simply assumes that bound variables have been renamed to be distinct.
@@ -563,9 +533,8 @@ which simply assumes that bound variables have been renamed to be distinct.
 Variables are only placeholders; and its name, as we have
 seen before, is not relevant. Two \lambda-terms whose only difference is
 the naming of the variables are called \alpha-equivalent. For example,
-\[
-(\lambda x.\lambda y. x\ y) \quad\text{ is $\alpha$-equivalent to }\quad (\lambda f.\lambda x. f\ x).
-\]
+$(\lambda x.\lambda y. x\ y)$ is \alpha-equivalent to $(\lambda f.\lambda x. f\ x)$.
+
 *\alpha-equivalence* formally captures the fact that the name of a bound
 variable can be changed without changing the meaning of the term. This
 idea appears repeatedly on mathematics; for example, the renaming of
@@ -577,16 +546,15 @@ variables of integration or the variable on a limit are a examples of
 \lim_{x \to \infty} \frac{1}{x} = \lim_{y \to \infty} \frac{1}{y}.
 \]
 
-#+attr_latex: :options [\alpha-equivalence]
 #+begin_definition
 *\alpha-equivalence* is the smallest relation $=_{\alpha}$ on
-\lambda-terms that is an equivalence relation, that is to say that
+\lambda-terms that is both an equivalence relation, that is,
 
   * it is /reflexive/, $M =_{\alpha} M$;
   * it is /symmetric/, if $M =_{\alpha} N$, then $N =_{\alpha} M$;
   * and it is /transitive/, if $M=_{\alpha}N$ and $N=_{\alpha}P$, then $M=_{\alpha}P$;
 
-and it is compatible with the structure of lambda terms,
+and compatible with the structure of lambda terms, that is,
 
   * if $M =_{\alpha} M'$ and $N =_{\alpha} N'$, then $MN =_{\alpha}M'N'$;
   * if $M=_{\alpha}M'$, then $\lambda x.M =_{\alpha} \lambda x.M'$;
@@ -606,10 +574,9 @@ into a canonical form which could not be further reduced.
 Unfortunately, as we will see later, it is not possible to find, in
 general, that canonical form.
 
-#+attr_latex: :options [\beta-reduction]
 #+begin_definition
 <<def-betared>>
-The *single-step \beta-reduction* is the smallest relation on \lambda-terms
+*Single-step \beta-reduction* is the smallest relation on \lambda-terms
 capturing the notion of evaluation and preserving the structure of \lambda-abstractions
 and applications. That is, the smallest relation containing
 
@@ -629,9 +596,8 @@ by the notion of \eta-reduction: any term which simply applies a function to the
 argument it takes can be reduced to that function. That is, $\lambda x.M x$
 can be reduced to $M$.
 
-#+attr_latex: :options [\eta-reduction]
 #+begin_definition
-The *\eta-reduction* is the smallest relation on \lambda-terms satisfiying 
+*\eta-reduction* is the smallest relation on \lambda-terms satisfiying 
 
  * $\lambda x.Mx \to_{\eta} M$, for any $x \notin \mathrm{FV}(M)$,
  * $MN \to_{\eta} M'N$ and $NM \to_{\eta} NM'$ for any $M,M'$ such that $M \to_{\eta} M'$, and
@@ -667,10 +633,10 @@ closure, we can consider three apparently related properties:
   * the *confluence property* (also called /Church-Rosser property/) we have just defined;
   * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$, and
   * the *diamond property*, which is defined substituting $\tto$ by $\to$ on
-    the definition on confluence.
+    the definition of confluence.
 
-Diagrammatically, the three properties can be represented
-respectively as
+The three properties can be represented respectively (left: confluence, center:
+quasidiamond, right: diamond) as
 \[\begin{tikzcd}[column sep=small]
 & 
 M \drar[two heads]\dlar[two heads] &&& 
@@ -702,22 +668,25 @@ but more convoluted proof was discovered by Alonzo Church and Barkley
 Rosser in 1935 (see cite:barendregt84 and cite:pollack95).
 It is based on the idea of parallel one-step reduction.
 
+**** Parallel one-step reduction                                  :ignore:
 #+attr_latex: :options [Parallel one-step reduction]
 #+begin_definition
 We define the *parallel one-step reduction* relation on \lambda-terms, $\rhd$,
-as the smallest relation satisfying that the following properties
+as the smallest relation satisfying that the following properties hold
+for any variable $\red{x}$ and any terms $\red{N},\red{N'},\red{M},\red{M'}$ such that $\red{M}\rhd\red{M'}$
+and $\red{N}\rhd\red{N'}$:
 
   * reflexivity for variables, $\red{x} \rhd \red{x}$;
   * parallel application, $\red{MN} \rhd \red{M'N'}$;
   * \lambda-abstraction congruence, $\red{\lambda x.N} \rhd \red{\lambda x.N'}$;
   * parallel substitution, $\red{(\lambda x.M)N} \rhd \red{M'[N'/x]}$;
-  * and extensionality, $\red{\lambda x.M x} \rhd \red{M'}$, if $\red{x} \not\in \mathrm{FV}(\red{M})$,
+  * and extensionality, $\red{\lambda x.M x} \rhd \red{M'}$, if $\red{x} \not\in \mathrm{FV}(\red{M})$.
 
-hold for any variable $\red{x}$ and any terms $\red{N},\red{N'},\red{M},\red{M'}$ such that $\red{M}\rhd\red{M'}$ and $\red{N}\rhd\red{N'}$.
 Using the first three rules, it is trivial to show inductively that
 this relation is in fact reflexive.
 #+end_definition
 
+**** Transitive reflexive closure of parallel one-step reduction  :ignore:
 #+begin_lemma
 <<lemma-transclosureparallel>>
 The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$. In particular, given
@@ -727,7 +696,7 @@ any \lambda-terms $\red{P},\red{P'}$,
   2) if $\red{P} \rhd \red{P'}$, then $\red{P} \tto_{\beta\eta} \red{P'}$;
 #+end_lemma
 #+begin_proof
-1) All possible ways in which we can arrive at $P \to_{\beta\eta} P'$ imply $P \rhd P'$.
+1. All possible ways in which we can arrive at $P \to_{\beta\eta} P'$ imply $P \rhd P'$.
    They are
 
      * $(\lambda x.M)N \to M[N/x]$; where we know that, by parallel substitution
@@ -738,13 +707,13 @@ any \lambda-terms $\red{P},\red{P'}$,
        and $NM \rhd NM'$;
 
      * congruence to \lambda-abstraction, which is a shared property between
-       the two relations where we can apply structural induction again;
+       the two relations;
 
      * $\lambda x. Mx \to M$, where $x \not\in \mathrm{FV}(M)$ and we can apply extensionality for $\rhd$
        and reflexivity.
 
-2) We can prove this by structural induction on the derivations of $M \rhd M'$. The
-   possible ways in which we arrive at it are
+2. All the possible ways in which we can deduce $M \rhd M'$ imply $M \to_{\beta\eta} M'$.
+   They are
      
      * the trivial one, reflexivity;
 
@@ -764,6 +733,11 @@ any \lambda-terms $\red{P},\red{P'}$,
 Because of this, the reflexive transitive closure of $\rhd$ should be a subset and a
 superset of $\tto$ at the same time.
 #+end_proof
+
+**** Substitution lemma                                           :ignore:
+In order to prove that this relation has the diamond property, we will
+define a reduction of a term that can be itself reached from any of its
+parallel one-step reductions. We begin proving a lemma on 
 
 #+attr_latex: :options [Substitution Lemma]
 #+begin_lemma
@@ -793,7 +767,7 @@ Note that we are implicitly assuming the Barendregt's variable
 convention: all variables have been renamed to avoid clashes.
 #+end_proof
 
-#+attr_latex: :options [Maximal parallel one-step reduct]
+**** Maximal parallel one-step reduct                             :ignore:
 #+begin_definition 
 The *maximal parallel one-step reduct* $M^{\ast}$ of a \lambda-term $M$ is defined
 inductively as
@@ -805,14 +779,15 @@ inductively as
   * $(\lambda x.Px)^{\ast} = P^{\ast}$, given $x \notin \mathrm{FV}(P)$.
 #+end_definition
 
+**** Diamond property of parallel reduction                       :ignore:
 #+attr_latex: :options [Diamond property of parallel reduction]
 #+begin_lemma
 <<lemma-paralleldiamond>>
-Given any $M'$ such that $M \rhd M'$, $M' \rhd M^{\ast}$. Parallel one-step reduction 
-has the diamond property.
+Given any $M'$ such that $M \rhd M'$, it can be proved that $M' \rhd M^{\ast}$. Parallel
+one-step reduction has the diamond property.
 #+end_lemma
 #+begin_proof
-We apply again structural induction on the derivation of $M \rhd M'$.
+We apply again induction on the possible derivations of $M \rhd M'$.
 
   * Reflexivity gives us $M' = x = M^{\ast}$.
 
@@ -846,6 +821,7 @@ We apply again structural induction on the derivation of $M \rhd M'$.
     we know that $P' \rhd P^{\ast} = M^{\ast}$.$\qedhere$
 #+end_proof
 
+**** Church-Rosser theorem                                        :ignore:
 #+attr_latex: :options [Church-Rosser Theorem]
 #+begin_theorem
 <<theorem-churchrosser>>
@@ -862,23 +838,22 @@ whose diamond property implies confluence for $\to_{\beta\eta}$.
 Once the Church-Rosser theorem is proved, we can formally define the notion
 of a normal form as a completely reduced \lambda-term.
 
-#+attr_latex: :options [Normal forms]
 #+begin_definition
 A \lambda-term is said to be in *\beta-normal form* if \beta-reduction
 cannot be applied to it or any of its subformulas. We define *\eta-normal forms*
 and *\beta\eta-normal forms* analogously.
 #+end_definition
 
-Fully evaluating \lambda-terms usually means to apply reductions to
+Fully evaluating \lambda-terms means to iteratively apply reductions to
 them until a normal form is reached. We know, by virtue of Theorem
 [[theorem-churchrosser]], that, if a normal form for a particular term
 exists, it is unique; but we do not know whether a normal form
-actually exists. We say that a term *has* a normal form when it can be
+actually exists. We say that a term /has a normal form/ if it can be
 reduced to a normal form.
 
 #+begin_definition
 A term is *weakly normalizing* if there exists a sequence of reductions
-from it to a normal form. It is *strongly* normalizing if every sequence
+from it to a normal form. It is *strongly normalizing* if every sequence
 of reductions is finite.
 #+end_definition
 
@@ -925,6 +900,7 @@ will always find a normal form if it exists.
 
 This section follows cite:kashima00, cite:barendsen94 and cite:barendregt84.
 
+**** Leftmost one-step reduction                                  :ignore:
 #+attr_latex: :options [Leftmost one-step reduction]
 #+begin_definition
 We define the relation $M \to_{n} N$ when $N$ can be obtained by \beta-reducing
@@ -933,6 +909,7 @@ We call $\to_{1}$ the *leftmost one-step reduction* and we write it as $\to_{l}$
 accordingly, $\tto_{l}$ is its reflexive transitive closure.
 #+end_definition
 
+**** Standard sequence                                            :ignore:
 #+attr_latex: :options [Standard sequence]
 #+begin_definition
 A sequence of \beta-reductions $M_0 \to_{n_1} M_1 \to_{n_2} M_2 \to_{n_3} \dots \to_{n_k} M_{k}$ 
@@ -940,10 +917,11 @@ is *standard* if $\{n_i\}$ is a non-decreasing sequence.
 #+end_definition
 
 We will prove that every term that can be reduced to a normal form can
-be reduced to it using a standard sequence, from this result, the existence
-of an optimal beta reduction strategy, in the sense that it will always reach
-a normal form if one exists, will follow as a corollary.
+be reduced to it using a standard sequence. This will imply the
+existence of an optimal beta reduction strategy that will always reach
+a normal form if one exists.
 
+**** Standarization theorem                                       :ignore:
 #+attr_latex: :options [Standarization theorem]
 #+begin_theorem
 <<thm-standarization>>
@@ -999,12 +977,14 @@ ways in which $M \to_{\beta} N$ can be derived.
      that $K \tto_h \lambda x.W$ and $W \tto_s M$. By induction $W \tto_s M'$, and $K \tto_s \lambda x.M'$.$\qedhere$
 #+end_proof
 
+**** Leftmost reduction theorem                                   :ignore:
 #+attr_latex: :options [Leftmost reduction theorem]
 #+begin_corollary
 <<cor-leftmosttheorem>>
 We define the *leftmost reduction strategy* as the strategy that
-reduces the leftmost \beta-reducible application at each step. If $M$ has a
-normal form, the leftmost reduction strategy will lead to it.
+reduces the leftmost \beta-reducible application at each step.
+If $M$ has a normal form, the leftmost reduction strategy will lead
+to it.
 #+end_corollary
 #+begin_proof
 Note that, if $M \to_n N$, where $N$ is in \beta-normal form; $n$ must be exactly
@@ -1027,21 +1007,20 @@ these are
 A language can be defined with these combinators and function
 application. Every \lambda-term can be translated to this language and recovered up
 to $=_{\beta\eta}$ equivalence. For example, the identity \lambda-term, $I$, can be written as
-\[
-I = \lambda x.x = SKK.
-\]
+$I = \lambda x.x = SKK$.
+
 It is common to also add the $I = \lambda x.x$ as a basic term to this language,
 even if it can be written in terms of $S$ and $K$, as a
 way to ease the writing of long complex terms. Terms written with
 these combinators are called */SKI-terms/*.
 
-The language of *SKI-terms* can be defined by the following Backus-Naus form
+The language of *SKI-terms* can be defined by the Backus-Naus form
 \[
-\mathtt{SKI} ::= x \mid (\mathtt{SKI}\ \mathtt{SKI}) \mid S \mid K \mid I\quad,
+\mathtt{SKI} ::= x \mid (\mathtt{SKI}\ \mathtt{SKI}) \mid S \mid K \mid I,
 \]
-where $x$ are free variables.
+where $x$ can represent any free variable.
 
-**** Transformation of SKI combinators                            :ignore:
+**** Lambda transform                                             :ignore:
 #+attr_latex: :options [Lambda transform]
 #+begin_definition
 The *Lambda-transform* of a SKI-term is a \lambda-term defined
@@ -1054,10 +1033,13 @@ recursively as
   * $\lambdatrans(XY) = \lambdatrans(X)\lambdatrans(Y)$.
 #+end_definition
 
+**** Bracket abstraction                                          :ignore:
 #+attr_latex: :options [Bracket abstraction]
 #+begin_definition
-The *bracket abstraction* of the SKI-term $U$ on the variable $x$ is
-written as $[x].U$ and defined recursively as
+Before translating back lambda terms to SKI combinators, we need the
+auxiliary notion of bracket abstraction. The *bracket abstraction* of
+the SKI-term $U$ on the variable $x$ is written as $[x].U$ and defined
+recursively as
 
   * $[x].x = I$;
   * $[x].M = KM$, if $x \notin \freevars(M)$;
@@ -1068,6 +1050,7 @@ where $\freevars$ is the set of free variables; as defined on Definition
 [[def-freevariables]].
 #+end_definition
 
+**** SKI abstraction                                              :ignore:
 #+attr_latex: :options [SKI abstraction]
 #+begin_definition
 The *SKI abstraction* of a \lambda-term $M$, written as $\skiabs(M)$ is
@@ -1083,10 +1066,7 @@ where $[x].U$ is the bracket abstraction of the SKI-term $U$.
 #+attr_latex: :options [SKI combinators and lambda terms]
 #+begin_theorem
 The SKI-abstraction is a retraction of the Lambda-transform of the term,
-that is, for any SKI-term $U$,
-\[
-\skiabs(\lambdatrans(U)) = U.
-\]
+that is, for any SKI-term $U$, we have that $\skiabs(\lambdatrans(U)) = U$.
 #+end_theorem
 #+begin_proof
 By structural induction on $U$,
@@ -1098,10 +1078,8 @@ By structural induction on $U$,
   * $\skiabs\lambdatrans(MN) = MN$.$\qedhere$
 #+end_proof
 
-In general this translation is not an isomorphism. As an example
-\[
-\lambdatrans(\skiabs(\lambda u. v u)) = \lambdatrans(v) = v.
-\]
+In general this translation is not an isomorphism. For instance,
+$\lambdatrans(\skiabs(\lambda u. v u)) = \lambdatrans(v) = v$.
 However, the \lambda-terms can be essentially recovered if we relax equality
 between \lambda-terms to mean $=_{\beta\eta}$.
 # This problem could be addressed by using a relaxed form of
@@ -1179,7 +1157,9 @@ It is Turing-complete.
 A complete implementation of untyped \lambda-calculus is discussed in
 Chapter [[Implementation of \lambda-expressions]]; and a detailed description on how to use the
 untyped \lambda-calculus as a programming language is given in Chapter
-[[Programming in untyped \lambda-calculus]].
+[[Programming in untyped \lambda-calculus]]. General recursive functions,
+for example, can be encoded using these techniques, thus proving that it
+is in fact Turing complete (see [[sec-fixed-points]]).
 
 # Church - An unsolvable problem of elementary number theory
 # Corollary 1 pág 362.
@@ -1824,6 +1804,7 @@ construction rule.
      for any $m : A + B$.
 
 *** Natural deduction
+<<sec-naturaldeduction>>
 The natural deduction is a logical system due to Gentzen. We introduce
 it here following cite:selinger13 and cite:wadler15. Its relationship
 with the simply-typed lambda calculus will be made explicit in Section 
@@ -3759,12 +3740,10 @@ mytree triplesum 0
 
 **** TODO The universal properties of fold, map and filter
 *** Fixed points
+<<sec-fixed-points>>
 A fixpoint combinator is a term representing a higher-order function
-that, given any function =f=, solves the equation
-\[
-\mathtt{x = f\ x}
-\]
-for =x=, meaning that, if =fix f= is the fixpoint of =f=, the following
+that, given any function =f=, solves the equation ~(x = f x)~
+for =x=, meaning that, if =(fix f)= is the fixpoint of =f=, the following
 sequence of equations holds
 \[
 \mathtt{fix}\ f =
@@ -3774,7 +3753,7 @@ f ( f ( f (\mathtt{fix}\ f))) =
 \dots
 \]
 
-Such a combinator actually exists; it can be defined and used as
+Such a combinator exists; and it can be defined and used as
 #+BEGIN_SRC haskell
 fix := (\f.(\x.f (x x)) (\x.f (x x)))
 fix (const id)
@@ -3828,6 +3807,18 @@ These definitions unfold as
 
  * $\mathtt{fix\ (cons\ 0) = cons\ 0\ (cons\ 0\ (cons\ 0\ \dots))}$, an infinite list of zeroes;
  * $\mathtt{fix\ succ\ \ \ \ \ \ = succ\ (succ\ (succ\ \dots))}$, an infinite natural number.
+
+As a final example, we define a minimisation operator that finds the
+first natural causing a given predicate to return true.  This, with all the
+previous considerations about how to program with natural numbers, can
+be used to prove that Gödel's \mu-recursive functions can be encoded
+inside untyped lambda calculus, and thus, it is Turing-complete.
+
+#+BEGIN_SRC haskell
+mu := \p.fix (\f.\n.(p n) n (f (succ n))) 0
+mu (\n.eq (mult 2 n) 10)
+---- [1]: 5
+#+END_SRC
 
 ** Programming in the simply typed \lambda-calculus
 This section explains how to use the simply typed \lambda-calculus to
@@ -4455,8 +4446,9 @@ this intuitive idea.
 
 A *natural transformation* between two functors $F$ and $G$ with the same domain
 and codomain, written as $\alpha\colon F \tonat G$, is a family of morphisms parameterized by
-the objects of the domain category, $\{\alpha_C\colon FC \to GC\}_{C \in {\cal C}}$, such that,
-for every arrow $f \colon C \to C'$, the following diagram commutes.
+the objects of the domain category, $\{\alpha_C\colon FC \to GC\}_{C \in {\cal C}}$, such that
+$\alpha_{C'} \circ Ff = Gf \circ \alpha_C$ for every arrow $f \colon C \to C'$. That is, the following
+diagram commutes.
 \[\begin{tikzcd}
 C \dar{f} & & FC \rar{\alpha_C}\dar[swap]{Ff} & GC \dar{Gf} \\
 C' & & FC' \rar{\alpha_{C'}} & GC'
@@ -4464,8 +4456,7 @@ C' & & FC' \rar{\alpha_{C'}} & GC'
 
 Sometimes, we also say that the family of morphisms $\alpha$ is /natural/ in its
 argument. This naturality property is what allows us to "translate" a
-commutative diagram from a functor to another, as in the following example
-diagram.
+commutative diagram from a functor to another, as in the following example.
 \[\begin{tikzcd}
 A\arrow{dd}{h}\drar{f} &   & & F A\arrow{dd}{F h}\drar{F f} \arrow{rrr}{\alpha_A} &     & & G A\arrow{dd}{}\drar{G f} &     \\
   & B \dlar{g} & &     & F B \dlar{F g} \arrow{rrr}{\alpha_B} & &     & G B \dlar{G g} \\
@@ -4642,12 +4633,12 @@ in a diagram like the following one
 are actually equivalent. That is, $(\beta' \cdot \alpha') \circ (\beta \cdot \alpha) = (\beta' \circ \beta) \cdot (\alpha' \circ \alpha)$.
 #+END_proposition
 #+BEGIN_proof
-Crucially applying naturality of $\alpha'$, we have
+By naturality of $\alpha'$, we have
 \[\begin{aligned}
 (\beta' \cdot \alpha') \circ (\beta \cdot \alpha) &=
 \{\beta'_{HC} \circ \alpha'_{HC} \circ F'\beta_{C} \circ F'\alpha_C\}_{C \in {\cal C}} \\
 &= \{\beta'_{HC} \circ G'\beta_{C} \circ \alpha'_{GC} \circ F'\alpha_C\}_{C \in {\cal C}} \\
-&= (\beta' \circ \beta) \cdot (\alpha' \circ \alpha).
+&= (\beta' \circ \beta) \cdot (\alpha' \circ \alpha).\qedhere
 \end{aligned}\]
 #+END_proof
 
@@ -7515,6 +7506,7 @@ quantifier.
 #+END_exampleth
 *** TODO Soundness up to isomorphism
 *** Equality types
+<<sec-equalitytypes>>
 *Equality* in our theory comes from an adjunction, as was first proposed
 in cite:lawvere70. The equality type
 between elements of type $A$ will be represented by the diagonal morphism
@@ -7594,6 +7586,7 @@ parametrized over $p$, of the form $C(x,y,p)$.
 The corresponding computation rule would be $\J_C(c,\refl)\equiv c[a/x]$.
 
 *** Subobject classifier and propositions
+<<sec-subobject-propositions>>
 # [[https://www.youtube.com/watch?v=zUPBEQe4Ti8][Internal Languages for Higher Toposes - Michael Shulman - YouTube]]
 
 # TODO: Rewrite this as "Subobject classifiers are ..."
@@ -7638,12 +7631,12 @@ proof irrelevance.
 Propositions are types, but not all types are propositions; a type $A$
 may have multiple distinct elements, witnessing different proofs of
 the same fact. We could, however, /truncate/ a type into a proposition
-$\|A\|$ by postulating that two of its proofs $p,q : \|A\|$ should be equal,
+$\|A\|$ by postulating that any two of its proofs $p,q : \|A\|$ should be equal,
 $p = q$. In this case, to provide an element of $A$ would mean to explicitly
 construct a proof of $A$; whereas to provide an element of $\|A\|$ would mean
 to witness that $A$ can be proved, without constructing any proof.
 
-As an example, there are four distinct elements of
+For instance, there are four distinct elements of
 \[
 \sum_{(n,m) : \mathbb{N} \times \mathbb{N}} (n + m = 3),
 \]
@@ -7662,6 +7655,8 @@ the untrucated version demands the explicit construction of an example.
 # \bigexists_{(n,m) :\mathbb{N} \times \mathbb{N}} (n + m = 3).
 # \]
 
+#+begin_exampleth
+<<example-type-axiom-of-choice>>
 As a second example, we can reformulate a nontrivial version of the
 axiom of choice we discussed previously in Example [[theorem-choice]].
 Note that
@@ -7674,6 +7669,7 @@ of a function only knowing that for each $a$ there exists an element $b$ related
 to it, but (crucially) without knowing which $b$ is related to $a$. This
 new version of the Axiom of Choice is indeed independent of our theory
 (see Chapter 3 of cite:hottbook).
+#+end_exampleth
 
 How should we represent truncations inside our theory? It can be proved (see cite:awodey04)
 that propositional truncation is the left adjoint to the inclusion of propositions
@@ -7724,7 +7720,47 @@ of locally closed cartesian categories with enough structure; we know
 that type theory (depending on what constructions we assume) will have
 models in categories like these.
 
-*** TODO Elementary Theory of the Category of Sets
+*** An Elementary Theory of the Category of Sets
+Lawvere's Elementary Theory of the Category of Sets cite:lawvere64
+provides a foundation for mathematics based on category theory.  It
+describes the category $\Set$ in an abstract setting using eight
+axioms; and the atomic, undefined notions of the theory are not
+memberships and sets, but morphisms and composition. In the original
+article some examples on how to do set theory inside the category
+are shown.
+
+Using the notation we have developed so far, Lawvere's axioms can be
+reduced to the following definition. A model of the Elementary Theory
+of the Category of Sets is
+
+ * a /topos/, that is, a locally closed cartesian category with
+   all finite limits and a subobject classifier,
+
+ * which is */well-pointed/*, meaning that any two morphisms $f,g \colon A \to B$
+   are equal if and only if $f \circ a = g \circ a$ for each $a \colon 1 \to A$; morphisms
+   from the terminal object are called /global elements/, and this property
+   can be thought as function extensionality;
+
+ * which has a natural numbers object, in the sense of Example
+   [[example-naturalnumbersobj]];
+   
+ * which satisfies the *Axiom of Choice*, meaning that point-surjective
+   morphisms have a section; in terms of our previous Example [[example-type-axiom-of-choice]],
+   we could translate this internally as
+
+   \[
+   \left(\prod_{(a:A)} \left\|\sum_{(b : B)} f(b) = a \right\|\right) \to 
+   \left\| \sum_{(g : A \to B)}\prod_{(a:A)} f(g(a)) = a \right\|,
+   \]
+
+   for any $f \colon B \to A$.
+   
+Note that the category $\Set$, under the usual axioms, is a model of
+this theory.  This can be seen, then, as an abstraction of set theory.
+As we will see later, the Axiom of Choice implies the Law of Excluded
+Middle, so we have finally recovered a classical foundation of
+mathematics from category theory.
+
 * Type theory (abstract)                                             :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 Topos theory arises independently with Grothendieck and sheaf theory,
@@ -7789,9 +7825,207 @@ In this text, we will use Agda to write mathematics, taking ideas from
 cite:Conor17.  We will check proofs in Martin-Löf type theory using its
 type system.
 
-*** TODO Translation between categories and types
-*** TODO Avoiding the law of excluded middle
-*** TODO Diaconescu's theorem
+*** Translation between categories and types
+**** Dependent products                                                                  :ignore:
+We can translate the categorical structure inside Agda as follows.
+Dependent products exist naturally as dependent functions of the
+language.
+
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{2}
+\begin{prooftree}
+\AXC{$\Gamma, a : A \vdash b : B$}
+\UIC{$\Gamma \vdash (\lambda a.b) : \prod_{a:A}B$}
+\end{prooftree}
+\vfill
+\columnbreak
+\vfill
+\centering\ExecuteMetaData[agda-mltt/latex/Snippets.tex]{mlttproduct}
+\vfill
+\end{multicols}
+
+**** Dependent sums                                                                      :ignore:
+Dependent sums must be explicitly specified in the form of
+/records/: data structures in which the type of every element
+can depend on the previous ones.
+
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{2}
+\vfill
+\begin{prooftree}
+\AXC{$\Gamma \vdash a : A$}
+\AXC{$\Gamma \vdash b : B[a/x]$}
+\BIC{$\Gamma \vdash \pair{a,b} : \sum_{x:A}B$}
+\end{prooftree}
+\columnbreak
+\centering\ExecuteMetaData[agda-mltt/latex/Snippets.tex]{mlttsum}
+\end{multicols}
+
+**** Naturals                                                                            :ignore:
+Naturals, and initial algebras in general, can be defined as inductive
+types with the /data/ keyword.  Functions over these types can be
+constructed using their universal property, as we did in Example
+[[example-naturalnumbersobj]].
+
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{2}
+\vfill
+\begin{tikzcd}[fragile]
+1+\mathbb{N}\rar{} \dar[swap]{\pair{0,\mathrm{succ}}} & 
+1+\hom(\mathbb{N},\mathbb{N}) \dar{\pair{\id, \mathrm{succ}\,\circ\, -}} \\
+\mathbb{N}\rar{+} &
+\hom(\mathbb{N},\mathbb{N})
+\end{tikzcd}
+\columnbreak
+\vfill
+\centering\ExecuteMetaData[agda-mltt/latex/Snippets.tex]{mlttnat}
+\end{multicols}
+
+**** Equalities                                                                          :ignore:
+Equality types are a particular case of an inductive family of types.
+The induction principle over equalities is the /J-eliminator/ we
+described in Section [[sec-equalitytypes]].
+
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{2}
+\vfill
+\begin{prooftree}
+\AXC{$\Gamma \vdash a : A$}
+\UIC{$\Gamma \vdash \refl_a : a = a$}
+\end{prooftree}
+\columnbreak
+\vfill
+\centering\ExecuteMetaData[agda-mltt/latex/Snippets.tex]{mltteq}
+\end{multicols}
+
+**** Examples                                                                            :ignore:
+Using all this machinery, we can prove facts about equality by
+induction and prove facts about the natural numbers, as in the
+following example, where we prove that $a = b$ implies $f(a) = f(b)$
+and then use this fact to prove that $n + 0 = n$ for any $n : \mathbb{N}$
+by induction.
+
+#+latex: \small
+#+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{mlttzero}
+#+latex: \normalsize
+
+**** Propositions                                                                        :ignore:
+Finally, we can define /propositions/ as those types where any two
+elements are equal and postulate that truncations are propositions.
+The induction principle for truncated types represents the adjunction
+we described in Section [[sec-subobject-propositions]].
+
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{2}
+\vfill
+\begin{prooftree}
+\AXC{$\Gamma \vdash P : \Omega$}
+\AXC{$\Gamma \vdash a : P$}
+\AXC{$\Gamma \vdash b : P$}
+\TIC{$\Gamma \vdash \mathrm{isProp}_P(a,b) : a = b$}
+\end{prooftree}
+\columnbreak
+\vfill
+\centering\ExecuteMetaData[agda-mltt/latex/Snippets.tex]{isprop}
+\end{multicols}
+
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{2}
+\vfill
+\begin{prooftree}
+\AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] A \rar{}\& P \end{tikzcd}}
+\doubleLine
+\UIC{\begin{tikzcd}[fragile,ampersand replacement=\&] \|A\| \rar{}\& P \end{tikzcd}}
+\end{prooftree}
+\columnbreak
+\vfill
+\centering\ExecuteMetaData[agda-mltt/latex/Snippets.tex]{truncrec}
+\end{multicols}
+
+*** Excluded middle and constructivism
+Using categories, we have strengthen the propositional logic we
+described in Section [[sec-naturaldeduction]] to a fully-fledged higher
+order logic in which we can construct mathematical proofs.
+However, during all this process, we have not accepted the Law of
+Excluded Middle, we do not assume that $P \vee \neg P$ for any arbitrary
+proposition $P$. Note that we do not negate it, neither; we are
+/agnostic/ regarding it.
+
+Why are we not simply accepting it, as is common practice? The
+Law of Excluded middle would affect the computational properties
+of the theory. For instance, whenever we create a natural number
+in our theory, we expect it to be a numeral of the form $\mathrm{succ}(\mathrm{succ}(\dots \mathrm{zero} \dots))$
+for an some number of $\mathrm{succ}$ applications. Inductive definitions
+can only compute with natural numbers when they are on this form.  However,
+if we were to postulate the Law of Excluded Middle, $\mathrm{LEM}\colon P \vee \neg P$, we should accept
+the existence of numbers such as
+\[ \mathrm{if}\ \mathrm{LEM}(\mathrm{RiemmanHypothesis})\ \mathrm{then}\ 0\ \mathrm{else}\ 1,\]
+but we would not be able to compute them into a numeral.
+We say that a type system has the /*canonicity property*/ if
+every inhabitant of the $\mathbb{N}$ type is a numeral.
+
+In any case, classical mathematics is a particular case of constructive
+mathematics. We can choose to work inside classical mathematics,
+although we would lose the computational content. When we choose not
+to, we are working in constructive mathematics with a programming
+language as it was first proposed by Errett Bishop cite:bishop67.
+
+*** Extensionality and Diaconescu's theorem
+If we want to recover classical mathematics, we should try to model
+the axioms of the Elementary Theory of Sets into our locally closed
+cartesian categories.  We already have natural numbers in Martin-Löf
+type theory, and /well-pointedness/, for instance, is called /function/
+/extensionality/ in type theory literature.
+
+#+ATTR_LATEX: :options [Function extensionality]
+#+BEGIN_definition
+*Function extensionality* states that, if any two functions $f,g \colon A \to B$
+have the same images under the same arguments, they are, in fact, equal.
+That is,
+\[
+\prod_{x:A}\left(f(x) = g(x)\right) \to (f = g).
+\]
+#+END_definition
+
+We postulate this in Agda as follows.
+
+#+latex: \small
+#+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{wellpointed}
+#+latex: \normalsize
+
+The last ingredient is the Axiom of Choice.  This, like in the case of
+the Law of Excluded Middle, will make us lose the computational
+content of the theory. In fact, we can prove that, in general, the
+Axiom of Choice implies the Law of Excluded Middle. This is the
+statement of *Diaconescu's theorem*, for which we provide both a
+natural proof and a computer-verified proof.
+
+#+ATTR_LATEX: :options [Diaconescu's theorem]
+#+BEGIN_theorem
+The Axiom of Choice implies the Law of Excluded Middle.
+#+END_theorem
+#+BEGIN_proof
+The proof we present is based in cite:altenkirch17 and cite:bauer2017five. 
+Given any proposition $P$, we define $U = \left\{ x \in \left\{ 0,1 \right\} \mid (x = 0) \vee P\right\}$ and
+$V = \left\{ x \in \{0,1\} \mid (x = 1) \vee P \right\}$, and we kwow that each one is inhabited.
+By the axiom of choice, there exists a function $f \colon \left\{ U,V \right\} \to U \cup V$
+such that $f(U) \in U$ and $f(V) \in V$.  We decide if $f(U)$ and
+$f(V)$ are equal to $0$ or not (by induction). If $f(U) = 1$ or $f(V) = 0$, we
+would have that $P$ must be true; and if $f(U) = 0$ and $f(V) = 1$, we
+would have $\neg P$, for if $P$ were true, then $U$ would be equal to $V$
+and thus, $0 = f(U) = f(V) = 1$.
+#+END_proof
+
+This proof has been implemented as follows. Note that we have only
+assumed the Axiom of Choice (and therefore, the Law of Excluded
+Middle) during this particular section of the text. In the next
+section, we return to constructive mathematics, working with the real
+numbers and extracting algorithms from proofs.
+
+#+latex: \small
+#+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{diaconescu}
+#+latex: \normalsize
+
 *** Dedekind reals
 In =Reals.agda=, we provide a formalized construction of the Dedekind
 positive reals in intensional Martin-Löf type theory, implemented in
@@ -8017,6 +8251,44 @@ using Z as a bridge.
 # the study of foundations and implementation of languages, coupled
 # with the creation of tools and software easing the task for the
 # working mathematician.
+
+** Acknowlegments
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+\small
+The opportunity of devoting my bachelor's thesis to this fascinating
+subject has been made possible by Prof. Pedro García-Sánchez and
+Prof. Manuel Bullejos.  They have provided me with corrections and
+useful guidelines for the text and they have gone beyond their
+obligation in their efforts to instruct me on how to expose these
+ideas clearly.  Any deviation from this goal must be attributed to
+my own inexperience.
+
+I would like to thank the LibreIM community in general and Ignacio
+Cordón, David Charte, Marta Andrés, José Carlos Entrena, Pablo Baeyens,
+Antonio Checa, Daniel Pozo, and Sofía Almeida in particular, for testing the
+interpreter and providing useful discussion and questions on the
+topics of this text. Prof. Luis Merino, Prof. Juan Julián Merelo and
+Braulio Valdivielso have made possible and participated on the
+organization of meetings and workshops on these ideas.
+
+Finally, I would like to express my gratitude to Benedikt Ahrens and
+the organizers of the School and Workshop on Univalent Mathematics at
+the University of Birmingham, whose effort has given me the
+opportunity to learn the fundaments of type theory and the Univalent
+Foundations program.
+
+This document has been written with Emacs26 and org-mode 9, using the
+=org= file format and LaTeX as intermediate format. The document
+follows the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by *André Miede* and uses modifications
+by Adrián Ranea, Alejandro García and David Charte. The =minted=
+package has been used for code listings and the =tikzcd= package has
+been used for commutative diagrams. The document is released under a Creative Commons
+BY-SA 3.0 license, while the source code can be redistributed under
+the terms of the GNU General Public License.
+\normalsize
 
 * Appendices
 bibliographystyle:alpha
