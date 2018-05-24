@@ -32,11 +32,13 @@
 
 *** TODO [#A] Terminar Presheaves
 *** TODO [#A] Agda exportado a HTML. Enlazar código o apéndices
+*** TODO [#A] Escribir sinopsis y abstract con el número pedido de palabras
 *** TODO [#A] Añadir lista de referencias principales
   - Selinger
   - MacLane, Categories for the working mathematician
   - Homotopy type theory book
   - nLab
+*** TODO [#A] Escribir conclusiones
 *** TODO [#B] Repasar todo sustituyendo definiciones de entorno por negrita
 *** TODO [#C] Añadir paradoja de Escardó para motivar topología y computación
 *** TODO [#C] Añadir ejemplo topológico de nudo que no se cierra
@@ -1128,15 +1130,15 @@ Three different notions of computability were proposed in the 1930s
 
  * the *general recursive functions* were defined by Herbrand and Gödel;
    they form a class of functions over the natural numbers closed under
-   composition, recursion and unbound search;
+   composition, recursion and unbounded search;
 
  * the *\lambda-definable functions* were proposed by Church; they are
    functions on the natural numbers that can be represented by
    \lambda-terms;
 
  * the *Turing computable functions*, proposed by Alan Turing as the
-   functions that can be defined on a theoretical model of a machine,
-   the /Turing machines/.
+   functions that can be computed using /Turing machines/, theoretical
+   models of a machine.
 
 In cite:church36 and cite:turing37, Church and Turing proved the equivalence of
 the three definitions. This lead to the metatheoretical */Church-Turing thesis/*,
@@ -1186,12 +1188,12 @@ matches the usual notion, and typed \lambda-calculus has been the basis of many 
 type systems for programming languages.
 
 *Simply typed \lambda-calculus* is a refinement of the untyped
-\lambda-calculus. In it, each term has a type, which limits how it can
+\lambda-calculus. On it, each term has a type, which limits how it can
 be combined with other terms. Only a set of basic types and function
 types between any to types are considered in this system.  Whereas
 functions in untyped \lambda-calculus could be applied over any term,
-now a function of type $A \to B$ can only be applied over a term of
-type $A$, to produce a new term of type $B$. Note that $A$ and $B$ can
+once we introduce types a function of type $A \to B$ can only be applied over a term of
+type $A$ to produce a new term of type $B$. Note that $A$ and $B$ can
 be, themselves, function types.
 
 We present now an account of simply typed \lambda-calculus based
@@ -1199,7 +1201,7 @@ on cite:Hindley08. Our description will rely only on the /arrow type constructor
 $\to$. While other presentations of simply typed
 \lambda-calculus extend this definition with type constructors
 providing pairs or union types, as it is done in cite:selinger13, it
-is clearer to present a first minimal version of the
+is clearer to present first a minimal version of the
 \lambda-calculus. Such extensions will be explained later, and its
 exposition will profit from the logical interpretation that we will
 explain in Section [[Propositions as types]].
@@ -1547,7 +1549,7 @@ proof. It should not be confused with the notion of \beta-reduction.
 We inductively define the set $\redu_T$ of *reducible* terms of type $T$
 for basic and arrow types.
 
- * If $t : T$ where $T$ a basic type, $t \in \redu_{T}$ if $t$ is strongly
+ * If $t : T$ where $T$ is a basic type, $t \in \redu_{T}$ if $t$ is strongly
    normalizable.
 
  * If $t : U \to V$, an arrow type, $t \in \redu_{U \to V}$ if $t\ u \in \redu_{V}$ for all
@@ -1591,7 +1593,7 @@ For arrow types,
      If $u \to_{\beta} u'$, we could proceed by induction over the length of the longest
      chain of \beta-reductions starting from $u$ and assume that $t\ u'$ is irreducible.
      In every case, we have proved that $t\ u$ only reduces to already reducible terms;
-     thus, $t\ u \in \redu_{U}$.
+     thus, $t\ u \in \redu_{U}$. \qedhere
 #+END_proof
 
 **** Abstraction lemma                                            :ignore:
@@ -3959,6 +3961,7 @@ first-order intuitionistic logic by virtue of the Curry-Howard
 correspondence.
 
 *** A proof in intuitionistic logic
+<<section-proof-lem>>
 Under the logical interpretation of Mikrokosmos, we can transcribe
 proofs in intuitionistic logic to \lambda-terms and check them on the
 interpreter. The translation between logical propositions and types is
@@ -7810,12 +7813,13 @@ language with a powerful enough type system; examples of these include
    # http://www.ams.org/notices/200811/tx081101382p.pdf
    # https://coq.inria.fr/about-coq
 
- * *Idris*, a programming language, which implements a different
-   version of identity types than that in standard type theory;
+ * *Idris*, a programming language implementing dependent types
+   and using a slightly modified version of intensional equality
+   types;
 
- * *NuPRL* cite:nuprl86 a proof assistant implementing Martin-Löf
+ * *NuPRL* cite:nuprl86, a proof assistant implementing Martin-Löf
    /extensional/ Type Theory, which is different from the intensional
-   one in how it treats equality types;
+   theory in how it defines equality types;
 
  * *Cubical* cite:cohen16 and *RedPRL* cite:redprl provide
    experimental implementations of Cubical Type Theory, a different
@@ -7947,9 +7951,10 @@ Using categories, we have strengthen the propositional logic we
 described in Section [[sec-naturaldeduction]] to a fully-fledged higher
 order logic in which we can construct mathematical proofs.
 However, during all this process, we have not accepted the Law of
-Excluded Middle, we do not assume that $P \vee \neg P$ for any arbitrary
-proposition $P$. Note that we do not negate it, neither; we are
-/agnostic/ regarding it.
+Excluded Middle; we do not assume that $P \vee \neg P$ for an arbitrary
+proposition $P$. Note, however, that we do not negate it, neither: that would
+cause a contradiction, as we actually proved $\neg\neg(P \vee \neg P)$ in
+general in Section [[section-proof-lem]]. We are /agnostic/ regarding it.
 
 Why are we not simply accepting it, as is common practice? The
 Law of Excluded middle would affect the computational properties
@@ -8252,6 +8257,8 @@ using Z as a bridge.
 # with the creation of tools and software easing the task for the
 # working mathematician.
 
+
+* Appendices
 ** Acknowlegments
 :PROPERTIES:
 :UNNUMBERED: t
@@ -8290,7 +8297,7 @@ BY-SA 3.0 license, while the source code can be redistributed under
 the terms of the GNU General Public License.
 \normalsize
 
-* Appendices
+** Bibliography                                                                            :ignore:
 bibliographystyle:alpha
 bibliography:Bibliography.bib
 
