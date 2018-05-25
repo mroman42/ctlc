@@ -2998,7 +2998,7 @@ stack install mikrokosmos
 # Jupyter kernel for Mikrokosmos
 sudo pip install imikrokosmos
 # Libraries
-git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
+git clone https://github.com/mroman42/mikrokosmos-lib.git ~/.mikrokosmos
 #+END_SRC
 
 **** Mikrokosmos interpreter :ignore:
@@ -3040,7 +3040,7 @@ repository. [fn:mikrokosmoslibgit] They have to be placed under
 =/usr/lib/mikrokosmos= if we want them to be globally available.
 
 #+BEGIN_SRC sh
-git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
+git clone https://github.com/mroman42/mikrokosmos-lib.git ~/.mikrokosmos
 #+END_SRC
 
 **** Complete script :ignore:
@@ -3064,7 +3064,7 @@ $STACK install mikrokosmos
 
 # 4. Installs the Mikrokosmos standard libraries
 sudo apt install git
-git clone https://github.com/M42/mikrokosmos-lib.git ~/.mikrokosmos
+git clone https://github.com/mroman42/mikrokosmos-lib.git ~/.mikrokosmos
 
 # 5. Installs the IMikrokosmos kernel for Jupyter
 sudo apt install python3-pip
@@ -3075,7 +3075,7 @@ sudo -H pip install imikrokosmos
 
 [fn:hackage]: Hackage can be accesed in: http://hackage.haskell.org/
 and the Mikrokosmos package can be found in https://hackage.haskell.org/package/mikrokosmos
-[fn:mikrokosmoslibgit]: The repository can be accessed in: https://github.com/M42/mikrokosmos-lib.git
+[fn:mikrokosmoslibgit]: The repository can be accessed in: https://github.com/mroman42/mikrokosmos-lib.git
 
 *** Mikrokosmos interpreter
 Once installed, the Mikrokosmos \lambda interpreter can be opened from
@@ -3358,7 +3358,7 @@ which is licensed under GPLv3, can be publicly accessed on the
 following GitHub repository:
 
 #+begin_center
-https://github.com/M42/mikrokosmos
+https://github.com/mroman42/mikrokosmos
 #+end_center
 
 Development takes place on the =development= git branch and permanent
@@ -3366,9 +3366,9 @@ changes are released into the =master= branch. Some more minor
 repositories have been used in the development; they directly
 depend on the main one
 
- * https://github.com/m42/mikrokosmos-js
- * https://github.com/M42/jupyter-mikrokosmos
- * https://github.com/M42/mikrokosmos-lib
+ * https://github.com/mroman42/mikrokosmos-js
+ * https://github.com/mroman42/jupyter-mikrokosmos
+ * https://github.com/mroman42/mikrokosmos-lib
 
 The code uses the *Travis CI* continuous integration system to run
 tests and check that the software builds correctly after each change
