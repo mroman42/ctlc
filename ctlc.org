@@ -3,34 +3,7 @@
 #+Options: broken-links:ignore toc:t tasks:nil num:3
 #+Todo: TODO(t) OLD(o) | DONE(d)
 
-** Hidden: To-do list                                             :noexport:
-*** Revisión
-
-- [ ] 1. Untyped lambda calculus
-- [ ] 2. Simply typed lambda calculus
-- [ ] 3. The Curry-Howard correspondence
-- [ ] 4. Other type systems
-- [ ] 5. Implementation of Lambda-expressions
-- [ ] 6. User interaction
-- [ ] 7. Usage
-- [ ] 8. Programming environment
-- [ ] 9. Programming in the untyped lambda-calculus
-- [ ] 10. Programming in the simply typed lambda-calculus
-- [X] 11. Categories
-- [X] 12. Functors and natural transformations
-- [X] 13. Constructions on categories
-- [ ] 14. Universality and limits
-- [ ] 15. Adjoints, monads and algebras
-- [ ] 16. Presheaves
-- [ ] 17. Cartesian closed categories and lambda calculus
-- [ ] 18. Working in cartesian closed categories
-- [ ] 19. Locally cartesian closed categories and dependent types
-- [ ] 20. Working in locally cartesian closed categories
-- [ ] 21. Topoi
-- [ ] 22. Martin-Löf type theory
-- [ ] 23. Homotopy type theory
-
-*** TODO [#A] Terminar Presheaves
+** Hidden: To-do list                                                                    :noexport:
 *** TODO [#A] Agda exportado a HTML. Enlazar código o apéndices
 *** TODO [#A] Escribir sinopsis y abstract con el número pedido de palabras
 *** TODO [#A] Añadir lista de referencias principales
@@ -48,7 +21,7 @@ puntos o usarlo consistentemente.
 
 *** TODO [#C] Considerar sólo un caso de límites con su dual, en lugar de dos.
 *** TODO [#C] Citas en cada capítulo
-** Hidden: Macros and libraries                                     :ignore:
+** Hidden: Macros and libraries                                                            :ignore:
 #+latex_class: scrreprt
 #+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
 #+latex_header_extra: %\input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
@@ -85,7 +58,7 @@ puntos o usarlo consistentemente.
 #+latex_header_extra: % \usepackage{libertinust1math}
 #+latex_header_extra: \usepackage{inconsolata}
 #+latex_header_extra: % \usepackage[scale=MatchLowercase]{FiraMono}
-#+latex_header_extra: \usepackage[scale=0.85]{FiraMono}
+#+latex_header_extra: \usepackage[scale=0.85,nomap]{FiraMono}
 #+latex_header_extra: \usepackage[T1]{fontenc}
 #+latex_header_extra: \usepackage{multicol}
 
@@ -107,7 +80,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{tikz}
 #+latex_header: \usepackage{tikz-cd}
-#+latex_header: \usetikzlibrary{shapes,fit,graph}
+#+latex_header: \usetikzlibrary{shapes,fit,graph,tikzmark}
 #+latex_header: \usepackage{bussproofs}
 #+latex_header: \EnableBpAbbreviations{}
 #+latex_header: \usepackage{mathtools}
@@ -290,7 +263,13 @@ cite:hottbook en la parte final. El proyecto nLab cite:nlab ha sido útil para
 encontrar la bibliografía relevante.
 
 ** TODO Declaración
-** Quote                                                            :ignore:
+** TODO Original
+
+ * An implementation of the Dedekind real numbers in Agda.
+ * An implementation in Agda of Diaconescu's theorem.
+ * A proof, using lambda calculus, of Lawvere's diagonal theorem.
+
+** Quote                                                                                   :ignore:
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
@@ -341,7 +320,7 @@ not enough for flattening them.
 # • Citar las principales fuentes consultadas.
 #
 
-* Lambda calculus (abstract)                                         :ignore:
+* Lambda calculus (abstract)                                                                :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 The \lambda-calculus is a collection of systems formalizing the notion
 of functions. They can be seen as programming languages and formal
@@ -352,6 +331,8 @@ logical interpretation.
 
 * Lambda calculus
 ** Untyped \lambda-calculus
+<<sec-untypedlambda>>
+
 **** Introduction                                                 :ignore:
 When are two functions equal? Classically in mathematics, /functions are graphs/.
 A function from a domain to a codomain, $f \colon X \to Y$, is seen as a subset 
@@ -460,6 +441,7 @@ example, $\lambda x. M N$ should be read as $\lambda x.(MN)$ instead
 of $(\lambda x.M) N$.
 
 *** Free and bound variables, substitution
+<<sec-freeboundvars>>
 In \lambda-calculus, the scope of a variable restricts to the \lambda-abstraction
 where it appeared, if any. Thus, the same variable can be used multiple
 times on the same term independently. For example, in $(\lambda x.x)(\lambda x.x)$, the
@@ -1169,6 +1151,7 @@ is in fact Turing complete (see [[sec-fixed-points]]).
 # recursively enumerable.
 
 ** Simply typed \lambda-calculus
+<<sec-simplytypedlambda>>
 # TODO: The weak lambda calculus as a reasonable machine
 
 */Types/* were introduced in mathematics as a response to the
@@ -1341,6 +1324,7 @@ that determines if a type is typeable and what its type should be,
 and we will make precise this intuition.
 
 *** Curry-style types
+<<sec-currystyle>>
 **** Church-style and Curry-style                                 :ignore:
 Two different approaches to typing in \lambda-calculus are commonly used.
 
@@ -1662,6 +1646,7 @@ Turing complete.
 # https://www.elsevier.com/books/lectures-on-the-curry-howard-isomorphism/sorensen/978-0-444-52077-7
 
 *** Extending the simply typed \lambda-calculus
+<<sec-extendingstlc>>
 We will add now special syntax for some terms and types, such as
 pairs, unions and unit types. This new syntax will make our
 \lambda-calculus more expressive, but the unification and type
@@ -2024,6 +2009,7 @@ of dots represents any given part of the deduction tree.
      \end{prooftree}
 
 *** Propositions as types
+<<sec-propositionstypes>>
 In 1934, Curry observed in cite:curry34 that the type of a function
 $(\blue{A \to B})$ could be read as an implication and that the existence of a
 function of that type was equivalent to the provability of the proposition.
@@ -2279,14 +2265,14 @@ In particular *System F* is equivalent to the single-sorted pure system $\lambda
 *** TODO Subtyping (?)
 
 *** TODO Inductive and coinductive definitions
-* Mikrokosmos (abstract)                                             :ignore:
+* Mikrokosmos (abstract)                                                                    :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 We have developed *Mikrokosmos*, an untyped and simply typed
 \lambda-calculus interpreter written in the purely functional
 programming language Haskell cite:hudak07_haskell.  It aims to provide
 students with a tool to learn and understand \lambda-calculus and the
 relation between logic and types. We show how to program and prove
-statements of intuitionistic propositional logic inside it.
+statements of intuitionistic propositional logic with it.
 #+LATEX: \end{center}}
 
 * Mikrokosmos
@@ -2294,55 +2280,56 @@ statements of intuitionistic propositional logic inside it.
 *** The Haskell programming language
 **** Haskell as a programming choice                              :ignore:
 *Haskell* is the purely functional programming language of our choice
-to implement Mikrokosmos, our \lambda-calculus interpreter. Its own
-design is heavily influenced by the \lambda-calculus and is a
-general-purpose language with a rich ecosystem and plenty of
-consolidated libraries[fn:hackagelibs] in areas such as parsing,
-testing or system interaction; matching the requisites of our
-project. In the following sections, we describe this ecosystem in more
-detail.
+to implement our \lambda-calculus interpreter. Its own design is
+heavily influenced by the \lambda-calculus and it is a general-purpose
+language with a rich ecosystem and plenty of consolidated
+libraries[fn:hackagelibs] in areas such as parsing, testing or system
+interaction; matching the requisites of our project. In the following
+sections, we describe this ecosystem in more detail and justify our
+choice.
 
-[fn:hackagelibs]: In the central package archive of the Haskell community,
-Hackage, a categorized list of libraries can be found: https://hackage.haskell.org/packages/
+[fn:hackagelibs]: A categorized list of libraries can be found in the
+central package archive of the Haskell community:
+https://hackage.haskell.org/packages/
 
 **** History of Haskell                                           :ignore:
 In the 1980s, many lazy programming languages were independently being
 written by researchers such as /Miranda/, /Lazy ML/, /Orwell/, /Clean/
 or /Daisy/. All of them were similar in expressive power, but their
 differences were holding back the efforts to communicate ideas on
-functional programming.  A comitee was created in 1987 with the
-mission of designing a common lazy functional language. Several
-versions of the language were developed, and the first standarized
-reference of the language was published in the *Haskell 98 Report*,
-whose revised version can be read in cite:haskell98. Its more popular
-implementation is the *Glasgow Haskell Compiler (GHC)*; an open source
-compiler written in Haskell and C. The complete history of Haskell and
-its design decisions is detailed on cite:hudak07_haskell.
+functional programming, so the *Haskell 98 Report* was a first standarized
+reference of a common lazy functional language. A revised version
+can be read in cite:haskell98. We will use its most standard implementation:
+the *Glasgow Haskell Compiler (GHC)*; an open source compiler written in Haskell
+and C. The complete history of Haskell and its design decisions is
+detailed on cite:hudak07_haskell, but we are interested in the following
+properties:
 
-**** Haskell's properties                                         :ignore:
+**** Haskell's properties                                                                :ignore:
 Haskell is
 
  1. *strongly and statically typed*, meaning that it only compiles
     well-typed programs and it does not allow implicit type
-    casting; the compiler will generate an error if a term is
-    non-typeable;
+    casting; type declarations are then useful in our interpreter
+    to keep a track of what kind of data are we dealing with at
+    each specific function;
 
  2. *lazy*, with /non-strict semantics/, meaning that it will not
     evaluate a term or the argument of a function until it is needed;
-    in cite:hughes89, John Hughes, codesigner of the language, argues
-    for the benefits of a lazy functional language, which could solve
-    the traditional efficiency problems on functional programming;
+    this can help to solve the traditional efficiency problems on functional
+    programming (see cite:hughes89);
 
  3. *purely functional*; as the evaluation order is demand-driven and
-    not explicitly known, it is not possible in practice to perform
-    ordered input/output actions or any other side-effects by relying
-    on the evaluation order; this helps modularity of the code,
-    testing, and verfication;
+    not explicitly known, it is not possible to perform ordered
+    input/output actions or any other side-effects that rely on the
+    evaluation order; this helps modularity of our code, testing, and
+    verfication;
 
  4. *referentially transparent*; as a consequence of its purity, every
-    term on the code could be replaced by its definition without
+    term on the code can be replaced by its definition without
     changing the global meaning of the program; this allows equational
-    reasoning with rules that are directly derived from \lambda-calculus;
+    reasoning with rules that are directly derived from \lambda-calculus
+    and makes it easier to reason about our functions;
 
  5. based on *System F\omega* with some restrictions; crucially, it
     implements *System F* adding quantification over type operators
@@ -2371,13 +2358,13 @@ nats = 1 : map (+1) nats  -- defined recursively.
 #+END_SRC
 #+END_exampleth
 
-**** Haskell's syntax                                             :ignore:
+**** Haskell's syntax                                                                    :ignore:
 Where most imperative languages use semicolons to separate sequential
 commands, Haskell has no notion of sequencing, and programs are
 written in a purely declarative way. A Haskell program essentially
 consist on a series of definitions (of both types and terms) and type
 declarations. The following example shows the definition of a binary
-tree and its preorder as
+tree and its preorder.
 
 #+BEGIN_SRC haskell
 -- A tree is either empty or a node with two subtrees.
@@ -2390,15 +2377,19 @@ preorder (Node x lft rgt) = preorder lft ++ [x] ++ preorder rgt
 
 We can see on the previous example that function definitions allow
 /pattern matching/, that is, data constructors can be used in
-definitions to decompose values of the type. This increases readability
-when working with algebraic data types.
+definitions to decompose values of the type. This increases
+readability when working with algebraic data types or implementing
+inductive definitions. Note that the majority of the definitions
+we discussed in Sections [[sec-untypedlambda]] and [[sec-simplytypedlambda]]
+are precisely structurally inductive.
 
 While infix operators are allowed, function application is
-left-associative in general. Definitions using partial application are
-allowed, meaning that functions on multiple arguments can use currying
-and can be passed only one of its arguments to define a new
-function. For example, a function that squares every number on a list
-could be written in two ways as
+left-associative in general.  Definitions using partial application
+are allowed, meaning that functions on multiple arguments can use
+currying and can be passed only one of its arguments to define a new
+function.  For example, a function that squares every number on a list
+could be written in two ways, as the following example shows.  The
+second one, because of its simplicity, is usually preferred.
 
 #+BEGIN_SRC haskell
 squareList :: [Int] -> [Int]
@@ -2407,14 +2398,11 @@ squareList' :: [Int] -> [Int]
 squareList' = map square
 #+END_SRC
 
-where the second one, because of its simplicity, is usually
-preferred. 
-
-**** Type classes, monads                                         :ignore:
+**** Type classes, monads                                                                :ignore:
 A characteristic piece of Haskell are *type classes*, which allow 
 defining common interfaces for different types. In the following
 example, we define =Monad= as the type class of types with suitably
-typed =return= and =bind= operators.
+typed =return= and =>>== operators.
 
 #+BEGIN_SRC haskell
 class Monad m where
@@ -2430,11 +2418,12 @@ instance Monad [] where
   xs >>= f = concat (map f xs) -- map and concatenation
 #+END_SRC
 
-Haskell uses monads in varied forms. They are used in I/O, error
-propagation and stateful computations. Another characteristical syntax
-bit of Haskell is the =do= notation, which provides a nicer, cleaner
-way to work with types that happen to be monads. The following example
-uses the list monad to compute the list of Pythagorean triples.
+Monads are used in I/O, error propagation and stateful
+computations. Another characteristical syntax bit of Haskell is the
+=do= notation, which provides a nicer, cleaner way to concatenate
+computations with monads that resembles an imperative language. The
+following example uses the list monad to compute the list of
+Pythagorean triples.
 
 #+BEGIN_SRC haskell
 pythagorean = do
@@ -2460,7 +2449,7 @@ instance Monad Maybe where
 #+END_SRC
 
 and can be used as in the following example to use /exception-like/
-error treatment in a pure declarative language
+error handling in a pure declarative language.
 
 #+BEGIN_SRC haskell
 roots :: (Float,Float,Float) -> Maybe Int
@@ -2473,39 +2462,43 @@ roots (a,b,c) = do
   return (root1,root2)
 #+END_SRC
 
-For a more detailed treatment of monads, and their relation to
-categorical monads, see the chapter on Category Theory.
-
+A more detailed treatment of monads from the perspective of category
+theory is presented in Section [[sec-monads]].
 # [[http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.22.2636][CiteSeerX — Faking It: Simulating Dependent Types in Haskell]]
+
 *** De Bruijn indexes
-Nicolaas Govert *De Bruijn* proposed in cite:debruijn81 a way of defining \lambda-terms modulo
+Nicolaas Govert *De Bruijn* proposed (see cite:debruijn81) a way of defining \lambda-terms modulo
 \alpha-conversion based on indices.  The main goal of De Bruijn
 indices is to remove all variables from binders and replace every
 variable on the body of an expression with a number, called /index/,
 representing the number of \lambda-abstractions in scope between the
-ocurrence and its binder.
-
-# TODO: Explicar esto con colores y diagramas
-Consider the following example: the \lambda-term
-\[ \lambda x.(\lambda y.\ y (\lambda z.\ y z)) (\lambda t.\lambda z.\ t x)
+ocurrence and its binder. Consider the following example where we draw
+arrows between each term and its intermediate \lambda-abstractions: the \lambda-term
+\[ \red{\lambda\tikzmark{2} y}.\ \tikzmark{3}y\ 
+  (\blue{\lambda\tikzmark{1} z}.\ \tikzmark{0}y\ 
+  \tikzmark{4}z) \begin{tikzpicture}[remember picture, overlay, bend right=45, -latex, redPRL]
+  \draw ([yshift=2ex]pic cs:0) to ([yshift=2ex]pic cs:1);
+  \draw ([yshift=2ex]pic cs:1) to ([yshift=2ex]pic cs:2);
+  \draw ([yshift=2ex]pic cs:3) to ([yshift=2ex]pic cs:2);
+  \end{tikzpicture} \begin{tikzpicture}[remember picture, overlay, bend left=45, -latex, bluePRL]
+  \draw ([yshift=-1ex]pic cs:4) to ([yshift=-1ex]pic cs:1);
+  \end{tikzpicture}
 \]
-can be written with de Bruijn indices as
-\[
-\lambda\ (\lambda(1 \lambda(2 1))\ \lambda\lambda(2 3)\ ).
-\]
+can be written with de Bruijn indices as $\red{\lambda}\ (1\ \blue{\lambda}\ (2\ 1))$.
+# Se podría explicar esto con colores y diagramas
 
 De Bruijn also proposed a notation for the \lambda-calculus
 changing the order of binders and \lambda-applications.  A review on
 the syntax of this notation, its advantages and De Bruijn indexes, can be found in
 cite:kamareddine01. In this section, we are going to describe De Bruijn
-indexes while preserving the usual notation of \lambda-terms; that is, the /De Bruijn/
-/indexes/ and the /De Bruijn notation/ are different concepts and we are going to
-use only the former.
+indexes while preserving the usual notation of \lambda-terms; that is, /De Bruijn/
+/indexes/ and /De Bruijn notation/ are two different concepts and we are going to
+use only the former one for clarity of exposition.
 
 #+attr_latex: :options [De Bruijn indexed terms]
 #+begin_definition
 We define recursively the set of \lambda-terms using de Bruijn notation
-following this BNF
+as the terms generated from the following Backus normal form.
 \[\begin{aligned}
 \mathtt{Exp} &::= 
  \underbrace{\mathbb{N}}_{\textit{variable}}
@@ -2518,7 +2511,8 @@ following this BNF
 #+end_definition
 
 Our internal definition closely matches the formal one. The names of
-the constructors here are =Var=, =Lambda= and =App=:
+the constructors are =Var=, =Lambda= and =App=, representing
+variables, abstractions and applications, respectively.
 
 #+BEGIN_SRC haskell
 -- | A lambda expression using DeBruijn indexes.
@@ -2533,7 +2527,8 @@ the \alpha-reductions. It will be useful to implement \lambda-calculus without
 having to worry about the specific names of variables.
 
 *** Substitution
-We define the [[*Free and bound variables, substitution][substitution]] operation needed for the [[*\beta-reduction][\beta-reduction]] on
+We now implement the substition operation described in Section
+[[sec-freeboundvars]], as it will be needed for \beta-reducing terms on
 de Bruijn indices. In order to define the substitution of the n-th
 variable by a \lambda-term $P$ on a given term, we must
 
@@ -2548,10 +2543,11 @@ variable by a \lambda-term $P$ on a given term, we must
    into account that free variables must be increased to avoid them
    getting captured by the outermost lambda terms. 
 
-In our code, we apply =subs= to any expression. When it is applied to
-a \lambda-abstraction, the index and the free variables of the
-replaced term are increased with =incrementFreeVars=; whenever it is
-applied to a variable, the previous cases are taken into consideration.
+In our code, we can apply the function =subs= to any expression. When
+it is applied to a \lambda-abstraction, the index and the free
+variables of the replaced term are increased with an auxiliary
+function called =incrementFreeVars=; whenever it is applied to a
+variable, the previous cases are taken into consideration.
 
 #+BEGIN_SRC haskell
 -- | Substitutes an index for a lambda expression
@@ -2564,7 +2560,7 @@ subs n p (Var m)
   | otherwise = Var m     -- An unrelated variable remains untouched
 #+END_SRC
 
-Then \beta-reduction can be defined using this =subs= function.
+Now \beta-reduction can be defined using this =subs= function.
 
 #+BEGIN_SRC haskell
 betared :: Exp -> Exp
@@ -2575,7 +2571,7 @@ betared e = e
 *** De Bruijn-terms and \lambda-terms
 The internal language of the interpreter uses de Bruijn expressions,
 while the user interacts with it using lambda expressions with alphanumeric
-variables. Our definition of a \lambda-expression with variables will be
+variables. Our definition of a lambda expression with variables will be
 used in parsing and output formatting.
 
 #+BEGIN_SRC haskell
@@ -2585,8 +2581,8 @@ data NamedLambda = LambdaVariable String
 #+END_SRC
 
 **** Lambda to deBruijn                                           :ignore:
-The translation from a natural \lambda-expression to de Bruijn notation
-is done using a dictionary which keeps track of the bounded variables
+The translation from a natural lambda expression to De Bruijn notation
+is done using a dictionary which keeps track of bounded variables.
 
 #+BEGIN_SRC haskell
 tobruijn :: Map.Map String Integer -- ^ names of the variables used
@@ -2612,7 +2608,7 @@ tobruijn d context (LambdaVariable c) =
 #+END_SRC
 
 **** deBruijn to Lambda                                           :ignore:
-while the translation from a de Bruijn expression to a natural one is done
+The translation from a de Bruijn expression to a natural one is done
 considering an infinite list of possible variable names and keeping a list
 of currently-on-scope variables to name the indices.
 
@@ -2639,9 +2635,9 @@ As we proved on Corollary [[cor-leftmosttheorem]], the leftmost reduction
 strategy will find the normal form of any given term provided that it
 exists. Consequently, we will implement reduction in our interpreter
 using a function that simply applies the leftmost possible reductions
-at each step. As a side benefit, this will allow us to show how the
-interpreter performs step-by-step evaluations to the final user, as
-discussed in the [[*Verbose mode][verbose mode]] section.
+at each step. As a side benefit, this will allow us to easily show how
+the interpreter performs step-by-step evaluations to the final user
+(see Section [[sec-verbose]]).
 
 #+BEGIN_SRC haskell
 -- | Simplifies the expression recursively.
@@ -2674,19 +2670,16 @@ expression stabilizes. This can happen in two different cases
     $(\lambda x.x x)(\lambda x.x x)$.
 
 *** Principal type inference
-The interpreter implements the [[*Unification and type inference][unification and type inference]] algorithms
+<<sec-typeinference>>
+The interpreter implements the /unification/ and /type inference/ algorithms
 described in Lemma [[lemma-unification]] and Theorem [[thm-typeinfer]]. Their
 recursive nature makes them very easy to implement directly on Haskell.
 
 **** Type templates and substitutions                             :ignore:
-We implement a simply-typed lambda calculus with [[*Curry-style types][Curry-style typing]]
-and type templates. Our type system has
-
-  * an unit type;
-  * a void type;
-  * product types;
-  * union types;
-  * and function types.
+We implement a simply-typed lambda calculus with /Curry-style typing/
+(see Section [[sec-currystyle]]) and type templates. Our type system has a
+/unit/ type; a /void/ type; /product/ types; /union/ types; and
+/function/ types.
 
 #+BEGIN_SRC haskell
 -- | A type template is a free type variable or an arrow between two
@@ -2787,18 +2780,16 @@ typeinfer (x:vars) ctx (App p q) b = do -- Writing inside the Maybe monad.
 
 The final form of the type inference algorithm will use a
 normalization algorithm shortening the type names and will apply the
-type inference to the empty type context. The complete code can be
-found on the [[*Mikrokosmos complete code][Appendix]].
+type inference to the empty type context.
 
 **** Gentzen deduction trees                                      :ignore:
-A generalized version of the type inference algorithm is used
-to generate derivation trees from terms, as it was described in
-[[*Propositions as types][Propositions as types]].
-
-In order to draw these diagrams in Unicode characters, a data type for
-character blocks has been defined. A monoidal structure is defined
-over them; blocks can be joined vertically and horizontally; and
-every deduction step can be drawn independently.
+A generalized version of the type inference algorithm is used to
+generate derivation trees from terms, as it was described in Section
+[[sec-propositionstypes]]. In order to draw these diagrams in Unicode
+characters, a data type for character blocks has been defined. A
+monoidal structure is defined over them; blocks can be joined
+vertically and horizontally; and every deduction step can be drawn
+independently.
 
 #+BEGIN_SRC haskell
 newtype Block = Block { getBlock :: [String] }
@@ -2818,7 +2809,7 @@ box :: Block -> Block
 
 ** User interaction
 *** Monadic parser combinators
-A common approach to building parsers in functional programming is to
+The common approach to building parsers in functional programming is to
 model parsers as functions. Higher-order functions on parsers act as
 /combinators/, which are used to implement complex parsers in a
 modular way from a set of primitive ones. In this setting, parsers
@@ -2831,7 +2822,8 @@ and later in cite:Wadler90 and cite:hutton98. The parser type is
 defined as a function taking an input =String= and returning a list of pairs,
 representing a successful parse each. The first component of the pair
 is the parsed value and the second component is the remaining
-input. The Haskell code for this definition is
+input. The Haskell code for this definition is the following,
+where the monadic structure is defined by =>>== and =return=.
 
 #+BEGIN_SRC haskell
   -- A parser takes a string an returns a list of possible parsings with
@@ -2846,25 +2838,25 @@ input. The Haskell code for this definition is
     p >>= q  = Parser (\s -> concat [parse (q x) s' | (x,s') <- parse p s ])
 #+END_SRC
 
-where the monadic structure is defined by =bind= and =return=. Given a
-value, the =return= function creates a parser that consumes no input
+Given a value, the =return= function creates a parser that consumes no input
 and simply returns the given value. The =>>== function acts as a sequencing
-operator for parsers. It takes two parsers and applies the second one
+operator for parsers; it takes two parsers and applies the second one
 over the remaining inputs of the first one, using the parsed values on
 the first parsing as arguments.
 
 An example of primitive *parser* is the =item= parser, which consumes a
 character from a non-empty string. It is written in Haskell code using
-pattern matching on the string as
+pattern matching on the string as follows.
 
 #+BEGIN_SRC haskell
 item :: Parser Char
 item = Parser (\s -> case s of "" -> []; (c:s') -> [(c,s')])
 #+END_SRC
 
-and an example of *parser combinator* is the =many= function, which
+An example of *parser combinator* is the =many= function, which
 creates a parser that allows one or more applications of the given
-parser
+parser. In the following example =many item= would be a parser
+consuming all characters from the input string.
 
 #+BEGIN_SRC haskell
 many :: Paser a -> Parser [a]
@@ -2874,25 +2866,23 @@ many p = do
   return (a:as)
 #+END_SRC
 
-in this example =many item= would be a parser consuming all characters
-from the input string.
-
-*** Parsec
 *Parsec* is a monadic parser combinator Haskell library described in
 cite:leijen2001. We have chosen to use it due to its simplicity and
 extensive documentation. As we expect to use it to parse user live
 input, which will tend to be short, performance is not a critical
 concern. A high-performace library supporting incremental parsing,
 such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
+
 *** Verbose mode
-As we explained previously on the [[*Evaluation][evaluation]] section, the simplification
-can be analyzed step-by-step. The interpreter allows us to see the
-complete evaluation when the =verbose= mode is activated. To activate
-it, we can execute =:verbose on= in the interpreter.
+<<sec-verbose>>
+As we mentioned previously, the evaluation of lambda
+terms can be analyzed step-by-step. The interpreter allows us to see
+the complete evaluation when the /verbose mode/ is activated. To
+activate it, we can execute =:verbose on= in the interpreter.
 
 The difference can be seen on the following example, which shows the execution
-of $1+2$, first without intermediate results, and later, showing every intermediate
-step.
+of the expression $1+2$, first without intermediate results, and later, showing
+every intermediate step.
 
 #+BEGIN_EXAMPLE
 mikro> plus 1 2
@@ -2908,7 +2898,6 @@ mikro> plus 1 2
 λλ(λ(3 1) (λ(3 (3 1)) 1))
 λλ(2 (λ(3 (3 1)) 1))
 λλ(2 (2 (2 1)))
-
 λa.λb.(a (a (a b))) ⇒ 3
 #+END_EXAMPLE
 
@@ -2920,12 +2909,11 @@ cases.
 #+BEGIN_SRC haskell
 -- | Shows an expression, coloring the next reduction if necessary
 showReduction :: Exp -> String
-showReduction (Lambda e)         = "λ" ++ showReduction e
+showReduction (Lambda e) = "λ" ++ showReduction e
 showReduction (App (Lambda f) x) = betaColor (App (Lambda f) x)
-showReduction (Var e)            = show e
-showReduction (App rs x)         = 
-  "(" ++ showReduction rs ++ " " ++ showReduction x ++ ")"
-showReduction e                  = show e
+showReduction (Var e) = show e
+showReduction (App rs x) = "("++showReduction rs++" "++showReduction x++")"
+showReduction e = show e
 #+END_SRC
 
 *** SKI mode
@@ -2966,7 +2954,6 @@ bracketabs x (Comb u v)
   | otherwise            = Comb (Comb S (bracketabs x u)) (bracketabs x v)
 bracketabs _ a           = Comb K a
 
-
 -- | SKI abstraction of a named lambda term. From a lambda expression
 -- creates a SKI equivalent expression. The following algorithm is a
 -- version of the algorithm (9.10) on the Hindley-Seldin book.
@@ -2975,8 +2962,6 @@ skiabs (LambdaVariable x)      = Cte x
 skiabs (LambdaApplication m n) = Comb (skiabs m) (skiabs n)
 skiabs (LambdaAbstraction x m) = bracketabs x (skiabs m)
 #+END_SRC
-
-# Mencionar que en la práctica se usan algoritmos C,B...
 
 ** Usage
 *** Installation
@@ -2993,49 +2978,44 @@ already satisfies all dependencies (Stack, Pip and Jupyter), can install
 Mikrokosmos using the following script, which is detailed on this section
 
 #+BEGIN_SRC sh
-# Mikrokosmos interpreter
-stack install mikrokosmos
-# Jupyter kernel for Mikrokosmos
-sudo pip install imikrokosmos
-# Libraries
-git clone https://github.com/mroman42/mikrokosmos-lib.git ~/.mikrokosmos
+stack install mikrokosmos                             # Mikrokosmos interpreter
+sudo pip install imikrokosmos                  # Jupyter kernel for Mikrokosmos
+git clone https://github.com/mroman42/mikrokosmos-lib.git ~/.mikrokosmos # Libs
 #+END_SRC
 
 **** Mikrokosmos interpreter :ignore:
-The *Mikrokosmos interpreter* is listed in the central Haskell
-package archive, /Hackage/ [fn:hackage]. The packaging of Mikrokosmos
-has been done using the *cabal* tool; and the configuration of the
-package can be read in the file =mikrokosmos.cabal= on the Mikrokosmos
-code. As a result, Mikrokosmos can be installed using the *cabal* and
-*stack* Haskell package managers. That is,
+The *Mikrokosmos interpreter* is listed in the central Haskell package
+archive[fn:hackage]. The packaging of Mikrokosmos has been done using
+the *cabal* tool; and the configuration of the package can be read in
+the file =mikrokosmos.cabal= of the source code. As a result,
+Mikrokosmos can be installed using the Haskell package managers
+*cabal* and *stack*.
 
 #+BEGIN_SRC sh
-# With cabal
-cabal install mikrokosmos
-# With stack
-stack install mikrokosmos
+cabal install mikrokosmos          # Installation with cabal
+stack install mikrokosmos          # Installation with stack
 #+END_SRC
 
 **** Mikrokosmos Jupyter kernel :ignore:
 The *Mikrokosmos Jupyter kernel* is listed in the central Python
-package archive. Jupyter is a dependency of this kernel, which only
+package archive[fn:pipmikro].  Jupyter is a dependency of this kernel, which only
 can be used in conjunction with it. It can be installed with the
-=pip= package manager as
+=pip= package manager.
 
 #+BEGIN_SRC sh
-sudo pip install imikrokosmos
+sudo pip install imikrokosmos      # Installation with pip
 #+END_SRC
 
-and the installation can be checked by listing the available Jupyter
-kernels with
+The installation can be checked by listing the available Jupyter
+kernels.
 
 #+BEGIN_SRC sh
-jupyter kernelspec list
+jupyter kernelspec list            # Checks installation
 #+END_SRC
 
 **** Mikrokosmos libraries :ignore:
-The *Mikrokosmos libraries* can be downloaded directly from its GitHub
-repository. [fn:mikrokosmoslibgit] They have to be placed under
+The *Mikrokosmos libraries* can be downloaded directly from their GitHub
+repository[fn:mikrokosmoslibgit]. They have to be placed under
 =~/.mikrokosmos= if we want them to be locally available or under
 =/usr/lib/mikrokosmos= if we want them to be globally available.
 
@@ -3073,7 +3053,8 @@ sudo -H pip install jupyter
 sudo -H pip install imikrokosmos
 #+END_SRC
 
-[fn:hackage]: Hackage can be accesed in: http://hackage.haskell.org/
+[fn:pipmikro]: The Jupyter-Mikrokosmos package can be found in https://pypi.org/project/imikrokosmos/.
+[fn:hackage]: Hackage can be accesed in http://hackage.haskell.org/
 and the Mikrokosmos package can be found in https://hackage.haskell.org/package/mikrokosmos
 [fn:mikrokosmoslibgit]: The repository can be accessed in: https://github.com/mroman42/mikrokosmos-lib.git
 
@@ -3085,7 +3066,7 @@ where \lambda-expressions and interpreter commands can be evaluated.
 #+BEGIN_EXAMPLE
 $> mikrokosmos
 Welcome to the Mikrokosmos Lambda Interpreter!
-Version 0.5.0. GNU General Public License Version 3.
+Version 0.7.0. GNU General Public License Version 3.
 mikro> _
 #+END_EXAMPLE
 
@@ -3195,12 +3176,10 @@ and no additional installation is required.
 official page: https://codemirror.net/
 
 *** JupyterHub
-*JupyterHub* manages multiple instances of independent single-user Jupyter
-notebooks. We used it to serve Mikrokosmos notebooks and tutorials to
-students studying \lambda-calculus.
-
-In order to install Mikrokosmos on a server and use it as =root= user,
-we perform the following steps.
+*JupyterHub* manages multiple instances of independent single-user
+Jupyter notebooks. It has been used to serve Mikrokosmos notebooks and
+tutorials to students. In order to install Mikrokosmos on a server and
+use it as =root= user, we perform the following steps.
 
   * Cloning the libraries into =/usr/lib/mikrokosmos=. They should be
     available system-wide.
@@ -3214,26 +3193,27 @@ we perform the following steps.
 
 A JupyterHub server was made available at =iemath1.ugr.es=.  Our
 server used a SSL certificate and OAuth autentication via GitHub.
-Mikrokosmos tutorials were installed for every student.
+Mikrokosmos tutorials and exercises were installed for every student.
 
 *** Calling Mikrokosmos from Javascript
 The GHCjs[fn:ghcjs] compiler allows transpiling from Haskell to Javascript.
 Its foreign function interface allows a Haskell function to be passed as
 a continuation to a Javascript function.
 
-A particular version of the =Main.hs= module of Mikrokosmos was written in
-order to provide a =mikrokosmos= function, callable from Javascript. This
-version includes the standard libraries automatically and reads blocks of
-text as independent Mikrokosmos commands. The relevant use of the foreign
-function interface is showed in the following code
+A particular version of the =Main.hs= module of Mikrokosmos was
+written in order to provide a =mikrokosmos= function, callable from
+Javascript. This version includes the standard libraries automatically
+and reads blocks of text as independent Mikrokosmos commands. The
+relevant use of the foreign function interface is shown in the
+following code, which provides =mikrokosmos= as a Javascript function
+once the code is transpiled.
 
 #+BEGIN_SRC haskell
 foreign import javascript unsafe "mikrokosmos = $1"
     set_mikrokosmos :: Callback a -> IO ()
 #+END_SRC
 
-which provides =mikrokosmos= as a Javascript function once the code is
-transpiled. In particular, the following is an example of how to call
+In particular, the following is an example of how to call
 Mikrokosmos from Javascript.
 
 #+BEGIN_SRC javascript
@@ -3246,14 +3226,14 @@ button.onclick = function () {
 
 A small script has been written in Javascript to help with the task of
 embedding Mikrokosmos into a web page. It and can be included directly
-from
+from the following direction, using GitHub as a CDN.
 
 #+begin_center
-https://m42.github.io/mikrokosmos-js/mikrobox.js
+https://mroman42.github.io/mikrokosmos-js/mikrobox.js
 #+end_center
 
-using GitHub as a CDN. It will convert any HTML script tag written as
-follows
+The script will convert any HTML script tag written as follows into a
+CodeMirror pad where Mikrokosmos can be executed.
 
 #+BEGIN_SRC html
 <div class="mikrojs-console">
@@ -3264,14 +3244,15 @@ follows
 </div>
 #+END_SRC
 
-into a CodeMirror pad where Mikrokosmos can be executed. The Mikrokosmos
-tutorials are an example of this feature and can be seen on Figure [[mikrokosmosjstutorial]].
-They can be accessed directly from the following direction.
+The Mikrokosmos tutorials are an example of this feature and can be
+seen on Figure [[mikrokosmosjstutorial]].  They can be accessed from the
+following direction.
 
 #+begin_center
-https://m42.github.io/mikrokosmos/
+https://mroman42.github.io/mikrokosmos/
 #+end_center
 
+**** Image                                                                               :ignore:
 #+caption: Mikrokosmos embedded into a web page.
 #+name: mikrokosmosjstutorial
 [[./images/mikrokosmosjs.png]]
@@ -3301,13 +3282,15 @@ using the following techniques
   * *unit tests*, in which individual core functions are tested
     independently of the rest of the application;
 
-  * *property-based testing*, in which multiple test cases are
-    created automatically in order to verfiy that a specified
-    property always holds;
+  * *property-based testing*, in which multiple test cases are created
+    automatically in order to verfiy that a specified property always
+    holds; this has been useful to test our implementation of several
+    algorithms on the lambda calculus;
 
   * *golden tests*, a special case of unit tests in which the expected
     results of an IO action, as described on a file, are checked to
-    match the actual ones.
+    match the actual ones; they have been used to check correctness
+    of the Mikrokosmos language.
     
 We are using the *HUnit* library for unit tests. It tests particular
 cases of type inference, unification and parsing. The following is an
@@ -3338,14 +3321,14 @@ interpreter is asked to provide the correct interpretation of a given
 file.  This file is called =testing.mkr=, and contains library
 definitions and multiple tests. Its expected output is
 =testing.golden=. For example, the following Mikrokosmos code can be
-found on the file
+found on the testing file.
 
 #+BEGIN_SRC haskell
 :types on
 caseof (inr 3) (plus 2) (mult 2)
 #+END_SRC
 
-and the expected output is
+While the expected output is the following.
 
 #+BEGIN_SRC haskell
 -- types: on
@@ -3364,7 +3347,7 @@ https://github.com/mroman42/mikrokosmos
 Development takes place on the =development= git branch and permanent
 changes are released into the =master= branch. Some more minor
 repositories have been used in the development; they directly
-depend on the main one
+depend on the main one.
 
  * https://github.com/mroman42/mikrokosmos-js
  * https://github.com/mroman42/jupyter-mikrokosmos
@@ -3374,19 +3357,20 @@ The code uses the *Travis CI* continuous integration system to run
 tests and check that the software builds correctly after each change
 and in a reproducible way on a fresh Linux installation provided by
 the service.
+
 ** Programming in untyped \lambda-calculus
 # Untyped \lambda-calculus in programming languages
 
-This section explains how to use untyped \lambda-calculus to
-encode data structures and useful data, such as booleans, linked lists,
-natural numbers or binary trees. All this is done on pure \lambda-calculus
-avoiding the addition of new syntax or axioms.
+This section explains how to use untyped \lambda-calculus to encode
+data structures such as booleans, linked lists, natural numbers or
+binary trees. All of this is done in pure \lambda-calculus, avoiding
+the addition of new syntax or axioms.
 
 This presentation follows the Mikrokosmos tutorial on \lambda-calculus, which
 aims to teach how it is possible to program using untyped \lambda-calculus
-without discussing technical topics such as those we have discussed on
-the chapter on [[*Untyped \lambda-calculus][untyped \lambda-calculus]]. It also follows
-the exposition on cite:selinger13 of the usual Church encodings.
+without discussing more advanced technical topics such as those we addressed on
+Chapter [[sec-untypedlambda]]. It also follows the exposition on cite:selinger13 of
+the usual Church encodings.
 
 All the code on this section is valid Mikrokosmos code.
 
@@ -3406,16 +3390,16 @@ compose = \f.\g.\x.f (g x)
 const = \x.\y.x
 #+END_SRC
 
-Evaluation of terms will be presented as comments to the code,
+Evaluation of terms will be presented as comments to the code, as in
+the following example.
 
 #+BEGIN_SRC haskell
-compose id id
--- [1]: λa.a ⇒ id
+compose id id                                                -- [1]: λa.a ⇒ id
 #+END_SRC
 
 It is important to notice that multiple argument functions are defined as
-higher one-argument functions that return another functions as arguments.
-These intermediate functions are also valid \lambda-terms. For example
+higher one-argument functions that return different functions as arguments.
+These intermediate functions are also valid \lambda-terms. For example,
 
 #+BEGIN_SRC haskell
 discard = const id
@@ -3424,61 +3408,52 @@ discard = const id
 is a function that discards one argument and returns the identity, =id=.
 This way of defining multiple argument functions is called the *currying*
 of a function in honor to the american logician Haskell Curry in cite:haskell58.
-It is a particular instance of a deeper fact we will detail on the chapter
-on Categorical Logic: exponentials are defined by the adjunction
+It is a particular instance of a deeper fact we will detail on Chapter
+[[sec-cartesianclosedlambdacalculus]]: exponentials are defined by the adjunction
 $\hom(A \times B, C) \cong \hom(A, \hom(B,C))$.
 
 *** A technique on inductive data encoding
 <<technique-on-inductive>>
 We will implicitly use a technique on the majority of our data
 encodings that allows us to write an encoding for any algebraically
-inductive generated data. This technique is used without comment on
-cite:selinger13 and represents the basis of what is called the *Church
-encoding* of data in \lambda-calculus.
+inductive generated data. This technique is used without explicit
+comment on cite:selinger13 and represents the basis of what is called
+the *Church encoding* of data in \lambda-calculus.
 
 We start considering the usual inductive representation of
 a data type with constructors, as we do when representing a
-syntax with a BNF, for example,
-\[
-\mathtt{Nat} ::= \mathtt{Zero} \mid \mathtt{Succ}\ \mathtt{Nat}.
-\]
-Or, in general
-\[
-\mathtt{D} ::= C_1 \mid C_2 \mid C_3 \mid \dots
-\]
+syntax with a BNF. For example, the naturals can be written
+as $\mathtt{Nat} ::= \mathtt{Zero} \mid \mathtt{Succ}\ \mathtt{Nat}$; and, in general a datatype
+$D$ with constructors $C_1,C_2,C_3,\dots$ is written as
+$\mathtt{D} ::= C_1 \mid C_2 \mid C_3 \mid \dots$.
 
 It is not possible to directly encode constructors on
-\lambda-calculus. Even if we were able, they would have, in theory, no
-computational content; the data structure would not
-be reduced under any \lambda-term, and we would need at least the 
-ability to pattern match on the constructors to define functions
-on them. Our \lambda-calculus would need to be extended with
-additional syntax for every new data structure.
+\lambda-calculus. Even if we were able to declare constants, they
+would have no computational content; the data structure would not be
+reduced under any \lambda-term, and we would need at least the ability
+to pattern-match on the constructors to define functions on them. Our
+\lambda-calculus would need to be extended with additional syntax for
+every new data structure.
 
-This technique, instead, defines a data term as a function on
-multiple arguments representing the missing constructors. In our example, 
-the number $2$, which would be written as $\mathtt{Succ}(\mathtt{Succ}(\mathtt{Zero}))$,
-would be encoded as $2 = \lambda s.\ \lambda z.\ s (s (z))$.
-
-In general, any instance of the data structure $\mathtt{D}$ would be encoded as a
-\lambda-expression depending on all its constuctors
-\[
-\lambda c_{1}.\ \lambda c_{2}.\ \lambda c_{3}.\ \dots\ \lambda c_{n}. (\textit{term}).
-\]
+Our technique, instead, is to define a data term as a function on
+multiple arguments representing the missing constructors. For instance,
+the number $2$, which would be written as $\mathtt{Succ}(\mathtt{Succ}(\mathtt{Zero}))$ using the
+BFN, is encoded as $2 = \lambda s.\ \lambda z.\ s (s (z))$. In general, any instance of the data
+structure $\mathtt{D}$ is encoded as a \lambda-expression depending on
+all of its constructors, as in $\lambda c_{1}.\ \lambda c_{2}.\ \lambda c_{3}.\ \dots\ \lambda c_{n}. (\textit{term})$.
 
 This acts as the definition of an initial algebra over the
-constructors and lets us to compute over instances of that algebra by
-instantiating it on particular cases. Particular examples
-are described on the following sections.
-# Link to categories
+constructors (see Section [[sec-algebras]]) and lets us to compute over
+instances of that algebra by instantiating it on particular cases. We
+will develop explicit examples of this technique on the following
+sections.
 
 *** Booleans
-Booleans can be defined as the data generated by a pair of constuctors
-\[\mathtt{Bool} ::= \mathtt{True} \mid \mathtt{False}.
-\]
-
-Consequently, the Church encoding of booleans takes these constructors as
-arguments and defines
+Booleans can be defined as the data generated by a pair of zero-ary
+constuctors, each one representing a truth value, as in 
+$\mathtt{Bool} ::= \mathtt{True} \mid \mathtt{False}$.  Consequently, the Church encoding of booleans
+takes these constructors as arguments and defines the following
+two elements.
 
 #+BEGIN_SRC haskell
 true  = \t.\f.t
@@ -3486,36 +3461,35 @@ false = \t.\f.f
 #+END_SRC
 
 **** If-else interpretation                                       :ignore:
-Note that =true= and =const= are exactly the same term up to
-\alpha-conversion. The same thing happens with =false= and =alwaysid=.
-The absence of types prevents us to make any effort to discriminate
-between these two uses of the same \lambda-term. Another side-effect
-of this definition is that our =true= and =false= terms can be interpreted
-as binary functions choosing between two arguments, that is, 
-$\mathtt{true}(a,b) = a$, and $\mathtt{false}(a,b) = b$.
+Note that =true= and the =const= function we defined earlier are
+exactly the same term up to \alpha-conversion. The same thing happens
+with =false= and =alwaysid=.  The absence of types prevents any effort
+to discriminate between these two uses of the same
+\lambda-term. Another side-effect of this definition is that our
+=true= and =false= terms can be interpreted as binary functions
+choosing between two arguments, that is, $\mathtt{true}(a,b) = a$, and
+$\mathtt{false}(a,b) = b$.
 
-We can test this interpretation on the interpreter to get
+We can test this interpretation on the interpreter to get the
+expected results.
 
 #+BEGIN_SRC haskell
-true id const
-false id const
---- [1]: id
---- [2]: const
+true id const                                                   --- [1]: id
+false id const                                                  --- [2]: const
 #+END_SRC
 
-This inspires the definition of an =ifelse= combinator as the identity
+And this inspires the definition of an =ifelse= combinator as the
+identity, when applied to boolean values.
 
 #+BEGIN_SRC haskell
 ifelse = \b.b
-(ifelse true) id const
-(ifelse false) id const
---- [1]: id
---- [2]: const
+(ifelse true) id const                                          --- [1]: id
+(ifelse false) id const                                         --- [2]: const
 #+END_SRC
 
 **** Logic gates                                                  :ignore:
-The usual logic gates can be defined profiting from this interpretation
-of booleans
+The usual logic gates can be defined using this interpretation of
+the booleans.
 
 #+BEGIN_SRC haskell
 and = \p.\q.p q p
@@ -3524,10 +3498,8 @@ not = \b.b false true
 xor = \a.\b.a (not b) b
 implies = \p.\q.or (not p) q
 
-xor true true
-and true true
---- [1]: false
---- [2]: true
+xor true true                                                   --- [1]: false
+and true true                                                   --- [2]: true
 #+END_SRC
 
 *** Natural numbers
@@ -3552,7 +3524,8 @@ it uses the same underlying idea: given a number, a successor and a
 zero, apply the successor to the interpretation of that number using
 the same successor and zero.
 
-We can then name some natural numbers as
+We can then name some natural numbers as follows, even if we can not
+define an infinite number of terms as we might wish.
 
 #+BEGIN_SRC haskell
 1 = succ 0
@@ -3564,21 +3537,16 @@ We can then name some natural numbers as
 ...
 #+END_SRC
 
-even if we can not define an infinite number of terms as we might wish.
-
 **** Interpretation as higher-order functions                     :ignore:
-The interpretation the natural number $n$ as a higher order function
+The interpretation a natural number $n$ as a higher order function
 is a function taking an argument =f= and applying them $n$ times over
-the second argument.
+the second argument. See the following examples.
 
 #+BEGIN_SRC haskell
-5 not true
-4 not true
+5 not true                                                      --- [1]: false
+4 not true                                                      --- [2]: true 
 double = \n.\s.\z.n (compose s s) z
-double 3
---- [1]: false
---- [2]: true
---- [3]: 6
+double 3                                                        --- [3]: 6
 #+END_SRC
 
 **** Addition and multiplication                                  :ignore:
@@ -3588,10 +3556,8 @@ $nm$ applies the $n\text{-fold}$ application of the successor $m$ times to $0$.
 #+BEGIN_SRC haskell
 plus = \m.\n.\s.\z.m s (n s z)
 mult = \m.\n.\s.\z.m (n s) z
-plus 2 1
-mult 2 4
---- [1]: 3
---- [2]: 8
+plus 2 1                                                        --- [1]: 3
+mult 2 4                                                        --- [2]: 8
 #+END_SRC
 
 *** The predecessor function and predicates on numbers
@@ -3613,12 +3579,9 @@ We will start defining a /reverse composition/ operator, called
 that is, the operator we define in the following code
 #+BEGIN_SRC haskell
 rcomp = \f.\g.\h.h (g f)
-\f.3 (inc f)
-\f.4 (inc f)
-\f.5 (inc f)
---- [1]: λa.λb.λc.c (a (a (b a)))
---- [2]: λa.λb.λc.c (a (a (a (b a))))
---- [3]: λa.λb.λc.c (a (a (a (a (b a)))))
+\f.3 (inc f)                         --- [1]: λa.λb.λc.c (a (a (b a)))
+\f.4 (inc f)                         --- [2]: λa.λb.λc.c (a (a (a (b a))))
+\f.5 (inc f)                         --- [3]: λa.λb.λc.c (a (a (a (a (b a)))))
 #+END_SRC
 allows us to use the =b= argument to discard the first instance of the
 =a= argument and return the same number wihtout the last constructor.
@@ -3637,10 +3600,8 @@ value.
 
 #+BEGIN_SRC haskell
 iszero = \n.(n (const false) true)
-iszero 0
-iszero 2
---- [1]: true
---- [2]: false
+iszero 0                                                        --- [1]: true
+iszero 2                                                        --- [2]: false
 #+END_SRC
 
 From this predicate, we can derive predicates on equality and ordering.
@@ -3653,19 +3614,19 @@ eq  = \m.\n.(and (leq m n) (leq n m))
 *** Lists and trees
 We would need two constructors to represent a list: a =nil= signaling
 the end of the list and a =cons=, joining an element to the head of
-the list. An example of list would be
-\[\mathtt{cons}\ 1\ (\mathtt{cons}\ 2\ (\mathtt{cons}\ 3\ \mathtt{nil})).\]
+the list. For instance, a list would be
+$\mathtt{cons}\ 1\ (\mathtt{cons}\ 2\ (\mathtt{cons}\ 3\ \mathtt{nil}))$. Our definition takes those two
+constructors into account.
 
-Our definition takes those two constructors into account
 #+BEGIN_SRC haskell
 nil  = \c.\n.n
 cons = \h.\t.\c.\n.(c h (t c n))
 #+END_SRC
-and the interpretation of a list as a higher-order function is its
+
+The interpretation of a list as a higher-order function is its
 =fold= function, a function taking a binary operation and an initial
 element and appliying the operation repeteadly to every element on
 the list.
-
 \[\mathtt{cons}\ 1\ (\mathtt{cons}\ 2\ (\mathtt{cons}\ 3\ \mathtt{nil}))
 \overset{fold\ plus\ 0}\longrightarrow 
 \mathtt{plus}\ 1\ (\mathtt{plus}\ 2\ (\mathtt{plus}\ 3\ 0)) = 6\]
@@ -3681,10 +3642,8 @@ all  = fold and true
 any  = fold or false
 length = foldr (\h.\t.succ t) 0
 
-sum (cons 1 (cons 2 (cons 3 nil)))
-all (cons true (cons true (cons true nil)))
---- [1]: 6
---- [2]: true
+sum (cons 1 (cons 2 (cons 3 nil)))                              --- [1]: 6   
+all (cons true (cons true (cons true nil)))                     --- [2]: true
 #+END_SRC
 
 **** Map and filter                                               :ignore:
@@ -3700,7 +3659,7 @@ of the functional programming paradigm are =map= and =filter=.
 They can be defined as follows.
 
 #+BEGIN_SRC haskell
-map    = \f.(fold (\h.\t.cons (f h) t) nil)
+map = \f.(fold (\h.\t.cons (f h) t) nil)
 filter = \p.(foldr (\h.\t.((p h) (cons h t) t)) nil)
 #+END_SRC
 
@@ -3711,11 +3670,10 @@ ignoring the head.
 
 #+BEGIN_SRC haskell
 mylist = cons 1 (cons 2 (cons 3 nil))
-sum (map succ mylist)
-length (filter (leq 2) mylist)
---- [1]: 9
---- [2]: 2
+sum (map succ mylist)                                           --- [1]: 9
+length (filter (leq 2) mylist)                                  --- [2]: 2
 #+END_SRC
+
 **** Binary trees                                                 :ignore:
 Lists have been defined using two constructors and *binary trees* will
 be defined using the same technique. The only difference with lists is
@@ -3736,8 +3694,7 @@ node = \x.\l.\r.\f.\n.(f x (l f n) (r f n))
 -- Example on natural numbers
 mytree    = node 4 (node 2 nil nil) (node 3 nil nil)
 triplesum = \a.\b.\c.plus (plus a b) c
-mytree triplesum 0
---- [1]: 9
+mytree triplesum 0                                              --- [1]: 9
 #+END_SRC
 
 **** TODO The universal properties of fold, map and filter
@@ -3756,23 +3713,22 @@ f ( f ( f (\mathtt{fix}\ f))) =
 \]
 
 Such a combinator exists; and it can be defined and used as
+
 #+BEGIN_SRC haskell
 fix := (\f.(\x.f (x x)) (\x.f (x x)))
-fix (const id)
---- [1]: id
+fix (const id)                                                 --- [1]: id
 #+END_SRC
 
 Where =:== defines a function without trying to evaluate it to a
 normal form; this is useful in cases like the previous one, where the
 function has no normal form. Examples of its applications are a
 /factorial/ function or a /fibonacci/ function, as in
+
 #+BEGIN_SRC haskell
 fact := fix (\f.\n.iszero n 1 (mult n (f (pred n))))
 fib  := fix (\f.\n.iszero n 1 (plus (f (pred n)) (f (pred (pred n)))))
-fact 3
-fib 3
---- [1]: 6
---- [2]: 5
+fact 3                                                         --- [1]: 6
+fib 3                                                          --- [2]: 5
 #+END_SRC
 Note the use of =iszero= to stop the recursion.
 
@@ -3799,10 +3755,8 @@ the successor function with a finite number.
 head = fold const false
 head (fix (cons 0))
 -- Compare infinity with other numbers
-infinity := fix succ
-leq infinity 6
----- [1]: 0
----- [2]: false
+infinity := fix succ                                         --- [1]: 0    
+leq infinity 6                                               --- [2]: false
 #+END_SRC
 
 These definitions unfold as
@@ -3818,8 +3772,7 @@ inside untyped lambda calculus, and thus, it is Turing-complete.
 
 #+BEGIN_SRC haskell
 mu := \p.fix (\f.\n.(p n) n (f (succ n))) 0
-mu (\n.eq (mult 2 n) 10)
----- [1]: 5
+mu (\n.eq (mult 2 n) 10)                                     --- [1]: 5
 #+END_SRC
 
 ** Programming in the simply typed \lambda-calculus
@@ -3829,13 +3782,15 @@ We will use the interpreter as a typed language and, at the same time,
 as a proof assistant for the intuitionistic propositional logic.
 
 This presentation of simply typed structures follows the Mikrokosmos
-tutorial and the previous sections on [[*Simply typed \lambda-calculus][simply typed \lambda-calculus]].
-All the code on this section is valid Mikrokosmos code.
+tutorial and the previous sections on simply typed \lambda-calculus
+(see Section [[sec-simplytypedlambda]]). All the code on this section is
+valid Mikrokosmos code.
 
 *** Function types and typeable terms
-Types can be activated with the commmand =:types on=. If types are activated,
-the interpreter will [[*Principal type inference][infer]] the principal type of every term before its evaluation.
-The type will then be displayed after the result of the computation.
+Types can be activated with the commmand =:types on=. If types are
+activated, the interpreter will infer (see Section [[sec-typeinference]])
+the principal type of every term before its evaluation.  The type will
+then be displayed after the result of the computation.
 
 #+attr_latex: :options [Typed terms on Mikrokosmos]
 #+begin_exampleth
@@ -3884,9 +3839,10 @@ still non typeable.
 *** Product, union, unit and void types
 Until now, we have only used the function type. That is to say that we
 are working on the implicational fragment of the simply-typed lambda
-calculus we described on the first [[*Typing rules for the simply typed \lambda-calculus][typing rules]].  We are now going to
-extend our type system in the same sense we [[*Extending the simply typed \lambda-calculus][extended]] that simply-typed
-lambda calculus. The following types are added to the system
+calculus we described when first describing typing rules.  We are now
+going to extend our type system in the same sense we extended (see
+Section [[sec-extendingstlc]]) that simply-typed lambda calculus. The
+following types are added to the system.
 
 | Type | Name          | Description                       |
 |------+---------------+-----------------------------------|
@@ -3896,7 +3852,7 @@ lambda calculus. The following types are added to the system
 | =⊤=  | Unit type     | A type with exactly one element   |
 | =⊥=  | Void type     | A type with no elements           |
 
-And the following typed constructors are added to the language,
+And the following typed constructors are added to the language.
 
 | Constructor | Type                              | Description               |
 |-------------+-----------------------------------+---------------------------|
@@ -3910,7 +3866,7 @@ And the following typed constructors are added to the language,
 | =abort=     | =⊥ → A=                           | Empty function            |
 | =absurd=    | =⊥ → ⊥=                           | Particular empty function |
 
-which correspond to the constructors we described on previous
+They correspond to the constructors we described on previous
 sections. The only new term is the =absurd= function, which is
 only a particular case of =abort=, useful when we want to make explicit
 that we are deriving an instance of the empty type. This addition will
@@ -3931,14 +3887,10 @@ using the extended typed constructors. The following terms are presented
 #+BEGIN_SRC haskell
 :load types
 swap = \m.(snd m,fst m)
-swap
---- [1]: λa.((SND a),(FST a)) ⇒ swap :: (A × B) → B × A
-caseof (inl 1) pred (mult 2)
-caseof (inr 1) pred (mult 2)
---- [2]: λa.λb.b ⇒ nil, 0, false :: A → B → B
---- [3]: λa.λb.(a (a b)) ⇒ 2 :: (A → A) → A → A
-\x.((abort x),(absurd x))
---- [4]: λa.((ABORT a),(ABSURD a)) :: ⊥ → A × ⊥
+swap                 --- [1]: λa.((SND a),(FST a)) ⇒ swap :: (A × B) → B × A
+caseof (inl 1) pred (mult 2) --- [2]: λa.λb.b ⇒ nil, 0, false :: A → B → B  
+caseof (inr 1) pred (mult 2) --- [3]: λa.λb.(a (a b)) ⇒ 2 :: (A → A) → A → A
+\x.((abort x),(absurd x))    --- [4]: λa.((ABORT a),(ABSURD a)) :: ⊥ → A × ⊥
 #+END_SRC
 
 Now it is possible to define a new encoding of the booleans with an
@@ -3949,10 +3901,8 @@ uniform type. The type =⊤ + ⊤= has two inhabitants, =inl ⊤= and =inr
 btrue = inl unit
 bfalse = inr unit
 bnot = \a.caseof a (\a.bfalse) (\a.btrue)
-bnot btrue
---- [1]: (INR UNIT) ⇒ bfalse :: A + ⊤
-bnot bfalse
---- [2]: (INL UNIT) ⇒ btrue :: ⊤ + A
+bnot btrue                            --- [1]: (INR UNIT) ⇒ bfalse :: A + ⊤
+bnot bfalse                           --- [2]: (INL UNIT) ⇒ btrue :: ⊤ + A
 #+END_SRC
 #+end_exampleth
 
@@ -3970,31 +3920,30 @@ must be written as $(A \to \bot)$, a function to the empty type.
 
 #+begin_theorem
 In intuitionistic logic, the double negation of the Law of Excluded
-Middle holds for every proposition, that is,
-\[
-\forall A\colon \neg \neg (A \lor \neg A)
-\]
+Middle holds for every proposition. That is, we know that $\neg\neg(A \vee \neg A)$
+for an arbitrary proposition $A$.
 #+end_theorem
 #+begin_proof
 Suppose $\neg (A \lor \neg A)$. We are going to prove first that, under this
 specific assumption, $\neg A$ holds. If $A$ were true, $A \lor \neg A$ would be true and we
 would arrive to a contradition, so $\neg A$. But then, if we have $\neg A$ we also have
-$A \lor \neg A$ and we arrive to a contradiction with the assumption. We should conclude
+$A \lor \neg A$ and we arrive to a contradiction with the assumption. We must conclude
 that $\neg \neg (A \lor \neg A)$.
 #+end_proof
 
-Note that this is, in fact, an intuitionistic proof. Although it seems
+Note that this is, in fact, a constructive proof. Although it seems
 to use the intuitionistically forbidden technique of proving by
 contradiction, it is actually only proving a negation.  There is a
 difference between assuming $A$ to prove $\neg A$ and assuming $\neg
-A$ to prove $A$: the first one is simply a proof of a negation, the
+A$ to prove $A$:
+the first one is simply a proof of a negation, the
 second one uses implicitly the law of excluded middle.
 
 This can be translated to the Mikrokosmos implementation of simply
 typed \lambda-calculus as the term
 #+BEGIN_SRC haskell
 notnotlem = \f.absurd (f (inr (\a.f (inl a))))
-notnotlem
+notnotlem 
 --- [1]: λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
 #+END_SRC
 whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$. The derivation tree
@@ -4004,7 +3953,7 @@ can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 #+name: mikrogentzen
 [[./images/mikrogentzen2.png]]
 
-* Category theory (abstract)                                         :ignore:
+* Category theory (abstract)                                                                :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 Categories will be the framework we will use to study the fundamental
 notion of function composition inside mathematics. They provide a
@@ -5980,12 +5929,17 @@ algebraic structures other than monoids.
 **** TODO Equivalence of categories                               :ignore:
 **** TODO Adjoints for preorders (Galois connections)             :ignore:
 *** Monads
+<<sec-monads>>
 **** Motivation                                                   :ignore:
-The notion of /monads/ is pervasive in category theory. A monad is
-a certain type of endofunctor that arises naturally when considering
+The notion of /monads/ is pervasive in category theory. A monad is a
+certain type of endofunctor that arises naturally when considering
 adjoints. They will be useful to model algebraic notions inside
 category theory and to model a variety of effects and contextual
-computations in functional programming languages.
+computations in functional programming languages. We will only prove
+here that each adjunction gives rise to a monad, but it is also true
+that there are multiple ways to turn a monad into an adjunction. With
+this result, we aim to illustrate how adjoints capture another
+fundamental concept in functional programming.
  
 \\
 
@@ -6013,9 +5967,8 @@ These statements will be made precise when we talk about algebraic
 theories. A *comonad* is the dual of a monad.
 
 **** Each adjunction gives rise to a monad                        :ignore:
-#+attr_latex: :options [Each adjunction gives rise to a monad]
 #+begin_proposition
-Given $F \dashv G$, the composition $GF$ is a monad.
+Given an adjunction $F \dashv G$, the composition $GF$ is a monad.
 #+end_proposition
 #+begin_proof
 We take the unit of the adjunction as the monad unit. We define the
@@ -6033,7 +5986,14 @@ where the first diagram is commutative by Proposition [[prop-interchangelaw]]
 and the second one is obtained by applying functors $G$ and $F$. Unit laws
 follow from the [[*Unit and counit][triangular identities]] after applying $F$ and $G$.
 #+end_proof
+
 *** Algebras
+<<sec-algebras>>
+In category theory, the word /algebra/ denotes certain structures that
+can be easily described in terms of endofunctors as universal fixed
+points for some functors.  They model inductive constructions in terms
+of category theory.
+
 Let $F \colon {\cal C} \to {\cal C}$ be a functor. An $F\textbf{-algebra}$ is an object $X$ with a
 map $\mu \colon FX \to X$ called /structure map/. A morphism between two
 $F\text{-algebras}$ $\mu \colon FX \to X$ and $\nu \colon FY \to Y$ is a map $h : X \to Y$
@@ -6141,7 +6101,7 @@ This definition immediately implies the equalities $\mathrm{sum}(\mathrm{nil}) =
 and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
 #+END_exampleth
 
-* Categorical logic (abstract)                                       :ignore:
+* Categorical logic (abstract)                                                              :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 This section is based on cite:maclane94.
 #+LATEX: \end{center}}
@@ -6179,6 +6139,7 @@ talking about functor catgeories (Examples [[example-functor-graphs]] and
 # Coproducts
 
 ** Cartesian closed categories and lambda calculus
+<<sec-cartesianclosedlambdacalculus>>
 # http://math.ucr.edu/home/baez/qg-fall2006/ccc.html
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
@@ -7764,7 +7725,7 @@ As we will see later, the Axiom of Choice implies the Law of Excluded
 Middle, so we have finally recovered a classical foundation of
 mathematics from category theory.
 
-* Type theory (abstract)                                             :ignore:
+* Type theory (abstract)                                                                    :ignore:
 #+LATEX: \ctparttext{\color{black}\begin{center}
 Topos theory arises independently with Grothendieck and sheaf theory,
 Lawvere and the axiomatization of set theory. It has allowed to
@@ -8257,7 +8218,6 @@ using Z as a bridge.
 # with the creation of tools and software easing the task for the
 # working mathematician.
 
-
 * Appendices
 ** Acknowlegments
 :PROPERTIES:
@@ -8304,7 +8264,7 @@ bibliography:Bibliography.bib
 ** TODO Mikrokosmos complete code
 ** TODO Mikrokosmos user's guide
 ** TODO Agda code
-* OLD Removed                                               :noexport:ignore:
+* OLD Removed                                                                      :noexport:ignore:
 # TODO: Example: quotients
 ** OLD Examples of comma categories
 *** TODO Pointed sets
@@ -8396,7 +8356,7 @@ category are commutative squares in ${\cal C}$ as in the following diagram.
 \end{tikzcd}\]
 #+END_definition
 
-** TODO Eta rule                                           :ignore:noexport:
+** TODO Eta rule                                                                  :ignore:noexport:
 \[\begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&,row sep=small] 
 \& \Gamma,A \& \\ C,A \ar{r}{a,f} \urar[bend left] \& \prod_{a:A}B(a), A \rar{app} \& B \ular[bend right]
