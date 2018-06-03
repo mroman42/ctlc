@@ -3,6 +3,8 @@
 #+Options: broken-links:ignore toc:t tasks:nil num:3
 #+Todo: TODO(t) OLD(o) | DONE(d)
 
+\clearpage\null\newpage 
+
 ** Hidden: To-do list                                                                    :noexport:
 *** TODO [#A] Agda exportado a HTML. Enlazar código o apéndices
 *** TODO [#A] Escribir sinopsis y abstract con el número pedido de palabras
@@ -22,19 +24,18 @@ puntos o usarlo consistentemente.
 *** TODO [#C] Considerar sólo un caso de límites con su dual, en lugar de dos.
 *** TODO [#C] Citas en cada capítulo
 ** Hidden: Macros and libraries                                                            :ignore:
-#+latex_class: scrreprt
-#+latex_class_options: [oneside,openright,titlepage,numbers=noenddot,openany,headinclude,footinclude=true,cleardoublepage=empty,abstractoff,BCOR=5mm,paper=a4,fontsize=12pt,ngerman,american]
-#+latex_header_extra: %\input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
+#+latex_class: report-noparts
+#+latex_class_options: [titlepage,a4paper,11pt]
+#+latex_header_extra: \input{titlepage}\usepackage{wallpaper}\ThisULCornerWallPaper{1}{ugrA4.pdf}
 
-*** Classic thesis setup                                           :ignore:
+*** Setup                                                                                 :ignore:
 #+latex_header_extra: \usepackage[T1]{fontenc}
-#+latex_header_extra: \usepackage[beramono,eulerchapternumbers,linedheaders,parts,a5paper,dottedtoc,manychapters]{classicthesis}
 
 #+latex_header_extra: \setcounter{secnumdepth}{0}
 #+latex_header_extra: \usepackage{enumitem}
 #+latex_header_extra: \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 #+latex_header_extra: \setlist[enumerate]{topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex}
-#+latex_header_extra: \usepackage[top=1in, bottom=1.5in, left=1in, right=1in]{geometry}
+#+latex_header_extra: \usepackage[top=1in, bottom=1.5in, left=1in, right=1.1in]{geometry}
 #+latex_header_extra: \setlength\itemsep{0em}
 #+latex_header_extra: \setlength{\parindent}{0pt}
 #+latex_header_extra: \usepackage{parskip}
@@ -51,23 +52,22 @@ puntos o usarlo consistentemente.
 #+latex_header_extra: \usepackage[conor]{agda}
 #+latex_header_extra: \usepackage{catchfilebetweentags}
 
-#+latex_header_extra: \input{classicthesis-config}
-
-*** Fonts                                                          :ignore:
+*** Fonts                                                                                 :ignore:
 #+latex_header_extra: % \usepackage{libertineRoman} \usepackage{eulervm}
 #+latex_header_extra: % \usepackage{libertine}
 #+latex_header_extra: % \usepackage{libertinust1math}
 #+latex_header_extra: \usepackage{inconsolata}
 #+latex_header_extra: % \usepackage[scale=MatchLowercase]{FiraMono}
-#+latex_header_extra: \usepackage[scale=0.85,nomap]{FiraMono}
+#+latex_header_extra: % \usepackage[scale=0.85,nomap]{FiraMono}
 #+latex_header_extra: \usepackage[T1]{fontenc}
 #+latex_header_extra: \usepackage{multicol}
 
-*** Colors                                                         :ignore:
+*** Colors                                                                                :ignore:
 #+latex_header: \definecolor{ugrColor}{HTML}{c6474b} % Title
 #+latex_header: \definecolor{ugrColor2}{HTML}{c6474b} % Sections
 #+latex_header: \definecolor{redPRL}{HTML}{ad2231}
 #+latex_header: \definecolor{bluePRL}{HTML}{07608f}
+#+latex_header: \definecolor{greenPRL}{HTML}{078f60}
 
 #+latex_header: \colorlet{myred}{redPRL}
 #+latex_header: \colorlet{myblue}{bluePRL}
@@ -76,7 +76,10 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand{\ctypes}[1]{\color{bluePRL}{#1}}
 #+latex_header: \newcommand{\cterms}[1]{\color{redPRL}{\texttt{#1}}}
 
-*** Libraries                                                      :ignore:
+*** Hyperreferences                                                                       :ignore:
+#+latex_header_extra: \hypersetup{colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,breaklinks=true, pdfpagemode=UseNone, pageanchor=true, pdfpagemode=UseOutlines,plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,hypertexnames=true, pdfhighlight=/O,urlcolor=greenPRL,linkcolor=greenPRL,citecolor=greenPRL}
+
+*** Libraries                                                                             :ignore:
 #+latex_header: \usepackage{amsthm}
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{tikz}
@@ -93,7 +96,7 @@ puntos o usarlo consistentemente.
 
 #+latex_header: \newenvironment{tightcenter}{\setlength\topsep{0pt}\setlength\bottomsep{0pt}\setlength\parskip{0pt}\begin{center}}{\end{center}}
 
-*** Theorem styles                                                 :ignore:
+*** Theorem styles                                                                        :ignore:
 #+latex_header_extra: \theoremstyle{plain}
 #+latex_header_extra: \newtheorem{theorem}{Theorem}[chapter]
 #+latex_header_extra: \newtheorem{proposition}[theorem]{Proposition}
@@ -108,7 +111,7 @@ puntos o usarlo consistentemente.
 #+latex_header_extra: \newtheorem{exampleth}[theorem]{Example}
 #+latex_header_extra: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
 
-*** Math symbols and Unicode support                               :ignore:
+*** Math symbols and Unicode support                                                      :ignore:
 #+latex_header: \usepackage{amssymb}
 #+latex_header: \usepackage{bbm}
 #+latex_header: \usepackage[greek,english]{babel}
@@ -209,7 +212,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\J{\mathsf{J}}
 #+latex_header: \usepackage{scalefnt}\DeclareMathOperator*\bigexists{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\scalefont{2}$\exists$}}}{\vcenter{\hbox{\scalefont{1.4}$\exists$}}}{\vcenter{\hbox{\scalefont{1}$\exists$}}}{\vcenter{\hbox{\scalefont{0.75}$\exists$}}}}
 
-** TODO Abstract
+** Abstract
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
@@ -218,8 +221,42 @@ puntos o usarlo consistentemente.
 # incluirán seguidamente al menos cinco palabras clave que definan el
 # trabajo a criterio del autor
 
-This is the abstract.
 # There is no claim of originality (?)
+
+*Chapter 1*: The \lambda-calculus is a collection of systems
+formalizing the notion of functions. They can be seen as programming
+languages and formal logics at the same time. We focus on the
+properties of the untyped \lambda-calculus and simply typed
+\lambda-calculus, and we study their logical interpretation.
+
+*Chapter 2*: We have developed *Mikrokosmos*, an untyped and simply
+typed \lambda-calculus interpreter written in the purely functional
+programming language Haskell cite:hudak07_haskell.  It aims to provide
+students with a tool to learn and understand \lambda-calculus and the
+relation between logic and types. We show how to program and prove
+statements of intuitionistic propositional logic with it.
+
+*Chapter 3*: Categories will be the framework we will use to study the
+fundamental notion of function composition inside mathematics. They
+provide a useful language to talk about theories, mathematic and
+logic. In particular, adjoint functors will be one of the key insights
+we will use to understand and expand the connection between
+computation and logic we have described so far.  This section is based
+on cite:maclane78.
+
+*Chapter 4*: The internal logic of categories is studied. In
+particular, cartesian closed categories can be used to model lambda
+calculus, and their structure serves as a basis for locally cartesian
+closed categories and topoi, which provide a framework for
+higher-order logics. Dependent type theory arises as the natural
+language for these richer categories. This section is based on
+the work by cite:maclane94 and cite:martinlof75.
+
+*Chapter 5*: Type theory provides both a programming language and a
+foundation of mathematics. The embedding of a category of sets and
+some classical principles inside constructive logic are studied.  We
+also present and formalize inside a programming language a first
+result of Homotopy Type Theory.
 
 ** Sinopsis
 :PROPERTIES:
@@ -320,15 +357,6 @@ not enough for flattening them.
 # • Sintetizar el contenido de la memoria.
 # • Citar las principales fuentes consultadas.
 #
-
-* Lambda calculus (abstract)                                                                :ignore:
-#+LATEX: \ctparttext{\color{black}\begin{center}
-The \lambda-calculus is a collection of systems formalizing the notion
-of functions. They can be seen as programming languages and formal
-logics at the same time. We focus on the properties of the untyped
-\lambda-calculus and simply typed \lambda-calculus, and we study their
-logical interpretation.
-#+LATEX: \end{center}}
 
 * Lambda calculus
 ** Untyped \lambda-calculus
@@ -2266,16 +2294,6 @@ In particular *System F* is equivalent to the single-sorted pure system $\lambda
 *** TODO Subtyping (?)
 
 *** TODO Inductive and coinductive definitions
-* Mikrokosmos (abstract)                                                                    :ignore:
-#+LATEX: \ctparttext{\color{black}\begin{center}
-We have developed *Mikrokosmos*, an untyped and simply typed
-\lambda-calculus interpreter written in the purely functional
-programming language Haskell cite:hudak07_haskell.  It aims to provide
-students with a tool to learn and understand \lambda-calculus and the
-relation between logic and types. We show how to program and prove
-statements of intuitionistic propositional logic with it.
-#+LATEX: \end{center}}
-
 * Mikrokosmos
 ** Implementation of \lambda-expressions
 *** The Haskell programming language
@@ -2885,7 +2903,7 @@ The difference can be seen on the following example, which shows the execution
 of the expression $1+2$, first without intermediate results, and later, showing
 every intermediate step.
 
-#+BEGIN_EXAMPLE
+#+begin_src bash
 mikro> plus 1 2
 λa.λb.(a (a (a b))) ⇒ 3
 
@@ -2900,7 +2918,7 @@ mikro> plus 1 2
 λλ(2 (λ(3 (3 1)) 1))
 λλ(2 (2 (2 1)))
 λa.λb.(a (a (a b))) ⇒ 3
-#+END_EXAMPLE
+#+end_src
 
 The interpreter output can be colored to show specifically where it
 is performing reductions. It is activated by default, but can be deactivated
@@ -3953,16 +3971,6 @@ can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 #+caption: Proof of the double negation of LEM.
 #+name: mikrogentzen
 [[./images/mikrogentzen2.png]]
-
-* Category theory (abstract)                                                                :ignore:
-#+LATEX: \ctparttext{\color{black}\begin{center}
-Categories will be the framework we will use to study the fundamental
-notion of function composition inside mathematics. They provide a
-useful language to talk about theories, mathematic and logic. In
-particular, adjoint functors will be one of the key insights we will
-use to understand and expand the connection between computation and
-logic we have described so far.  This section is based on cite:maclane78.
-#+LATEX: \end{center}}
 
 * Category theory
 ** Categories
@@ -6098,11 +6106,6 @@ This definition immediately implies the equalities $\mathrm{sum}(\mathrm{nil}) =
 and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
 #+END_exampleth
 
-* Categorical logic (abstract)                                                              :ignore:
-#+LATEX: \ctparttext{\color{black}\begin{center}
-This section is based on cite:maclane94.
-#+LATEX: \end{center}}
-
 * Categorical logic
 ** Presheaves
 <<section-presheaves>>
@@ -7724,17 +7727,6 @@ As we will see later, the Axiom of Choice implies the Law of Excluded
 Middle, so we have finally recovered a classical foundation of
 mathematics from category theory.
 
-* Type theory (abstract)                                                                    :ignore:
-#+LATEX: \ctparttext{\color{black}\begin{center}
-Topos theory arises independently with Grothendieck and sheaf theory,
-Lawvere and the axiomatization of set theory. It has allowed to
-construct new models of ZFC and many different models of constructive
-mathematics. Martin-Löf type theory provides a language to study and
-to program inside categories with enough structure.
-#+LATEX: \end{center}}
-
-# WONTFIX?: Cite Paul Cohen and the forcing technique.
-
 * Type theory
 ** Martin-Löf type theory
 #+begin_quote
@@ -7965,7 +7957,7 @@ Axiom of Choice implies the Law of Excluded Middle. This is the
 statement of *Diaconescu's theorem*, for which we provide both a
 natural proof and a computer-verified proof.
 
-#+ATTR_LATEX: :options [Diaconescu's theorem]
+#+ATTR_LATEX: :options [R. Diaconescu, 1975]
 #+BEGIN_theorem
 The Axiom of Choice implies the Law of Excluded Middle.
 #+END_theorem
@@ -8191,9 +8183,9 @@ use this fact to prove, inside type theory, that $\mathbb{Z} = \pi_1(\mathbb{S}^
 a proof, inside this synthetic homotopical setting, of the fact 
 that the fundamental group of the circle is $\mathbb{Z}$.
 
-#+latex: \small
+#+latex: \noindent\rule[0.5ex]{\linewidth}{0.1pt}\small
 #+latex: \ExecuteMetaData[agda-hott/latex/Snippets.tex]{circle}
-#+latex: \normalsize
+#+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 **** Note on the proof                                          :noexport:
 We could think that this only proves that Z is the free group
@@ -8265,6 +8257,7 @@ bibliography:Bibliography.bib
 ** TODO Agda code
 * OLD Removed                                                                      :noexport:ignore:
 # TODO: Example: quotients
+
 ** OLD Examples of comma categories
 *** TODO Pointed sets
 *** TODO The category of all categories
@@ -12016,3 +12009,13 @@ is precisely $T$.
 # to the Lawvere theory of commutative monoids, that is, to the category
 # of finitely generated free commutative monoids.
 ** TODO Continuity
+** Type theory (abstract)                                                                  :ignore:
+#+LATEX: \ctparttext{\color{black}\begin{center}
+Topos theory arises independently with Grothendieck and sheaf theory,
+Lawvere and the axiomatization of set theory. It has allowed to
+construct new models of ZFC and many different models of constructive
+mathematics. Martin-Löf type theory provides a language to study and
+to program inside categories with enough structure.
+#+LATEX: \end{center}}
+
+# WONTFIX?: Cite Paul Cohen and the forcing technique.
