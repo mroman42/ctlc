@@ -54,6 +54,7 @@ puntos o usarlo consistentemente.
 #+latex_header_extra: \input{classicthesis-config}
 
 *** Fonts                                                          :ignore:
+#+latex_header_extra: % \usepackage{libertineRoman} \usepackage{eulervm}
 #+latex_header_extra: % \usepackage{libertine}
 #+latex_header_extra: % \usepackage{libertinust1math}
 #+latex_header_extra: \usepackage{inconsolata}
@@ -93,19 +94,19 @@ puntos o usarlo consistentemente.
 #+latex_header: \newenvironment{tightcenter}{\setlength\topsep{0pt}\setlength\bottomsep{0pt}\setlength\parskip{0pt}\begin{center}}{\end{center}}
 
 *** Theorem styles                                                 :ignore:
-#+latex_header: \theoremstyle{plain}
-#+latex_header: \newtheorem{theorem}{Theorem}
-#+latex_header: \newtheorem{proposition}{Proposition}
-#+latex_header: \newtheorem{lemma}{Lemma}
-#+latex_header: \newtheorem{corollary}{Corollary}
-#+latex_header: \theoremstyle{definition}
-#+latex_header: \newtheorem{definition}{Definition}
-#+latex_header: \newtheorem{axiom}{Axiom}
-#+latex_header: \newtheorem{proofs}{Proof}
-#+latex_header: \theoremstyle{remark}
-#+latex_header: \newtheorem{remark}{Remark}
-#+latex_header: \newtheorem{exampleth}{Example}
-#+latex_header: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
+#+latex_header_extra: \theoremstyle{plain}
+#+latex_header_extra: \newtheorem{theorem}{Theorem}[chapter]
+#+latex_header_extra: \newtheorem{proposition}[theorem]{Proposition}
+#+latex_header_extra: \newtheorem{lemma}[theorem]{Lemma}
+#+latex_header_extra: \newtheorem{corollary}[theorem]{Corollary}
+#+latex_header_extra: \theoremstyle{definition}
+#+latex_header_extra: \newtheorem{definition}[theorem]{Definition}
+#+latex_header_extra: \newtheorem{axiom}[theorem]{Axiom}
+#+latex_header_extra: \newtheorem{proofs}{Proof}
+#+latex_header_extra: \theoremstyle{remark}
+#+latex_header_extra: \newtheorem{remark}[theorem]{Remark}
+#+latex_header_extra: \newtheorem{exampleth}[theorem]{Example}
+#+latex_header_extra: \begingroup\makeatletter\@for\theoremstyle:=definition,remark,plain\do{\expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{\addtolength\thm@preskip\parskip}}\endgroup
 
 *** Math symbols and Unicode support                               :ignore:
 #+latex_header: \usepackage{amssymb}
@@ -3965,53 +3966,49 @@ logic we have described so far.  This section is based on cite:maclane78.
 
 * Category theory
 ** Categories
+*** Motivation                                                                            :ignore:
 *Categories* are algebraic structures that capture the notion of
 composition. They consist of objects linked by composable arrows; to
-which associativity and identity laws will apply.
-
-Thus, a category has to rely in some notion of /collection of
-objects/.  When interpreted inside set-theory, this term can denote
-sets or proper classes.  We want to talk about categories containing
-subsets of the class of all sets, and thus it is necessary to allow
-the objects to form a proper class (which is not itself a set) in
-order to avoid inconsistent results such as the Russell's paradox.
-This is why we will consider a particular class of categories of small
+which associativity and identity laws will apply.  Thus, a category
+has to rely in some notion of /collection of objects/.  When
+interpreted inside set-theory, this term can denote sets or proper
+classes.  We want to talk about categories containing subsets of the
+class of all sets, and thus it is necessary to allow the objects to
+form a proper class (which is not itself a set) in order to avoid
+inconsistent results such as the Russell's paradox.  This is why we
+will consider a particular class of categories of small
 set-theoretical size to be specially well-behaved.
 
 #+attr_latex: :options [Small and locally small categories]
 #+begin_definition
-A category will be said to be *small* if the collection of its objects
-can be given by a set (instead of a proper class). It will be said to
-be *locally small* if the collection of arrows between any two objects can
-be given by a set.
+A category is said to be *small* if the collection of its objects can
+be given by a set (instead of a proper class).  It is *locally small*
+if the collection of arrows between any two objects can be given by a
+set.
 #+end_definition
 
-A different approach, however, would be to simply take the /objects/
-and the /arrows/ as fundamental concepts of our theory. These
-foundational concerns will not cause any explicit problem in this
-presentation of category theory, so we will keep it deliberately
-open to both interpretations.
+A different approach, however, would be to simply take /objects/ and
+/arrows/ as fundamental concepts of our theory. These foundational
+concerns will not cause any explicit problem in this presentation of
+category theory, so we will keep it deliberately open to both
+interpretations.
 
 *** Definition of category
 **** Categories, objects and morphisms                            :ignore:
-#+attr_latex: :options [Category]
 #+begin_definition
-A *category* ${\cal C}$, as defined in cite:maclane78 or cite:awodey10, is given by
+A *category* ${\cal C}$ (following cite:maclane78 or cite:awodey10) is given by
+a collection whose elements are called /objects/, sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$;
+and a collection whose elements are called /morphisms/.
+Every morphism $f$ is assigned two objects, its /domain/ and its
+/codomain/; we write $f \colon A \to B$ to indicate that $f$ has domain $A$ and
+codomain $B$.
 
- * a collection (sometimes denoted $\mathrm{obj}({\cal C})$ or simply ${\cal C}$), whose
-   elements are called *objects*; and
- * a collection, whose elements are called *morphisms*.
-
-Every morphism $f$ is assigned two objects: a *domain*
-and a *codomain*; a common notation to indicate that $f$
-has domain $A$ and codomain $B$ is to write $f \colon A \to B$.
-
-Given two morphisms $f \colon A \to B$ and $g \colon B \to C$, there exists a 
+Given any two morphisms $f \colon A \to B$ and $g \colon B \to C$, there exists a
 *composition* morphism $g \circ f \colon A \to C$. Composition of morphisms
 is a partially defined binary operation satisfying the following
 two axioms. It must be /associative/,
 verifying that $h \circ (g \circ f) = (h \circ g) \circ f$ for any composable morphisms
-$f,g,h$; and it must have an /identity/ morphism $\id_{A}\colon A \to A$ for each
+$f,g,h$; and there must exist an /identity/ morphism $\id_{A}\colon A \to A$ for each
 object $A$, verifying that $f \circ \id_A = f = \id_B \circ f$ for all $f \colon A \to B$.
 #+end_definition
 
