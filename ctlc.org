@@ -4028,7 +4028,6 @@ Objects in category theory are an atomic concept and can be only
 studied by their morphisms; that is, by how they relate to each other.
 In other words, the essence of a category is given not by its objects,
 but by the morphisms between them and how composition is defined.
-
 It is so much so, that we will consider two objects essentially
 equivalent (and we will call them /isomorphic/) whenever they relate
 to other objects in the exact same way. This occurs if we can find
@@ -4036,7 +4035,6 @@ an invertible morphism connecting both: composition by this morphism
 or its inverse will translate arrows from one object to the other.
 
 **** Isomorphisms                                                 :ignore:
-#+attr_latex: :options [Isomorphisms]
 #+begin_definition
 A morphism $f : A \to B$ is an *isomorphism* if there exists a morphism
 $f^{-1} : B \to A$ such that $f^{-1} \circ f = \id_{A}$ and $f \circ f^{-1} = \id_{B}$.
@@ -4046,7 +4044,6 @@ $A \cong B$.
 #+end_definition
 
 **** Unicity of inverses                                          :ignore:
-#+attr_latex: :options [Unicity of inverses]
 #+begin_proposition
 <<prop-unicityinverse>>
 There is, at most, a single way to invert a morphism.  If the inverse of a
@@ -4054,7 +4051,8 @@ morphism exists, it is unique. In fact, if a morphism has a left-side
 inverse and a right-side inverse, they must be equal.
 #+end_proposition
 #+begin_proof
-Given $f : A \to B$ with inverses $g_1,g_2 : B \to A$; we have that
+Given $f : A \to B$ with a left-side inverse $g_1 \colon B \to A$ and a right-side
+inverse $g_2 : B \to A$; we have that
 \[
 g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) = 
 (g_1 \circ f) \circ g_2 =
@@ -4063,12 +4061,13 @@ g_1 = g_1 \circ \id_A = g_1 \circ (f \circ g_2) =
 #+end_proof
 
 **** Equivalence relation                                         :ignore:
-As we promised, /to be isomorphic to/ is an equivalence
+As expected, /to be isomorphic to/ is an equivalence
 relation. In particular, reflexivity follows from the fact that the
 identity is its own inverse, $\id = \id^{-1}$; symmetry follows from the
 inverse of an isomorphism being itself an isomorphism, $(f^{-1})^{-1} = f$;
 and transitivity follows by the fact that the composition of isomorphisms
-is itself an isomorphism, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$.
+is itself an isomorphism, $(f \circ g)^{-1} = g^{-1} \circ f^{-1}$. All these equalities
+can be checked from the axioms of a category.
 
 **** Monomorphisms and epimorphisms                               :ignore:
 We can notice that morphisms are an abstraction of the notion of
@@ -4942,29 +4941,32 @@ turn determines a universal arrow by Proposition [[prop-universality-homsets]].
 # TODO: Check this proof
 
 *** Yoneda Lemma
-**** TODO Motivation of Yoneda Lemma                              :ignore:
-**** Statement of the Yoneda Lemma                                :ignore:
+**** Motivation of Yoneda Lemma                                                          :ignore:
+*Yoneda lemma* is one of the first results of pure category theory.
+It allows us to embed any small category into a functor category over
+the category of sets. It will be useful when studying presheaves and
+algebraic theories (see Section [[sec-lawveretheories]]).
+
+**** Statement of the Yoneda Lemma                                                       :ignore:
 #+attr_latex: :options [Yoneda Lemma]
 #+begin_lemma
 <<lemma-yoneda>>
 For any $K\colon {\cal D} \to \Sets$ and $r \in {\cal D}$, there is a bijection
-\[
-y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr
-\]
+$y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr$
 sending any natural transformation $\alpha \colon \hom_{{\cal D}}(r,-) \tonat K$ to 
 its image on the identity, $\alpha_r(\id_r)$.
 #+end_lemma
 #+begin_proof
 The complete natural transformation $\alpha$ is determined by $\alpha_r(\id_r)$.
-By naturality, given any $f \colon r \to s$,
+By naturality, given any $f \colon r \to s$, it must be the case that
+$\alpha_s(f) = Kf(\alpha_r(\id_r))$.
 \[\begin{tikzcd}[row sep={8mm,between origins},column sep={12mm,between origins}]
 \hom(r,r) \arrow{rrrr}{\alpha_r} \arrow[swap]{ddd}{f \circ -}
     & & & & Kr \arrow{ddd}{Kf} \\  
     & \id_r \arrow[rr, |->] \arrow[d, |->] & & \alpha_r(\id_r) \arrow[d, |->] & \\[1cm]
     & f \arrow[rr, |->] & & \alpha_s(f) \\
 \hom(r,s) \arrow[swap]{rrrr}{\alpha_s} & & & & Ks\\  
-\end{tikzcd}\]
-it must be the case that $\alpha_s(f) = Kf(\alpha_r(\id_r))$.
+\end{tikzcd}\qedhere\]
 #+end_proof
 
 **** Natural transformations between representable functors       :ignore:
@@ -4986,9 +4988,7 @@ rest of the natural transformation is determined as $- \circ h$ by naturality.
 #+attr_latex: :options [Naturality of the Yoneda Lemma]
 #+begin_proposition
 The bijection on the Yoneda Lemma (Lemma [[lemma-yoneda]]),
-\[
-y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr,
-\]
+$y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr$,
 is a natural isomorphism between two functors $\Sets^{\cal D} \times {\cal D} \to \Sets$.
 #+end_proposition
 #+begin_proof
@@ -5025,7 +5025,7 @@ y\big(N\pair{f,F}(\alpha)\big)
 &= F(\alpha(\id_{r'} \circ f))
 = F(Kf(\alpha_r(\id_r)))
 = E\pair{f,F}\alpha_r(\id_{r}) \\
-&= E\pair{f,F}\big(y (\alpha)\big).
+&= E\pair{f,F}\big(y (\alpha)\big).\qedhere
 \end{aligned}\]
 #+end_proof
 
@@ -6105,6 +6105,7 @@ This section is based on cite:maclane94.
 
 * Categorical logic
 ** Presheaves
+<<section-presheaves>>
 # [Moerdijk]
 # TODO: Comma category is equivalent to a presheaf category
 # TODO: Pullbacks (in particular, products) always exist on presheaf cats
@@ -6141,6 +6142,7 @@ talking about functor catgeories (Examples [[example-functor-graphs]] and
 # http://math.ucr.edu/home/baez/qg-fall2006/index.html#computation
 
 *** Lawvere theories
+<<sec-lawveretheories>>
 **** Signature to category                                        :ignore:
 The usual notion of /algebraic theory/ is given by a set of /k-ary operations/
 for each $k \in \mathbb{N}$ and certain axioms between the terms that can be constructed
@@ -6582,7 +6584,7 @@ and an equivalence of theories $\mathbb{T} \simeq \mathbb{L}({\cal S}(\mathbb{T}
 On the one hand, we define $\eta \colon {\cal C} \to {\cal S}(\mathbb{L}({\cal C}))$ as $\eta A = \intl{A}$ in objects and $\eta f = (a : \intl{A} \vdash f\ a : \intl{B})$
 for any morphism $f \colon A \to B$. It is a functor because $\intl{\id}\ a \equiv a$ and $\intl{g \circ f}\ a \equiv g\ (f\ a)$.
 We define $\theta : {\cal S}(\mathbb{L}({\cal C})) \to {\cal C}$ on types inductively as $\theta(1) = 1$, $\theta(\intl{A}) = A$,
-$\theta(B \times C) = \theta(A) \times \theta(C)$ and $\theta(B \to C) = \theta(C)^{\theta(B)}$. Now there is a natural 
+$\theta(B \times C) = \theta(A) \times \theta(C)$ and $\theta(B \to C) = \theta(C)^{\theta(B)}$. Now, there is a natural 
 isomorphism $\eta\theta \tonat \Id$, using the isomorphisms induced by the constants $\mathtt{T}, \mathtt{P}, \mathtt{E}$,
 \begin{center}\begin{array}{ll}
 \eta(\theta \intl{A}) = \eta A = \intl{A}, \\
@@ -6628,9 +6630,9 @@ on the constructors of the type:
 \\
 
 **** Semantics                                                    :ignore:
-Thus, we can say that the simply-typed lambda calculus is the language
-of cartesian closed categories; each theory is a model inside a
-cartesian closed category. 
+Thus, we can say that the simply-typed lambda calculus is the internal
+language of cartesian closed categories; each lambda theories are
+cartesian closed categories.
 
 ** Working in cartesian closed categories
 *** Diagonal arguments
@@ -7494,10 +7496,10 @@ of types $C(x,y)$ parametrized by two elements $x,y:A$. We have that any morphis
 from the equality type to $C$ corresponds to a section to $\vartriangle^{\ast}\!\! C$, which
 is, by substitution, the family of types $C(x,x)$.
 \[\begin{array}{lll}\begin{tikzcd}
-\phantom{f}\vartriangle^{\ast}\!\! C \rar\dar & C\dar{g} \\
+\phantom{f}\vartriangle^{\ast}\!\! C \rar\dar & C\dar{\pi} \\
 A\rar{\vartriangle}\uar[dashed,bend left]{\widetilde k} & A\times A
 \end{tikzcd} &\qquad& \begin{tikzcd}[column sep=tiny]
-A \drar[swap]{\vartriangle}\ar[dashed]{rr}{k} && C\dlar{g} \\
+A \drar[swap]{\vartriangle}\ar[dashed]{rr}{k} && C\dlar{\pi} \\
 & A\times A &
 \end{tikzcd}\end{array}\]
 A section $\widetilde k$ of this form is precisely a term $x :A \vdash c : C(x,x)$,
