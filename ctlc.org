@@ -37,7 +37,7 @@ puntos o usarlo consistentemente.
 #+latex_header_extra: \setlist[enumerate]{topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex}
 #+latex_header_extra: \usepackage[top=1in, bottom=1.5in, left=1in, right=1.1in]{geometry}
 #+latex_header_extra: \setlength\itemsep{0em}
-#+latex_header_extra: \setlength{\parindent}{0pt}
+#+latex_header_extra: % \setlength{\parindent}{0pt}
 #+latex_header_extra: \usepackage{parskip}
 
 #+latex_header_extra: \usepackage{minted} \usemintedstyle{colorful}
@@ -200,7 +200,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\fst{\mathtt{fst}} % first
 #+latex_header: \newcommand\snd{\mathtt{snd}} % second
 #+latex_header: \DeclareMathOperator{\freevars}{FV} % Free variables
-#+latex_header: \newcommand\TypeTemp{\mathtt{TypeTemp}} % type templates
+#+latex_header: \newcommand\TypeTemp{\mathsf{TypeTemp}} % type templates
 *** Type theory                                                    :ignore:
 #+latex_header: \newcommand{\wtype}{\mathop{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\huge{\textsf{W}}}}}{\vcenter{\hbox{\Large\textsf{W}}}}{\textsf{W}}{\textsf{W}}}\displaylimits}
 #+latex_header: \newcommand{\wt}{\textsf{W}}
@@ -367,8 +367,10 @@ When are two functions equal? Classically in mathematics, /functions are graphs/
 A function from a domain to a codomain, $f \colon X \to Y$, is seen as a subset 
 of the product space: $f \subset X \times Y$.
 Any two functions are identical if they map equal inputs to equal outputs;
-and a function is completely determined by what its outputs are.
-This vision is called */extensional/* (see cite:selinger13).
+and a function is completely determined by what its outputs are under
+different inputs.
+This vision is called */extensional/* (see cite:selinger13, where this
+difference is detailed).
 
 From a computational point of view, this perspective could seem
 incomplete in some cases; we usually care not only about the result
@@ -382,14 +384,14 @@ essentially the same formula, is called */intensional/*.
 
 The *\lambda-calculus* is a collection of formal systems, all of them
 based on the lambda notation introduced by Alonzo Church in the 1930s
-while trying to develop a foundational notion of functions (/as formulae/)
+while trying to develop a foundational notion of functions /as formulae/
 on mathematics. It is a logical theory of functions, where application and
-abstraction are primitive notions; and, at the same time, it
+abstraction are primitive notions, and at the same time it
 is also one of the simplest programming languages, in which many other
 full-fledged languages are based.
 
-The *untyped* or *pure \lambda-calculus* is, syntactically, the
-simplest of those formal systems. In it, a function does not need a
+The *untyped* or *pure \lambda-calculus* is syntactically the
+simplest of these formal systems. In it, a function does not need a
 domain nor a codomain; every function is a formula that can be
 directly applied to any expression. It even allows functions to be
 applied to themselves, a notion that would be troublesome
@@ -400,13 +402,15 @@ f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 \]
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
 set theory (see, for example, cite:kunen11).
-In constrast, untyped \lambda-calculus presents some problems such as
-non-terminating functions.
+In constrast, untyped \lambda-calculus presents some problems that
+would never appear in our usual foundations such as non-terminating
+functions. An approach to solving these is presented in Section [[sec-simplytypedlambda]].
 
 This presentation of the untyped lambda calculus will follow
 cite:Hindley08 and cite:selinger13.
 
-*** The untyped \lambda-calculus
+*** Untyped \lambda-calculus
+**** As a formal language                                                                :ignore:
 As a formal language, the untyped \lambda-calculus is given by a set of
 equations between expressions called /\lambda-terms/, and equivalences
 between them can be computed using some manipulation rules.
@@ -419,46 +423,44 @@ of the language, identifying it with the formula it represents and
 admitting a more succinct representation. For example, the polynomial function
 $p(x) = x^2 + x$
 is written in \lambda-calculus as
-$\lambda x.\ x^2 + x$; and $p(2)$ is written as $(\lambda x.\ x^2+x)(2)$. In general,
-$\lambda x.M$ is a function taking $x$ as an argument and returning $M$,
-which is a term where $x$ may appear in.
+$\lambda x.\ x^2 + x$; and the particular evaluation $p(2)$ is written as $(\lambda x.\ x^2+x)(2)$.
+In general, $\lambda x.M$ is a function taking $x$ as an argument and returning $M$,
+which is a term where $x$ may appear as a symbolic variable.
 
 The use of \lambda-notation also eases the writing of
 *higher-order functions*, functions whose arguments or outputs are
-functions themselves. For instance,
-\[
-\lambda f.(\ \lambda y.\ f(f(y))\ )
-\]
-would be a function taking $f$ as an argument and returning $\lambda y.\ f(f(y))$,
+functions themselves. For instance, $\lambda f.(\lambda y.f(f(y)))$
+would be a function taking $f$ as an argument and returning $\lambda y.f(f(y))$,
 which is itself a function; most commonly written as $f \circ f$. In particular,
+the following expression
 \[
-\Big( \big( \lambda f.(\ \lambda y.\ f(f(y))\ ) \big)
-\big( \lambda x.\ x^2 + x \big) \Big) (1)
+\Big( \big( \lambda f.(\lambda y.f(f(y))) \big)
+\big( \lambda x.x^2 + x \big) \Big) (1)
 \]
-evaluates to $6$.
+evaluates to $6$. It can be read as applying the polynomial $x^2+x$ twice to
+the initial argument $1$.
 
-#+attr_latex: :options [Lambda terms]
+**** Lambda terms                                                                        :ignore:
 #+begin_definition
 <<def-lambdaterms>>
 *\lambda-terms* are constructed using the following rules:
 
   * every */variable/*, taken from an infinite countable set of
-    variables and usually written as lowercase single letters
+    variables and usually written with a lowercase single letter
     $(x, y, z, \dots)$, is a \lambda-term;
 
-  * given two \lambda-terms $M,N$; its */application/*, $MN$, is a \lambda-term;
-
-  * given a \lambda-term $M$ and a variable $x$, its */abstraction/*, $\lambda x.M$,
+  * for any two \lambda-terms $M,N$, their */application/*, written as $MN$,
     is a \lambda-term;
 
-  * every possible \lambda-term can be constructed using these rules: no other
-    \lambda-term exists.
+  * for any \lambda-term $M$ and for any variable $x$, their */abstraction/*,
+    written as $\lambda x.M$, is a \lambda-term;
+
+  * every possible \lambda-term can be constructed using these rules
+    and no other \lambda-term exists.
 
 Equivalently, they are given by the Backus-Naur form
-\[
-\mathtt{Term} ::= x \mid (\mathtt{Term}\ \mathtt{Term}) \mid (\lambda x.\mathtt{Term}),
-\]
-where $x$ can be any variable.
+$\mathsf{Term} ::= x \mid (\mathsf{Term}\ \mathsf{Term}) \mid (\lambda x.\mathsf{Term})$,
+where $x$ represents any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
@@ -472,7 +474,7 @@ of $(\lambda x.M) N$.
 *** Free and bound variables, substitution
 <<sec-freeboundvars>>
 In \lambda-calculus, the scope of a variable restricts to the \lambda-abstraction
-where it appeared, if any. Thus, the same variable can be used multiple
+where it appears, if any. Thus, the same variable can be used multiple
 times on the same term independently. For example, in $(\lambda x.x)(\lambda x.x)$, the
 variable $x$ appears twice with two different meanings.
 
@@ -482,18 +484,18 @@ variable $x$ appears twice with two different meanings.
 Any ocurrence of a variable $x$ inside the /scope/ of a lambda is said
 to be */bound/*; and any variable without bound ocurrences is said to be
 */free/*.  The *set of free variables* of a term $M$ is defined inductively
-as
-\[\begin{aligned}
-\freevars(x) &= \{x\}, \\
-\freevars(MN) &= \freevars(M) \cup \freevars(N), \\
-\freevars(\lambda x.M) &= \freevars(M) \setminus \{x\}.
-\end{aligned}\]
+on the structure of lambda terms as
+\[\begin{array}{ll}
+\freevars(x) = \{x\}, & \mbox{ for any variable } x, \\
+\freevars(MN) = \freevars(M) \cup \freevars(N), & \mbox{ for any two terms } M \mbox{ and } N, \\
+\freevars(\lambda x.M) = \freevars(M) \setminus \{x\}, & \mbox{ for any variable } x \mbox{ abstracted over a term } M. \\
+\end{array}\]
 #+end_definition
 
 Evaluation in \lambda-calculus relies in the notion of */substitution/*.
 Any free ocurrence of a variable can be substituted by a term, as we do
-when evaluating. For instance, in the previous example, we
-evaluated $(\lambda x.\ x^2+x)(2)$ by substituting $2$ in the place of $x$ inside $x^{2} + x$;
+when evaluating function applications. For instance, in the previous example, we
+can evaluate $(\lambda x.\ x^2+x)(2)$ into $6$ by substituting $2$ in the place of $x$ inside $x^{2} + x$;
 as in
 \[\begin{tikzcd}
 (\lambda x.\ x^2+x)(2) \rar{x \mapsto 2}
@@ -513,16 +515,15 @@ on $(\lambda x.yx)$ and $x$ (the free variable) would get tied to $x$ (the bound
 \end{tikzcd}\]
 
 To avoid this, the bounded $x$ must be given a new name before the
-substitution, which must be carried as
+substitution, which must be carried as follows, keeping $x$ free,
 \[\begin{tikzcd}
-(\lambda y. \lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u),
+(\lambda y. \lambda u.y u)(\lambda z.\ xz) \ar{rr}{y \mapsto (\lambda z.xz)} & & (\lambda u.(\lambda z.xz)u).
 \end{tikzcd}\]
-keeping $x$ free.
 
-#+attr_latex: :options [Substitution on lambda terms]
 #+begin_definition
 The *substitution* of a variable $x$ by a term $N$ on $M$ is
-written as $M[N/x]$ and defined inductively as
+written as $M[N/x]$ and defined inductively on the structure
+of lambda terms as
 \[\begin{aligned}
 x[N/x] &\equiv N,\\
 y[N/x] &\equiv y, & \text{ if } y \neq x,\\
@@ -532,24 +533,27 @@ y[N/x] &\equiv y, & \text{ if } y \neq x,\\
 (\lambda y.P)[N/x] &\equiv \lambda z.P[z/y][N/x] & \text{ if } y \in \freevars(N),
 \end{aligned}\]
 
-where, in the last clause, $z$ is a fresh unused variable.
+where, in the last clause, $z$ is a fresh variable that is not
+used anywhere inside any of the other expressions.
 #+end_definition
 
 We could define a criterion for choosing exactly what this new
 variable should be, or simply accept that this procedure is not
-/well-defined/, but only /well-defined up to a change on the name of the variables/.
-This equivalence relation will be defined formally on the next section.
-In practice, it is common to follow the /Barendregt's variable convention/,
-which simply assumes that bound variables have been renamed to be distinct.
+/well-defined/, but only /well-defined up to a change on the name of
+the variables/.  This equivalence relation between terms with the same
+structure but different variable names is defined formally on the
+next section.  In practice, it is common to follow the /Barendregt's
+variable convention/, which simply assumes that bound variables have
+been renamed to be distinct.
 
-*** \alpha-equivalence
+*** Alpha equivalence
 Variables are only placeholders; and its name, as we have
 seen before, is not relevant. Two \lambda-terms whose only difference is
-the naming of the variables are called \alpha-equivalent. For example,
+the naming of the variables are called /\alpha-equivalent/. For example,
 $(\lambda x.\lambda y. x\ y)$ is \alpha-equivalent to $(\lambda f.\lambda x. f\ x)$.
 
-*\alpha-equivalence* formally captures the fact that the name of a bound
-variable can be changed without changing the meaning of the term. This
+The relation of *\alpha-equivalence* formally captures the fact that the name of a bound
+variable can be changed without changing the meaning of the term.  This
 idea appears repeatedly on mathematics; for example, the renaming of
 variables of integration or the variable on a limit are a examples of
 \alpha-equivalence.
@@ -572,20 +576,23 @@ and compatible with the structure of lambda terms, that is,
   * if $M =_{\alpha} M'$ and $N =_{\alpha} N'$, then $MN =_{\alpha}M'N'$;
   * if $M=_{\alpha}M'$, then $\lambda x.M =_{\alpha} \lambda x.M'$;
   * if $y$ does not appear on $M$, $\lambda x.M =_{\alpha} \lambda y.M[y/x]$.
+
+The last clause captures the idea of freely substituting unused
+variables inside an expression.
 #+end_definition
 
-*** \beta-reduction
-The core idea of evaluation in \lambda-calculus is captured by the notion
+*** Beta reduction
+The core notion of evaluation in \lambda-calculus is captured by the idea
 of *\beta-reduction*. Until now, evaluation has been only informally
 described; it is time to define it as a relation, $\tto_{\beta}$, going from the
 initial term to any of its partial evaluations. We
-will firstly consider a /one-step reduction/ relationship, called
-$\to_{\beta}$, which will be extended by transitivity to $\tto_{\beta}$.
+consider first a /one-step reduction/ relationship, called
+$\to_{\beta}$, and we extend it later by transitivity to $\tto_{\beta}$.
 
 Ideally, we would like to define evaluation as a series of reductions
 into a canonical form which could not be further reduced.
-Unfortunately, as we will see later, it is not possible to find, in
-general, that canonical form.
+Unfortunately, as we will see later, it is not possible to find that
+canonical form in general.
 
 #+begin_definition
 <<def-betared>>
@@ -598,16 +605,16 @@ and applications. That is, the smallest relation containing
   * $\lambda x.M \to_{\beta} \lambda x.M'$, for any $M,M'$ such that $M \to_{\beta} M'$.
 
 The reflexive transitive closure of $\to_{\beta}$ is written as $\tto_{\beta}$. The symmetric
-closure of $\tto_{\beta}$ is called *\beta-equivalence* and written as $=_{\beta}$ or simply $=$.
+closure of $\tto_{\beta}$ is called *\beta-equivalence* and is written as $=_{\beta}$, or simply $=$.
 #+end_definition
 
-*** \eta-reduction
+*** Eta reduction
 Although we lost the extensional view of functions when we decided to
 adopt the /functions as formulae/ perspective, some notion of
 /function extensionality/ in \lambda-calculus can be partially recovered
 by the notion of \eta-reduction: any term which simply applies a function to the
-argument it takes can be reduced to that function. That is, $\lambda x.M x$
-can be reduced to $M$.
+argument it takes can be reduced to that function. That is, given any term $M$, the
+abstraction $\lambda x.M x$ can be reduced to $M$.
 
 #+begin_definition
 *\eta-reduction* is the smallest relation on \lambda-terms satisfiying 
@@ -619,37 +626,39 @@ can be reduced to $M$.
 Note that, in the particular case where $M$ is itself a \lambda-abstraction,
 \eta-reduction is simply a particular case of \beta-reduction.
 We define single-step \beta\eta-reduction as the union of \beta-reduction
-and \eta-reduction. This will be written as $\to_{\beta\eta}$, and its reflexive transitive
-closure will be $\tto_{\beta\eta}$.
+and \eta-reduction. This relation is written as $\to_{\beta\eta}$ and its reflexive transitive
+closure is written as $\tto_{\beta\eta}$.
 #+end_definition
 
 # Comments in https://cstheory.stackexchange.com/a/8261/28986
 # suggest a theorem in Urzyczyn, Sorensen which might be relevant.
 
 *** Confluence
-It is not possible in general to evaluate a \lambda-term
-into a canonical, non-reducible term. However, we will be able to prove
-that, in the cases where it exists, it is unique. This property
-is a consequence of a sightly more general one, */confluence/*, which
-can be defined in any abstract rewriting system.
+It is not possible in general to evaluate a \lambda-term into a
+canonical, non-reducible term. We discuss many examples of this
+phenomenon in the following sections. However, we will be able to
+prove that, in the cases where it exists, it is unique. This property
+is a consequence of a sightly more general one called */confluence/*,
+which can be defined in any abstract rewriting system.
 
 #+attr_latex: :options [Confluence]
 #+begin_definition
 A relation $\to$ on a set ${\cal S}$ is *confluent* if, given its reflexive
-transitive closure $\tto$, for any $M,N,P \in {\cal S}$,  $M \tto N$ and $M \tto P$
-imply the existence of some $Z \in {\cal S}$ such that $N \tto Z$ and $P \tto Z$.
+transitive closure $\tto$ and any terms $M,N,P \in {\cal S}$, the relations $M \tto N$
+and $M \tto P$ imply the existence of some $Z \in {\cal S}$ such that $N \tto Z$ and $P \tto Z$.
 #+end_definition
 
 Given any binary relation $\to$ of which $\tto$ is its reflexive transitive
-closure, we can consider three apparently related properties:
+closure, we can consider three related properties:
 
   * the *confluence property* (also called /Church-Rosser property/) we have just defined;
-  * the *quasidiamond property*, which assumes $M \to N$ and $M \to P$, and
-  * the *diamond property*, which is defined substituting $\tto$ by $\to$ on
+  * the *quasidiamond property*, similar to the confluence property but assuming $M \to N$
+    and $M \to P$ instead of the weaker hypothesis of $M \tto N$ and $M \tto P$;
+  * and the *diamond property*, which is defined by substituting $\tto$ by $\to$ in
     the definition of confluence.
 
-The three properties can be represented respectively (left: confluence, center:
-quasidiamond, right: diamond) as
+The three properties can be represented respectively as follows
+(/left:/ confluence, /center:/ quasidiamond property, /right:/ diamond property).
 \[\begin{tikzcd}[column sep=small]
 & 
 M \drar[two heads]\dlar[two heads] &&& 
@@ -666,9 +675,21 @@ Z &&&
 Z &\\
 \end{tikzcd}\]
 #+latex: \\[-30pt]
-and we can show that the diamond relation implies confluence; while
-the quasidiamond does not. In order to prove confluence for a given relation, we
-must use the diamond property instead of the quasidiamond property.
+We can show that the diamond relation implies confluence; while the
+quasidiamond does not. In fact, the following figure provides
+a relation satisfying the quasidiamond property but not the
+confluence property (from cite:selinger13). If want to prove confluence for a given
+relation, we must use the diamond property instead of the quasidiamond
+property.
+\[\begin{tikzcd}[column sep=tiny, row sep=tiny]
+& & \bullet \drar\dlar & & & \\
+& \bullet \dlar & & \bullet \dlar\drar & & \\
+\bullet\drar & & \bullet \drar\dlar & & \bullet \drar & \\
+ & \bullet\dlar & & \bullet \drar\dlar & & \bullet\dlar \\
+\bullet\drar & & \bullet \drar\dlar & & \bullet \drar & \\
+ & \bullet\dlar & & \bullet \drar\dlar & & \bullet\dlar \\
+\makebox[0pt][l]{\dots}\phantom{\bullet} & & \makebox[0pt][l]{\dots}\phantom{\bullet} & & \makebox[0pt][l]{\dots}\phantom{\bullet} & \\
+\end{tikzcd}\]
 
 The statement of $\tto_{\beta}$ and $\tto_{\beta\eta}$ being confluent is what we
 call the */Church-Rosser Theorem/*. The definition of a relation satisfying
@@ -681,34 +702,35 @@ but more convoluted proof was discovered by Alonzo Church and Barkley
 Rosser in 1935 (see cite:barendregt84 and cite:pollack95).
 It is based on the idea of parallel one-step reduction.
 
-**** Parallel one-step reduction                                  :ignore:
-#+attr_latex: :options [Parallel one-step reduction]
+**** Parallel one-step reduction                                                         :ignore:
 #+begin_definition
 We define the *parallel one-step reduction* relation on \lambda-terms, $\rhd$,
 as the smallest relation satisfying that the following properties hold
-for any variable $\red{x}$ and any terms $\red{N},\red{N'},\red{M},\red{M'}$ such that $\red{M}\rhd\red{M'}$
-and $\red{N}\rhd\red{N'}$:
+for any variable ${x}$ and any terms ${N},{N'},{M},{M'}$ such that ${M}\rhd{M'}$
+and ${N}\rhd{N'}$:
 
-  * reflexivity for variables, $\red{x} \rhd \red{x}$;
-  * parallel application, $\red{MN} \rhd \red{M'N'}$;
-  * \lambda-abstraction congruence, $\red{\lambda x.N} \rhd \red{\lambda x.N'}$;
-  * parallel substitution, $\red{(\lambda x.M)N} \rhd \red{M'[N'/x]}$;
-  * and extensionality, $\red{\lambda x.M x} \rhd \red{M'}$, if $\red{x} \not\in \mathrm{FV}(\red{M})$.
+  * reflexivity for variables, ${x} \rhd {x}$;
+  * parallel application, ${MN} \rhd {M'N'}$;
+  * \lambda-abstraction congruence, ${\lambda x.N} \rhd {\lambda x.N'}$;
+  * parallel substitution, ${(\lambda x.M)N} \rhd {M'[N'/x]}$;
+  * and extensionality, ${\lambda x.M x} \rhd {M'}$, if ${x} \not\in \mathrm{FV}({M})$.
 
 Using the first three rules, it is trivial to show inductively that
 this relation is in fact reflexive.
 #+end_definition
 
-**** Transitive reflexive closure of parallel one-step reduction  :ignore:
+**** Transitive reflexive closure of parallel one-step reduction                         :ignore:
 #+begin_lemma
 <<lemma-transclosureparallel>>
 The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$. In particular, given
-any \lambda-terms $\red{P},\red{P'}$,
+any \lambda-terms ${P},{P'}$,
 
-  1) if $\red{P} \to_{\beta\eta} \red{P'}$, then $\red{P} \rhd \red{P'}$.
-  2) if $\red{P} \rhd \red{P'}$, then $\red{P} \tto_{\beta\eta} \red{P'}$;
+  1) if ${P} \to_{\beta\eta} {P'}$, then ${P} \rhd {P'}$.
+  2) if ${P} \rhd {P'}$, then ${P} \tto_{\beta\eta} {P'}$;
 #+end_lemma
 #+begin_proof
+In both cases, we apply induction on the structure of the derivation.
+
 1. All possible ways in which we can arrive at $P \to_{\beta\eta} P'$ imply $P \rhd P'$.
    They are
 
@@ -722,8 +744,8 @@ any \lambda-terms $\red{P},\red{P'}$,
      * congruence to \lambda-abstraction, which is a shared property between
        the two relations;
 
-     * $\lambda x. Mx \to M$, where $x \not\in \mathrm{FV}(M)$ and we can apply extensionality for $\rhd$
-       and reflexivity.
+     * $\lambda x. Mx \to M$ with $x \not\in \mathrm{FV}(M)$; where we can apply
+       extensionality for $\rhd$ and reflexivity.
 
 2. All the possible ways in which we can deduce $M \rhd M'$ imply $M \to_{\beta\eta} M'$.
    They are
@@ -743,44 +765,49 @@ any \lambda-terms $\red{P},\red{P'}$,
      * extensionality, $\lambda x.M x \rhd M'$, where by induction $M \tto M'$, and trivially,
        $\lambda x.Mx \tto \lambda x.M'x$.
 
-Because of this, the reflexive transitive closure of $\rhd$ should be a subset and a
-superset of $\tto$ at the same time.
+Because of this, the reflexive transitive closure of $\rhd$ is a subset and a
+superset of $\tto$ at the same time. It follows that they must be equal.
 #+end_proof
 
-**** Substitution lemma                                           :ignore:
-In order to prove that this relation has the diamond property, we will
-define a reduction of a term that can be itself reached from any of its
-parallel one-step reductions. We begin proving a lemma on 
+**** Substitution lemma                                                                  :ignore:
+In order to prove that this newly defined relation has the diamond
+property, we will define a reduction of a term with the property that
+it can be reached from any of its parallel one-step reductions. We
+first prove a lemma on substitution that will handle later the more
+challenging cases of the proof.
 
 #+attr_latex: :options [Substitution Lemma]
 #+begin_lemma
 <<lemma-subsl>>
-Assuming $M \rhd M'$ and $U \rhd U'$, $M[U/y] \rhd M'[U'/y]$.
+Let $M,M',U$ and $U'$ be four lambda terms such that $M \rhd M'$ and $U \rhd U'$.
+Then, we have $M[U/y] \rhd M'[U'/y]$ for any variable $y$.
 #+end_lemma
 #+begin_proof
-By structural induction on the derivations of $M \rhd M'$, depending
-on what was the last derivation rule we used, we have the following
-cases.
-
-  * Reflexivity, $M = x$. If $x=y$, we simply use a$U \rhd U'$; if $x \neq y$,
-    we use reflexivity on $x$ to get $x \rhd x$.
-
-  * Parallel application. By induction hypothesis, $P[U/y] \rhd P'[U'/y]$ and
-    $N[U/y]\rhd N'[U'/y]$, hence $(PN)[U/y] \rhd (P'N')[U'/y]$.
-
-  * Congruence. By induction, $N[U/y] \rhd N'[U'/y]$ and $\lambda x.N[U/y] \rhd \lambda x.N'[U'/y]$.
-
-  * Parallel substitution. By induction, $P[U/y] \rhd P'[U'/y]$ and $N[U/y] \rhd N[U'/y]$,
-    hence $((\lambda x.P)N)[U/y] \rhd P'[U'/y][N'[U'/y]/x] = P'[N'/x][U'/y]$.
-
-  * Extensionality, given $x \notin \mathrm{FV}(P)$. By induction, $P \rhd P'$, hence
-    $\lambda x.P[U/y]x \rhd P'[U'/y]$.
-
+By structural induction on the derivations of $M \rhd M'$ we have the following
+cases, depending on what was the last derivation rule we used. 
 Note that we are implicitly assuming the Barendregt's variable
 convention: all variables have been renamed to avoid clashes.
+
+  * Reflexivity, $M = x$. If $x$ precisely is the variable we are substituting, with $x=y$,
+    we simply use $U \rhd U'$; if not, $x \neq y$, we use reflexivity on $x$ to get $x \rhd x$.
+
+  * Parallel application. Let $M$ and $M'$ be $PN$ and $P'N'$ respectively, where
+    $P \rhd P'$ and $N \rhd N'$. By induction hypothesis $P[U/y] \rhd P'[U'/y]$ and
+    $N[U/y]\rhd N'[U'/y]$, hence $(PN)[U/y] \rhd (P'N')[U'/y]$ by definition
+    of substitution.
+
+  * Congruence. By induction, $N[U/y] \rhd N'[U'/y]$ and therefore $\lambda x.N[U/y] \rhd \lambda x.N'[U'/y]$.
+
+  * Parallel substitution. Let $M$ and $M'$ be $(\lambda x.P)N$ and $(\lambda x.P')N'$ respectively,
+    where $P \rhd P'$ and $N \rhd N'$. By induction hypothesis, $P[U/y] \rhd P'[U'/y]$ and $N[U/y] \rhd N[U'/y]$,
+    hence $((\lambda x.P)N)[U/y] \rhd P'[U'/y][N'[U'/y]/x] = P'[N'/x][U'/y]$.
+
+  * Extensionality. Let $M$ and $M'$ be $\lambda x.Px$ and $\lambda x.P'x$ respectively,
+    where $x \notin \mathrm{FV}(P)$. By induction hypothesis, $P \rhd P'$, hence
+    $\lambda x.P[U/y]x \rhd P'[U'/y]$. \qedhere
 #+end_proof
 
-**** Maximal parallel one-step reduct                             :ignore:
+**** Maximal parallel one-step reduct                                                    :ignore:
 #+begin_definition 
 The *maximal parallel one-step reduct* $M^{\ast}$ of a \lambda-term $M$ is defined
 inductively as
@@ -792,7 +819,7 @@ inductively as
   * $(\lambda x.Px)^{\ast} = P^{\ast}$, given $x \notin \mathrm{FV}(P)$.
 #+end_definition
 
-**** Diamond property of parallel reduction                       :ignore:
+**** Diamond property of parallel reduction                                              :ignore:
 #+attr_latex: :options [Diamond property of parallel reduction]
 #+begin_lemma
 <<lemma-paralleldiamond>>
@@ -834,48 +861,45 @@ We apply again induction on the possible derivations of $M \rhd M'$.
     we know that $P' \rhd P^{\ast} = M^{\ast}$.$\qedhere$
 #+end_proof
 
-**** Church-Rosser theorem                                        :ignore:
+**** Church-Rosser theorem                                                               :ignore:
 #+attr_latex: :options [Church-Rosser Theorem]
 #+begin_theorem
 <<theorem-churchrosser>>
 The relation $\tto_{\beta\eta}$ is confluent.
 #+end_theorem
 #+begin_proof
-Parallel reduction, $\rhd$, satisfies the diamond property (lemma [[lemma-paralleldiamond]]), 
+/(Tait, Martin-Löf)/. Parallel reduction, $\rhd$, satisfies the diamond property (Lemma [[lemma-paralleldiamond]]), 
 which implies the Church-Rosser property. Its reflexive transitive closure is $\tto_{\beta\eta}$
-(lemma [[lemma-transclosureparallel]]),
+(Lemma [[lemma-transclosureparallel]]),
 whose diamond property implies confluence for $\to_{\beta\eta}$.
 #+end_proof
 
 *** Normalization
-Once the Church-Rosser theorem is proved, we can formally define the notion
-of a normal form as a completely reduced \lambda-term.
+Once the Church-Rosser theorem is proved, we can formally define the
+notion of a normal form as a completely reduced lambda term.
 
 #+begin_definition
 A \lambda-term is said to be in *\beta-normal form* if \beta-reduction
-cannot be applied to it or any of its subformulas. We define *\eta-normal forms*
-and *\beta\eta-normal forms* analogously.
+cannot be applied to it or any of its subformulas. We define /\eta-normal forms/
+and /\beta\eta-normal forms/ analogously.
 #+end_definition
 
 Fully evaluating \lambda-terms means to iteratively apply reductions to
 them until a normal form is reached. We know, by virtue of Theorem
-[[theorem-churchrosser]], that, if a normal form for a particular term
-exists, it is unique; but we do not know whether a normal form
+[[theorem-churchrosser]], that if a normal form for a particular term
+exists, then it is unique; but we do not know whether a normal form
 actually exists. We say that a term /has a normal form/ if it can be
 reduced to a normal form.
 
 #+begin_definition
-A term is *weakly normalizing* if there exists a sequence of reductions
-from it to a normal form. It is *strongly normalizing* if every sequence
-of reductions is finite.
+A term is /weakly normalizing/ if there exists a sequence of
+reductions from it to a normal form. A term is /strongly normalizing/
+if every possible sequence of reductions is finite.
 #+end_definition
 
 A consequence of Theorem [[theorem-churchrosser]] is that a weakly normalizing
 term has a unique normal form. Strong normalization implies weak normalization,
-but the converse is not true; as an example, the term
-\[
-\Omega = (\lambda x.(x x))(\lambda x.(x x))
-\]
+but the converse is not true; as an example, the term $\Omega = (\lambda x.(x x))(\lambda x.(x x))$
 is neither weakly nor strongly normalizing; and the term
 $(\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x)$
 is weakly but not strongly normalizing. It can be reduced to a normal form as
@@ -886,6 +910,7 @@ is weakly but not strongly normalizing. It can be reduced to a normal form as
 *** Standarization and evaluation strategies
 # Barendregt, 1985, section 13.2
 
+**** Motivation                                                                          :ignore:
 # Leftmost vs Rightmost evaluation
 # Leftmost does always normalize if it is possible
 # Rightmost only normalizes if it is necessary
@@ -910,14 +935,13 @@ if a \beta-reduction to a normal form exists, then a sequence of
 able to find it. From this result, we will be able to prove that the
 reduction strategy that always reduces the leftmost \beta-abstraction
 will always find a normal form if it exists.
-
 This section follows cite:kashima00, cite:barendsen94 and cite:barendregt84.
 
 **** Leftmost one-step reduction                                  :ignore:
-#+attr_latex: :options [Leftmost one-step reduction]
 #+begin_definition
-We define the relation $M \to_{n} N$ when $N$ can be obtained by \beta-reducing
-the $n\text{-th}$ leftmost \beta-reducible application of the expression.
+Any two lambda terms $M$ and $N$ are related by $\to_n$, and we write
+this as $M \to_{n} N$, when $N$ can be obtained by \beta-reducing
+the $n\text{-th}$ leftmost \beta-reducible application in the lambda term $M$.
 We call $\to_{1}$ the *leftmost one-step reduction* and we write it as $\to_{l}$;
 accordingly, $\tto_{l}$ is its reflexive transitive closure.
 #+end_definition
@@ -925,8 +949,9 @@ accordingly, $\tto_{l}$ is its reflexive transitive closure.
 **** Standard sequence                                            :ignore:
 #+attr_latex: :options [Standard sequence]
 #+begin_definition
-A sequence of \beta-reductions $M_0 \to_{n_1} M_1 \to_{n_2} M_2 \to_{n_3} \dots \to_{n_k} M_{k}$ 
-is *standard* if $\{n_i\}$ is a non-decreasing sequence.
+Let $M_0,M_1,\dots,M_k$ be a sequence of lambda terms.
+A sequence of reductions $M_0 \to_{n_1} M_1 \to_{n_2} M_2 \to_{n_3} \dots \to_{n_k} M_{k}$ 
+is *standard* if $n_0 \leq n_1 \leq \dots \leq n_k$, that is, $\left\{ n_i \right\}$ is a non-decreasing sequence.
 #+end_definition
 
 We will prove that every term that can be reduced to a normal form can
@@ -941,6 +966,7 @@ a normal form if one exists.
 If $M \tto_{\beta} N$, there exists a standard sequence from $M$ to $N$.
 #+end_theorem
 #+begin_proof
+/(Kashima, 2000)/
 We start by defining the following two binary relations. The first one
 is the minimal reflexive transitive relation on \lambda-terms
 capturing a form of \beta-reduction called /head \beta-reduction/;
@@ -967,7 +993,7 @@ We can check the following trivial properties by structural induction
   6) if $M \tto_h N$, then $M[P/x] \tto_h N[P/x]$,
   7) if $M \tto_s N$ and $P \tto_s Q$, then $M[P/z] \tto_{s} N[Q/z]$.
 
-And now we can prove that $K \tto_{s} (\lambda x.M)N$ implies $K \tto_s M[N/x]$.
+Now we can prove that, given any lambda term $K$, the relation $K \tto_{s} (\lambda x.M)N$ implies $K \tto_s M[N/x]$.
 From the fact that $K \tto_s (\lambda x.M)N$, we know that there must exist $P$ and $Q$ such
 that $K \tto_h PQ$, $P \tto_s \lambda x.M$ and $Q \tto_s N$; and from $P \tto_s \lambda x.M$, we know
 that there exists $W$ such that $P \tto_h \lambda x.W$ and $W \tto_s M$. From all this information,
@@ -975,7 +1001,7 @@ we can conclude that
 \[
 K \tto_h PQ \tto_{h} (\lambda x.W)Q \tto W[Q/x] \tto_s M[N/x];
 \]
-which, by (3.), implies $K \tto_s M[N/x]$.
+which, by the third clause (3.), implies $K \tto_s M[N/x]$.
 
 We finally prove that, if $K \tto_s M \to_{\beta} N$, then $K \tto_s N$. This proves the theorem,
 as every \beta-reduction $M \tto_s M \tto_\beta N$ implies $M \tto_s N$. We analize the possible
@@ -990,7 +1016,7 @@ ways in which $M \to_{\beta} N$ can be derived.
      that $K \tto_h \lambda x.W$ and $W \tto_s M$. By induction $W \tto_s M'$, and $K \tto_s \lambda x.M'$.$\qedhere$
 #+end_proof
 
-**** Leftmost reduction theorem                                   :ignore:
+**** Leftmost reduction theorem                                                          :ignore:
 #+attr_latex: :options [Leftmost reduction theorem]
 #+begin_corollary
 <<cor-leftmosttheorem>>
@@ -1029,12 +1055,11 @@ these combinators are called */SKI-terms/*.
 
 The language of *SKI-terms* can be defined by the Backus-Naus form
 \[
-\mathtt{SKI} ::= x \mid (\mathtt{SKI}\ \mathtt{SKI}) \mid S \mid K \mid I,
+\mathsf{SKI} ::= x \mid (\mathsf{SKI}\ \mathsf{SKI}) \mid S \mid K \mid I,
 \]
 where $x$ can represent any free variable.
 
 **** Lambda transform                                             :ignore:
-#+attr_latex: :options [Lambda transform]
 #+begin_definition
 The *Lambda-transform* of a SKI-term is a \lambda-term defined
 recursively as
@@ -1043,30 +1068,29 @@ recursively as
   * $\lambdatrans(I) = (\lambda x.x)$;
   * $\lambdatrans(K) = (\lambda x.\lambda y.x)$;
   * $\lambdatrans(S) = (\lambda x.\lambda y.\lambda z.xz(yz))$;
-  * $\lambdatrans(XY) = \lambdatrans(X)\lambdatrans(Y)$.
+  * $\lambdatrans(XY) = \lambdatrans(X)\lambdatrans(Y)$, where $X$ and $Y$ are any two SKI-terms.
 #+end_definition
 
 **** Bracket abstraction                                          :ignore:
-#+attr_latex: :options [Bracket abstraction]
 #+begin_definition
 Before translating back lambda terms to SKI combinators, we need the
 auxiliary notion of bracket abstraction. The *bracket abstraction* of
-the SKI-term $U$ on the variable $x$ is written as $[x].U$ and defined
+the SKI-term $W$ on the variable $x$ is written as $[x].W$ and defined
 recursively as
 
   * $[x].x = I$;
-  * $[x].M = KM$, if $x \notin \freevars(M)$;
-  * $[x].Ux = U$, if $x \notin \freevars(U)$;
-  * $[x].UV = S([x].U)([x].V)$, otherwise.
+  * $[x].U = KU$, if $x \notin \freevars(U)$;
+  * $[x].Vx = V$, if $V$ is a term such that $x \notin \freevars(V)$;
+  * $[x].VV' = S([x].V)([x].V')$, otherwise.
 
-where $\freevars$ is the set of free variables; as defined on Definition
+where $\freevars$ is the set of free variables as in Definition
 [[def-freevariables]].
 #+end_definition
 
 **** SKI abstraction                                              :ignore:
 #+attr_latex: :options [SKI abstraction]
 #+begin_definition
-The *SKI abstraction* of a \lambda-term $M$, written as $\skiabs(M)$ is
+The *SKI abstraction* of a \lambda-term $P$, written as $\skiabs(P)$ is
 defined recursively as
 
   * $\skiabs(x) = x$, for any variable $x$;
@@ -1114,14 +1138,10 @@ variable $x$; we also know that
           &= (\lambda x.\lambda y.\lambda z. xz(yz))(\lambda x.\lambdatrans(M))(\lambda x.\lambdatrans(N)) \\
           &= \lambda z.\lambdatrans(M)\lambdatrans(N);
 \end{aligned}\]
-also, if $x$ is free in $M$,
-\[
-\lambdatrans([x].M) = \lambdatrans(KM) = (\lambda x.\lambda y.x) \lambdatrans(M) =_{\beta} \lambda x.\lambdatrans(M);
-\]
-and finally, if $x$ is free in $U$,
-\[
-\lambdatrans([x].Ux) = \lambdatrans(U) =_{\eta} \lambda x.\lambdatrans(U)x\ .
-\]
+also, if $x$ is free in $M$, we know that
+$\lambdatrans([x].M) = \lambdatrans(KM) = (\lambda x.\lambda y.x) \lambdatrans(M) =_{\beta} \lambda x.\lambdatrans(M);$
+and finally, if $x$ is free in $U$, we have that
+$\lambdatrans([x].Ux) = \lambdatrans(U) =_{\eta} \lambda x.\lambdatrans(U)x$.
 Now we can use this result to prove the main theorem. Again by
 structural induction,
 
@@ -1137,7 +1157,7 @@ structural induction,
 
 # https://en.wikipedia.org/wiki/Entscheidungsproblem
 
-Three different notions of computability were proposed in the 1930s
+Three different notions of computability were proposed in the 1930s,
 
  * the *general recursive functions* were defined by Herbrand and Gödel;
    they form a class of functions over the natural numbers closed under
@@ -1172,7 +1192,9 @@ Chapter [[Implementation of \lambda-expressions]]; and a detailed description on
 untyped \lambda-calculus as a programming language is given in Chapter
 [[Programming in untyped \lambda-calculus]]. General recursive functions,
 for example, can be encoded using these techniques, thus proving that it
-is in fact Turing complete (see [[sec-fixed-points]]).
+is in fact Turing complete (see [[sec-fixed-points]]).  Note that the lambda
+calculus has even a cost model allowing us to develop complexity theory
+within it (see cite:dallago08). It is however beyond the scope of this text.
 
 # Church - An unsolvable problem of elementary number theory
 # Corollary 1 pág 362.
@@ -1183,14 +1205,16 @@ is in fact Turing complete (see [[sec-fixed-points]]).
 <<sec-simplytypedlambda>>
 # TODO: The weak lambda calculus as a reasonable machine
 
+**** Motivation                                                                          :ignore:
 */Types/* were introduced in mathematics as a response to the
 Russell's paradox, found in the first naive axiomatizations of set
 theory. An attempt to use untyped \lambda-calculus as a foundational
-logical system by Church suffered from the */Rosser-Kleene paradox/*, as
-detailed in cite:kleene35 and cite:curry46, and types were a method to avoid it.
+logical system by Church suffered from the */Rosser-Kleene paradox/*
+and types were a method to avoid it, as
+detailed in cite:kleene35 and cite:curry46.
 Once types are added to the calculus, a deep connection between \lambda-calculus and
-logic arises. This connection will be discussed in Chapter 
-[[The Curry-Howard correspondence]].
+logic arises. This connection will be discussed in Section
+[[sec-curryhoward]].
 
 In programming languages, types indicate how the programmer intends to
 use the data, prevent errors and enforce certain invariants and
@@ -1215,8 +1239,8 @@ $\to$. While other presentations of simply typed
 providing pairs or union types, as it is done in cite:selinger13, it
 is clearer to present first a minimal version of the
 \lambda-calculus. Such extensions will be explained later, and its
-exposition will profit from the logical interpretation that we will
-explain in Section [[Propositions as types]].
+exposition will profit from the logical interpretation that we
+develop in Section [[Propositions as types]].
 
 *** Simple types
 We start by assuming a set of *basic types*. Those basic types would
@@ -1227,24 +1251,20 @@ one basic type.
 
 #+attr_latex: :options [Simple types]
 #+begin_definition
-The set of *simple types* is given by the following Backus-Naur form
-\[\mathtt{Type} ::= 
-\iota \mid 
-\mathtt{Type} \to \mathtt{Type},\]
-where $\iota$ can be any /basic type/.
-#+end_definition
-
-That is to say that, for every two types $A,B$, there exists a
+The set of *simple types* is generated by the Backus-Naur form
+$\mathsf{Type} ::= \iota \mid \mathsf{Type} \to \mathsf{Type}$,
+where $\iota$ can be any /basic type/. That is to say that, for every two types $A,B$, there exists a
 *function type* $A \to B$ between them.
+#+end_definition
 
 *** Typing rules for simply typed \lambda-calculus
 We define the terms of simply typed \lambda-calculus using
 the same constructors we used on the untyped version. The set of 
-*typed lambda terms* is given by the following Backus-Naus form
-\[\mathtt{Term} ::=
+*typed lambda terms* is given by the following Backus-Naus form.
+\[\mathsf{Term} ::=
 x \mid
-\mathtt{Term}\ \mathtt{Term} \mid
-\lambda x^{\mathtt{Type}}. \mathtt{Term}.
+\mathsf{Term}\ \mathsf{Term} \mid
+\lambda x^{\mathsf{Type}}. \mathsf{Term}.
 \]
 The main difference here with Definition [[def-lambdaterms]] is 
 that every bound variable has a type, and therefore, every \lambda-abstraction
@@ -1254,11 +1274,11 @@ type $B$, this term will be of type $A \to B$.
 However, the set of raw typed \lambda-terms contains some meaningless terms
 under this type interpretation, such as $(\lambda x^A. m)(\lambda x^A. m)$.
 In particular, we can not apply a function of type $A \to B$ to
-a term of type $A \to B$; it is expecting a term of type $A$.
-*Typing rules* will give them the desired expressive power. Only a subset
+a term of type $A \to B$; because it would expect only a term of type $A$.
+*Typing rules* will give terms their desired expressive power. Only a subset
 of these raw lambda terms can be obtained using the rules, and we will choose to work
 only with that subset. When a particular term $m$ has type $A$, we write
-this relation as $m : A$. The $:$ symbol should be read as ''is of type''.
+this relation as $m : A$. The $:$ symbol should be read as /''is of type''/.
 
 **** Typing rules                                                 :ignore:
 #+attr_latex: :options [Typing context]
@@ -1363,7 +1383,7 @@ Two different approaches to typing in \lambda-calculus are commonly used.
    type is defined as an intrinsic property of the term; and the same
    term has to be always interpreted with the same type.
 
- * *Curry-style* typing, also known as /implicit typing/; which
+ * *Curry-style* typing, also known as /implicit typing/,
    creates a formalism where every single term can be given an
    infinite number of possible types.  This technique is called
    /polymorphism/ when it is a formal part of the language; but
@@ -1381,31 +1401,27 @@ term.
 
 \\
 
-**** Parametric types                                             :ignore:
+**** Type templates                                                                      :ignore:
 Assuming an infinite numerable set of *type variables*, we define
-or *type templates* inductively as
-\[\TypeTemp ::= 
-\iota \mid
-\mathtt{Tvar} \mid
-\TypeTemp \to \TypeTemp,\]
-where $\iota$ is a basic type and $\mathtt{TVar}$ is a type variable.
+*type templates* as inductively generated by
+$\TypeTemp ::=  \iota \mid \mathsf{Tvar} \mid \TypeTemp \to \TypeTemp$,
+where $\iota$ is a basic type and $\mathsf{TVar}$ is a type variable.
 That is, all basic types and type variables are atomic type templates;
 and we also consider the arrow type between two type templates. The
 interesting property of type variables is that they can act as
 placeholders and be substituted for other type templates.
 
-**** Type substitution                                            :ignore:
-#+attr_latex: :options [Type substitution]
+**** Type substitution                                                                   :ignore:
 #+begin_definition
-A *substitution* $\psi$ is any function from type variables to type templates. Any
-substitution $\psi$ can be extended to a function between type templates called $\overline{\psi}$
+A *type substitution* $\psi$ is any function from type variables to type templates. Any
+type substitution $\psi$ can be extended to a function between type templates called $\overline{\psi}$
 and defined inductively by
 
    * $\overline{\psi} \iota = \iota$, for any basic type $\iota$;
    * $\overline{\psi} \sigma = \psi \sigma$, for any type variable $\sigma$;
-   * $\overline{\psi} (A \to B) = \overline{\psi} A \to \overline{\psi} B$.
+   * $\overline{\psi} (A \to B) = \overline{\psi} A \to \overline{\psi} B$, for any two type templates $A$ and $B$.
 
-That is, the parametric type $\overline{\psi} A$ is the same as $A$ but with every type variable
+That is, the type template $\overline{\psi} A$ is the same as $A$ but with every type variable
 replaced according to the substitution $\psi$.
 #+end_definition
 
@@ -1414,12 +1430,13 @@ applying a substitution to the former. In this case, the latter is called an /in
 of the former. For example, $A \to B$ is more general than its instance
 $(C \to D) \to B$, where $A$ has been substituted by $C \to D$. A
 crucial property of simply typed \lambda-calculus is that every type has a most
-general type, called its /principal type/; this will be proved in Theorem [[thm-typeinfer]].
+general type, called its /principal type/; this is proved in Theorem [[thm-typeinfer]].
 
 **** Principal type                                               :ignore:
 #+attr_latex: :options [Principal type]
 #+begin_definition
-A closed \lambda-term $M$ has a *principal type* $\pi$ if $M : \pi$ and given any
+A closed \lambda-term $M$ has a *principal type* $\pi$ if $M : \pi$, and given any
+typing judgement
 $M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\sigma} \pi = \tau$.
 #+end_definition
 
@@ -1428,42 +1445,43 @@ $M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\s
 The unification of two type templates is the construction of two substitutions
 making them equal as type templates; that is, the construction of a type that
 is a particular instance of both at the same time. We will not only aim for
-an unifier but for the most general one between them.
+an unifier but for the most general one between them, the universal one.
 
 A substitution $\psi$ is called an *unifier* of two sequences of type templates
-$\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ if $\overline{\psi} A_i = \overline{\psi} B_i$ for any $i$. We say that it
+$A_1\dots,A_n$ and $B_1,\dots,B_n$ if $\overline{\psi} A_i = \overline{\psi} B_i$ for any $i = 1,\dots,n$. We say that it
 is the *most general unifier* if given any other unifier $\phi$ exists a substitution
 $\varphi$ such that $\phi = \overline{\varphi} \circ \psi$.
 
 #+attr_latex: :options [Unification]
 #+begin_lemma
 <<lemma-unification>>
-If an unifier of $\left\{ A_i \right\}_{i = 1,\dots,n}$ and $\left\{ B_i \right\}_{i=1,\dots,n}$ exists, the most general unifier
-can be found using the following recursive definition of $\mathtt{unify}(A_1,\dots,A_n;B_1,\dots,B_n)$.
+If an unifier of $\left\{ A_1,\dots,A_n \right\}$ and $\left\{ B_1,\dots,B_n \right\}$ exists, the most general unifier
+is $\mathsf{unify}(A_1,\dots,A_n;B_1,\dots,B_n)$, which is partially defined by induction as follows,
+where $x$ is any type variable.
 
-  1) $\mathtt{unify}(x;x) = \id$ and $\mathtt{unify}(\iota,\iota) = \id$;
-  2) $\mathtt{unify}(x;B) = (x \mapsto B)$, the substitution that only changes $x$ by $B$;
-     if $x$ does not occur in $B$. The algorithm *fails* if $x$ occurs in $B$;
-  3) $\mathtt{unify}(A;x)$ is defined symmetrically;
-  4) $\mathtt{unify}(A \to A'; B \to B') = \mathtt{unify}(A,A';B,B')$;
-  5) $\mathtt{unify}(A,A_1,\dots; B,B_1,\dots) = \overline{\psi} \circ \rho$ where $\rho = \mathtt{unify}(A_1,\dots;B_1,\dots)$ 
-     and $\psi = \mathtt{unify}(\overline{\rho}A; \overline{\rho}B)$;
-  6) $\mathtt{unify}$ fails in any other case;
+  1) $\mathsf{unify}(x;x) = \id$ and $\mathsf{unify}(\iota,\iota) = \id$.
+  2) $\mathsf{unify}(x;B) = (x \mapsto B)$, the substitution that only changes $x$ by $B$;
+     if $x$ does not occur in $B$. The algorithm *fails* if $x$ occurs in $B$.
+  3) $\mathsf{unify}(A;x)$ is defined symmetrically.
+  4) $\mathsf{unify}(A \to A'; B \to B') = \mathsf{unify}(A,A';B,B')$.
+  5) $\mathsf{unify}(A,A_1,\dots; B,B_1,\dots) = \overline{\psi} \circ \rho$ where $\rho = \mathsf{unify}(A_1,\dots;B_1,\dots)$ 
+     and $\psi = \mathsf{unify}(\overline{\rho}A; \overline{\rho}B)$.
+  6) $\mathsf{unify}$ fails in any other case.
 
-where $x$ is any type variable. The two sequences $\{A_i\},\{B_i\}$ of types have no unifier
-if and only if $\mathtt{unify}(\{A_i\};\{B_i\})$ fails.
+Moreover, the two sequences of types, $A_1\dots,A_n$ and $B_1,\dots,B_n$, have no unifier
+if and only if $\mathsf{unify}(A_1,\dots,A_n;B_1,\dots,B_n)$ fails.
 #+end_lemma
 #+begin_proof
 It is easy to notice by structural induction that, if
-$\mathtt{unify}(A;B)$ exists, it is in fact an unifier.
+$\mathsf{unify}(A;B)$ exists, it is in fact an unifier. If the unifier
+fails in clause 2, there is obviously no possible unifier: the number
+of constructors on the first type template will be always smaller than
+the second one.  If the unifier fails in clause 6, the type templates
+are fundamentally different, they have different head constructors and
+this is invariant to substitutions. This proves that the failure of
+the algorithm implies the non existence of an unifier.
 
-If the unifier fails in clause 2, there is obviously no possible unifier: the number
-of constructors on the first type template will be always smaller than the second one.
-If the unifier fails in clause 6, the type templates are fundamentally different, they
-have different head constructors and this is invariant to substitutions. This proves
-that the failure of the algorithm implies the non existence of an unifier.
-
-We now prove that, if $A$ and $B$ can be unified, $\mathtt{unify}(A,B)$ is the most general unifier.
+We now prove that, if $A$ and $B$ can be unified, $\mathsf{unify}(A,B)$ is the most general unifier.
 For instance, in the clause 2, if we call $\psi = (x \mapsto B)$ and, if $\eta$ were another unifier,
 then $\eta x = \overline{\eta}x = \overline{\eta} B = \overline{\eta}(\psi(x))$; hence $\overline{\eta} \circ \psi = \eta$ by definition of $\psi$. A similar argument can 
 be applied to clauses 3 and 4. In the clause 5, we suppose the existence of some unifier $\psi'$. 
@@ -1480,31 +1498,31 @@ Therefore, we need to apply induction on the number of type variables and only t
 induction on the size of the arguments.
 #+end_proof
 
-**** Type Inference                                               :ignore:
+**** Type Inference                                                                      :ignore:
 Using unification, we can write an algorithm inferring types.
 
 #+attr_latex: :options [Type inference]
 #+begin_theorem
 <<thm-typeinfer>>
-The algorithm $\mathtt{typeinfer}(M,B)$, defined as follows, finds the most general substitution $\sigma$
-such that $x_1 : \sigma A_1, \dots, x_n : \sigma A_n \vdash M : \overline{\sigma} B$ is a valid typing judgment if it exists;
-and fails otherwise.
+The function $\mathsf{typeinfer}(M,B)$, partially defined as follows, finds the most
+general substitution $\sigma$ such that $x_1 : \sigma A_1, \dots, x_n : \sigma A_n \vdash M : \overline{\sigma} B$ is a
+valid typing judgment if it exists; and fails otherwise.
 
-  1) $\mathtt{typeinfer}(x_i:A_i,\Gamma \vdash x_i : B) = \mathtt{unify}(A_i,B)$;
-  2) $\mathtt{typeinfer}(\Gamma \vdash MN : B) = \overline{\varphi} \circ \psi$, where $\psi = \mathtt{typeinfer}(\Gamma \vdash M : x \to B)$ and
-     $\varphi = \mathtt{typeinfer}(\overline{\psi}\Gamma \vdash N : \overline{\psi}x)$ for a fresh type variable $x$;
-  3) $\mathtt{typeinfer}(\Gamma \vdash \lambda x.M : B) = \overline{\varphi} \circ \psi$ where $\psi = \mathtt{unify}(B; z \to z')$ and
-     $\varphi = \mathtt{typeinfer}(\overline{\psi}\Gamma, x:\overline{\psi}z \vdash M : \overline{\psi}z')$ for fresh type variables $z,z'$.
+  1) $\mathsf{typeinfer}(x_i:A_i,\Gamma \vdash x_i : B) = \mathsf{unify}(A_i,B)$;
+  2) $\mathsf{typeinfer}(\Gamma \vdash MN : B) = \overline{\varphi} \circ \psi$, where $\psi = \mathsf{typeinfer}(\Gamma \vdash M : x \to B)$ and
+     $\varphi = \mathsf{typeinfer}(\overline{\psi}\Gamma \vdash N : \overline{\psi}x)$ for a fresh type variable $x$;
+  3) $\mathsf{typeinfer}(\Gamma \vdash \lambda x.M : B) = \overline{\varphi} \circ \psi$ where $\psi = \mathsf{unify}(B; z \to z')$ and
+     $\varphi = \mathsf{typeinfer}(\overline{\psi}\Gamma, x:\overline{\psi}z \vdash M : \overline{\psi}z')$ for fresh type variables $z,z'$.
 
-Note that the existence of fresh type variables is always asserted by the set of
-type variables being infinite. The output of this algorithm is defined up to
-a permutation of type variables.
+Note that the existence of fresh type variables is always asserted by
+the set of type variables being infinite. The output of this algorithm
+is defined up to a permutation of type variables.
 #+end_theorem
 #+begin_proof
-The algorithm terminates by induction on the size of $M$. It is easy to check
-by structural induction that the inferred type judgments are in fact valid.
-If the algorithm fails, by Lemma [[lemma-unification]], it is also clear that the
-type inference is not possible.
+The algorithm terminates by induction on the size of $M$. It is easy
+to check by structural induction that the inferred type judgments are
+in fact valid.  If the algorithm fails, by Lemma [[lemma-unification]], it
+is also clear that the type inference is not possible.
 
 On the first case, the type is obviously the most general substitution
 by virtue of the previous Lemma [[lemma-unification]].  On the second
@@ -1523,7 +1541,7 @@ We have proved that the inferred type is in general the most general one.
 Every typeable pure \lambda-term has a principal type.
 #+end_corollary
 #+begin_proof
-Given a typeable term $M$, we can compute $\mathtt{typeinfer}(x_1:A_1,\dots,x_n:A_n \vdash M : B)$,
+Given a typeable term $M$, we can compute $\mathsf{typeinfer}(x_1:A_1,\dots,x_n:A_n \vdash M : B)$,
 where $x_1,\dots,x_n$ are the free variables on $M$ and $A_1,\dots,A_n,B$ are fresh type
 variables. By virtue of Theorem [[thm-typeinfer]], the result is the most general type of $M$
 if we assume the variables to have the given types.
@@ -1578,19 +1596,15 @@ to use mutual induction.
 The following three properties hold;
 
   1. if $t \in \redu_{T}$, then $t$ is strongly normalizable;
-  2. if $t \in \redu_{T}$ and $t \to_{\beta} t'$, $t' \in \redu_{T}$; and
+  2. if $t \in \redu_{T}$ and $t \to_{\beta} t'$, then $t' \in \redu_{T}$; and
   3. if $t$ is not a \lambda-abstraction and $t' \in \redu_{T}$ for every $t \to_{\beta} t'$,
      then $t \in \redu_{T}$.
 #+END_proposition
 #+BEGIN_proof
-For basic types,
-
-  1. holds trivially;
-
-  2. holds by the definition of strong normalization;
-
-  3. if any one-step \beta-reduction leads to a strongly normalizing term,
-     the term itself must be strongly normalizing.
+For basic types, 1. holds definitionally; 2. holds by the definition of
+strong normalization; and 3. follows from the fact that if any
+one-step \beta-reduction leads to a strongly normalizing term then the
+term itself must be strongly normalizing.
 
 For arrow types,
 
@@ -1670,6 +1684,7 @@ Turing complete.
 # !!!! Detail and check this proof
 
 ** The Curry-Howard correspondence
+<<sec-curryhoward>>
 # Tutorial on Curry-Howard http://purelytheoretical.com/papers/ATCHC.pdf
 # Local soundness and completeness http://www.cs.cmu.edu/~fp/courses/15816-s10/lectures/01-judgments.pdf
 # https://www.elsevier.com/books/lectures-on-the-curry-howard-isomorphism/sorensen/978-0-444-52077-7
@@ -2183,7 +2198,7 @@ which is encoded by $\red{\lambda a.\mathrm{inr}\ a}$.
 On Chapter [[Implementation of \lambda-expressions]], we develop a \lambda-calculus interpreter
 which is able to check and simplify proofs in intuitionistic logic.
 This example could be checked and simplified by this interpreter as
-it is shown in image [[mikrogentzen]]. 
+it is shown at Figure [[mikrogentzen]].
 
 #+caption: Curry-Howard example in Mikrokosmos.
 #+name: mikrogentzen
@@ -4896,7 +4911,6 @@ kind is determined by a unique universal arrow.
 On the one hand, given an universal arrow, bijectivity follows
 from the definition of universal arrow; and naturality follows from
 the fact that $G(g\circ f)\circ u = Gg \circ Gf \circ u$.
-
 On the other hand, given a bijection $\varphi$, we define $u = \varphi(\id_{D_0})$.
 By naturality, we have the bijection $\varphi(f) = Gf \circ u$; and every arrow
 can be written in this form.
@@ -4920,14 +4934,12 @@ D_0 & GD_0 \rar[swap]{v} & C
 **** TODO Examples
 # TODO Equivalence relations
 *** Representability
-A *representation* of a functor from a locally small category to the category of
-sets, $K \colon {\cal D} \to \Sets$, is a natural isomorphism making it isomorphic to a
-partially applied hom-functor,
-\[
-\psi\colon \hom_{{\cal D}}(r,-) \cong K.
-\]
-A functor is /representable/ if it has a representation. The object $r$ is
-called a /representing object/.
+A *representation* of a functor from a locally small category to the
+category of sets, $K \colon {\cal D} \to \Sets$, is a natural
+isomorphism $\psi\colon \hom_{{\cal D}}(r,-) \cong K$ making it
+isomorphic to a partially applied hom-functor. A functor is
+/representable/ if it has a representation and the object $r$ used
+in the representation is called its /representing object/.
 
 #+attr_latex: :options [Representations in terms of universal arrows]
 #+begin_proposition
@@ -4950,10 +4962,11 @@ turn determines a universal arrow by Proposition [[prop-universality-homsets]].
 
 *** Yoneda Lemma
 **** Motivation of Yoneda Lemma                                                          :ignore:
-*Yoneda lemma* is one of the first results of pure category theory.
+The Yoneda lemma is one of the first results in pure category theory.
 It allows us to embed any small category into a functor category over
-the category of sets. It will be useful when studying presheaves and
-algebraic theories (see Section [[sec-lawveretheories]]).
+the category of sets. It will be very useful when studying presheaves and
+algebraic theories (see Section [[sec-lawveretheories]]) to create models
+of these theories.
 
 **** Statement of the Yoneda Lemma                                                       :ignore:
 #+attr_latex: :options [Yoneda Lemma]
@@ -5707,7 +5720,7 @@ FX \uar[dashed,swap]{\exists! Fh}
 \end{tikzcd}\]
 and this choice makes $F$ a functor and $\eta$ a natural transformation,
 as it can be checked in the following diagrams using the existence
-and uniqueness given by the universality of $\eta$ in both cases
+and uniqueness given by the universality of $\eta$ in both cases.
 \[\begin{tikzcd}
 &&& X'' \rar{\eta_{X''}}  & GFX''  & FX'' \\
 & GFX & FX & X'  \uar{h'} \rar{\eta_{X'}}  & GFX'  \uar[swap]{GFh'}  & 
@@ -5770,7 +5783,7 @@ are $\pair{G \eta' F \circ \eta,\ \varepsilon' \circ F' \varepsilon G'}$.
 #+BEGIN_proof
 We see that the vertical composition of two natural isomorphisms is itself
 an natural isomorphism because the composition of isomorphisms is itself an
-isomorphism. Diagramatically, we compose
+isomorphism. We compose as in the following diagram.
 #+latex: \\[-20pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&]
@@ -5912,7 +5925,8 @@ The adjunction can be seen diagramatically as
 \end{prooftree}
 where each monoid homormorphism from the free monoid, $FA \to M$ can
 be seen as the unique extension of a function from the set
-of generators $f \colon A \to UM$ to a full monoid homomorphism, $\overline{f}$.
+of generators $f \colon A \to UM$ to a full monoid homomorphism,
+$\overline{f} \colon FA \to M$.
 
 Note how, while this characterizes the notion of free monoid, it does
 not provide an explicit construction. Indeed, given $f \colon A \to UM$,
@@ -5922,11 +5936,10 @@ an homomorphism is to define
 \[
 \overline{f}(a_1a_2\dots a_n) = f(a_1)f(a_2)\dots f(a_n).
 \]
-Note how every homomorphism from the free monoid is determined by how
-it acts on the generator set.
-
-This notion of forgetful and free functors can be generalized to
-algebraic structures other than monoids.
+Note also that every homomorphism from the free monoid is determined
+by how it acts on the generator set. This notion of forgetful and free
+functors can be generalized to algebraic structures other than
+monoids.
 #+END_exampleth
 
 **** TODO Hom-tensor                                              :ignore:
@@ -6178,6 +6191,7 @@ rise to the same category.
 **** Definition                                                   :ignore:
 #+ATTR_LATEX: :options [Lawvere algebraic theory]
 #+BEGIN_definition
+<<def-algebraictheory>>
 An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
 whose objects form a sequence $A^0,A^1,A^2, \dots$ such that $A^m \times A^n = A^{m+n}$
 for any $m, n$.
@@ -6307,6 +6321,7 @@ over $n$.
 #+END_exampleth
 
 *** Cartesian closed categories
+**** Definition                                                                          :ignore:
 #+ATTR_LATEX: :options [Cartesian closed category]
 #+BEGIN_definition
 A *cartesian closed category* is a category ${\cal C}$ in which the terminal,
@@ -6349,7 +6364,7 @@ B^A
 \end{tikzcd}}
 \end{prooftree}
 
-**** Presheaves and sets are cartesian closed                     :ignore:
+**** Presheaves and sets are cartesian closed                                            :ignore:
 #+ATTR_LATEX: :options [Presheaf categories are cartesian closed]
 #+BEGIN_exampleth
 <<example-presheaves-ccc>>
@@ -6383,17 +6398,18 @@ for any $r \in RA$, $p \in PA$ as
 \]
 The existence of a universal family of evaluations characterizes
 the adjunction by Proposition [[prop-characterize-adjunctions]].
+In general, cartesian-closed categories with functors preserving
+products and exponentials form a category called $\mathsf{Ccc}$ that
+we show equivalent to a category containing lambda theories in
+Theorem [[th-equivalence-ccctl]].
 #+END_exampleth
 
 # Example 2.2.10 from Bauer, Awodey
 # This is Proposition I.6.1 in "Sheaves in geometry and logic."
 # https://mathoverflow.net/questions/10406/general-construction-for-internal-hom-in-a-presheaf-category
 
-**** Category of cartesian-closed categories                      :ignore:
-In general, cartesian-closed categories with functors
-preserving products and exponentials form a category called $\mathsf{Ccc}$.
-
 *** Simply-typed \lambda-theories
+**** Cartesian category                                                                  :ignore:
 If we read $\Gamma \vdash a : A$ as a morphism from the context $\Gamma$ to the output
 type $A$, the rules of simply-typed lambda calculus with product and
 unit types match the adjoints that determine a cartesian closed category
@@ -6411,7 +6427,7 @@ unit types match the adjoints that determine a cartesian closed category
 # where the projections are what we called $\fst$ and $\snd$, and
 # evaluation is function application
 
-**** Lambda theories                                              :ignore:
+**** Lambda theories                                                                     :ignore:
 A *\lambda-theory* $\mathbb{T}$ is the analog of a Lawvere theory for cartesian
 closed categories. It is given by a set of basic types and constants
 over the simply-typed lambda calculus and a set of equality axioms,
@@ -6433,47 +6449,46 @@ Two types are /isomorphic/, $A \cong A'$ if there exist terms $f \colon A \to A'
 and $g \colon A' \to A$ such that $f\ (g\ a) \equiv a$ for each $a {:} A$, and $g\ (f\ a') \equiv a'$
 for each $a'{:}A'$.
 
-**** System T                                                     :ignore:
-#+ATTR_LATEX: :options [System T]
+**** System T                                                                            :ignore:
 #+BEGIN_exampleth
 <<example-systemt>>
 Gödel's *System T* cite:girard89 is defined as a \lambda-theory with the basic types =nat=
-and =bool=; the constants $0 {:} \mathtt{nat}$, $S {:} \mathtt{nat}\to \mathtt{nat}$, $\mathrm{true} {:} \mathtt{bool}$, $\mathrm{false} {:} \mathtt{bool}$,
-$\mathrm{ifelse} {:} \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} : C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$;
-and the axioms
+and =bool=; the constants $0 : \mathtt{nat}$, $S : \mathtt{nat}\to \mathtt{nat}$, $\mathrm{true} : \mathtt{bool}$, $\mathrm{false} : \mathtt{bool}$,
+$\mathrm{ifelse} : \mathtt{bool} \to C \to C \to C$ and $\mathrm{rec} : C\to (\mathtt{nat} \to C \to C) \to \mathtt{nat}\to C$
+where $C$ is any type; and the axioms
 \begin{center}\arraycolsep=30pt\begin{array}{ll}
 \textrm{ifelse}\ \textrm{true}\ a\ b \equiv a,  & \textrm{rec}\ c_0\ c_s\ 0 \equiv c_0, \\
 \textrm{ifelse}\ \textrm{false}\ a\ b \equiv b, & \textrm{rec}\ c_0\ c_s\ (S n) \equiv c_s\ n\ (\textrm{rec}\ c_0\ c_s\ n). \\
 \end{array}\end{center}
 #+END_exampleth
 
-**** Untyped lambda calculus as a theory                          :ignore:
+**** Untyped lambda calculus as a theory                                                 :ignore:
 #+ATTR_LATEX: :options [Untyped \lambda-calculus]
 #+BEGIN_exampleth
 <<example-untypedlambda-theory>>
 Untyped \lambda calculus can be recovered as a \lambda theory with a single
-basic type $\mathtt{D}$ and a type isomorphism $\mathtt{D} \cong \mathtt{D}\to \mathtt{D}$ given by two constants
-$r : \mathtt{D}\to (\mathtt{D} \to \mathtt{D})$ and $s : (\mathtt{D}\to \mathtt{D})\to \mathtt{D}$ such that $r\ (s\ f) \equiv f$ for each
-$f : \mathtt{D}\to \mathtt{D}$ and $s\ (r\ x) \equiv x$ for each $x : \mathtt{D}$. We assume that each term of the
-untyped calculus is of type $\mathtt{D}$ and apply $r,s$ as needed to construct well-typed
+basic type $\mathsf{D}$ and a type isomorphism $\mathsf{D} \cong \mathsf{D}\to \mathsf{D}$ given by two constants
+$r : \mathsf{D}\to (\mathsf{D} \to \mathsf{D})$ and $s : (\mathsf{D}\to \mathsf{D})\to \mathsf{D}$ such that $r\ (s\ f) \equiv f$ for each
+$f : \mathsf{D}\to \mathsf{D}$ and $s\ (r\ x) \equiv x$ for each $x : \mathsf{D}$. We assume that each term of the
+untyped calculus is of type $\mathsf{D}$ and apply $r,s$ as needed to construct well-typed
 terms.
 #+END_exampleth
 
-**** Translations                                                 :ignore:
-#+ATTR_LATEX: :options [Translation]
+**** Translations                                                                        :ignore:
 #+BEGIN_definition
 The reasonable notion of homomorphism between lambda theories is called
-a *translation* between \lambda-theories $\tau \colon \mathbb{T} \to \mathbb{U}$, and it given by
-a function on types and terms
+a *translation* between \lambda-theories. Given two lambda theories $\mathbb{T}$ and $\mathbb{U}$,
+a translation $\tau \colon \mathbb{T} \to \mathbb{U}$ is given by
+a function both on types and terms that
 
-  1. preserving type constructors
+  1. preserves type constructors
      \[
      \tau 1 = 1,\qquad
      \tau(A \times B) = \tau A \times \tau B,\qquad
      \tau(A \to B) = \tau A \to \tau B;
      \]
 
-  2. preserving the term structure
+  2. preserves the term structure
      \begin{center}\begin{array}{lll}
      \tau(\texttt{fst}\ m) \equiv \texttt{fst}\ (\tau m), &
      \tau(\texttt{snd}\ m) \equiv \texttt{snd}\ (\tau m), &
@@ -6482,24 +6497,25 @@ a function on types and terms
      \tau (\lambda x. m) \equiv \lambda x. (\tau m);
      \end{array}\end{center}
      
-  3. and preserving all equations, $t \equiv u$ implies $\tau t \equiv \tau u$.
+  3. and preserves all equations, meaning that $t \equiv u$ implies $\tau t \equiv \tau u$.
 #+END_definition
 
-We consider the category $\lambda\mathsf{Thr}$ of \lambda-theories with
-translations, note that the identity and composition of translations
-are translations.  Our goal is to prove that this category is
-equivalent to that of cartesian closed categories with functors
-preserving products and exponentials.
+We consider the category $\lambda\mathsf{Thr}$ of \lambda-theories
+with translations as morphisms.  Note that the identity is a
+translation and that the composition of two translations is again a
+translation.  Our goal is to prove that this category is equivalent to
+that of cartesian closed categories with functors preserving products
+and exponentials.
 
 Apart from the natural definition of isomorphism, we consider the
-weaker notion of *equivalence of theories*. Two theories with translations $\tau \colon \mathbb{T} \to \mathbb{U}$
-and $\sigma \colon \mathbb{U} \to \mathbb{T}$ are equivalent $\mathbb{T} \simeq \mathbb{U}$ if there exist two families of
-/type isomorphisms/ $\tau\sigma A \cong A$ and $\sigma\tau B \cong B$.
+weaker notion of /equivalence of theories/. Two theories with translations $\tau \colon \mathbb{T} \to \mathbb{U}$
+and $\sigma \colon \mathbb{U} \to \mathbb{T}$ are *equivalent* $\mathbb{T} \simeq \mathbb{U}$ if there exist two families of
+/type isomorphisms/ $\tau\sigma A \cong A$ and $\sigma\tau B \cong B$ parametrized over the types
+$A$ and $B$.
 
 *** Syntactic categories and internal languages
-**** Syntactic category                                           :ignore:
+**** Syntactic category                                                                  :ignore:
 # Models are functors from the sintactic category
-#+ATTR_LATEX: :options [Syntactic category]
 #+BEGIN_proposition
 Given a \lambda-theory $\mathbb{T}$, its *syntactic category* ${\cal S}(\mathbb{T})$, has an object
 for each type of the theory and a morphism $A \to B$ for each term
@@ -6542,7 +6558,7 @@ $\vdash \tau b : \tau B$. The complete structure of the functor is then determin
 it must preserve products and exponentials.
 #+END_proof
 
-**** Internal language                                            :ignore:
+**** Internal language                                                                   :ignore:
 #+ATTR_LATEX: :options [Internal language]
 #+BEGIN_proposition
 Given a cartesian closed category ${\cal C}$, its *internal language* $\mathbb{L}({\cal C})$
@@ -6577,9 +6593,10 @@ and types are preserved up to isomorphism because $F$ preserves products and
 exponentials.
 #+END_proof
 
-**** Equivalence between CCC and STLC                             :ignore:
+**** Equivalence between CCC and STLC                                                    :ignore:
 #+ATTR_LATEX: :options [Equivalence between cartesian closed categories and lambda calculus]
 #+BEGIN_theorem
+<<th-equivalence-ccctl>>
 There exists a equivalence of categories ${\cal C} \simeq {\cal S}(\mathbb{L}({\cal C}))$ for any ${\cal C} \in \Ccc$
 and an equivalence of theories $\mathbb{T} \simeq \mathbb{L}({\cal S}(\mathbb{T}))$ for any $\mathbb{T} \in \lambda\mathsf{Thr}$.
 #+END_theorem
@@ -6615,24 +6632,25 @@ on the constructors of the type:
    
    * if $B$ is a basic type, $\tau\sigma(\intl{B}) = \intl{B}$;
 
-   * if $B = 1$, then $\tau\sigma(\intl{1}) = 1$ and $\intl{1} \cong 1$ thanks to the constant $\mathtt{T}$;
+   * if $B = 1$, then $\tau\sigma(\intl{1}) = 1$ and $\intl{1} \cong 1$ thanks
+     to the constant $\mathtt{T}$;
 
-   * if $B = C \times D$, then $\tau\sigma(\intl{C \times D}) = \intl{C} \times \intl{D}$ and $\intl{C \times D} \cong \intl{C} \times \intl{D}$
-     thanks to the constant $\mathtt{P}$;
+   * if $B = C \times D$, then $\tau\sigma(\intl{C \times D}) = \intl{C} \times \intl{D}$
+     and $\intl{C \times D} \cong \intl{C} \times \intl{D}$ thanks to the constant $\mathtt{P}$;
 
-   * if $B = D^C$, then $\tau\sigma(\intl{D^C}) = \intl{C} \to \intl{D}$ and $\intl{D^C} \cong \intl{C}\to\intl{D}$ thanks
-     to the constant $\mathtt{E}$.
+   * if $B = D^C$, then $\tau\sigma(\intl{D^C}) = \intl{C} \to \intl{D}$ and $\intl{D^C} \cong \intl{C}\to\intl{D}$
+     thanks to the constant $\mathtt{E}$.
 
  * if $A = 1$, then $\tau\sigma 1 = 1$;
 
- * if $A = C \times D$, then $\tau\sigma(C \times D) = \tau\sigma(C) \times \tau\sigma(D) \cong C \times D$ by induction hypothesis;
+ * if $A = C \times D$, then $\tau\sigma(C \times D) = \tau\sigma(C) \times \tau\sigma(D) \cong C \times D$
+   by induction hypothesis;
 
- * if $A = C \to D$, then $\tau\sigma(C \to D) = \tau\sigma(C) \to \tau\sigma(D) \cong C \to D$ by induction hypothesis.
+ * if $A = C \to D$, then $\tau\sigma(C \to D) = \tau\sigma(C) \to \tau\sigma(D) \cong C \to D$
+   by induction hypothesis. \qedhere
 #+END_proof
 
-\\
-
-**** Semantics                                                    :ignore:
+**** Semantics                                                                           :ignore:
 Thus, we can say that the simply-typed lambda calculus is the internal
 language of cartesian closed categories; each lambda theories are
 cartesian closed categories.
@@ -6651,53 +6669,94 @@ cartesian closed categories.
 # Fixed points in untyped lambda calculus
 
 We can now talk internally about cartesian closed categories using
-lambda calculus. Note each closed \lambda term $\vdash a : A$ can also be
-seen as a morphism from the terminal object $1 \to A$.
+lambda calculus. Note each closed \lambda term
+$\vdash a : A$ can also be seen as a morphism from the terminal object
+$1 \to A$. We use this language to provide a simple proof to a
+known theorem for catesian closed categories by W. Lawvere
+(see cite:lawvere06 for details). The theorem will imply many known
+corollaries as particular cases when interpreted in different contexts.
 
-**** Point-surjective                                             :ignore:
-# Weak point-surjection suffices
-# Existence of products suffice
-We say that a morphism $f : A \to B$ in a cartesian closed category is
-*point-surjective* if, for every $b : B$, there exists an $a : A$ such that
-$f\ a \equiv b$.
-
-**** Lawvere's fixed point theorem                                :ignore:
-#+ATTR_LATEX: :options [Lawvere's fixed point theorem]
+**** Lawvere's fixed point theorem                                                       :ignore:
+#+ATTR_LATEX: :options [Lawvere, 1969]
 #+BEGIN_theorem
-In any cartesian closed category, if there exists a point-surjective
-$d : A \to B^A$, then each $f : B \to B$ has a fixed point $b : B$ such
-that $f\ b \equiv b$. cite:lawvere06
+<<th-diagonal>>
+We say that a morphism $g : A \to B$ in a cartesian closed category is
+*point-surjective* if, for every element $b : B$, there exists an element $a : A$ such that
+$g\ a \equiv b$. In any cartesian closed category, if there exists a point-surjective
+morphism $d : A \to B^A$, then each morphism $f : B \to B$ has a fixed point $b : B$, such
+that $f\ b \equiv b$.
 #+END_theorem
 #+BEGIN_proof
 As $d$ is point-surjective, there exists $x : A$ such that $d\ x \equiv \lambda a. f\ (d\ a\ a)$,
 but then, $d\ x\ x \equiv (\lambda a.f\ (d\ a\ a))\ x \equiv f\ (d\ x\ x)$ is a fixed point.
 #+END_proof
 
-**** Consequences                                                 :ignore:
-This theorem has nontrivial consequences when interpreted in different
-contexts:
+**** Consequences                                                                        :ignore:
+#+ATTR_LATEX: :options [Cantor, 1878]
+#+BEGIN_corollary
+Let $A$ be a set. The set of all subsets of $A$ has a strictly greater cardinality
+than $A$.
+#+END_corollary
+#+BEGIN_proof
+Every subset of $A$ is uniquely determined by a function to the set of
+two elements $A \to 2$. As there exists nontrivial permutation of the
+two-element set, a point-surjective $A \to 2^A$ cannot exist by virtue
+of Theorem [[th-diagonal]].
+#+END_proof
 
- * *Cantor's theorem* is a corollary in $\Sets$; as there exists a nontrivial
-   permutation of the two-element set, a point-surjective $A \to 2^A$ cannot
-   exist;
+#+ATTR_LATEX: :options [Russell, 1901]
+#+BEGIN_corollary
+In a naive formulation of set theory, every collection is a set. This
+leads to inconsistency.
+#+END_corollary
+#+BEGIN_proof
+We could consider $\mathsf{Sets}$, the class of all sets, and the membership relation
+$\in \colon \mathsf{Sets} \to 2^{\mathsf{Sets}}$. This relation would be point-surjective if we assume that
+for any property on the class of sets, given as a morphism $P \colon \mathsf{Sets} \to 2$,
+there exists a comprehension set $\left\{ y \in \mathsf{Sets} \mid P(y) \right\}$. In that case, again,
+any permutation of the two-element set would have a fixed point, which
+is false.
+#+END_proof
 
- * *Russell's paradox* follows because $\in \colon \mathrm{Sets} \to 2^{\mathrm{Sets}}$ would be point-surjective
-   if we assume that for any property on the class of sets $P \colon \mathrm{Sets} \to 2$ 
-   there exists a comprehension set $\left\{ y \in \mathrm{Sets} \mid P(y) \right\}$;
+#+BEGIN_corollary
+Every term in untyped \lambda-calculus has a fixed point.
+#+END_corollary
+#+BEGIN_proof
+We consider untyped \lambda-calculus as a theory (Example
+[[example-untypedlambda-theory]]) where terms can be regarded as
+morphisms $D \to D$. There exists a type isomorphism $D \to (D \to D)$,
+which is in particular a point-surjection.  Thus, by Theorem
+[[th-diagonal]], there exists a fixed point for any term $D \to D$.
+Note that the term thus constructed is precisely the fixed point
+we defined in Section [[sec-fixed-points]].
+#+END_proof
 
- * the *existence of fixed points* for any term of *in untyped \lambda-calculus* 
-   given as a theory like in Example [[example-untypedlambda-theory]] follows from 
-   the fact that there exists a type isomorphism (in particular, a point-surjection)
-   $\mathtt{D} \to (\mathtt{D}\to \mathtt{D})$;
+#+ATTR_LATEX: :options [Gödel, Tarski, 1936]
+#+BEGIN_corollary
+A consistent theory cannot express its own truth. In particular, no
+consistent formal system of arithmetic can encode the truth of
+arithmetic statements.
+#+END_corollary
+#+BEGIN_proof
+Let our category be a theory (in the sense of Definition [[def-algebraictheory]])
+with objects $A^0,A^1,A^2,\dots$ and a supplementary object $2$. We say that the theory is
+/consistent/ if there exists a morphism $\mathrm{not} \colon 2 \to 2$ such that $\mathrm{not}\circ \varphi \neq \varphi$ for
+every $\varphi : A \to 2$. We say that /truth/ is definable if there exists a 
+map $\mathrm{truth} : A \times A \to 2$ such that for every predicate $\varphi \colon A \to 2$, there exists
+a /Gödel number/ $c : A$ such that $\mathrm{truth}(c,a) = \varphi(a)$. By Theorem [[th-diagonal]]
+we know that if satisfiability is definable in a theory then
+it must be inconsistent (see cite:yanofsky03).
+#+END_proof
 
- * *Gödel first incompleteness theorem* and *Tarski's theorem* follow a similar
-   reasoning (see cite:yanofsky03 for details). Let our category be an (algebraic)
-   theory $A^0,A^1,A^2,\dots$ with a supplementary object $2$. We say that the theory is
-   *consistent* if there exists a morphism $\mathrm{not} \colon 2 \to 2$ such that $\mathrm{not}\circ \varphi \neq \varphi$ for
-   every $\varphi : A \to 2$. We say that *satisfiability* is definable if there exists a 
-   map $\mathrm{sat} : A \times A \to 2$ such that for every /predicate/ $\varphi \colon A \to 2$, there exists
-   a /Gödel number/ $c : A$ such that $\mathrm{sat}(c,a) = \varphi(a)$. The fixed point theorem says
-   that, if satisfiability is definible in a theory, it must be inconsistent.
+We want to note here how abstracting a seemingly banal theorem
+has resulted in a myriad of deep results.  Moreover, Lawvere's
+original theorem can be replicated without exponentials in any
+category with all products, taking adjoints in $d : A \times A \to
+B$.
+The condition of $d$ being point-surjective can also be weakened;
+we only need, for every $g \colon A \to B$, the existence of some $x :
+A$
+such that $d\ x\ a \equiv g\ a$ for all $a : A$.
 
 # Turing halting problem from yanofsky follows in a category of computations
 
@@ -6710,13 +6769,11 @@ contexts:
 # https://ncatlab.org/nlab/show/cocartesian+closed+category
 # Theorem. Any cocartesian closed category is equivalent to the terminal category.
 
-#+ATTR_LATEX: :options [Bicartesian closed category]
 #+BEGIN_definition
 A *bicartesian closed category* is a cartesian closed category in which
 the terminal and diagonal functors have left adjoints.
-#+END_definition
-
 These adjoints are given by initial and coproduct objects, written as
+inference rules as follows.
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] \ast \rar{}\& \ast \end{tikzcd}}
 \doubleLine
@@ -6727,8 +6784,10 @@ These adjoints are given by initial and coproduct objects, written as
 \noLine
 \BIC{}
 \end{prooftree}
+#+END_definition
+
 The rules of union and void types in simply-typed lambda calculus can
-be rewritten to match the structure of these adjoints
+be rewritten to match the structure of these adjoints.
 \begin{prooftree}
 \AXC{$$}
 \UIC{$\Gamma, z:0 \vdash \mathrm{abort} : C$}
@@ -6740,7 +6799,8 @@ be rewritten to match the structure of these adjoints
 \end{prooftree}
 In a similar way to how our previous fragment of simply-typed lambda
 calculus was the internal language of cartesian closed categories, the
-extended version is the internal language of bicartesian closed categories.
+extended version of lambda calculus defined in Section [[sec-extendingstlc]]
+is the internal language of bicartesian closed categories.
 
 *** Inductive types
 # We get System T when we assume Nats and Bools
@@ -6766,9 +6826,9 @@ class of functors.
 #+ATTR_LATEX: :options [Binary tree data structure]
 #+BEGIN_exampleth
 <<example-bintree>>
-Let $T$ be a type generated by the constructors $\mathrm{nil} : T$ and
-$\mathrm{node} : \mathbb{N} \to T \to T \to T$. It can be seen as the data structure
-of a binary tree of naturals, where "$\mathrm{nil}$" is an empty leaf and "$\mathrm{node}$"
+Let $T$ be a type generated by the constructors $\mathsf{nil} : T$ and
+$\mathsf{node} : \mathbb{N} \to T \to T \to T$. It can be seen as the data structure
+of a binary tree of naturals, where "$\mathsf{nil}$" is an empty leaf and "$\mathsf{node}$"
 builds a data structure with a natural number on top and two pointers
 to binary trees.
 \[\begin{tikzcd}[column sep=tiny]
@@ -6778,11 +6838,11 @@ to binary trees.
 \end{tikzcd}\]
 For instance, the above diagram represents the term
 \[
-\mathrm{node}\ 5\ 
-(\mathrm{node}\ 3\ 
-(\mathrm{node}\ 1\ \mathrm{nil}\ \mathrm{nil})\ 
-(\mathrm{node}\ 2\ \mathrm{nil}\ \mathrm{nil}))\ 
-(\mathrm{node}\ 4\ \mathrm{nil}\ (\mathrm{node}\ 6\ \mathrm{nil}\ \mathrm{nil})).
+\mathsf{node}\ 5\ 
+(\mathsf{node}\ 3\ 
+(\mathsf{node}\ 1\ \mathsf{nil}\ \mathsf{nil})\ 
+(\mathsf{node}\ 2\ \mathsf{nil}\ \mathsf{nil}))\ 
+(\mathsf{node}\ 4\ \mathsf{nil}\ (\mathsf{node}\ 6\ \mathsf{nil}\ \mathsf{nil})).
 \]
 #+END_exampleth
 
@@ -6793,32 +6853,32 @@ System T was described in Example [[example-systemt]] as an extension of
 the simply typed lambda calculus with natural numbers and booleans.
 A cartesian closed category with a natural numbers object given as an
 initial algebra (Example [[example-naturalnumbersobj]]) has an internal
-language with a type $\mathbb{N}$ and an elimination principle $\mathrm{ind}$ given by the
+language with a type $\mathbb{N}$ and an elimination principle $\mathsf{ind}$ given by the
 universal property of the algebra, as in the following diagram.
 \begin{center}\begin{array}{lll}
 \begin{tikzcd}
 1+\mathbb{N}\rar{} \dar[swap]{\pair{0,\mathrm{succ}}} & 
 1+C\dar{\pair{x,f}} \\
-\mathbb{N}\rar{ \mathrm{ind}\ x\ f} &
+\mathbb{N}\rar{ \mathsf{ind}\ x\ f} &
 C \end{tikzcd} &  \qquad & 
 \begin{gathered}
-\mathrm{ind} \colon C \to (C \to C) \to (\mathbb{N} \to C)  \\
-\mathrm{ind}\ x\ f \ 0 \equiv x \\
-\mathrm{ind}\ x\ f\ (S\ n) \equiv f\ (\mathrm{ind}\ x\ f\ n)
+\mathsf{ind} \colon C \to (C \to C) \to (\mathbb{N} \to C)  \\
+\mathsf{ind}\ x\ f \ 0 \equiv x \\
+\mathsf{ind}\ x\ f\ (S\ n) \equiv f\ (\mathsf{ind}\ x\ f\ n)
 \end{gathered}\end{array}\end{center}
 \\
-Although this induction principle is weaker than the recursion
-principle System T offered, $\mathrm{rec} : D\to (\mathbb{N} \to D \to D) \to \mathbb{N} \to D$,
-it can be recovered using the cartesian closed structure and
-taking $C = \mathbb{N} \times D$ when applying the induction principle in
+It could seem that this induction principle is weaker than the recursion
+principle System T offered, $\mathsf{rec} : D\to (\mathbb{N} \to D \to D) \to \mathbb{N} \to D$.
+However, the full recursion principle can be recovered using the cartesian closed structure and
+taking $C = \mathbb{N} \times D$ when applying the induction principle to define
 \[
-\mathrm{rec}\ c_0\ c_s\ n \equiv
-\pi_1\ (\mathrm{ind}\ \pair{c_0,0}\ (\lambda m.\ \pair{c_s\ m\ d, \mathrm{succ}\ m})\ n).
+\mathsf{rec}\ c_0\ c_s\ n \equiv
+\pi_1\ (\mathsf{ind}\ \pair{c_0,0}\ (\lambda m.\ \pair{c_s\ m\ d, \mathrm{succ}\ m})\ n).
 \]
-It can be checked that $\mathrm{rec}$ is such that $\mathrm{rec}\ c_0\ c_s\ 0 \equiv c_0$, and
-$\mathrm{rec}\ c_0\ c_s\ (S\ n) \equiv c_s\ n\ (\mathrm{rec}\ c_0\ c_s\ n)$.
+It can be checked that $\mathsf{rec}$ is such that $\mathsf{rec}\ c_0\ c_s\ 0 \equiv c_0$, and
+$\mathsf{rec}\ c_0\ c_s\ (S\ n) \equiv c_s\ n\ (\mathsf{rec}\ c_0\ c_s\ n)$.
 
-Finally, note that $\mathrm{ind}$ can be directly recovered from $\mathrm{rec}$, and the
+Finally, note that $\mathsf{ind}$ can be directly recovered from $\mathsf{rec}$, and the
 booleans of System T correspond to the coproduct $1+1$. System T
 is thus equivalent to the internal language of a cartesian closed
 category with a natural numbers object and a coproduct $1+1$; and
@@ -6840,17 +6900,17 @@ it can take models in any category with this structure.
 #+BEGIN_exampleth
 Following cite:awodey10 and cite:moerdijk00, we can generalize these
 examples to initial algebras over *polynomial endofunctors* of the
-following form for some fixed objects $C_0,\dots,C_n$;
+form 
 \[
-P(X) = C_0 + C_1 \times X + C_2 \times X^2 + \dots + C_n \times X^n.
+P(X) = C_0 + C_1 \times X + C_2 \times X^2 + \dots + C_n \times X^n
 \]
-Where the initial algebra can be seen to correspond to an inductive
+for some fixed objects $C_0,\dots,C_n$. Where the initial algebra can be seen to correspond to an inductive
 branching type with n-ary nodes of type $C_n$ and leafs of type $C_0$.
 Natural numbers $(1+X)$ and lists $(1 + A \times X)$ for a fixed type
 $A$, are particular examples of initial algebras of polynomial
-endofunctors (as seen in Examples [[example-naturalnumbersobj]] and[[
-example-listalgebra]]). Binary trees, as described in Example [[example-bintree]],
-are the initial algebra for $(1 + \mathbb{N} \times T \times T)$.
+endofunctors (as seen in Examples [[example-naturalnumbersobj]] 
+and [[example-listalgebra]]). Binary trees, as described in Example [[example-bintree]],
+are the initial algebra for the functor $T \mapsto(1 + \mathbb{N} \times T \times T)$.
 #+END_exampleth
 
 **** TODO Initial algebras in presheaves                          :ignore:
@@ -7861,9 +7921,9 @@ following example, where we prove that $a = b$ implies $f(a) = f(b)$
 and then use this fact to prove that $n + 0 = n$ for any $n : \mathbb{N}$
 by induction.
 
-#+latex: \small
+#+latex: \noindent\rule[0.5ex]{\linewidth}{0.1pt}\small
 #+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{mlttzero}
-#+latex: \normalsize
+#+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 **** Propositions                                                                        :ignore:
 Finally, we can define /propositions/ as those types where any two
@@ -7946,9 +8006,9 @@ That is,
 
 We postulate this in Agda as follows.
 
-#+latex: \small
+#+latex: \noindent\rule[0.5ex]{\linewidth}{0.1pt}\small
 #+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{wellpointed}
-#+latex: \normalsize
+#+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 The last ingredient is the Axiom of Choice.  This, like in the case of
 the Law of Excluded Middle, will make us lose the computational
@@ -7979,9 +8039,9 @@ Middle) during this particular section of the text. In the next
 section, we return to constructive mathematics, working with the real
 numbers and extracting algorithms from proofs.
 
-#+latex: \small
+#+latex: \noindent\rule[0.5ex]{\linewidth}{0.1pt}\small
 #+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{diaconescu}
-#+latex: \normalsize
+#+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 *** Dedekind reals
 In =Reals.agda=, we provide a formalized construction of the Dedekind
