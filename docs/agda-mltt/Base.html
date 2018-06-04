@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Base</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Option">--without-K</a> <a id="25" class="Symbol">#-}</a>
+
+<a id="30" class="Comment">-- Agda-MLTT library.</a>
+<a id="52" class="Comment">-- Author: Mario Román.</a>
+
+<a id="77" class="Comment">-- Base.  Basic definitions for Martin-Löf type theory, elimination</a>
+<a id="145" class="Comment">-- principles, induction principles and some basic lemmas.</a>
+
+<a id="205" class="Keyword">module</a> <a id="212" href="Base.html" class="Module">Base</a> <a id="217" class="Keyword">where</a>
+
+<a id="224" class="Comment">-- The terminal type with a single constructor.</a>
+<a id="272" class="Keyword">record</a> <a id="⊤" href="Base.html#%E2%8A%A4" class="Record">⊤</a> <a id="281" class="Symbol">:</a> <a id="283" class="PrimitiveType">Set</a> <a id="287" class="Keyword">where</a>
+  <a id="295" class="Keyword">instance</a> <a id="304" class="Keyword">constructor</a> <a id="⊤.tt" href="Base.html#%E2%8A%A4.tt" class="InductiveConstructor">tt</a>
+<a id="319" class="Symbol">{-#</a> <a id="323" class="Keyword">BUILTIN</a> UNIT <a id="336" href="Base.html#%E2%8A%A4" class="Record">⊤</a> <a id="338" class="Symbol">#-}</a>
+
+
+<a id="344" class="Comment">-- The initial type, without any constructors.</a>
+<a id="391" class="Keyword">data</a> <a id="⊥" href="Base.html#%E2%8A%A5" class="Datatype">⊥</a> <a id="398" class="Symbol">:</a> <a id="400" class="PrimitiveType">Set</a> <a id="404" class="Keyword">where</a>
+
+<a id="411" class="Comment">-- Definition of negation.</a>
+<a id="¬" href="Base.html#%C2%AC" class="Function">¬</a> <a id="440" class="Symbol">:</a> <a id="442" class="PrimitiveType">Set</a> <a id="446" class="Symbol">→</a> <a id="448" class="PrimitiveType">Set</a>
+<a id="452" href="Base.html#%C2%AC" class="Function">¬</a> <a id="454" href="Base.html#454" class="Bound">A</a> <a id="456" class="Symbol">=</a> <a id="458" href="Base.html#454" class="Bound">A</a> <a id="460" class="Symbol">→</a> <a id="462" href="Base.html#%E2%8A%A5" class="Datatype">⊥</a>
+
+
+<a id="466" class="Comment">-- Definition of equality inside as an inductive type. Its induction</a>
+<a id="535" class="Comment">-- principle is the J-elimination rule described in (4.5.2).</a>
+<a id="596" class="Keyword">infix</a> <a id="602" class="Number">4</a> <a id="604" href="Base.html#_%E2%89%A1_" class="Datatype Operator">_≡_</a>
+<a id="608" class="Keyword">data</a> <a id="_≡_" href="Base.html#_%E2%89%A1_" class="Datatype Operator">_≡_</a> <a id="617" class="Symbol">{</a><a id="618" href="Base.html#618" class="Bound">a</a><a id="619" class="Symbol">}</a> <a id="621" class="Symbol">{</a><a id="622" href="Base.html#622" class="Bound">A</a> <a id="624" class="Symbol">:</a> <a id="626" class="PrimitiveType">Set</a> <a id="630" href="Base.html#618" class="Bound">a</a><a id="631" class="Symbol">}</a> <a id="633" class="Symbol">(</a><a id="634" href="Base.html#634" class="Bound">x</a> <a id="636" class="Symbol">:</a> <a id="638" href="Base.html#622" class="Bound">A</a><a id="639" class="Symbol">)</a> <a id="641" class="Symbol">:</a> <a id="643" href="Base.html#622" class="Bound">A</a> <a id="645" class="Symbol">→</a> <a id="647" class="PrimitiveType">Set</a> <a id="651" href="Base.html#618" class="Bound">a</a> <a id="653" class="Keyword">where</a>
+  <a id="661" class="Keyword">instance</a> <a id="_≡_.refl" href="Base.html#_%E2%89%A1_.refl" class="InductiveConstructor">refl</a> <a id="675" class="Symbol">:</a> <a id="677" href="Base.html#634" class="Bound">x</a> <a id="679" href="Base.html#_%E2%89%A1_" class="Datatype Operator">≡</a> <a id="681" href="Base.html#634" class="Bound">x</a>
+<a id="683" class="Symbol">{-#</a> <a id="687" class="Keyword">BUILTIN</a> EQUALITY <a id="704" href="Base.html#_%E2%89%A1_" class="Datatype Operator">_≡_</a> <a id="708" class="Symbol">#-}</a>
+
+<a id="713" class="Comment">-- Explicit reflexivity</a>
+<a id="refl-in" href="Base.html#refl-in" class="Function">refl-in</a> <a id="745" class="Symbol">:</a> <a id="747" class="Symbol">{</a><a id="748" href="Base.html#748" class="Bound">A</a> <a id="750" class="Symbol">:</a> <a id="752" class="PrimitiveType">Set</a><a id="755" class="Symbol">}</a> <a id="757" class="Symbol">(</a><a id="758" href="Base.html#758" class="Bound">a</a> <a id="760" class="Symbol">:</a> <a id="762" href="Base.html#748" class="Bound">A</a><a id="763" class="Symbol">)</a> <a id="765" class="Symbol">→</a> <a id="767" href="Base.html#758" class="Bound">a</a> <a id="769" href="Base.html#_%E2%89%A1_" class="Datatype Operator">≡</a> <a id="771" href="Base.html#758" class="Bound">a</a>
+<a id="773" href="Base.html#refl-in" class="Function">refl-in</a> <a id="781" href="Base.html#781" class="Bound">a</a> <a id="783" class="Symbol">=</a> <a id="785" href="Base.html#_%E2%89%A1_.refl" class="InductiveConstructor">refl</a>
+
+
+<a id="792" class="Comment">-- Definition of the sigma type as a record with two constructors.</a>
+<a id="859" class="Comment">-- Its elimination principle can be directly derived from the</a>
+<a id="921" class="Comment">-- definition.</a>
+<a id="936" class="Keyword">record</a> <a id="Σ" href="Base.html#%CE%A3" class="Record">Σ</a> <a id="945" class="Symbol">(</a><a id="946" href="Base.html#946" class="Bound">S</a> <a id="948" class="Symbol">:</a> <a id="950" class="PrimitiveType">Set</a><a id="953" class="Symbol">)</a> <a id="955" class="Symbol">(</a><a id="956" href="Base.html#956" class="Bound">T</a> <a id="958" class="Symbol">:</a> <a id="960" href="Base.html#946" class="Bound">S</a> <a id="962" class="Symbol">→</a> <a id="964" class="PrimitiveType">Set</a><a id="967" class="Symbol">)</a> <a id="969" class="Symbol">:</a> <a id="971" class="PrimitiveType">Set</a> <a id="975" class="Keyword">where</a>
+  <a id="983" class="Keyword">constructor</a> <a id="Σ._,_" href="Base.html#%CE%A3._%2C_" class="InductiveConstructor Operator">_,_</a>
+  <a id="1001" class="Keyword">field</a>
+    <a id="Σ.fst" href="Base.html#%CE%A3.fst" class="Field">fst</a> <a id="1015" class="Symbol">:</a> <a id="1017" href="Base.html#946" class="Bound">S</a>
+    <a id="Σ.snd" href="Base.html#%CE%A3.snd" class="Field">snd</a> <a id="1027" class="Symbol">:</a> <a id="1029" href="Base.html#956" class="Bound">T</a> <a id="1031" href="Base.html#%CE%A3.fst" class="Field">fst</a>
+<a id="1035" class="Keyword">open</a> <a id="1040" href="Base.html#%CE%A3" class="Module">Σ</a> <a id="1042" class="Keyword">public</a>
+
+<a id="Σ-elim" href="Base.html#%CE%A3-elim" class="Function">Σ-elim</a> <a id="1057" class="Symbol">:</a> <a id="1059" class="Symbol">{</a><a id="1060" href="Base.html#1060" class="Bound">A</a> <a id="1062" class="Symbol">:</a> <a id="1064" class="PrimitiveType">Set</a><a id="1067" class="Symbol">}</a> <a id="1069" class="Symbol">{</a><a id="1070" href="Base.html#1070" class="Bound">B</a> <a id="1072" class="Symbol">:</a> <a id="1074" href="Base.html#1060" class="Bound">A</a> <a id="1076" class="Symbol">→</a> <a id="1078" class="PrimitiveType">Set</a><a id="1081" class="Symbol">}</a> <a id="1083" class="Symbol">{</a><a id="1084" href="Base.html#1084" class="Bound">P</a> <a id="1086" class="Symbol">:</a> <a id="1088" class="PrimitiveType">Set</a><a id="1091" class="Symbol">}</a> <a id="1093" class="Symbol">→</a> <a id="1095" href="Base.html#%CE%A3" class="Record">Σ</a> <a id="1097" href="Base.html#1060" class="Bound">A</a> <a id="1099" href="Base.html#1070" class="Bound">B</a> <a id="1101" class="Symbol">→</a> <a id="1103" class="Symbol">(</a><a id="1104" href="Base.html#%CE%A3" class="Record">Σ</a> <a id="1106" href="Base.html#1060" class="Bound">A</a> <a id="1108" href="Base.html#1070" class="Bound">B</a> <a id="1110" class="Symbol">→</a> <a id="1112" href="Base.html#1084" class="Bound">P</a><a id="1113" class="Symbol">)</a> <a id="1115" class="Symbol">→</a> <a id="1117" href="Base.html#1084" class="Bound">P</a>
+<a id="1119" href="Base.html#%CE%A3-elim" class="Function">Σ-elim</a> <a id="1126" class="Symbol">(</a><a id="1127" href="Base.html#1127" class="Bound">a</a> <a id="1129" href="Base.html#%CE%A3._%2C_" class="InductiveConstructor Operator">,</a> <a id="1131" href="Base.html#1131" class="Bound">b</a><a id="1132" class="Symbol">)</a> <a id="1134" href="Base.html#1134" class="Bound">f</a> <a id="1136" class="Symbol">=</a> <a id="1138" href="Base.html#1134" class="Bound">f</a> <a id="1140" class="Symbol">(</a><a id="1141" href="Base.html#1127" class="Bound">a</a> <a id="1143" href="Base.html#%CE%A3._%2C_" class="InductiveConstructor Operator">,</a> <a id="1145" href="Base.html#1131" class="Bound">b</a><a id="1146" class="Symbol">)</a>
+
+<a id="1149" class="Comment">-- Product type, as a particular case of a Sigma type over a constant</a>
+<a id="1219" class="Comment">-- family of types.</a>
+<a id="_×_" href="Base.html#_%C3%97_" class="Function Operator">_×_</a> <a id="1243" class="Symbol">:</a> <a id="1245" class="Symbol">(</a><a id="1246" href="Base.html#1246" class="Bound">S</a> <a id="1248" class="Symbol">:</a> <a id="1250" class="PrimitiveType">Set</a><a id="1253" class="Symbol">)</a> <a id="1255" class="Symbol">(</a><a id="1256" href="Base.html#1256" class="Bound">T</a> <a id="1258" class="Symbol">:</a> <a id="1260" class="PrimitiveType">Set</a><a id="1263" class="Symbol">)</a> <a id="1265" class="Symbol">→</a> <a id="1267" class="PrimitiveType">Set</a>
+<a id="1271" href="Base.html#1271" class="Bound">A</a> <a id="1273" href="Base.html#_%C3%97_" class="Function Operator">×</a> <a id="1275" href="Base.html#1275" class="Bound">B</a> <a id="1277" class="Symbol">=</a> <a id="1279" href="Base.html#%CE%A3" class="Record">Σ</a> <a id="1281" href="Base.html#1271" class="Bound">A</a> <a id="1283" class="Symbol">(λ</a> <a id="1286" href="Base.html#1286" class="Bound">_</a> <a id="1288" class="Symbol">→</a> <a id="1290" href="Base.html#1275" class="Bound">B</a><a id="1291" class="Symbol">)</a>
+
+<a id="1294" class="Comment">-- Sum type.  It is defined explicitly as an inductive type with two</a>
+<a id="1363" class="Comment">-- constructors.</a>
+<a id="1380" class="Keyword">data</a> <a id="_⊎_" href="Base.html#_%E2%8A%8E_" class="Datatype Operator">_⊎_</a> <a id="1389" class="Symbol">(</a><a id="1390" href="Base.html#1390" class="Bound">S</a> <a id="1392" class="Symbol">:</a> <a id="1394" class="PrimitiveType">Set</a><a id="1397" class="Symbol">)</a> <a id="1399" class="Symbol">(</a><a id="1400" href="Base.html#1400" class="Bound">T</a> <a id="1402" class="Symbol">:</a> <a id="1404" class="PrimitiveType">Set</a><a id="1407" class="Symbol">)</a> <a id="1409" class="Symbol">:</a> <a id="1411" class="PrimitiveType">Set</a> <a id="1415" class="Keyword">where</a>
+  <a id="_⊎_.inl" href="Base.html#_%E2%8A%8E_.inl" class="InductiveConstructor">inl</a> <a id="1427" class="Symbol">:</a> <a id="1429" href="Base.html#1390" class="Bound">S</a> <a id="1431" class="Symbol">→</a> <a id="1433" href="Base.html#1390" class="Bound">S</a> <a id="1435" href="Base.html#_%E2%8A%8E_" class="Datatype Operator">⊎</a> <a id="1437" href="Base.html#1400" class="Bound">T</a>
+  <a id="_⊎_.inr" href="Base.html#_%E2%8A%8E_.inr" class="InductiveConstructor">inr</a> <a id="1445" class="Symbol">:</a> <a id="1447" href="Base.html#1400" class="Bound">T</a> <a id="1449" class="Symbol">→</a> <a id="1451" href="Base.html#1390" class="Bound">S</a> <a id="1453" href="Base.html#_%E2%8A%8E_" class="Datatype Operator">⊎</a> <a id="1455" href="Base.html#1400" class="Bound">T</a>
+
+
+<a id="1459" class="Comment">-- Function extensionality. We postulate that two functions are equal</a>
+<a id="1529" class="Comment">-- if they take equal inputs into equal outputs.</a>
+<a id="1578" class="Keyword">postulate</a>
+  <a id="funext" href="Base.html#funext" class="Postulate">funext</a> <a id="1597" class="Symbol">:</a> <a id="1599" class="Symbol">{</a><a id="1600" href="Base.html#1600" class="Bound">A</a> <a id="1602" class="Symbol">:</a> <a id="1604" class="PrimitiveType">Set</a><a id="1607" class="Symbol">}</a> <a id="1609" class="Symbol">{</a><a id="1610" href="Base.html#1610" class="Bound">B</a> <a id="1612" class="Symbol">:</a> <a id="1614" href="Base.html#1600" class="Bound">A</a> <a id="1616" class="Symbol">→</a> <a id="1618" class="PrimitiveType">Set</a><a id="1621" class="Symbol">}</a> <a id="1623" class="Symbol">→</a> <a id="1625" class="Symbol">{</a><a id="1626" href="Base.html#1626" class="Bound">f</a> <a id="1628" href="Base.html#1628" class="Bound">g</a> <a id="1630" class="Symbol">:</a> <a id="1632" class="Symbol">(</a><a id="1633" href="Base.html#1633" class="Bound">a</a> <a id="1635" class="Symbol">:</a> <a id="1637" href="Base.html#1600" class="Bound">A</a><a id="1638" class="Symbol">)</a> <a id="1640" class="Symbol">→</a> <a id="1642" href="Base.html#1610" class="Bound">B</a> <a id="1644" href="Base.html#1633" class="Bound">a</a><a id="1645" class="Symbol">}</a>
+    <a id="1651" class="Symbol">→</a> <a id="1653" class="Symbol">((</a><a id="1655" href="Base.html#1655" class="Bound">x</a> <a id="1657" class="Symbol">:</a> <a id="1659" href="Base.html#1600" class="Bound">A</a><a id="1660" class="Symbol">)</a> <a id="1662" class="Symbol">→</a> <a id="1664" href="Base.html#1626" class="Bound">f</a> <a id="1666" href="Base.html#1655" class="Bound">x</a> <a id="1668" href="Base.html#_%E2%89%A1_" class="Datatype Operator">≡</a> <a id="1670" href="Base.html#1628" class="Bound">g</a> <a id="1672" href="Base.html#1655" class="Bound">x</a><a id="1673" class="Symbol">)</a> <a id="1675" class="Symbol">→</a> <a id="1677" href="Base.html#1626" class="Bound">f</a> <a id="1679" href="Base.html#_%E2%89%A1_" class="Datatype Operator">≡</a> <a id="1681" href="Base.html#1628" class="Bound">g</a>
+
+
+<a id="1685" class="Comment">-- From falsehood, anything follows.</a>
+<a id="exfalso" href="Base.html#exfalso" class="Function">exfalso</a> <a id="1730" class="Symbol">:</a> <a id="1732" class="Symbol">{</a><a id="1733" href="Base.html#1733" class="Bound">A</a> <a id="1735" class="Symbol">:</a> <a id="1737" class="PrimitiveType">Set</a><a id="1740" class="Symbol">}</a> <a id="1742" class="Symbol">→</a> <a id="1744" href="Base.html#%E2%8A%A5" class="Datatype">⊥</a> <a id="1746" class="Symbol">→</a> <a id="1748" href="Base.html#1733" class="Bound">A</a>
+<a id="1750" href="Base.html#exfalso" class="Function">exfalso</a> <a id="1758" class="Symbol">()</a>
+</pre></body></html>
