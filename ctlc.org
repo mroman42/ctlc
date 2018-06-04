@@ -6744,7 +6744,7 @@ with objects $A^0,A^1,A^2,\dots$ and a supplementary object $2$. We say that the
 every $\varphi : A \to 2$. We say that /truth/ is definable if there exists a 
 map $\mathrm{truth} : A \times A \to 2$ such that for every predicate $\varphi \colon A \to 2$, there exists
 a /Gödel number/ $c : A$ such that $\mathrm{truth}(c,a) = \varphi(a)$. By Theorem [[th-diagonal]]
-we know that if satisfiability is definable in a theory then
+we know that if truth is definable in a theory then
 it must be inconsistent (see cite:yanofsky03).
 #+END_proof
 
