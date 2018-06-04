@@ -196,7 +196,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\skiabs{\mathfrak{H}} % SKI abstraction
 #+latex_header: \newcommand\lambdatrans{\mathfrak{L}} % Lambda transformation
 #+latex_header: \newcommand\tto{\twoheadrightarrow} % Reduction
-#+latex_header: \newcommand\redu{\mathtt{RED}} % Reducibility
+#+latex_header: \newcommand\redu{\mathsf{Red}} % Reducibility
 #+latex_header: \newcommand\fst{\mathtt{fst}} % first
 #+latex_header: \newcommand\snd{\mathtt{snd}} % second
 #+latex_header: \DeclareMathOperator{\freevars}{FV} % Free variables
@@ -1326,14 +1326,14 @@ listed above and the conclusion is written below the line.
 
 
 A term $m$ is *typeable* in a giving context $\Gamma$ if a typing
-judgement of the form $\Gamma \vdash m : T$ can be derived using only
+judgment of the form $\Gamma \vdash m : T$ can be derived using only
 the previous typing rules.
 From now on, we only consider typeable terms as the terms of simply
 typed \lambda-calculus: the set of \lambda-terms of simply typed
 \lambda-calculus is only a subset of the terms of untyped
 \lambda-calculus.
 
-**** Examples of typeable and non-typeable terms                  :ignore:
+**** Examples of typeable and non-typeable terms                                         :ignore:
 #+ATTR_LATEX: :options [Typeable and non-typeable terms]
 #+BEGIN_exampleth
 The term $\lambda f.\lambda x.f (f x)$ is typeable.
@@ -1374,7 +1374,7 @@ and we will make precise this intuition.
 
 *** Curry-style types
 <<sec-currystyle>>
-**** Church-style and Curry-style                                 :ignore:
+**** Church-style and Curry-style                                                        :ignore:
 Two different approaches to typing in \lambda-calculus are commonly used.
 
  * *Church-style* typing, also known as /explicit typing/, originated
@@ -1432,23 +1432,23 @@ $(C \to D) \to B$, where $A$ has been substituted by $C \to D$. A
 crucial property of simply typed \lambda-calculus is that every type has a most
 general type, called its /principal type/; this is proved in Theorem [[thm-typeinfer]].
 
-**** Principal type                                               :ignore:
+**** Principal type                                                                      :ignore:
 #+attr_latex: :options [Principal type]
 #+begin_definition
 A closed \lambda-term $M$ has a *principal type* $\pi$ if $M : \pi$, and given any
-typing judgement
+typing judgment
 $M : \tau$, we can obtain $\tau$ as an instance of $\pi$, that is, $\overline{\sigma} \pi = \tau$.
 #+end_definition
 
 *** Unification and type inference
-**** Unification                                                  :ignore:
+**** Unification                                                                         :ignore:
 The unification of two type templates is the construction of two substitutions
 making them equal as type templates; that is, the construction of a type that
 is a particular instance of both at the same time. We will not only aim for
 an unifier but for the most general one between them, the universal one.
 
 A substitution $\psi$ is called an *unifier* of two sequences of type templates
-$A_1\dots,A_n$ and $B_1,\dots,B_n$ if $\overline{\psi} A_i = \overline{\psi} B_i$ for any $i = 1,\dots,n$. We say that it
+$A_1\dots,A_n$ and $B_1,\dots,B_n$ if $\overline{\psi} A_i = \overline{\psi} B_i$ for all $i = 1,\dots,n$. We say that it
 is the *most general unifier* if given any other unifier $\phi$ exists a substitution
 $\varphi$ such that $\phi = \overline{\varphi} \circ \psi$.
 
@@ -1511,8 +1511,8 @@ general substitution $\sigma$ such that $x_1 : \sigma A_1, \dots, x_n : \sigma A
 valid typing judgment if it exists; and fails otherwise.
 
   1) $\mathsf{typeinfer}(x_i:A_i,\Gamma \vdash x_i : B) = \mathsf{unify}(A_i,B)$;
-  2) $\mathsf{typeinfer}(\Gamma \vdash MN : B) = \overline{\varphi} \circ \psi$, where $\psi = \mathsf{typeinfer}(\Gamma \vdash M : x \to B)$ and
-     $\varphi = \mathsf{typeinfer}(\overline{\psi}\Gamma \vdash N : \overline{\psi}x)$ for a fresh type variable $x$;
+  2) $\mathsf{typeinfer}(\Gamma \vdash MN : B) = \overline{\varphi} \circ \psi$, where $\psi = \mathsf{typeinfer}(\Gamma \vdash M : X \to B)$ and
+     $\varphi = \mathsf{typeinfer}(\overline{\psi}\Gamma \vdash N : \overline{\psi}X)$ for a fresh type variable $X$;
   3) $\mathsf{typeinfer}(\Gamma \vdash \lambda x.M : B) = \overline{\varphi} \circ \psi$ where $\psi = \mathsf{unify}(B; z \to z')$ and
      $\varphi = \mathsf{typeinfer}(\overline{\psi}\Gamma, x:\overline{\psi}z \vdash M : \overline{\psi}z')$ for fresh type variables $z,z'$.
 
@@ -1550,14 +1550,14 @@ if we assume the variables to have the given types.
 #+end_proof
 
 *** Subject reduction and normalization
-**** Subject reduction                                            :ignore:
+**** Subject reduction                                                                   :ignore:
 A crucial property is that type inference and \beta-reductions do not
 interfere with each other. A term can be \beta-reduced without changing
 its type.
 
 #+attr_latex: :options [Subject reduction]
 #+begin_theorem
-The type is preserved on \beta-reductions; that is, if $\Gamma \vdash M : A$ and
+Types are preserved on \beta-reductions; that is, if $\Gamma \vdash M : A$ and
 and $M \tto_{\beta} M'$, then $\Gamma \vdash M' : A$.
 #+end_theorem
 #+begin_proof
@@ -1568,7 +1568,7 @@ case uses that $x$ and $Q$ have the same type) we can prove
 that substitutions do not alter the type and thus, $\Gamma,Q:B \vdash P[Q/x] : A$.
 #+end_proof
 
-**** Reducibility                                                 :ignore:
+**** Reducibility                                                                        :ignore:
 We have seen previously that the term $\Omega = (\lambda x.xx)(\lambda x.xx)$ is
 not weakly normalizing; but it is also non-typeable. In this section
 we will prove that, in fact, every typeable term is strongly normalizing.
@@ -1588,7 +1588,7 @@ for basic and arrow types.
  * If $t : U \to V$, an arrow type, $t \in \redu_{U \to V}$ if $t\ u \in \redu_{V}$ for all
    $u \in \redu_{U}$.
 
-**** Properties of reducibility                                   :ignore:
+**** Properties of reducibility                                                          :ignore:
 We prove three properties of reducibility at the same time in order
 to use mutual induction.
 
@@ -1625,7 +1625,7 @@ For arrow types,
      thus, $t\ u \in \redu_{U}$. \qedhere
 #+END_proof
 
-**** Abstraction lemma                                            :ignore:
+**** Abstraction lemma                                                                   :ignore:
 #+ATTR_LATEX: :options [Abstraction lemma]
 #+BEGIN_lemma
 <<lemma-reductionabstraction>>
@@ -1642,7 +1642,7 @@ We apply induction over the sum of the lengths of the longest
 Thus, by Proposition [[prop-reducibilityprop]], $(\lambda x.v) \in \redu_{U \to V}$.
 #+END_proof
 
-**** Strong normalization lemma                                   :ignore:
+**** Strong normalization lemma                                                          :ignore:
 A final lemma is needed before the proof of the Strong Normalization
 Theorem.  It is a generalization of the main theorem, useful because
 of the stronger induction hypothesis it provides.
@@ -1678,7 +1678,7 @@ It is the particular case of Lemma [[lemma-strongnormalization]] where we
 take $u_i = x_i$.
 #+END_proof
 
-**** Turing completeness of STLC                                  :ignore:
+**** Turing completeness of STLC                                                         :ignore:
 # [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
 Every term normalizes in simply typed \lambda-calculus and every
 computation ends, therefore, simply typed \lambda-calculus must be not
@@ -1704,10 +1704,10 @@ cases.
 
 **** Simple types II                                              :ignore:
 The new set of *simple types* is given by the following BNF
-\[\mathtt{Type} ::= \iota \mid 
-\mathtt{Type} \to \mathtt{Type} \mid
-\mathtt{Type} \times \mathtt{Type} \mid
-\mathtt{Type} + \mathtt{Type} \mid
+\[\mathsf{Type} ::= \iota \mid 
+\mathsf{Type} \to \mathsf{Type} \mid
+\mathsf{Type} \times \mathsf{Type} \mid
+\mathsf{Type} + \mathsf{Type} \mid
 1 \mid
 0,\]
 where $\iota$ is any /basic type/.
@@ -1723,17 +1723,17 @@ or void type $0$ without inhabitants.
 **** Raw typed lambda terms II                                    :ignore:
 The new set of *typed lambda terms* is given by the BNF
 \[\begin{aligned} 
-\mathtt{Term} ::=\ &
+\mathsf{Term} ::=\ &
 x \mid
-\mathtt{Term}\mathtt{Term} \mid
-\lambda x. \mathtt{Term} \mid \\&
-\left\langle \mathtt{Term},\mathtt{Term} \right\rangle \mid
-\pi_1 \mathtt{Term} \mid
-\pi_2 \mathtt{Term} \mid \\&
-\textrm{inl}\ \mathtt{Term} \mid
-\textrm{inr}\ \mathtt{Term} \mid
-\textrm{case}\ \mathtt{Term}\ \textrm{of}\ \mathtt{Term}; \mathtt{Term} \mid \\&
-\textrm{abort}\ \mathtt{Term} \mid \ast.
+\mathsf{Term}\mathsf{Term} \mid
+\lambda x. \mathsf{Term} \mid \\&
+\left\langle \mathsf{Term},\mathsf{Term} \right\rangle \mid
+\pi_1 \mathsf{Term} \mid
+\pi_2 \mathsf{Term} \mid \\&
+\textrm{inl}\ \mathsf{Term} \mid
+\textrm{inr}\ \mathsf{Term} \mid
+\textrm{case}\ \mathsf{Term}\ \textrm{of}\ \mathsf{Term}; \mathsf{Term} \mid \\&
+\textrm{abort}\ \mathsf{Term} \mid \ast.
 \end{aligned}\]
 
 And the use of these new terms is formalized by the following extended
@@ -2202,7 +2202,7 @@ which is able to check and simplify proofs in intuitionistic logic.
 This example could be checked and simplified by this interpreter as
 it is shown at Figure [[mikrogentzen]].
 
-#+caption: Curry-Howard example in Mikrokosmos.
+#+caption: An example of the Curry-Howard correspondence in Mikrokosmos.
 #+name: mikrogentzen
 [[./images/mikrogentzen.png]]
 #+end_exampleth
@@ -2784,10 +2784,10 @@ unifypair (a,b) (c,d) = do
 #+END_SRC
 
 **** Type inference                                               :ignore:
-The type inference algorithm is more involved. It takes a list
-of fresh variables, a type context, a lambda expression and a
+The type inference algorithm from Theorem [[thm-typeinfer]] is more involved.
+It takes a list of fresh variables, a type context, a lambda expression and a
 constraint on the type, expressed as a type template. It outputs
-a substitution. As an example, the following code shows the type
+a substitution. As an example, the following code shows the type 
 inference algorithm for function types.
 
 #+BEGIN_SRC haskell
@@ -2804,14 +2804,6 @@ typeinfer (x:vars) ctx (App p q) b = do -- Writing inside the Maybe monad.
   sigma <- typeinfer (evens vars) ctx                  p (Arrow (Tvar x) b)
   tau   <- typeinfer (odds  vars) (applyctx sigma ctx) q (sigma (Tvar x))
   return (tau . sigma)
-  where
-    -- The list of fresh variables has to be split into two
-    odds [] = []
-    odds [_] = []
-    odds (_:e:xs) = e : odds xs
-    evens [] = []
-    evens [e] = [e]
-    evens (e:_:xs) = e : evens xs
 #+END_SRC
 
 The final form of the type inference algorithm will use a
@@ -2911,14 +2903,13 @@ such as *Attoparsec* cite:attoparsec, would be suitable otherwise.
 
 *** Verbose mode
 <<sec-verbose>>
-As we mentioned previously, the evaluation of lambda
-terms can be analyzed step-by-step. The interpreter allows us to see
-the complete evaluation when the /verbose mode/ is activated. To
-activate it, we can execute =:verbose on= in the interpreter.
-
-The difference can be seen on the following example, which shows the execution
-of the expression $1+2$, first without intermediate results, and later, showing
-every intermediate step.
+As we mentioned previously, the evaluation of lambda terms can be
+analyzed step-by-step. The interpreter allows us to see the complete
+evaluation when the /verbose mode/ is activated. To activate it, we
+can execute =:verbose on= in the interpreter.  The difference can be
+seen on the following example, which shows the execution of the
+expression $1+2$, first without intermediate results, and later,
+showing every intermediate step.
 
 #+begin_src bash
 mikro> plus 1 2
@@ -2955,7 +2946,7 @@ showReduction e = show e
 *** SKI mode
 Every \lambda-term can be written in terms of SKI combinators.
 SKI combinator expressions can be defined as a binary tree having
-S, K, and I as possible leafs.
+variables, S, K, and I as possible leafs.
 
 #+BEGIN_SRC haskell
 data Ski = S | K | I | Comb Ski Ski | Cte String
@@ -3118,7 +3109,7 @@ accepts the following commands
   * =:color= deactivates colored output;
   * =:load= loads a library.
 
-Figure [[mikrosession]] is an example session on the mikrokosmos interpreter.
+Figure [[mikrosession]] is an example session on the Mikrokosmos interpreter.
 
 #+caption: Mikrokosmos interpreter session.
 #+name: mikrosession
@@ -3976,16 +3967,17 @@ the first one is simply a proof of a negation, the
 second one uses implicitly the law of excluded middle.
 
 This can be translated to the Mikrokosmos implementation of simply
-typed \lambda-calculus as the term
+typed \lambda-calculus as the following term, whose type is
+precisely $((A + (A \to \bot)) \to \bot) \to \bot$.
 #+BEGIN_SRC haskell
 notnotlem = \f.absurd (f (inr (\a.f (inl a))))
 notnotlem 
 --- [1]: λa.(ABSURD (a (INR λb.(a (INL b))))) :: ((A + (A → ⊥)) → ⊥) → ⊥
 #+END_SRC
-whose type is precisely $\mathtt{((A + (A \to \bot)) \to \bot) \to \bot}$. The derivation tree
+The derivation tree
 can be seen directly on the interpreter as Figure [[mikrogentzen]] shows.
 
-#+caption: Proof of the double negation of LEM.
+#+caption: Proof of the double negation of the Law of Excluded Middle in Mikrokosmos.
 #+name: mikrogentzen
 [[./images/mikrogentzen2.png]]
 
@@ -4326,8 +4318,8 @@ morphisms.
 
 ** Functors and natural transformations
 #+begin_quote
-"Category" has been defined in order to define "functor" and "functor"
-has been defined in order to define "natural transformation".
+/"Category" has been defined in order to define "functor" and "functor"/
+/has been defined in order to define "natural transformation"./
 
    -- *Saunders MacLane*, /Categories for the working mathematician/, cite:maclane42.
 #+end_quote
@@ -7503,7 +7495,7 @@ In order to prove the implication, we assume that we have a term
 $f : \prod_{a:A}\sum_{b:B}R(a,b)$, and construct a term of type
 $\sum_{g:A\to B}\prod_{a:A}R(a,g(a))$. The first step is to provide a function
 of type $A \to B$, and $g :\equiv \lambda a.\fst(f(a))$ is exactly of this type. The
-second step is to provide a term $\prod_{a:A}R(a,\fst(f(a)))$, but now
+second step is to provide a term of type $\prod_{a:A}R(a,\fst(f(a)))$, but now
 the function $\lambda a.\snd(f(a))$ is exactly of this type.
 #+end_proof
 # TODO: Annotate each term with its type
@@ -8655,7 +8647,7 @@ type of proofs of equality between the two, $x = y$. Note that this
 *propositional equality* $x = y$ is conceptually different from the
 *definitional equality* $x \equiv y$ we have considered before.
 
-Definitional equality, $x \equiv y$, is a judgement that is part of
+Definitional equality, $x \equiv y$, is a judgment that is part of
 the theory, and we cannot work internally with it; two terms are
 definitionally equal if and only if they are the same term up to
 reduction rules. On the other hand, $x = y$ is a type that could
@@ -8966,7 +8958,7 @@ is a first example of a path that cannot be reduced to reflexivity.
 The induction principle for the interval says that, given any type
 $A$ with two elements $a_0,a_1 : A$ and a path between them $p : a_0 = a_1$,
 there exists a function $f : I \to B$ such that $f(i_0) \equiv a_0$, $f(i_1) \equiv a_1$
-and $\ap_f(s) =\mathsf{seg}$. Note how the last equality is only judgemental; 
+and $\ap_f(s) =\mathsf{seg}$. Note how the last equality is only judgmental; 
 higher inductive types are easier to formalize in a proof assistant
 this way, for a more detailed discussion see [HoTT].
 #+END_exampleth
@@ -10532,7 +10524,7 @@ of typed variables $x_1,x_2,\dots,x_n$, of the form
 \[
 \Gamma = x_1:A_1, \dots, x_n:A_n.
 \]
-And any /typing judgment/ was of the form $\Gamma \vdash a : A$. This time,
+And any /typing judgement/ was of the form $\Gamma \vdash a : A$. This time,
 the theory will also introduce equations of the form $\Gamma \vdash a = b : A$
 as judgments.
 
@@ -10882,7 +10874,7 @@ Type theory can be seen as an intuitionistic foundation of mathematics.
 
 The principal difference between types and sets is that 
 In Type theory, membership of an element to a type, as in $a : A$, is a
-/judgement/ of the theory instead of a /proposition/. In practice, this
+/judgment/ of the theory instead of a /proposition/. In practice, this
 means that that we can write things like $\forall a. \left(a \in A \to (a,a) \in A \times A\right)$,
 as $a \in A$ *is* a proposition; but we cannot write $\prod_{a : A} (a,a) : A \times A$.
 A type declaration is not part of the language.
@@ -10914,8 +10906,8 @@ declarations
 \[
 x_1{:}A_1,\ x_2{:}A_2,\ \dots,\ x_n{:}A_n,
 \]
-and we will consider as valid the judgement saying that the empty context
-is a context ($\cdot\ \mathtt{ctx}$), and the judgement saying that, given a context
+and we will consider as valid the judgment saying that the empty context
+is a context ($\cdot\ \mathtt{ctx}$), and the judgment saying that, given a context
 $x_1{:}A_1,\ x_2{:}A_2,\ \dots,\e x_{n-1}{:}A_{n-1}$ and any type $A_n$, we can take a new
 unused variable to form a new context
 \[x_1{:}A_1,\ x_2{:}A_2,\ \dots,\e x_{n-1}{:}A_{n-1}, x_n{:}A_n\ \mathtt{ctx}.\]
