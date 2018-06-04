@@ -1,13 +1,21 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-MLTT library.
+-- Author: Mario Román.
+
+-- Dyadics.  Dyadic positive rational numbers as a quotient on pairs
+-- of natural numbers.
+
 module Dyadics where
 
 open import Naturals
 
-
+-- A symbolic fraction given as (n/2ᵉ) is normalized if the exponent
+-- on the denominator is zero or if the numerator is odd.
 normalized : ℕ → ℕ → Bool
 normalized n e = or (odd n) (iszero e)
 
+-- We prove that some fractions are automatically normalized.
 iszero-normalized : (n e : ℕ) → iszero e ≡ true → normalized n e ≡ true
 iszero-normalized n e p rewrite p | or-rtrue (odd n) = refl
 
@@ -22,9 +30,12 @@ nonzero-normalized2 zero e p rewrite or-rfalse (odd zero) | p = refl
 nonzero-normalized2 (succ n) e p = refl
 
 
+-- A dyadic rational is a pair of natural numbers describing a
+-- normalized fraction.
 data D : Set where
   dyadic : (n e : ℕ) → normalized n e ≡ true → D
 
+-- Getters for the numerator and the denominator
 num$ : D → ℕ
 num$ (dyadic n _ _) = n
 
@@ -32,6 +43,8 @@ pow$ : D → ℕ
 pow$ (dyadic _ e _) = e
 
 
+-- Reflexivity for fractions follows from reflexivity of their
+-- components.
 drefl : ∀ {n} {e} 
   → {p : normalized n e ≡ true}
   → {q : normalized n e ≡ true}
@@ -48,6 +61,9 @@ drefl-app : (n e n' e' : ℕ)
   → dyadic n e p ≡ dyadic n' e' q
 drefl-app n e n' e' a b {p} {q} rewrite a | b | uip p q = refl
 
+-- Cross multiplication being equal implies equality of the two
+-- fractions. This proof employs some lemmas on ordering,
+-- exponentiation and parity.
 drefl' : ∀ a b → num$ a * exp2 (pow$ b) ≡ num$ b * exp2 (pow$ a) → a ≡ b
 drefl' (dyadic n zero x) (dyadic n' zero x') p rewrite *runit n | *runit n' | p = drefl
 drefl' (dyadic n zero x) (dyadic n' (succ e') x') p rewrite *runit n' | inv p = exfalso (refute n e' x')
@@ -72,6 +88,8 @@ drefl' (dyadic n (succ e) x) (dyadic n' (succ e') x') p = drefl-app n (succ e) n
 d≡ : ∀ {a} {b} → num$ a * exp2 (pow$ b) ≡ num$ b * exp2 (pow$ a) → a ≡ b
 d≡ {a} {b} p = drefl' a b p
 
+-- Creates a dyadic rational from a (not necessarily normalized)
+-- fraction of given by two natural numbersr.
 mkd : ℕ → ℕ → D
 mkd n zero = dyadic n 0 (or-rtrue (odd n))
 mkd n (succ e) with (odd n)??
@@ -157,6 +175,7 @@ c≡ {n} {e} {n'} {e'} = cross≡ n e n' e'
 dmk≡ : ∀ n e n' e' → n * exp2 e' ≡ n' * exp2 e → mkd n e ≡ mkd n' e'
 dmk≡ n e n' e' p = d≡ (cross≡ n e n' e' p)
 
+-- Some useful constants.
 zer : D
 zer = mkd 0 0
 
@@ -169,6 +188,7 @@ twod = mkd 2 0
 half : D
 half = mkd 1 1
 
+-- Addition of dyadic rationals.
 _+d_ : D → D → D
 (_+d_) (dyadic n e x) (dyadic n' e' x') = mkd (n * exp2 e' + n' * exp2 e) (e + e')
 
@@ -180,9 +200,12 @@ _+d'_ : D → D → D
     n' = num$ b
     e' = pow$ b
 
+-- Multiplication of dyadic rationals.
 _*d_ : D → D → D
 (_*d_) (dyadic n e x) (dyadic n' e' x') = mkd (n * n') (e + e')
 
+-- Addition and multiplication in terms of the numerator and the
+-- denominator.
 add-numden : (a b : D) → (_+d_) a b ≡ mkd (num$ a * exp2 (pow$ b) + num$ b * exp2 (pow$ a)) (pow$ a + pow$ b)
 add-numden (dyadic n e x) (dyadic n₁ e₁ x₁) = refl
 
@@ -219,7 +242,7 @@ mk-const n (succ e) | inr x | m , α | k' , (β1 , (β2 , β3)) = 2 * k' , (lemm
       | inv β3
       = refl
 
-
+-- Addition of non-normalized fractions.
 add-mk : ∀ n e n' e' → (_+d_) (mkd n e) (mkd n' e') ≡ mkd (n * exp2 e' + n' * exp2 e) (e + e')
 add-mk n e n' e' with (mk-const n e) | (mk-const n' e')
 add-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
@@ -276,7 +299,8 @@ add-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
           (n * exp2 e' + n' * exp2 e) * exp2 (pow$ (mkd n e) + pow$ (mkd n' e'))
         lemma = *inj k _ _ α1 (*inj k' _ _ α1'
           (lemma2 k k' n e n' e' _ (pow$ (mkd n e)) _ (pow$ (mkd n' e')) α2 α2' α3 α3'))
-
+          
+-- Multiplication of non-normalized fractions.
 mult-mk : ∀ n e n' e' → (_*d_) (mkd n e) (mkd n' e') ≡ mkd (n * n') (e + e')
 mult-mk n e n' e' with (mk-const n e) | (mk-const n' e')
 mult-mk n e n' e' | k , (α1 , (α2 , α3)) | k' , (α1' , (α2' , α3')) rewrite
@@ -335,18 +359,21 @@ mult-comm (dyadic n e x) (dyadic n₁ e₁ x₁) = d≡ (cross≡ (n * n₁) (e 
       | +comm e e₁
       = refl
 
+-- Lemmas on addition
 add-zero : ∀ a → (_+d_) zer a ≡ a
 add-zero (dyadic n e x) rewrite mkd-norm n e x | *runit n = d≡ refl
 
 addhalfhalf : (_+d_) half half ≡ oned
 addhalfhalf = d≡ refl
 
+-- Lemmas on multiplication
 mult-zero : ∀ a → (_*d_) zer a ≡ zer
 mult-zero (dyadic n e x) = d≡ (cross≡ zero e zero zero refl)
 
 mult-one : ∀ a → (_*d_) oned a ≡ a
 mult-one (dyadic n e x) rewrite +rzero n = inv (mkd-norm n e x)
 
+-- Addition is associative.
 add-assoc : ∀ a b c → (_+d_) a ((_+d_) b c) ≡ (_+d_) ((_+d_) a b) c
 add-assoc (dyadic n e x) (dyadic n' e' _) (dyadic n'' e'' x'')
   rewrite
@@ -388,6 +415,7 @@ add-assoc (dyadic n e x) (dyadic n' e' _) (dyadic n'' e'' x'')
            | *assoc n' (exp2 e'') (exp2 e)
            = refl
 
+-- Multiplication is associative.
 mult-assoc : ∀ a b c → (_*d_) a ((_*d_) b c) ≡ (_*d_) ((_*d_) a b) c
 mult-assoc (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
   rewrite
@@ -403,7 +431,7 @@ mult-assoc (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
         | +assoc e e₁ e₂
         = refl
 
-
+-- Addition and multiplication are distributive.
 mp-distr : ∀ a b c → (_*d_) a ((_+d_) b c) ≡ (_+d_) ((_*d_) a b) ((_*d_) a c)
 mp-distr (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂)
   rewrite

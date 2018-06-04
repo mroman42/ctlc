@@ -1,5 +1,14 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-MLTT library.
+-- Author: Mario Román.
+
+-- Naturals.  Natural numbers, addition, multiplication, ordering and
+-- properties and lemmas over these definitions. A binary exponential
+-- function is considered (it will be useful when defining Dyadic
+-- numbers) and an integral square root is also considered.
+
+
 module Naturals where
 
 open import Prop public
@@ -8,24 +17,32 @@ open import Booleans public
 open import Equality public
 
 
+-- Definition of the natural numbers as an initial algebra over a
+-- polynomial endofunctor. They are described as an inductive type
+-- with two constructors representing Peano notation.
 data ℕ : Set where
   zero : ℕ
   succ : ℕ → ℕ
 {-# BUILTIN NATURAL ℕ #-}
 
 
+-- Succesor is injective.
 succ-inj-l : ∀ n m → (n ≡ m) → (succ n ≡ succ m)
-succ-inj-l n m p = ap succ p
+succ-inj-l n m = ap succ
 
 succ-inj-r : ∀ n m → (succ n ≡ succ m) → (n ≡ m)
 succ-inj-r n .n refl = refl
 
+-- Inductive definition of addition.
 infixl 30 _+_
 _+_ : ℕ → ℕ → ℕ
 zero + b = b
 succ a + b = succ (a + b)
 {-# BUILTIN NATPLUS _+_ #-}
 
+-- Some lemmas on addition of natural numbers. We prove them using the
+-- properties of the equality types and the induction principle for
+-- natural numbers.
 +rzero : ∀ n → n + 0 ≡ n
 +rzero 0 = refl
 +rzero (succ n) = ap succ (+rzero n)
@@ -38,24 +55,28 @@ succ a + b = succ (a + b)
 +rsucc zero m = refl
 +rsucc (succ n) m = ap succ (+rsucc n m)
 
+-- Associativity.
 +assoc : ∀ n m o → n + (m + o) ≡ n + m + o
 +assoc zero m o = refl
 +assoc (succ n) m o = ap succ (+assoc n m o)
 
-
+-- Commutativity.
 +comm : ∀ n m → n + m ≡ m + n
 +comm zero m rewrite +rzero m = refl
 +comm (succ n) m rewrite +rsucc m n = ap succ (+comm n m)
 
+-- Left cancellation.
 +inj : ∀ a b c → a + b ≡ a + c → b ≡ c
 +inj zero b c p = p
 +inj (succ a) b c p = +inj a b c (succ-inj-r (a + b) (a + c) p)
 
+-- Right cancellation.
 +inj-r : ∀ b c a → b + a ≡ c + a → b ≡ c
 +inj-r b c zero p rewrite +rzero b | +rzero c = p
 +inj-r b c (succ a) p rewrite +rsucc b a | +rsucc c a = +inj-r b c a (succ-inj-r (b + a) (c + a) p)
 
--- Multiplication
+
+-- Inductive definition of multiplication.
 infixl 35 _*_
 _*_ : ℕ → ℕ → ℕ
 zero * m = zero
@@ -63,6 +84,7 @@ succ n * m = m + (n * m)
 {-# BUILTIN NATTIMES _*_ #-}
 
 
+-- Some lemmas on the multiplication operation.
 *rzero : ∀ n → n * zero ≡ zero
 *rzero zero = refl
 *rzero (succ n) = *rzero n
@@ -84,6 +106,7 @@ succ n * m = m + (n * m)
   | +assoc m (n * m) n
   = refl
 
+-- Commutativity.
 *comm : ∀ n m → n * m ≡ m * n
 *comm zero m rewrite (*rzero m) = refl
 *comm (succ n) m rewrite
@@ -92,6 +115,7 @@ succ n * m = m + (n * m)
   | inv (*rsucc m n)
   = refl
 
+-- Left-distributivity over addition.
 *distr : ∀ a b c → a * (b + c) ≡ a * b + a * c
 *distr zero b c = refl
 *distr (succ a) b c rewrite
@@ -104,9 +128,16 @@ succ n * m = m + (n * m)
   | +assoc (a * b) c (a * c)
   = refl
 
+-- Right-distributivity over addition.
 *distr-r : ∀ b c a → (b + c) * a ≡ b * a + c * a
-*distr-r b c a rewrite *comm (b + c) a | *comm b a | *comm c a | *distr a b c = refl
+*distr-r b c a rewrite
+  *comm (b + c) a
+  | *comm b a
+  | *comm c a
+  | *distr a b c
+  = refl
 
+-- Associativity.
 *assoc : ∀ a b c → a * (b * c) ≡ a * b * c
 *assoc zero b c = refl
 *assoc (succ a) b c rewrite
@@ -114,12 +145,19 @@ succ n * m = m + (n * m)
   | *distr-r b (a * b) c
   = refl
 
+
+-- Definition of a 'strictly less than' relation as an inductively
+-- constructed type. The definition of a 'less or equal than' relation
+-- follows the same pattern. They both depend on addition.
 data Less (n m : ℕ) : Set where
   less : (k : ℕ) → succ (k + n) ≡ m → Less n m
 
 data LessThan (n m : ℕ) : Set where
   lth : (k : ℕ) → k + n ≡ m → LessThan n m 
 
+-- Equality for natural numbers is decidable by induction. That is,
+-- any two numbers are equal or distinct; we have excluded middle for
+-- this particular case.
 _==_ : ℕ → ℕ → Bool
 zero  == zero  = true
 zero  == succ _ = false
@@ -127,6 +165,7 @@ succ _ == zero = false
 succ n == succ m = n == m
 {-# BUILTIN NATEQUALS _==_ #-}
 
+-- The less-than relation is decidable by induction.
 infix 6 _<_ 
 _<_ : ℕ → ℕ → Bool
 _ < zero = false
@@ -134,6 +173,10 @@ zero < succ _ = true
 succ n < succ m = n < m
 {-# BUILTIN NATLESS _<_ #-}
 
+
+-- A function that extracts evidence from the fact that a number is
+-- smaller than other. A function extracting the same evidence for a
+-- 'less or equal than' relation is presented.
 <evd : (n m : ℕ) → n < m ≡ true → Σ ℕ (λ k → (n + k ≡ m) × (0 < k ≡ true))
 <evd zero zero ()
 <evd zero (succ m) p = succ m , (refl , refl)
@@ -148,16 +191,19 @@ succ n < succ m = n < m
 <nevd (succ n) (succ m) p with <nevd n m p
 ... | k , α = k , succ-inj-l (m + k) n α
 
+-- No natural number is less than zero.
 <zero : ∀ n → 0 < n ≡ false → n ≡ 0
 <zero zero p = refl
 <zero (succ n) ()
 
+-- A less than relation defined as a function on the natural numbers.
 infix 6 _≤_ 
 _≤_ : (n m : ℕ) → Bool
 zero ≤ m = true
 succ n ≤ zero = false
 succ n ≤ succ m = n ≤ m
 
+-- Some lemmas on natural number ordering.
 <not : ∀ n m → (n ≤ m) ≡ not (m < n)
 <not zero zero = refl
 <not zero (succ m) = refl
@@ -170,6 +216,7 @@ succ n ≤ succ m = n ≤ m
     lemma : not (n < m) ≡ not (not (m ≤ n))
     lemma rewrite not-double (m ≤ n) | <not m n = refl
 
+-- Ordering preserves addition.
 <plus : ∀ k n m → (k + n < k + m) ≡ (n < m)
 <plus zero n m = refl
 <plus (succ k) n m = <plus k n m
@@ -185,6 +232,7 @@ succ n ≤ succ m = n ≤ m
 ≤plus-r k n m rewrite <not (n + k) (m + k) | <not n m | <plus-r k m n = refl
 
 
+-- Transitivty of the 'less than' relation.
 <trans : ∀ n m k
   → (n < m) ≡ true
   → (m < k) ≡ true
@@ -197,6 +245,7 @@ succ n ≤ succ m = n ≤ m
 <trans (succ n) (succ m) zero p q = q
 <trans (succ n) (succ m) (succ k) p q = <trans n m k p q
 
+-- Transitivty of the 'less or equal than' relation.
 ≤trans : ∀ n m k
   → (n ≤ m) ≡ true
   → (m ≤ k) ≡ true
@@ -207,6 +256,8 @@ succ n ≤ succ m = n ≤ m
 ≤trans (succ n) (succ m) zero p ()
 ≤trans (succ n) (succ m) (succ k) p q = ≤trans n m k p q
 
+
+-- Multiplication (by a number different from zero) preserves ordering.
 <mult : ∀ n m k → (succ k * n < succ k * m) ≡ (n < m)
 <mult n m zero rewrite +rzero n | +rzero m = refl
 <mult n m (succ k) with (n < m)??
@@ -228,6 +279,7 @@ succ n ≤ succ m = n ≤ m
     lemma2 rewrite ≤plus-r (n + k * n) m n | <not m n = ap not f
 
 
+-- Parity of natural numbers.
 odd : (n : ℕ) → Bool
 odd zero = false
 odd (succ zero) = true
@@ -236,6 +288,7 @@ odd (succ (succ n)) = odd n
 even : (n : ℕ) → Bool
 even n = not (odd n)
 
+-- Lemmas on parity.
 oddsucc : (n : ℕ) → odd (succ n) ≡ not (odd n)
 oddsucc zero = refl
 oddsucc (succ zero) = refl
@@ -271,7 +324,6 @@ oddmul (succ (succ n)) m rewrite
   | oddmul n m
   = refl
 
-
 evenplus : (n m : ℕ) → even (n + m) ≡ not (xor (even n) (even m))
 evenplus n m rewrite
   xor-not-l (odd n) (not (odd m))
@@ -280,10 +332,15 @@ evenplus n m rewrite
   | oddplus n m
   = refl
 
+
+-- A decidable predicate that is true if and only if the natural
+-- number is zero. This is useful as an argument to proofs that
+-- require the number not to be zero.
 iszero : (n : ℕ) → Bool
 iszero zero = true
 iszero (succ n) = false
 
+-- Lemmas on being zero.
 iszero-sound : (n : ℕ) → iszero n ≡ true → n ≡ 0
 iszero-sound zero p = refl
 iszero-sound (succ n) ()
@@ -320,17 +377,21 @@ zero<false : ∀ n → zero < n ≡ false → n ≡ 0
 zero<false zero = λ _ → refl
 zero<false (succ n) = λ ()
 
+
+-- A version of the previous lemma using the 'iszero' predicate.
 <mult-inj : ∀ n m k → iszero k ≡ false → k * n < k * m ≡ n < m
 <mult-inj n m zero ()
 <mult-inj n m (succ k) p = <mult n m k
 
-
+-- Extracting evidence from the fact that a number is even. If n is
+-- even, it has to be of the form (n = k + k) for some k.
 not-odd-form : (n : ℕ) → odd n ≡ false → Σ ℕ (λ k → n ≡ k + k)
 not-odd-form zero x = zero , refl
 not-odd-form (succ zero) ()
 not-odd-form (succ (succ n)) x with not-odd-form n x
 not-odd-form (succ (succ n)) x | k , q rewrite q | inv (+rsucc k k) = (succ k) , refl
 
+-- More lemmas on parity of natural numbers.
 notodda+a : ∀ a → not (odd (a + a)) ≡ true
 notodda+a a rewrite oddplus a a | xoraa (odd a) = refl
 
@@ -347,10 +408,14 @@ notodd*a+b a b rewrite
   | and-false (odd a)
   = refl
 
+
+-- Binary exponentiation of natural numbers. This operation is crucial
+-- on the definition of the Dyadic rational numbers.
 exp2 : ℕ → ℕ
 exp2 zero = 1
 exp2 (succ n) = exp2 n + exp2 n
 
+-- Lemmas on binary exponentiation.
 exp2plus : ∀ a b → exp2 (a + b) ≡ exp2 a * exp2 b
 exp2plus zero b rewrite +rzero (exp2 b) = refl
 exp2plus (succ a) b rewrite
@@ -439,6 +504,7 @@ a*b≡0 (succ a) (succ b) ()
 0≡a+b→0≡a zero b = λ _ → refl
 0≡a+b→0≡a (succ a) b = λ ()
 
+-- Multiplication, by a nonzero number, is injective.
 *inj : ∀ a b c
   → iszero a ≡ false
   → a * b ≡ a * c
@@ -459,15 +525,11 @@ a*b≡0 (succ a) (succ b) ()
     lemma2 : b + a * b ≡ c + a * c
     lemma2 = +inj-r (b + a * b) (c + a * c) a lemma1
 
-
-
 *cancel : ∀ a b c
   → b ≡ c
   -------------------
   → a * b ≡ a * c
 *cancel a b .b refl = refl
-
-
 
 simpl-a2b≡c2d : ∀ a b c d
   → a * (b + b) ≡ c * (d + d)
@@ -603,6 +665,8 @@ eq< (succ a) (succ b) p q = eq< a b p λ x → q (ap succ x)
 _² : ℕ → ℕ
 n ² = n * n
 
+-- A 'natural square root' that provides bounds to the real value of
+-- the square root of a number.
 nsqr : ℕ → ℕ
 nsqr zero = zero
 nsqr (succ n) with ndec≡ (succ (nsqr n) * succ (nsqr n)) (succ n)
@@ -663,6 +727,7 @@ nsqr-ubound (succ n) | inl x with nsqr-ubound n
 nsqr-ubound (succ n) | inr x = eq< n
   (nsqr n + nsqr n * succ (nsqr n)) (nsqr-ubound n) λ x₁ → x (inv (ap succ x₁))
 
+-- A lemma on addition and ordering that eases future proofs.
 <+< : ∀ a b c d
   → a < b ≡ true
   → c < d ≡ true
@@ -673,6 +738,8 @@ nsqr-ubound (succ n) | inr x = eq< n
 <+< (succ a) (succ b) (succ c) zero p ()
 <+< (succ a) (succ b) (succ c) (succ d) p q = <+< a b (succ c) (succ d) p q
 
+
+-- Squares preserve ordering.
 <sq : ∀ a b
   → a < b ≡ true
   → a ² < b ² ≡ true
@@ -698,6 +765,9 @@ eq<n : ∀ a b → a ≡ b → a < b ≡ false
 eq<n zero .0 refl = refl
 eq<n (succ a) .(succ a) refl = eq<n a a refl
 
+
+-- Given two numbers x,y such that (2a+1 < y-x), and (y < a²) we can
+-- find an square between them.
 sqrbetween : (x y a k : ℕ)
   → x + k ≡ y
   → succ (a + a) < k ≡ true
@@ -758,6 +828,7 @@ sqrbetween x y (succ a) k p q r with (y < a ²)??
       | +assoc a a (a * a)
       = refl
 
+-- Any number a is less than 2ᵃ.
 a<exp2a : ∀ a → a < exp2 a ≡ true
 a<exp2a zero = refl
 a<exp2a (succ a) with a<exp2a a
@@ -779,6 +850,9 @@ dexp : ∀ n → 1 < exp2 n + exp2 n ≡ true
 dexp zero = refl
 dexp (succ n) = <bound+ 1 (exp2 n + exp2 n) (exp2 n + exp2 n) (dexp n)
 
+-- Asymptotic growth of 2²ⁿ versus 2ⁿ. This will be needed in order to
+-- prove the existence of a square root between any two dyadic
+-- numbers.
 asymp : ∀ a k
   → iszero k ≡ false
   → Σ ℕ (λ n → succ ((exp2 n * a) + (exp2 n * a)) < exp2 (n + n) * k ≡ true)
@@ -847,6 +921,9 @@ asymp a k p = 2 * (succ a) , lemma (succ (a + succ (a + zero))) refl (lemma0 (a 
                <mult-inj (a + a) (succ (a + a)) (exp2 n) (exp2-notzero n)
                = <succ (a + a)
 
+-- Existence of a squared dyadic rational between any two natural
+-- numbers. This is a lemma used in the proof of the existence of a
+-- square root between any two natural numbers.
 diffsq : ∀ x y
   → x < y ≡ true
   → Σ ℕ (λ n → Σ ℕ (λ c → (exp2 (2 * n) * x < c ² ≡ true) × (exp2 (2 * n) * y < c ² ≡ false)))
@@ -877,16 +954,3 @@ diffsq x y p | k , (q , α) with asymp (succ y) k (<iszero k α)
       | <bound+ y (succ y) (y * succ y) (<succ y)
       = refl
 ... | v = n , v
-
--- diffsq' : ∀ x y
---   → succ x < y ≡ true
---   → Σ ℕ (λ n → Σ ℕ (λ c → (exp2 (2 * n) * x < c ² ≡ true) × (c ² < exp2 (2 * n) * y ≡ true)))
--- diffsq' x zero ()
--- diffsq' x (succ y) p with (diffsq x y p)
--- ... | n , (c , (α , β)) = n , (c , (α , {!!}))
-
--- diffsq'' : ∀ x y
---   → x < y ≡ true
---   → Σ ℕ (λ n → Σ ℕ (λ c → (exp2 (2 * n) * x < c ² ≡ true) × (c ² < exp2 (2 * n) * y ≡ true)))
--- diffsq'' x y p with diffsq' (2 * x) (2 * y) {!!}
--- ... | w = {!!}
