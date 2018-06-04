@@ -1207,10 +1207,10 @@ within it (see cite:dallago08). It is however beyond the scope of this text.
 
 **** Motivation                                                                          :ignore:
 */Types/* were introduced in mathematics as a response to the
-Russell's paradox, found in the first naive axiomatizations of set
-theory. An attempt to use untyped \lambda-calculus as a foundational
-logical system by Church suffered from the */Rosser-Kleene paradox/*
-and types were a method to avoid it, as
+Russell's paradox found in the first naive axiomatizations of set
+theory (see Corollary ?). An attempt to use untyped \lambda-calculus
+as a foundational logical system by Church suffered from a variant called the 
+/Rosser-Kleene paradox/ and types were a method to avoid it, as
 detailed in cite:kleene35 and cite:curry46.
 Once types are added to the calculus, a deep connection between \lambda-calculus and
 logic arises. This connection will be discussed in Section
@@ -1224,11 +1224,11 @@ matches the usual notion, and typed \lambda-calculus has been the basis of many 
 type systems for programming languages.
 
 *Simply typed \lambda-calculus* is a refinement of the untyped
-\lambda-calculus. On it, each term has a type, which limits how it can
+\lambda-calculus. On it, each term has a type that limits how it can
 be combined with other terms. Only a set of basic types and function
 types between any to types are considered in this system.  Whereas
-functions in untyped \lambda-calculus could be applied over any term,
-once we introduce types a function of type $A \to B$ can only be applied over a term of
+functions in untyped \lambda-calculus can be applied over any term,
+once we introduce types, a function of type $A \to B$ can only be applied over a term of
 type $A$ to produce a new term of type $B$. Note that $A$ and $B$ can
 be, themselves, function types.
 
@@ -1258,6 +1258,7 @@ where $\iota$ can be any /basic type/. That is to say that, for every two types 
 #+end_definition
 
 *** Typing rules for simply typed \lambda-calculus
+**** Terms on simply typed lambda calculus                                               :ignore:
 We define the terms of simply typed \lambda-calculus using
 the same constructors we used on the untyped version. The set of 
 *typed lambda terms* is given by the following Backus-Naus form.
@@ -1273,15 +1274,14 @@ type $B$, this term will be of type $A \to B$.
 
 However, the set of raw typed \lambda-terms contains some meaningless terms
 under this type interpretation, such as $(\lambda x^A. m)(\lambda x^A. m)$.
-In particular, we can not apply a function of type $A \to B$ to
-a term of type $A \to B$; because it would expect only a term of type $A$.
-*Typing rules* will give terms their desired expressive power. Only a subset
-of these raw lambda terms can be obtained using the rules, and we will choose to work
-only with that subset. When a particular term $m$ has type $A$, we write
+In particular, we cannot apply a function of type $A \to B$ to
+a term of type $A \to B$; as it can only be applied to a term of type $A$.
+*Typing rules* will give terms this desired expressive power. Only a subset
+of the raw lambda terms can be obtained using typing rules, and we will choose to work
+only with this subset. When a particular term $m$ has type $A$, we write
 this relation as $m : A$. The $:$ symbol should be read as /''is of type''/.
 
-**** Typing rules                                                 :ignore:
-#+attr_latex: :options [Typing context]
+**** Typing rules                                                                        :ignore:
 #+begin_definition
 A *typing context* is a sequence of type assumptions
 $\Gamma = (x_1:A_1,\dots,x_n:A_n)$, where no variable $x_{i}$ appears more than once.
@@ -1290,8 +1290,8 @@ assumptions appear does not matter.
 #+end_definition
 
 Every typing rule assumes a typing context, usually denoted by $\Gamma$.
-Concatenation of typing contexts is written as $\Gamma,\Gamma'$; and
-the fact that $\psi$ follows from $\Gamma$ is written as $\Gamma \vdash \psi$.
+Concatenation of two typing contexts $\Gamma$ and $\Delta$ is written with a comma, as
+in $\Gamma,\Delta$; and the fact that $\psi$ follows from $\Gamma$ is written as $\Gamma \vdash \psi$.
 Typing rules are written as rules of inference; the premises are
 listed above and the conclusion is written below the line.
 
@@ -1490,12 +1490,14 @@ since it is more general than $\psi'$, there exists an $\alpha$ such that $\over
 $\overline{\alpha}(\overline{\rho}A) = \psi'(A) = \psi'(B) = \overline{\alpha}(\overline{\rho} B)$, hence $\alpha$ is a unifier of $\overline{\rho}A$ and $\overline{\rho}B$; we can take the 
 most general unifier to be $\psi$, so $\overline{\beta} \circ \psi = \overline{\alpha}$; and finally, $\overline{\beta} \circ (\overline{\psi} \circ \rho) = \overline{\alpha} \circ \rho = \psi'$.
 
-We also need to prove that the unification algorithm terminates. Firstly, we note that
-every substitution generated by the algorithm is either the identity or it removes at least
-one type variable. We can perform induction on the size of the argument on all clauses except
-for clause 5, where a substitution is applied and the number of type variables is reduced.
-Therefore, we need to apply induction on the number of type variables and only then apply
-induction on the size of the arguments.
+We also need to prove that the unification algorithm
+terminates.  Firstly, we note that every substitution generated by the
+algorithm is either the identity or it removes at least one type
+variable. We can perform induction on the size of the argument on all
+clauses except for clause 5, where a substitution is applied and the
+number of type variables is reduced.  Therefore, we need to apply
+induction both on the number of type variables and the size of the
+arguments.
 #+end_proof
 
 **** Type Inference                                                                      :ignore:
