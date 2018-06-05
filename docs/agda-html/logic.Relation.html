@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>logic.Relation</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Option">--without-K</a> <a id="25" class="Symbol">#-}</a>
+
+
+<a id="31" class="Comment">-- Agda-hott library.</a>
+<a id="53" class="Comment">-- Author: Mario Román</a>
+
+<a id="77" class="Comment">-- Relation.  Logical relations in terms of Propositions.</a>
+
+<a id="136" class="Keyword">open</a> <a id="141" class="Keyword">import</a> <a id="148" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>
+<a id="163" class="Keyword">open</a> <a id="168" class="Keyword">import</a> <a id="175" href="Base.html" class="Module">Base</a>
+<a id="180" class="Keyword">open</a> <a id="185" class="Keyword">import</a> <a id="192" href="Equality.html" class="Module">Equality</a>
+<a id="201" class="Keyword">open</a> <a id="206" class="Keyword">import</a> <a id="213" href="logic.Propositions.html" class="Module">logic.Propositions</a>
+<a id="232" class="Keyword">open</a> <a id="237" class="Keyword">import</a> <a id="244" href="logic.Sets.html" class="Module">logic.Sets</a>
+
+<a id="256" class="Keyword">module</a> <a id="263" href="logic.Relation.html" class="Module">logic.Relation</a> <a id="278" class="Keyword">where</a>
+
+  <a id="287" class="Keyword">record</a> <a id="Rel" href="logic.Relation.html#Rel" class="Record">Rel</a> <a id="298" class="Symbol">{</a><a id="299" href="logic.Relation.html#299" class="Bound">ℓ</a><a id="300" class="Symbol">}</a> <a id="302" class="Symbol">(</a><a id="303" href="logic.Relation.html#303" class="Bound">A</a> <a id="305" class="Symbol">:</a> <a id="307" href="base.Universes.html#Type" class="Function">Type</a> <a id="312" href="logic.Relation.html#299" class="Bound">ℓ</a><a id="313" class="Symbol">)</a> <a id="315" class="Symbol">:</a> <a id="317" href="base.Universes.html#Type" class="Function">Type</a> <a id="322" class="Symbol">(</a><a id="323" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="328" href="logic.Relation.html#299" class="Bound">ℓ</a><a id="329" class="Symbol">)</a> <a id="331" class="Keyword">where</a>
+    <a id="341" class="Keyword">field</a>
+      <a id="Rel.R" href="logic.Relation.html#Rel.R" class="Field">R</a> <a id="355" class="Symbol">:</a> <a id="357" href="logic.Relation.html#303" class="Bound">A</a> <a id="359" class="Symbol">→</a> <a id="361" href="logic.Relation.html#303" class="Bound">A</a> <a id="363" class="Symbol">→</a> <a id="365" href="base.Universes.html#Type" class="Function">Type</a> <a id="370" href="logic.Relation.html#299" class="Bound">ℓ</a>
+      <a id="Rel.Rprop" href="logic.Relation.html#Rel.Rprop" class="Field">Rprop</a> <a id="384" class="Symbol">:</a> <a id="386" class="Symbol">(</a><a id="387" href="logic.Relation.html#387" class="Bound">a</a> <a id="389" href="logic.Relation.html#389" class="Bound">b</a> <a id="391" class="Symbol">:</a> <a id="393" href="logic.Relation.html#303" class="Bound">A</a><a id="394" class="Symbol">)</a> <a id="396" class="Symbol">→</a> <a id="398" href="logic.Propositions.html#isProp" class="Function">isProp</a> <a id="405" class="Symbol">(</a><a id="406" href="logic.Relation.html#Rel.R" class="Field">R</a> <a id="408" href="logic.Relation.html#387" class="Bound">a</a> <a id="410" href="logic.Relation.html#389" class="Bound">b</a><a id="411" class="Symbol">)</a>
+  <a id="415" class="Keyword">open</a> <a id="420" href="logic.Relation.html#Rel" class="Module">Rel</a> <a id="424" class="Symbol">{{...}}</a> <a id="432" class="Keyword">public</a>
+</pre></body></html>

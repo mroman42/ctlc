@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>base.Universes</title><link rel="stylesheet" href="Agda.css"></head><body><pre><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Option">--without-K</a> <a id="25" class="Symbol">#-}</a>
+
+<a id="30" class="Comment">-- Agda-hott library.</a>
+<a id="52" class="Comment">-- Author: Mario Román</a>
+
+<a id="76" class="Comment">-- Universes.  Type universe hierarchy. It hides Agda primitive</a>
+<a id="140" class="Comment">-- hierarchy and the keyword Set. It uses Type instead.</a>
+
+<a id="197" class="Keyword">module</a> <a id="204" href="base.Universes.html" class="Module">base.Universes</a> <a id="219" class="Keyword">where</a>
+
+  <a id="228" class="Keyword">open</a> <a id="233" class="Keyword">import</a> <a id="240" href="Agda.Primitive.html" class="Module">Agda.Primitive</a> <a id="255" class="Keyword">public</a>
+
+  <a id="265" class="Comment">-- Our Universe hierarchy. It is implemented over the primitive</a>
+  <a id="331" class="Comment">-- Agda universe hierarchy but it uses Type instead of Set, the</a>
+  <a id="397" class="Comment">-- usual name for the Universe in Agda.  </a>
+  <a id="Type" href="base.Universes.html#Type" class="Function">Type</a> <a id="446" class="Symbol">:</a> <a id="448" class="Symbol">(</a><a id="449" href="base.Universes.html#449" class="Bound">ℓ</a> <a id="451" class="Symbol">:</a> <a id="453" href="Agda.Primitive.html#Level" class="Postulate">Level</a><a id="458" class="Symbol">)</a> <a id="460" class="Symbol">→</a> <a id="462" class="PrimitiveType">Set</a> <a id="466" class="Symbol">(</a><a id="467" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="472" href="base.Universes.html#449" class="Bound">ℓ</a><a id="473" class="Symbol">)</a>
+  <a id="477" href="base.Universes.html#Type" class="Function">Type</a> <a id="482" href="base.Universes.html#482" class="Bound">ℓ</a> <a id="484" class="Symbol">=</a> <a id="486" class="PrimitiveType">Set</a> <a id="490" href="base.Universes.html#482" class="Bound">ℓ</a>
+
+  <a id="495" class="Comment">-- First levels of the universe hierarchy</a>
+  <a id="Type0" href="base.Universes.html#Type0" class="Function">Type0</a> <a id="545" class="Symbol">:</a> <a id="547" href="base.Universes.html#Type" class="Function">Type</a> <a id="552" class="Symbol">(</a><a id="553" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="558" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a><a id="563" class="Symbol">)</a>
+  <a id="567" href="base.Universes.html#Type0" class="Function">Type0</a> <a id="573" class="Symbol">=</a> <a id="575" href="base.Universes.html#Type" class="Function">Type</a> <a id="580" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a>
+  
+  <a id="Type1" href="base.Universes.html#Type1" class="Function">Type1</a> <a id="597" class="Symbol">:</a> <a id="599" href="base.Universes.html#Type" class="Function">Type</a> <a id="604" class="Symbol">(</a><a id="605" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="610" class="Symbol">(</a><a id="611" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="616" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a><a id="621" class="Symbol">))</a>
+  <a id="626" href="base.Universes.html#Type1" class="Function">Type1</a> <a id="632" class="Symbol">=</a> <a id="634" href="base.Universes.html#Type" class="Function">Type</a> <a id="639" class="Symbol">(</a><a id="640" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="645" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a><a id="650" class="Symbol">)</a>
+
+  <a id="Type2" href="base.Universes.html#Type2" class="Function">Type2</a> <a id="661" class="Symbol">:</a> <a id="663" href="base.Universes.html#Type" class="Function">Type</a> <a id="668" class="Symbol">(</a><a id="669" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="674" class="Symbol">(</a><a id="675" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="680" class="Symbol">(</a><a id="681" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="686" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a><a id="691" class="Symbol">)))</a>
+  <a id="697" href="base.Universes.html#Type2" class="Function">Type2</a> <a id="703" class="Symbol">=</a> <a id="705" href="base.Universes.html#Type" class="Function">Type</a> <a id="710" class="Symbol">(</a><a id="711" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="716" class="Symbol">(</a><a id="717" href="Agda.Primitive.html#lsuc" class="Primitive">lsuc</a> <a id="722" href="Agda.Primitive.html#lzero" class="Primitive">lzero</a><a id="727" class="Symbol">))</a>
+</pre></body></html>
