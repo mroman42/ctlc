@@ -14,4 +14,8 @@ _minted-ctlc/*
 slides/slides.tex
 slides/*.log
 slides/*.bbl
-
+agda-hott/html/*
+agda-mltt/html/*
+\#*\#
+.\#*
+docs/output.pdf
