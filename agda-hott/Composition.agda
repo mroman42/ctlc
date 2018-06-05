@@ -1,5 +1,10 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Composition.  Properties of function composition.
+
 open import Base
 open import Equality
 

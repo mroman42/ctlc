@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Relation.  Logical relations in terms of Propositions.
+
 open import Agda.Primitive
 open import Base
 open import Equality

@@ -1,5 +1,14 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Fundamental Group of the Circle.  Follows the proof on the Homotopy
+-- Type Theory Book. Encodes ℤ inside the equalities of the circle
+-- type and extracts the homotopical structure of equalities using the
+-- Univalence Axiom.
+
 open import Base
 open import Equality
 open import EquationalReasoning

@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K  #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- IntegerAction.  Integers can act on groups. This corresponds to the
+-- fact that the integers are the free group on one generator.
+
 open import Base
 open import Equality
 open import EquationalReasoning
@@ -9,6 +16,7 @@ open import algebra.Groups
 module algebra.IntegerAction {ℓ} {M : Type ℓ} (grpst : GroupStructure M) where
   open GroupStructure grpst
 
+  -- Integers acting on a group structure M.
   z-act : ℤ → M → M
   z-act zer            m = e
   z-act (pos zero)     m = m
@@ -17,6 +25,7 @@ module algebra.IntegerAction {ℓ} {M : Type ℓ} (grpst : GroupStructure M) whe
   z-act (neg (succ x)) m = (z-act (neg x) m) * ginv m
 
 
+  -- Lemmas on how integers act on a group.
   zsucc-act : ∀ n a → z-act (zsucc n) a == (z-act n a * a)
   zsucc-act zer a = inv (lunit a)
   zsucc-act (pos x) a = refl _

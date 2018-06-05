@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- CartesianProduct.  Equality in the particular case of cartesian
+-- products.
+
 open import Base
 open import Equality
 open import logic.Contractible

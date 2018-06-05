@@ -1,5 +1,10 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Empty.  The empty type, representing falsehood.
+
 open import base.Universes
 
 module base.Empty where

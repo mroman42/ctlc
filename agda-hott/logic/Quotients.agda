@@ -1,12 +1,19 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Quotients.  Set quotients in terms of higher-inductive types. They
+-- can be used to model integers or rationals as higher-inductive
+-- types.
+
 open import Base
 open import Equality
 open import logic.Propositions
 open import logic.Sets
 
 module logic.Quotients where
-
 
   record QRel {ℓ} (A : Type ℓ) : Type (lsuc ℓ) where
     field

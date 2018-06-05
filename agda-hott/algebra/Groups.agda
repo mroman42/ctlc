@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Groups.  Definition of the algebraic structure of a group.
+
 open import Base
 
 module algebra.Groups where

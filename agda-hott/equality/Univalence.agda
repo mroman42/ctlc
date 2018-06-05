@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Univalence.  Voevodsky's univalence axiom is postulated. It induces
+-- an equality between any two equivalent types. Some β and η rules
+-- are provided.
+
 open import Base
 open import Equality
 open import EquationalReasoning
@@ -39,6 +46,7 @@ module equality.Univalence where
 
   
   module UnivalenceLemmas {ℓ} where
+    -- The identity equivalence creates the trivial path.
     ua-id : {A : Type ℓ} → ua idEqv == refl A
     ua-id {A} = 
       begin
@@ -47,6 +55,8 @@ module equality.Univalence where
         refl A
       ∎
 
+    -- The composition of equivalences is preserved into composition
+    -- of equalities.
     ua-comp : {A B C : Type ℓ} → (α : A ≃ B) → (β : B ≃ C) → ua (compEqv α β) == ua α · ua β
     ua-comp α β = 
       begin
@@ -67,6 +77,7 @@ module equality.Univalence where
             fst (idtoeqv (ua α · ua β))
           ∎)
 
+    -- Inverses are preserved.
     ua-inv-r : {A B : Type ℓ} → (α : A ≃ B) → ua α · ua (invEqv α) == refl A
     ua-inv-r α = 
       begin

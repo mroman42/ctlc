@@ -1,5 +1,10 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Equality.  Properties and structure of the equality type.
+
 open import Base
 open import EquationalReasoning
 

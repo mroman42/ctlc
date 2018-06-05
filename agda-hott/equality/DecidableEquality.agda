@@ -1,5 +1,13 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- DecidableEquality.  A type has decidable equality if any two of its
+-- elements are equal or different. This would be a particular
+-- instance of the Law of Excluded Middle that holds even if we do not
+-- assume Excluded Middle.
+
 open import Agda.Primitive
 open import Base
 open import Equality

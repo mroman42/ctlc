@@ -1,5 +1,13 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- FunctionExtensionality.  The full axiom of function extensionality
+-- provides a way of identifying two functions that act in the same
+-- way all inputs. It is written here in terms of type-theoretical
+-- homotopies and it provides some β and η rules.
+
 open import Base
 open import Equality
 open import equivalence.Equivalence

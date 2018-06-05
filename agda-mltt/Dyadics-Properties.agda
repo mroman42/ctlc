@@ -1,4 +1,12 @@
 {-# OPTIONS --without-K #-}
+
+-- Agda-MLTT library.
+-- Author: Mario Román.
+
+-- Dyadics-Properties.  Some technical lemmas about dyadic numbers in
+-- general that are used when constructing Dedekind reals.
+
+
 module Dyadics-Properties where
 
 open import Base
@@ -7,6 +15,8 @@ open import Equality
 open import Prop
 open import Naturals using (ℕ)
 
+-- We rename Dyadics in order to ease the reading and write shorter
+-- proofs.
 open import Dyadics public using (half) renaming
   ( D to F
   ; zer to zero
@@ -43,10 +53,13 @@ open import Dyadics-Ordering public using () renaming
   ; <sqbetween-almost to <sqbetween-almost
   )
 
+
+-- Cancellation and ordering.
 <plus : (a b c : F) → (a + c) < (b + c) ≡ a < b
 <plus a b c rewrite +comm a c | +comm b c = <plus' c a b
 
 
+-- Order is transitive.
 <trans : (a b c : F) → a < b ≡ true → b < c ≡ true → a < c ≡ true
 <trans a b c p q with (<evd a b p) | (<evd b c q)
 <trans a b c p q | d , (refl , β) | e , (refl , β2) rewrite
@@ -128,6 +141,7 @@ cantbezero a b p with <evd a b p
         lemma2 : zero < d + k ≡ true
         lemma2 rewrite cantbezero d (d + k) (lemma' · γ) = refl
 
+-- Minimum of two rationals.
 min : F → F → F
 min a b with (a < b)
 min a b | true = a
@@ -243,9 +257,11 @@ halfsplit a = inv (*one a) · lemma
       | *comm half a
       = refl
 
+-- Arithmetic mean of two numbers.
 mean : F → F → F
 mean a b = half * (a + b)
 
+-- Mean inequalities.
 <mean-max : (a b : F) → a < b ≡ a < mean a b
 <mean-max a b = lemma · ap (λ u → u < mean a b) (inv (halfsplit a))
   where
@@ -279,6 +295,8 @@ mean a b = half * (a + b)
 <mean-min-true : (a b : F) → a < b ≡ true → mean a b < b ≡ true
 <mean-min-true a b p rewrite inv p | inv (<mean-min a b) = refl
 
+
+-- Square root between rational numbers.
 <sqless : ∀ a b
   → a * a < b * b ≡ true
   -----------------------
@@ -323,7 +341,7 @@ mean a b = half * (a + b)
   = refl
 
 
-
+-- Technical lemmas on the dyadic rationals.
 F-lemma1 : (x y d f r : F)
   → r + d ≡ f
   → x + y ≡ r

@@ -10,7 +10,3 @@ module algebra.Automorphisms {ℓ} {A : Type ℓ} where
 
   automorphisms : Type ℓ
   automorphisms = A ≃ A
-
-  automorphismsGroup : GroupStructure automorphisms
-  automorphismsGroup = group-structure
-    {!!} {!!} {!!} {!!} {!!} {!!} {!!} {!!} {!!}

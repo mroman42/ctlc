@@ -1,10 +1,17 @@
 {-# OPTIONS --without-K #-}
+
+-- Agda-MLTT library.
+-- Author: Mario Román.
+
+-- Dyadics-Ordering.  Some technical lemmas about order on the dyadic
+-- numbers, relating it to ordering on the natural numbers.
+
 module Dyadics-Ordering where
 
 open import Naturals
 open import Dyadics
 
-
+-- Ordering in terms of natural numbers.
 ltmk : (n e n' e' : ℕ) → (mkd n e) <d (mkd n' e') ≡ n * exp2 e' < n' * exp2 e
 ltmk n e n' e' with mk-const n e | mk-const n' e'
 ltmk n e n' e' | k , (α , (β , γ)) | k' , (α' , (β' , γ')) rewrite
@@ -28,6 +35,7 @@ ltmk n e n' e' | k , (α , (β , γ)) | k' , (α' , (β' , γ')) rewrite
   | inv β'
   = refl
 
+-- Addition.
 ltplus : (a b c : D) → (a +d b) <d (a +d c) ≡ b <d c
 ltplus (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) rewrite
   ltmk (n * exp2 e₁ + n₁ * exp2 e) (e + e₁) (n * exp2 e₂ + n₂ * exp2 e) (e + e₂)
@@ -63,6 +71,7 @@ ltplus (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) rewrite
   | *comm (exp2 e₁) n₂
   = refl
 
+-- Multiplication.
 ltmult : (a b c : D) → zer <d a ≡ true → (a *d b) <d (a *d c) ≡ b <d c
 ltmult (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) p rewrite
   *runit n
@@ -81,6 +90,7 @@ ltmult (dyadic n e x) (dyadic n₁ e₁ x₁) (dyadic n₂ e₂ x₂) p rewrite
   | <mult-inj (n₁ * exp2 e₂) (n₂ * exp2 e₁) (exp2 e) (exp2-notzero e)
   = refl
 
+-- All positive dyadic rationals are positive.
 dpositivity : (a b : D) → zer <d a ≡ true → zer <d (a +d b) ≡ true
 dpositivity (dyadic n e x) (dyadic n₁ e₁ x₁) p
   rewrite
@@ -93,6 +103,7 @@ dpositivity (dyadic n e x) (dyadic n₁ e₁ x₁) p
          (iszero-not-mult n (exp2 e₁) (<iszero n p) (exp2-notzero e₁)))
 
 
+-- Extract evidence from an ordering relation.
 ltevd : (a b : D) → a <d b ≡ true → Σ D (λ c → (a +d c ≡ b) × (zer <d c ≡ true))
 ltevd (dyadic n e x) (dyadic n' e' x') p with <evd (n * exp2 e') (n' * exp2 e) p
 ... | k , (α , β) = mkd k (e + e') , (lemma , lemma2)
@@ -152,7 +163,7 @@ leevd (dyadic n e x) (dyadic n₁ e₁ x₁) p with <nevd (n * exp2 e₁) (n₁ 
           = refl
 
 
-
+-- Lemmas on addition, multiplication and positivity.
 +nonzero : (a b : D)
   → zer <d a ≡ true
   → zer <d a +d b ≡ true
@@ -199,6 +210,9 @@ alwayspos (dyadic n e x) = refl
             u zero = refl
             u (succ e) = <bound+ 1 (exp2 e + exp2 e) (exp2 e + exp2 e) (u e)
 
+
+-- Technical lemmas on the square root. They will allow us to define
+-- the square root on real numbers.
 <sqbetween-integers : ∀ n x n' x'
   → dyadic n 0 x <d dyadic n' 0 x' ≡ true
   → Σ D (λ c → ((dyadic n 0 x) <d c *d c ≡ true) × ((dyadic n' 0 x') <d c *d c ≡ false))

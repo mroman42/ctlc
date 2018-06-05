@@ -857,8 +857,8 @@ We apply again induction on the possible derivations of $M \rhd M'$.
   * Parallel substitution, with $N \rhd N'$ and $Q \rhd Q'$; we know that $M^{\ast} = Q^{\ast}[N^{\ast}/x]$
     and we can apply the substitution lemma (lemma [[lemma-subsl]]) to get $M' \rhd M^{\ast}$.
 
-  * Extensionality. We know that $P \rhd P'$ and $x \notin \mathrm{FV}(P)$, so by induction hypothesis
-    we know that $P' \rhd P^{\ast} = M^{\ast}$.$\qedhere$
+  * Extensionality. We know that $P \rhd P'$ and $x \notin \mathrm{FV}(P)$. By induction hypothesis,
+    we have $P' \rhd P^{\ast} = M^{\ast}$.$\qedhere$
 #+end_proof
 
 **** Church-Rosser theorem                                                               :ignore:
@@ -7738,7 +7738,9 @@ The study of any of these theories is beyond the scope of this text.
 However, as we have been relating type theory to the internal language
 of locally closed cartesian categories with enough structure; we know
 that type theory (depending on what constructions we assume) will have
-models in categories like these.
+models in categories like these. We only describe a particular case
+developed by W. Lawvere while trying to provide an axiomatization of the
+category of sets.
 
 *** An Elementary Theory of the Category of Sets
 Lawvere's Elementary Theory of the Category of Sets cite:lawvere64
@@ -7783,25 +7785,15 @@ mathematics from category theory.
 
 * Type theory
 ** Martin-Löf type theory
-#+begin_quote
-And it soon became clear that the only long-term solution was somehow
-to make it possible for me to use computers to verify my abstract,
-logical, and mathematical constructions. When I first started to
-explore the possibility, computer proof verification was almost a
-forbidden subject among mathematicians.  The primary challenge that
-needed to be addressed was that the foundations of mathematics were
-unprepared for the requirements of the task. 
-
-  -- *Vladimir Voevodsky*, cite:voevodsky14.
-#+end_quote
-
 In this chapter, we will exclusively work internally in dependent type
 theory and use it as a constructive foundation of mathematics.  This
 will have the added benefit that every formal proof in the system will
 be a closed lambda term and checking that a proof is correct will amount to
 typechecking the term.  Explicitly, the type theory we have been
 describing in the previous sections corresponds to *Martin-Löf type theory*
-cite:nordstrom90.
+cite:nordstrom90. Two libraries of formalized mathematics, correspoding
+to two different foundational theories, have been built, containing a
+verfied version of all the theorems on this chapter.
 
 *** Programming in Martin-Löf type theory
 Martin-Löf type theory and the internal language we have been
@@ -7965,17 +7957,17 @@ general in Section [[section-proof-lem]]. We are /agnostic/ regarding it.
 Why are we not simply accepting it, as is common practice? The
 Law of Excluded middle would affect the computational properties
 of the theory. For instance, whenever we create a natural number
-in our theory, we expect it to be a numeral of the form $\mathrm{succ}(\mathrm{succ}(\dots \mathrm{zero} \dots))$
-for an some number of $\mathrm{succ}$ applications. Inductive definitions
+in our theory, we expect it to be a numeral of the form $\mathsf{succ}(\mathsf{succ}(\dots \mathsf{zero} \dots))$
+for some number of $\mathsf{succ}$ applications. Inductive definitions
 can only compute with natural numbers when they are on this form.  However,
-if we were to postulate the Law of Excluded Middle, $\mathrm{LEM}\colon P \vee \neg P$, we should accept
+if we were to postulate the Law of Excluded Middle, $\mathsf{LEM}\colon P \vee \neg P$, we should accept
 the existence of numbers such as
-\[ \mathrm{if}\ \mathrm{LEM}(\mathrm{RiemmanHypothesis})\ \mathrm{then}\ 0\ \mathrm{else}\ 1,\]
+\[ \mathsf{if}\ \mathsf{LEM}(\mathrm{RiemmanHypothesis})\ \mathsf{then}\ 0\ \mathsf{else}\ 1,\]
 but we would not be able to compute them into a numeral.
 We say that a type system has the /*canonicity property*/ if
 every inhabitant of the $\mathbb{N}$ type is a numeral.
 
-In any case, classical mathematics is a particular case of constructive
+In any case, classical mathematics are a particular case of constructive
 mathematics. We can choose to work inside classical mathematics,
 although we would lose the computational content. When we choose not
 to, we are working in constructive mathematics with a programming
@@ -8021,7 +8013,7 @@ Given any proposition $P$, we define $U = \left\{ x \in \left\{ 0,1 \right\} \mi
 $V = \left\{ x \in \{0,1\} \mid (x = 1) \vee P \right\}$, and we kwow that each one is inhabited.
 By the axiom of choice, there exists a function $f \colon \left\{ U,V \right\} \to U \cup V$
 such that $f(U) \in U$ and $f(V) \in V$.  We decide if $f(U)$ and
-$f(V)$ are equal to $0$ or not (by induction). If $f(U) = 1$ or $f(V) = 0$, we
+$f(V)$ are equal to $0$ or not by the induction principle. If $f(U) = 1$ or $f(V) = 0$, we
 would have that $P$ must be true; and if $f(U) = 0$ and $f(V) = 1$, we
 would have $\neg P$, for if $P$ were true, then $U$ would be equal to $V$
 and thus, $0 = f(U) = f(V) = 1$.
@@ -8082,9 +8074,9 @@ constructed as the sum of the following data.
 The following code shows the core definition of the Agda
 implementation.
 
-#+latex: \small
+#+latex: \noindent\rule[0.5ex]{\linewidth}{0.1pt}\small
 #+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{reals}
-#+latex: \normalsize
+#+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 Note that, under the intuitionistic interpretation, it is not the case 
 in general that $\prod_{q : D} \mathrm{cut}_r(q) + \neg\, \mathrm{cut}_r(q)$ for an arbitrary $r : \mathbb{R}^+$; in fact,
@@ -8111,9 +8103,9 @@ it calls to already defined lemmas on the natural numbers when necessary
 and it shows how existential elimination is written inside the language
 to prove the necessary properties of the Dedekind cut.
 
-#+latex: \small
+#+latex: \noindent\rule[0.5ex]{\linewidth}{0.1pt}\small
 #+latex: \ExecuteMetaData[agda-mltt/latex/Snippets.tex]{sqrt}
-#+latex: \normalsize
+#+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 Dedekind cuts are not the only path we can take in order to define
 the real numbers in type theory. Reals can be also defined in terms
@@ -8124,6 +8116,19 @@ number is recovered. A detailed discussion can be found in the last
 chapters of cite:hottbook.
 
 ** Homotopy type theory
+#+begin_quote
+/And it soon became clear that the only long-term solution was somehow/
+/to make it possible for me to use computers to verify my abstract,/
+/logical, and mathematical constructions. When I first started to/
+/explore the possibility, computer proof verification was almost a/
+/forbidden subject among mathematicians.  The primary challenge that/
+/needed to be addressed was that the foundations of mathematics were/
+/unprepared for the requirements of the task./
+
+  -- *Vladimir Voevodsky*, cite:voevodsky14.
+#+end_quote
+
+
 *** Homotopy type theory I: Equality
 We have already discussed how, given any $x,y:A$, we can interpret
 the equality type $(x = y)$, whose terms are witnesses of the equality.
@@ -8252,6 +8257,7 @@ only visible from outside. When we prove this we need univalence
 to internalize the structure of groupoid inside the theory,
 using Z as a bridge.
 
+** TODO Verified formal proofs
 * Conclusions
 ** Further
  * https://arxiv.org/abs/quant-ph/0312174
@@ -8271,20 +8277,21 @@ using Z as a bridge.
 
 \small
 The opportunity of devoting my bachelor's thesis to this fascinating
-subject has been made possible by Prof. Pedro García-Sánchez and
-Prof. Manuel Bullejos.  They have provided me with corrections and
+subject has been made possible by Professor Pedro García-Sánchez and
+Professor Manuel Bullejos.  They have provided me with corrections and
 useful guidelines for the text and they have gone beyond their
 obligation in their efforts to instruct me on how to expose these
 ideas clearly.  Any deviation from this goal must be attributed to
 my own inexperience.
 
 I would like to thank the LibreIM community in general and Ignacio
-Cordón, David Charte, Marta Andrés, José Carlos Entrena, Pablo Baeyens,
-Antonio Checa, Daniel Pozo, and Sofía Almeida in particular, for testing the
-interpreter and providing useful discussion and questions on the
-topics of this text. Prof. Luis Merino, Prof. Juan Julián Merelo and
-Braulio Valdivielso have made possible and participated on the
-organization of meetings and workshops on these ideas.
+Cordón, David Charte, Marta Andrés, José Carlos Entrena, Pablo
+Baeyens, Antonio Checa, Daniel Pozo, and Sofía Almeida in particular,
+for testing the interpreter and providing useful discussion and
+questions on the topics of this text. Professor Luis Merino, Professor
+Juan Julián Merelo and Braulio Valdivielso have made possible and
+participated on the organization of meetings and workshops on these
+ideas.
 
 Finally, I would like to express my gratitude to Benedikt Ahrens and
 the organizers of the School and Workshop on Univalent Mathematics at
@@ -8293,13 +8300,14 @@ opportunity to learn the fundaments of type theory and the Univalent
 Foundations program.
 
 This document has been written with Emacs26 and org-mode 9, using the
-=org= file format and LaTeX as intermediate format. The document
-follows the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by *André Miede* and uses modifications
-by Adrián Ranea, Alejandro García and David Charte. The =minted=
-package has been used for code listings and the =tikzcd= package has
-been used for commutative diagrams. The document is released under a Creative Commons
-BY-SA 3.0 license, while the source code can be redistributed under
-the terms of the GNU General Public License.
+=org= file format and LaTeX as intermediate format. The document takes
+some configurations forom the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede
+and modifications by Adrián Ranea, Alejandro García and David
+Charte. The =minted= package has been used for code listings and the
+=tikzcd= package has been used for commutative diagrams. The document
+is released under a Creative Commons BY-SA 3.0 license, while the
+source code can be redistributed under the terms of the GNU General
+Public License. 
 \normalsize
 
 ** Bibliography                                                                            :ignore:

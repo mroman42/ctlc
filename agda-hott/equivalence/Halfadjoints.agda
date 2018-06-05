@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Halfadjoints.  Half-adjoints are an auxiliary notion that helps us
+-- to define a suitable notion of equivalence, meaning that it is a
+-- proposition and that it captures the usual notion of equivalence.
+
 open import Base
 open import Equality
 open import Homotopies
@@ -13,7 +20,7 @@ open import equivalence.Equivalence
 
 module equivalence.Halfadjoints {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
 
-  -- Half adjoint equivalence
+  -- Half adjoint equivalence.
   record ishae (f : A → B) : Type (ℓᵢ ⊔ ℓⱼ) where
     constructor hae
     field
@@ -22,7 +29,7 @@ module equivalence.Halfadjoints {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ�
       ε : (f ∘ g) ∼ id
       τ : (x : A) → ap f (η x) == ε (f x)
     
-  -- Half adjoint equivalences give contractible fibers
+  -- Half adjoint equivalences give contractible fibers.
   ishae-contr : (f : A → B) → ishae f → isContrMap f
   ishae-contr f (hae g η ε τ) y = ((g y) , (ε y)) , contra
     where
@@ -62,6 +69,7 @@ module equivalence.Halfadjoints {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ�
               ε y
             ∎
 
+  -- Half-adjointness implies equivalence.
   ishae-≃ : {f : A → B} → ishae f → A ≃ B
   ishae-≃ ishaef = _ , (ishae-contr _ ishaef)
 

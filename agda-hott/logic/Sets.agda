@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Sets.  Sets are types without any higher dimensional structure, all
+-- parallel paths are homotopic and the homotopy is given by a
+-- continuous function on the two paths.
+
 open import Base
 open import Equality
 open import EquationalReasoning

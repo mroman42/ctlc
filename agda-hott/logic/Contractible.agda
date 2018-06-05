@@ -4,6 +4,8 @@ open import Base
 open import Equality
 open import logic.Fibers
 
+-- Contractible.  Contractible types with a center of contraction.
+
 module logic.Contractible where
 
   -- Contractible types. A contractible type is a type such that every

@@ -1,5 +1,13 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Dyadic.  A basic implementation of dyadic numbers inside Homotopy
+-- Type Theory, please refer to the agda-mltt library for a complete
+-- implementation.
+
 open import Base
 open import logic.Hedberg
 open import logic.Quotients
@@ -66,9 +74,3 @@ module numbers.Dyadic {ℓ} where
    infixl 60 _+ᵈ_
    _+ᵈ_ : Dyadic → Dyadic → Dyadic
    dyadic dm de dn +ᵈ dyadic em ee en = normalize ((dm *ᶻ exp2 ee) +ᶻ (exp2 de *ᶻ em)) (de +ₙ ee)
-
-   +ᵈ-lunit : (d : Dyadic) → dzero +ᵈ d == d
-   +ᵈ-lunit (dyadic m e n) = {!!}
-   
-
-   

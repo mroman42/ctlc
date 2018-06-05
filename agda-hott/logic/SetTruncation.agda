@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- SetTruncation.  An analogous form of truncation for Sets instead of
+-- Propositions. It truncates any higher-dimensional homotopical
+-- structure.
+
 open import Base
 open import Equality
 open import logic.Propositions
@@ -26,7 +33,7 @@ module logic.SetTruncation where
   strunc-rec : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {P : Type ℓⱼ} → isSet P → (A → P) → ∥ A ∥₀ → P
   strunc-rec _ f !∣ x ∣₀ = f x
 
-  -- Induction principle (?)
+  -- Induction principle
   strunc-ind : ∀{ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : ∥ A ∥₀ → Type ℓⱼ} → ((a : ∥ A ∥₀) → isSet (B a))
              → (g : (a : A) → B ∣ a ∣₀) → (a : ∥ A ∥₀) → B a
   strunc-ind _ g !∣ x ∣₀ = g x

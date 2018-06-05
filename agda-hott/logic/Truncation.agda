@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Truncation.  Propositional truncation of types. It works as an
+-- adjoint, this is shared code with the Agda-mltt library.
+
 open import Base
 open import Equality
 open import logic.Propositions

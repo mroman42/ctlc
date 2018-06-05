@@ -1,5 +1,13 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Hedberg.  Hedberg's theorem proves that any type with decidable
+-- equality (the natural numbers, the booleans) is a set, meaning that
+-- it has no higher homotopical structure.
+
 open import Agda.Primitive
 open import Base
 open import Equality
@@ -43,7 +51,7 @@ module logic.Hedberg {ℓ} where
     
   open HedbergLemmas public
 
-  -- Hedberg's theorem.
+  -- Hedberg's theorem. A type with decidable equality is a set.
   hedberg : {A : Type ℓ} → ((a b : A) → (a == b) + ¬ (a == b)) → isSet A
   hedberg {A} f = reflRelIsSet A
                 (record { R = λ a b → ¬ (¬ (a == b)) ; Rprop = isPropNeg })

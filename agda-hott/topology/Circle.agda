@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Circle.  The circle type is constructed by postulating a type with
+-- a single element (base) and a nontrivial path (loop).
+
 open import Base
 open import Equality
 
@@ -21,6 +28,7 @@ module topology.Circle where
   base : S¹
   base = !base
 
+  -- Nontrivial path on the circle.
   postulate loop : base == base
 
   -- Recursion principle on points

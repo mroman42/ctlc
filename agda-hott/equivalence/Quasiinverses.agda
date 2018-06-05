@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Quasiinverses.  Two functions are quasiinverses if we can construct
+-- a function providing gfx = x and fgy = y for any given x and y.
+
 open import Base
 open import Equality
 open import EquationalReasoning
@@ -17,12 +23,6 @@ module equivalence.Quasiinverses {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ
   -- biinverses.
   qinv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
   qinv f = Σ (B → A) (λ g → ((f ∘ g) ∼ id) × ((g ∘ f) ∼ id))
-
-  -- record qinv (f : A → B) : Type (ℓᵢ ⊔ ℓⱼ) where
-  --   field
-  --     g : B → A
-  --     η : (g ∘ f) ∼ id
-  --     ε : (f ∘ g) ∼ id
 
   linv : (A → B) → Type (ℓᵢ ⊔ ℓⱼ)
   linv f = Σ (B → A) (λ g → (g ∘ f) ∼ id)
@@ -51,16 +51,13 @@ module equivalence.Quasiinverses {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ
       δ : (g ∘ f) ∼ id
       δ = (rcomp-∼ f γ) ● α
 
-  -- TODO: Propositions
-  -- linvIsProp : (f : A → B) → isProp (linv f)
-  -- linvIsProp f = {!!}
-
   equiv-biinv : (f : A → B) → isContrMap f → biinv f
   equiv-biinv f contrf = (remap eq , rlmap-inverse-h eq) , (remap eq , lrmap-inverse-h eq)
     where
       eq : A ≃ B
       eq = f , contrf
 
+  -- Quasiinverses are halfadjoint equivalences.
   qinv-ishae : {f : A → B} → qinv f → ishae f
   qinv-ishae {f} (g , (ε , η)) = record {
       g = g ;
@@ -92,21 +89,14 @@ module equivalence.Quasiinverses {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓ
           inv (ε (f (g (f a)))) · ap f (η (g (f a))) · ε (f a)
         ∎
 
+  -- Quasiinverses create equivalences.
   qinv-≃ : (f : A → B) → qinv f → A ≃ B
   qinv-≃ f = ishae-≃ ∘ qinv-ishae
 
   ≃-qinv : A ≃ B → Σ (A → B) qinv
   ≃-qinv eq = lemap eq , (remap eq , (lrmap-inverse-h eq , rlmap-inverse-h eq))
 
+  -- Half-adjoint equivalences are quasiinverses.
   ishae-qinv : {f : A → B} → ishae f → qinv f
   ishae-qinv {f} (hae g η ε τ) = g , (ε , η)
-
-  -- qinv-equiv : (f : A → B) → qinv f → isContrMap f
-  -- qinv-equiv f (g , (α , β)) b = ((g b) , α b) , {!!}
-  --   where
-  --     uniq : (x : fib f b) → (g b , α b) == x
-  --     uniq (a , p) = Σ-bycomponents ((ap g (inv p) · β a) , {!!})
-
-  -- biinv-equiv : (f : A → B) → biinv f → isContrMap f
-  -- biinv-equiv f ((gl , hgl) , (gr , hgr)) = λ b → {!!}
 

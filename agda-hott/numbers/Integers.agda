@@ -1,5 +1,14 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Integers.  Inductive representation of the integers. It defines
+-- ordering and an equivalence given by the successor and predecessor
+-- functions that will be used in the homotopical proof of the
+-- fundamental group of the circle.
+
 open import Base
 open import Equality
 open import logic.Sets

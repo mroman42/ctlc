@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Homotopies.  In a type-theoretical sense, a homotopy between two
+-- functions is a family of equalities between their applications.
+
 open import Agda.Primitive
 open import Base
 open import Equality
@@ -45,12 +51,15 @@ module Homotopies where
     lcomp-∼ j α = hl-comp _ _ _ _ α (h-refl j)
   open HomotopyComposition public
 
+  -- Homotopy is natural, meaning that it satisfies the following
+  -- square commutative diagram.
   module Naturality {ℓᵢ ℓⱼ} {A : Type ℓᵢ} {B : Type ℓⱼ} where
     h-naturality : {f g : A → B} (H : f ∼ g) → {x y : A} → (p : x == y)
                  → H x · ap g p == ap f p · H y
     h-naturality H (refl a) = inv (·-runit (H a))
   open Naturality public
 
+  -- A particular case of naturality on the identity function.
   h-naturality-id : ∀{ℓ} {A : Type ℓ} {f : A → A} (H : f ∼ id) → {x : A}
                   → H (f x) == ap f (H x)
   h-naturality-id {f = f} H {x = x} =

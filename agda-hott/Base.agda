@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Base.  Basic types of Martin-Löf type theory and some basic
+-- functions.
+
 module Base where
 
   open import base.Universes public
@@ -52,7 +58,8 @@ module Base where
         → (B → C) → (A → B) → (A → C)
   (g ∘ f) z = g (f z)
 
-  -- Equality is defined as an inductive type
+  -- Equality is defined as an inductive type. Its induction principle
+  -- is the J-eliminator.
   data _==_ {ℓ} {A : Type ℓ} : A → A → Type ℓ where
     refl : (a : A) → a == a
 

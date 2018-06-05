@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Universes.  Type universe hierarchy. It hides Agda primitive
+-- hierarchy and the keyword Set. It uses Type instead.
+
 module base.Universes where
 
   open import Agda.Primitive public

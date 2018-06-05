@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Monoid.  Definition of the algebraic structure of a monoid.
+
 open import Agda.Primitive
 open import Base
 open import Equality
@@ -20,14 +26,3 @@ module algebra.Monoids {ℓ} where
       runit : (x : G) → (x <> e) == x
       assoc : (x y z : G) → (x <> (y <> z)) == ((x <> y) <> z)
   open Monoid {{...}} public
-
-  -- TODO: Lists are free monoids
-  -- TODO: Monoid homomorphisms
-
-  data List (A : Type0) : Type0 where
-    [] : List A
-    ∷ : A → List A → List A
-
-
-  
-    

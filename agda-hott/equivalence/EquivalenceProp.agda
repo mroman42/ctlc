@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- EquivalenceProp.  Equivalence of two types is a
+-- proposition. Moreover, equivalences preserve propositions.
+
 open import Agda.Primitive
 open import Base
 open import Equality

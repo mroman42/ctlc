@@ -1,5 +1,12 @@
 {-# OPTIONS --without-K #-}
 
+
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- Naturals.  A basic implementation of the natural numbers and some
+-- lemmas on them using the inductive definition.
+
 open import Agda.Primitive
 open import Base
 open import Equality

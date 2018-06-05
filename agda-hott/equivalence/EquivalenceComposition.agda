@@ -1,5 +1,11 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- EquivalenceComposition.  Composition of equivalences and properties
+-- of that composition.
+
 open import Agda.Primitive
 open import Base
 open import Equality

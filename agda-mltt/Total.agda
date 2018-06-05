@@ -3,7 +3,7 @@
 -- Agda-MLTT library.
 -- Author: Mario Román.
 
--- Total.  Index for the complete MLTT library.
+-- Total.  Index for the complete Agda-MLTT library.
 
 open import Base
 open import Equality

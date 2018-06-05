@@ -1,5 +1,13 @@
 {-# OPTIONS --without-K #-}
 
+-- Agda-hott library.
+-- Author: Mario Román
+
+-- HLevels.  Higher levels of the homotopical structure, where the
+-- first levels are Contractible types (0), Propositions (1) and Sets
+-- (2). They would correspond to homotopy levels. We only work with
+-- these first levels.
+
 open import Base
 open import Equality
 open import EquationalReasoning
@@ -11,6 +19,7 @@ open import logic.Sets
 
 module logic.HLevels where
 
+  -- Propositions are Sets.
   propIsSet : ∀{ℓ} {A : Type ℓ} → isProp A → isSet A
   propIsSet {A = A} f a _ p q = lemma p · inv (lemma q)
     where
@@ -26,10 +35,11 @@ module logic.HLevels where
           inv (f a y) · (f a z)
         ∎
       
-
+  -- Contractible types are Propositions.
   contrIsProp : ∀{ℓ}  {A : Type ℓ} → isContr A → isProp A
   contrIsProp (a , p) x y = inv (p x) · p y
 
+  -- To be contractible is itself a proposition.
   isContrIsProp : ∀{ℓ}  {A : Type ℓ} → isProp (isContr A)
   isContrIsProp {_} {A} (a , p) (b , q) = Σ-bycomponents (inv (q a) , piProp (AisSet b) _ q)
     where
