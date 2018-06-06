@@ -6446,12 +6446,18 @@ unit types match the adjoints that determine a cartesian closed category.
 \noLine
 \TIC{}
 \end{prooftree}
-# where the projections are what we called $\fst$ and $\snd$, and
-# evaluation is function application
+Note that categorical projections from the product object correspond
+to the pair projections we called $\fst$ and $\snd$, and the
+evaluation morphism is simply function application in lambda calculus.
+This motivates the idea that simply typed \lambda-calculus is a manifestation
+of cartesian closed categories in some sense yet to be made explicit.
+
+\\
 
 **** Lambda theories                                                                     :ignore:
-A *\lambda-theory* $\mathbb{T}$ is the analog of a Lawvere theory for cartesian
-closed categories. It is given by a set of basic types and constants
+A *\lambda-theory* $\mathbb{T}$ is the analog of a Lawvere algebraic theory
+(Definition [[def-algebraictheory]])
+for cartesian closed categories. It is given by a set of basic types and constants
 over the simply-typed lambda calculus and a set of equality axioms,
 determining a *definitional equality* $\equiv$, an equivalence relation
 preserving the structure of the simply-typed lambda calculus;
@@ -6951,6 +6957,7 @@ are the initial algebra for the functor $T \mapsto(1 + \mathbb{N} \times T \time
 # Open subsets of a topological space.
 
 ** Locally cartesian closed categories and dependent types
+<<sec-locallydependent>>
 *** Quantifiers and subsets
 **** Logical formulas as subsets                                  :ignore:
 The motivation for this section is the interpretation of logical formulas
@@ -7194,19 +7201,24 @@ and by the characterization of Theorem [[theorem-characterization-lccc]], the
 whole category is locally cartesian closed.
 
 We take ${\cal D}$ as a particular case of a comma category where objects are
-arrows $f \colon yC \to A$ in $\Set^{{\cal C}^{op}}$ from the Yoneda embedding of an object
-$C \in {\cal C}$ to the fixed object $A$.  Morphisms are commutative triangles
+arrows $f \colon YC \to A$ in $\Set^{{\cal C}^{op}}$ from the Yoneda embedding (Definition [[def-yoneda-functor]]) of an object
+$C \in {\cal C}$ to the fixed object $A$.  Morphisms between two objects
+$f \colon YC \to A$ and $f' \colon YC' \to A$ are commutative triangles determined by
+arrows $\varphi \colon YC \to YC'$ such that $f' \circ \varphi = f$.
 \[\begin{tikzcd}[column sep=tiny]
-yC \ar{rr}{\varphi}\drar[swap]{f} && yC'\dlar{f'} \\
+YC \ar{rr}{\varphi}\drar[swap]{f} && YC'\dlar{f'} \\
 & A &
 \end{tikzcd}\]
-where, as Yoneda is a full and faithful embedding, $\varphi$ must be of the
-form $\varphi = yh$ for a unique $h \colon C \to C'$. Note how ${\cal D}$ can be fully and
-faithfully embedded inside $\Set^{{\cal C}^{op}}/A$ with a functor $I \colon {\cal D} \to \Set^{{\cal C}^{op}}/A$.
+As the Yoneda functor provides a full and faithful embedding,
+an arrow $\varphi$ on these conditions must be of the form $\varphi = Yh$ for
+a unique $h \colon C \to C'$. Note how this category ${\cal D}$ can be fully and
+faithfully embedded inside $\Set^{{\cal C}^{op}}/A$ by simply reinterpreting its
+objects as objects of the slice category, this embedding defines a
+functor $I \colon {\cal D} \to \Set^{{\cal C}^{op}}/A$.
 
 A functor $\varPhi \colon \Set^{{\cal C}^{op}}/A \to \Set^{{\cal D}^{op}}$ can be now defined on objects
 as $\varPhi(q) = \hom_{\Set^{{\cal C}^{op}}/A}(I(-),q)$, which is a composition of functors.
-It remains to show that this functor in fact determines an equivalence.
+It can be seen that this functor determines an equivalence.
 # TODO: Show that it is an equivalence
 #+END_proof
 
@@ -7463,7 +7475,7 @@ following the characterization of the adjunction.
 && \intr{\ast}
 \end{tikzcd}\]
 That is, we have to provide a morphism from the empty context
-to the naturals $m : \intr{\ast} \to \intr{n : \mathbb{N}}$, or, in other words, an
+to the natural numbers $m : \intr{\ast} \to \intr{n : \mathbb{N}}$, or, in other words, an
 element of $\mathbb{N}$. Computing the pullback of the dependent type
 of vector over this element gives us the context $\intr{v : \mathrm{Vect}(m)}$
 of vectors of length $m$. Now, we only have to provide a
@@ -7552,7 +7564,6 @@ has a fundamentally different meaning. Later, we will see a
 technique that will allow us to recreate the classical existential
 quantifier.
 #+END_exampleth
-*** TODO Soundness up to isomorphism
 *** Equality types
 <<sec-equalitytypes>>
 *Equality* in our theory comes from an adjunction, as was first proposed
@@ -7688,7 +7699,7 @@ For instance, there are four distinct elements of
 \[
 \sum_{(n,m) : \mathbb{N} \times \mathbb{N}} (n + m = 3),
 \]
-each one of them providing an ordered pair of naturals that add up to $3$.
+each one of them providing an ordered pair of natural numbers that add up to $3$.
 In contrast, there is a unique element of
 \[
 \left\|\sum_{(n,m) : \mathbb{N} \times \mathbb{N}} (n + m = 3) \right\|,
@@ -7736,7 +7747,6 @@ having a proof of existence can be used to assume that we have explicitly
 constructed the element and to prove a different proposition using it, with
 the condition that we cannot refer later to the explicit element we used during
 the proof.
-
 ** Topoi
 *** Motivation
 *Topoi* (singular /topos/) are category-theoretic models of
@@ -8209,9 +8219,9 @@ the type of loops $\pi_1(A,a) :\equiv a = a$, endowed with reflexivity and
 transitivity. The *circle* can be defined as the freely generated
 type with a single element $\mathsf{p} : \mathbb{S}^1$ and a nontrivial equality
 $\mathsf{loop} : \mathsf{p} = \mathsf{p}$. Because it is freely
-generated, we can apply symmetry to get a different proof $\mathsf{p} = \mathsf{p}$ which we
+generated, we can apply symmetry to get a /different/ proof of $\mathsf{p} = \mathsf{p}$ which we
 will call $\mathsf{loop}^{-1}$; moreover,
-we can transitivity $n$ times to $\mathsf{loop}$ for an arbitrary $n$, to get a new proof
+we can apply transitivity $n$ times to $\mathsf{loop}$ for an arbitrary $n$ to get a new proof
 of $\mathsf{p} = \mathsf{p}$ which we will call $\mathsf{loop}^n$; these are the elements
 of its fundamental group $\pi_1(\mathbb{S}^1, \mathsf{p})$.
 
@@ -8287,17 +8297,77 @@ using Z as a bridge.
 
 ** TODO Verified formal proofs
 * Conclusions
-** Further
- * https://arxiv.org/abs/quant-ph/0312174
+** Conclusions
+** Further work
+
+$A \multimap B$
+
+# Automation in Agda
+# Linear logic, monoidal categories 
+# https://arxiv.org/abs/quant-ph/0312174
 
 # It is conceivable that, in the future, mathematicians will be able
 # to write and check their proofs directly into a computer as part of
-# their routine. Reaching that ... will require a massive effort into
+# their routine. Reaching that [...] will require a massive effort into
 # the study of foundations and implementation of languages, coupled
 # with the creation of tools and software easing the task for the
 # working mathematician.
 
 * Appendices
+** Code
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+The complete code that generates this text, along with the code here
+presented can be found at https://github.com/mroman42/ctlc.
+
+The *Mikrokosmos* lambda interpreter has its documented code published
+under a GNU General Public License v3.0 at
+https://github.com/mroman42/mikrokosmos. Code for a previous stable
+version on the Hackage platform can be found at
+https://hackage.haskell.org/package/mikrokosmos. An HTML version of
+the documented code can be accessed at
+https://mroman42.github.io/mikrokosmos/haddock/.
+
+Mikrokosmos has been released along with the following references.
+
+ * A /User's guide/ for the command line interpreter. It details
+   the installation procedure and the core functionality. It can be found at
+   https://mroman42.github.io/mikrokosmos/userguide.html.
+
+ * The online version of the interpreter, which can be accessed at 
+   https://mroman42.github.io/mikrokosmos/.
+
+ * An interactive /Tutorial on the lambda calculus/, following Sections
+   [[sec-programming-untyped]] and [[sec-programming-typed]] from a more
+   didactic perspective. It can be found at https://mroman42.github.io/mikrokosmos/tutorial.html.
+
+ * The /Javascript interface/ and instructions on how to use it at
+   https://github.com/mroman42/mikrokosmos-js.
+
+ * The /IPython/Jupyter Mikrokosmos kernel/, whose code can be found at
+   https://github.com/mroman42/jupyter-mikrokosmos. Tutorials in
+   Jupyter notebook format can be found at
+   https://github.com/mroman42/mikrokosmos-tutorials.
+
+ * The /standard libraries/, which are also part of the interpreter from
+   version 0.5.0. The code can be found at
+   https://github.com/mroman42/mikrokosmos-lib.
+
+The code for the Agda-mltt and Agda-hott libraries can be downloaded
+from the main repository.  The easily-navigable HTML versions can be
+found at
+
+ * https://mroman42.github.io/ctlc/agda-mltt/Total.html,
+ * https://mroman42.github.io/ctlc/agda-hott/Total.html.
+
+
+# Mikrokosmos
+# Mikrokosmos suite
+# Agda-mltt
+# Agda-hott
+
 ** Acknowlegments
 :PROPERTIES:
 :UNNUMBERED: t
@@ -8348,6 +8418,7 @@ bibliography:Bibliography.bib
 * OLD Removed                                                                      :noexport:ignore:
 # TODO: Example: quotients
 
+** TODO Soundness up to isomorphism
 ** OLD Examples of comma categories
 *** TODO Pointed sets
 *** TODO The category of all categories
