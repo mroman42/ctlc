@@ -256,7 +256,7 @@ the work by cite:maclane94 and cite:martinlof75.
 foundation of mathematics. The embedding of a category of sets and
 some classical principles inside constructive logic are studied.  We
 also present and formalize inside a programming language a first
-result of Homotopy Type Theory.
+result of Homotopy Type Theory. This section is based on cite:hottbook.
 
 ** Sinopsis
 :PROPERTIES:
@@ -3386,6 +3386,7 @@ and in a reproducible way on a fresh Linux installation provided by
 the service.
 
 ** Programming in untyped \lambda-calculus
+<<sec-programming-untyped>>
 # Untyped \lambda-calculus in programming languages
 
 This section explains how to use untyped \lambda-calculus to encode
@@ -3433,7 +3434,7 @@ discard = const id
 #+END_SRC
 
 is a function that discards one argument and returns the identity, =id=.
-This way of defining multiple argument functions is called the *currying*
+This way of defining multiple argument functions is called the /currying/
 of a function in honor to the american logician Haskell Curry in cite:haskell58.
 It is a particular instance of a deeper fact we will detail on Chapter
 [[sec-cartesianclosedlambdacalculus]]: exponentials are defined by the adjunction
@@ -3597,7 +3598,7 @@ Stephen Kleene, one of the students of Alonzo Church only discovered
 how to write the predecessor function after thinking about it for a
 long time (and he only discovered it while a long visit at the
 dentist's, which is the reason why this definition is often called the
-*/wisdom tooth trick/*, see cite:crossley75). We will use a slightly
+/wisdom tooth trick/, see cite:crossley75). We will use a slightly
 different version of that definition, as we consider it to be simpler
 to understand.
 
@@ -3803,6 +3804,7 @@ mu (\n.eq (mult 2 n) 10)                                     --- [1]: 5
 #+END_SRC
 
 ** Programming in the simply typed \lambda-calculus
+<<sec-programming-typed>>
 This section explains how to use the simply typed \lambda-calculus to
 encode compound data structures and proofs in intuitionistic logic.
 We will use the interpreter as a typed language and, at the same time,
@@ -4955,7 +4957,7 @@ turn determines a universal arrow by Proposition [[prop-universality-homsets]].
 # TODO: Check this proof
 
 *** Yoneda Lemma
-**** Motivation of Yoneda Lemma                                                          :ignore:
+**** Motivation                                                                          :ignore:
 The Yoneda lemma is one of the first results in pure category theory.
 It allows us to embed any small category into a functor category over
 the category of sets. It will be very useful when studying presheaves and
@@ -4984,7 +4986,7 @@ $\alpha_s(f) = Kf(\alpha_r(\id_r))$.
 \end{tikzcd}\qedhere\]
 #+end_proof
 
-**** Natural transformations between representable functors       :ignore:
+**** Natural transformations between representable functors                              :ignore:
 #+attr_latex: :options [Characterization of natural transformations between representable functors]
 #+begin_corollary
 Given $r,s \in {\cal D}$, any natural transformation $\hom(r,-) \tonat \hom(s,-)$ is
@@ -4999,9 +5001,10 @@ sending the natural transformation to a morphism $\alpha(id_r) = h \colon s \to 
 rest of the natural transformation is determined as $- \circ h$ by naturality.
 #+end_proof
 
-**** Naturality of the Yoneda Lemma                               :ignore:
+**** Naturality of the Yoneda Lemma                                                      :ignore:
 #+attr_latex: :options [Naturality of the Yoneda Lemma]
 #+begin_proposition
+<<lemma-yoneda-natural>>
 The bijection on the Yoneda Lemma (Lemma [[lemma-yoneda]]),
 $y \colon \mathrm{Nat}(\hom_{{\cal D}}(r,-), K) \cong Kr$,
 is a natural isomorphism between two functors $\Sets^{\cal D} \times {\cal D} \to \Sets$.
@@ -5044,21 +5047,21 @@ y\big(N\pair{f,F}(\alpha)\big)
 \end{aligned}\]
 #+end_proof
 
-**** Yoneda functor                                               :ignore:
+**** Yoneda functor                                                                      :ignore:
 #+begin_definition
 <<def-yoneda-functor>>
 In the conditions of the Yoneda Lemma (Lemma [[lemma-yoneda]]) the *Yoneda functor*,
 $Y \colon {\cal D}^{op} \to \Sets^{{\cal D}}$, is defined with the arrow function
 \[
-\left(f \colon s \to r\right) \mapsto 
-\Big(\hom_{\cal D}(f,-) \colon \hom_{\cal D}(r,-) \to \hom_{\cal D}(s,-)\Big).
+\left(f \colon A \to B\right) \mapsto 
+\Big(\hom_{\cal D}(f,-) \colon \hom_{\cal D}(B,-) \to \hom_{\cal D}(A,-)\Big).
 \]
 It can be also written as $Y\colon {\cal D} \to \Sets^{{\cal D}^{op}}$. By the Yoneda Lemma, there
-is a bijection $y \colon \Nat(\hom(r,-), \hom(s,-)) \cong \hom(s,r)$ given by
-$y(\hom(f,-)) = f$; making the Yoneda functor full and faithful.
+is a bijection $y \colon \Nat(\hom(B,-), \hom(A,-)) \cong \hom(A,B)$ given by
+$Y(\hom(f,-)) = f$; making the Yoneda functor full and faithful.
 #+end_definition
 
-***** OLD Full and faithful as proposition                       :ignore:
+***** OLD Full and faithful as proposition                                              :ignore:
 #+begin_proposition
 The Yoneda functor is full and faithful.
 #+end_proposition
@@ -5075,8 +5078,8 @@ is a bijection, where
 # TODO: Limpiar toda esta parte
 **** Motivation: products                                         :ignore:
 In the definition of product, we chose two objects of the category, we
-considered all possible */\red{cones}/* over two objects and we picked the
-universal one. Diagramtically,
+considered all possible /cones/ over two objects and we picked the
+universal one.
 \[\begin{tikzcd}[column sep=tiny]
 &&&&& 
 D \dar[dashed]{\exists!} \ar[bend left,color=myred]{ddr}\ar[bend right,swap,color=myred]{ddl} &\\& 
@@ -5087,9 +5090,10 @@ B &\phantom{gap}&
 A && 
 B
 \end{tikzcd}\]
-$C$ is a cone and $A \times B$ is the universal one: every cone factorizes through
-it. In this particular case, the base of each cone is given by two objects;
-or, in other words, by the image of a functor from the discrete category with
+In this previous commutative diagram, $C$ is a cone and $A \times B$
+is the universal one: every cone factorizes through it. In this
+particular case, the base of each cone is given by two objects; or, in
+other words, by the image of a functor from the discrete category with
 only two objects, called the /index category/.
 
 We will be able to create new constructions on categories by formalizing
@@ -5160,7 +5164,6 @@ limit by a universal natural transformation between the two constant
 functors.
 
 **** Definition of limit                                          :ignore:
-#+ATTR_LATEX: :options [Limit]
 #+BEGIN_definition
 The *limit* of a functor $F \colon {\cal J} \to {\cal C}$ is an object $r \in {\cal C}$ such that
 there exists a universal arrow $v \colon \Delta r \tonat F$ from $\Delta$ to $F$. It is
@@ -5295,7 +5298,9 @@ X
 Z
 \end{tikzcd}\]
 The square in this diagram is usually called a /pullback square/,
-and the pullback object is usually called a /fibered product/.
+and the pullback object is sometimes called a /fibered product/.
+Pullbacks will be a central notion when developing semantics for
+dependent types in Section [[sec-locallydependent]].
 
 # TODO: Example of pullback
 # TODO: Equalizers are a particular example of pullbacks
@@ -5309,7 +5314,7 @@ and the pullback object is usually called a /fibered product/.
 A colimit is the dual notion of a limit. We could consider 
 cocones to be the dual of cones and pick the universal one.
 Once an index category ${\cal J}$ and a base category ${\cal C}$ are fixed,
-a */\blue{cocone}/* is a natural transformation from a functor on the
+a /cocone/ is a natural transformation from a functor on the
 base category to a constant functor. Diagramatically,
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &&& &&& & c &&\\
@@ -5343,7 +5348,7 @@ $r$, such that, for each cone $d$,
 \ar[bend right, color=myblue]{uuull}
 \ar[bend right, color=myblue]{uuuuull} \\
 \end{tikzcd}\]
-and naturality implies that each triangle
+and naturality implies that each triangle of the following form commutes.
 \[\begin{tikzcd}[column sep=tiny,row sep=small]
 &\cdot &\\
 \cdot
@@ -5352,10 +5357,8 @@ and naturality implies that each triangle
 \cdot
 \ar[color=myblue, shorten >= -1.5mm, shorten <= -2mm]{ul}
 \end{tikzcd}\]
-commutes.
 
 **** Definition of colimits                                       :ignore:
-#+attr_latex: :options [Colimits]
 #+begin_definition
 The *colimit* of a functor $F \colon J \to {\cal C}$ is an object $r \in {\cal C}$ such that there exists
 a universal arrow $u \colon F \tonat \Delta r$ from $F$ to $\Delta$. It is usually written as $r = \Colimit F$.
@@ -5378,7 +5381,7 @@ earlier and proves that colimits are unique up to isomorphism.
 from $\downarrow\downarrow$. The coequalizer of two parallel arrows is an object
 $\mathrm{coeq}(f,g)$ with a morphism $e \colon b \to \mathrm{coeq}(f,g)$ such that $e \circ f = e \circ g$;
 and such that any other object with a similar morphism factorizes uniquely
-through it
+through it.
 \[\begin{tikzcd}[column sep=tiny]
 &
 d &\\& 
@@ -5393,8 +5396,9 @@ b
 \ar[color=myblue, swap]{ul}{e}
 \ar[color=myblue, bend right, swap]{uul}{e'}
 \end{tikzcd}\]
-as the right part of the cocone is completely determined by
-the left one, the diagram can be written as
+As the arrows on the right of the cocone are completely determined by
+the fact that the diagram must be commutative, we can simplify the diagram
+as follows.
 \[\begin{tikzcd}
 a 
 \ar[bend left=15]{r}{f}
@@ -5411,9 +5415,10 @@ d
 #+BEGIN_exampleth
 The coequalizer of two parallel functions $f,g \colon A \to B$ in
 $\Sets$ is $B /(\sim_{f=g})$, where $\sim_{f = g}$ is the minimal equivalence
-relation in which we have $f(a) \sim g(a)$ for each $a \in A$.
+relation for which we have $f(a) \sim g(a)$ for each $a \in A$.
 Given any other function $h \colon B \to D$ such that $h(f(a)) = h(g(a))$,
-it can be factorized in a unique way by $h' \colon B/\sim_{f=g} \to D$.
+the universal property precisely states that it can be factorized in a
+unique way by $h' \colon B/\sim_{f=g} \to D$.
 \[\begin{tikzcd}
 A
 \ar[bend left=15]{r}{f}
@@ -5429,7 +5434,6 @@ D
 **** Pushouts                                                     :ignore:
 *Pushouts* are the dual of pullbacks; colimits whose index category
 is $\cdot \gets \cdot \to \cdot$, that is, the dual of the index category for pullbacks.
-Diagramatically,
 \[\begin{tikzcd}
 & d
 &\\
@@ -5447,11 +5451,11 @@ y
 \ular[bend right,swap,color=myblue]{q}
 \arrow[bend right,swap,color=myblue]{uul}{q'} \\
 \end{tikzcd}\]
-and we can define the pushout of two morphisms $f \colon z \to x$ and
+We can define the pushout of two morphisms $f \colon z \to x$ and
 $g \colon z \to y$ as a pair of morphisms $p \colon x \to a$ and $q \colon y \to a$ such
 that $p \circ f = q \circ g$ which are also universal, that is, given any
 pair of morphisms $p' \colon x \to d$ and $q' \colon y \to d$, there exists a unique
-$u \colon a \to d$ making the diagram commute.
+$u \colon a \to d$ making the following diagram commute.
 \[\begin{tikzcd}
 z
 \rar{g}
@@ -5462,7 +5466,7 @@ x \amalg_z y \ar[dashed,swap]{dr}{\exists! u} & \\
 & & d
 \end{tikzcd}\]
 The square in this diagram is usually called a 
-/pushout square/, and the pullback object is usually called a
+/pushout square/, and the pullback object is sometimes called a
 /fibered coproduct/.
 
 # TODO Seifert Van-Kampen
@@ -5572,6 +5576,7 @@ respectively, in the definition of adjunction.
 \BIC{}
 \end{prooftree}
 
+**** Units and counits are natural transformations                                       :ignore:
 #+attr_latex: :options [Units and counits are natural transformations]
 #+begin_proposition
 The *unit* and the *counit* are natural transformations such that
@@ -5678,7 +5683,7 @@ Finally, the triangle identities follow directly from the previous ones:
 we have $\id &= \varphi(\varepsilon) = G\varepsilon \circ \eta$ and $\id &= \varphi^{-1}(\eta) = \varepsilon \circ F\eta$.
 #+END_proof
 
-**** Characterization of adjunctions                              :ignore:
+**** Characterization of adjunctions                                                     :ignore:
 #+attr_latex: :options [Characterization of adjunctions]
 #+begin_proposition
 <<prop-characterize-adjunctions>>
@@ -6138,11 +6143,13 @@ talking about functor catgeories (Examples [[example-functor-graphs]] and
 **** TODO Pointed Sets (?)
 *** TODO Pullbacks, in particular products always exists, thus all finite limits
 # The product of two functors is the product functor
+
 *** TODO Has \omega-colimits
 # Proposition 10.12 in Awodey gives initial algebras for presheaves.
 
 # Yoneda embedding preserves colimits and limits (?), that is why
-# presheaves have colimits.
+# presheaves have colimits. <- This is proved later.
+# Yoneda preserves limits but does it preserve colimits?
 
 # Coproducts
 
@@ -6183,14 +6190,15 @@ into a category. Differently presented but equivalent axioms will give
 rise to the same category.
 
 **** Definition                                                   :ignore:
-#+ATTR_LATEX: :options [Lawvere algebraic theory]
+#+ATTR_LATEX: :options [Lawvere, 1963]
 #+BEGIN_definition
 <<def-algebraictheory>>
-An *algebraic theory* cite:bauer17 is a category $\mathbb{A}$ with all finite products
-whose objects form a sequence $A^0,A^1,A^2, \dots$ such that $A^m \times A^n = A^{m+n}$
-for any $m, n$.
+An *algebraic theory* (see cite:bauer17 and cite:lawvere1963funct) is a
+category $\mathbb{A}$ with all finite products
+whose objects form a sequence $A^0,A^1,A^2, \dots$ such
+that $A^m \times A^n = A^{m+n}$ for any $m, n$. From this definition,
+it follows that $A^0$ must be the terminal object.
 #+END_definition
-# From this definition, it follows that $A^0$ must be the terminal object.
 
 An algebraic theory can be built from its operations and axioms as
 follows: objects represent natural numbers, $A^0,A^1,A^2,\dots$, and morphisms
@@ -6212,13 +6220,12 @@ make $A^n$ the n-fold product of $A$. We have built a category with the desired
 properties.
 
 **** Models                                                       :ignore:
-#+ATTR_LATEX: :options [Model]
 #+BEGIN_definition
 A *model* of an algebraic theory $\mathbb{A}$ in a category ${\cal C}$ is a functor
 $M \colon \mathbb{A} \to {\cal C}$ preserving all finite products.
 #+END_definition
 
-The *category of models*, $\Mod_{{\cal C}}(\mathbb{A})$, is the subcategory of the functor
+The /category of models/, $\Mod_{{\cal C}}(\mathbb{A})$, is the subcategory of the functor
 category ${\cal C}^{\mathbb{A}}$ containing the functors that preserve all finite products,
 with the usual natural transformations between them. We say that a
 category is /algebraic/ if it is equivalent to a category of the
@@ -6233,9 +6240,10 @@ have all the tuples of terms that can be inductively built with
 (x \vdash x^{-1}) \colon G \to G, \qquad
 (\vdash e) \colon G,\]
 and the projections $(x_1\dots x_n \vdash x_k) \colon G^n\to G$, where the usual group
-axioms hold. A model $H \colon \mathbb{G} \to {\cal C}$ is determined by an object of ${\cal C}$
-and some /morphisms of the catgeory/ with the above signature
-for which the axioms hold; for instance,
+axioms hold. A model of the theory of groups inside some category ${\cal C}$ is given by
+a functor $H \colon \mathbb{G} \to {\cal C}$ which is in turn determined by an object
+of ${\cal C}$ and some morphisms of the category with the above signature
+for which the axioms hold. For instance,
 
  * a model of $\mathbb{G}$ in $\Set$ is a classical *group*,
    a set with multiplication and inverse functions for which
@@ -6280,8 +6288,8 @@ A category with this property is called a *universal model*.
 #+END_theorem
 #+BEGIN_proof
 Indeed, taking ${\cal A} = \mathbb{A}$ as a model of itself with the identity functor
-$U = \Id$, $u = v$ is satisfied under the identity functor if and only if
-it is satisfied in the original category.
+$U = \Id$, the equation $u = v$ is trivially satisfied under the identity
+functor if and only if it is satisfied in the original category.
 # TODO: Is this category really a representation of the equations?
 # Yes by construction (x,y \vdash x.y) is a representation
 #+END_proof
@@ -6293,12 +6301,18 @@ Yoneda embedding (Definition [[def-yoneda-functor]]).
 
 #+ATTR_LATEX: :options [Completeness on presheaves]
 #+BEGIN_corollary 
-The Yoneda embedding $y \colon \mathbb{A} \to \Set^{\mathbb{A}^{op}}$ is a universal model for $\mathbb{A}$.
+The Yoneda embedding $Y \colon \mathbb{A} \to \Set^{\mathbb{A}^{op}}$ is a universal model for $\mathbb{A}$.
 #+END_corollary
-#+BEGIN_proof 
-It preserves finite products because it preserves all limits, and thus,
-it is a model. As it is a faithful functor, we know that any equation
-proved in the model is an equation proved by the theory.
+#+BEGIN_proof
+Note that the Yoneda embedding preserves all limits. That is, if
+a family of morphisms $D \to A_i$ in $\mathbb{A}$ determines a universal cone, that
+means that we have a universal cone $\hom(X,D)\to\hom(X,A_i)$
+for each $X \in \mathbb{A}$. Then, as we discussed in Definition [[def-yoneda-functor]],
+this gives natural transformations $\hom(-,D)\to\hom(-,A_i)$ creating
+a new universal cone.
+In particular, the Yoneda functor is a model because it preserves all
+finite products. As it is a faithful functor, we know that any
+equation proved in the model is an equation proved by the theory.
 #+END_proof
 
 **** Universal group                                              :ignore:
@@ -6327,8 +6341,8 @@ diagonal and product functors have right adjoints
 \]
 #+END_definition
 
-These adjoints are given by terminal, product and exponential objects,
-written as
+These adjoints are given by terminal, product and exponential objects
+respectively, written as follows.
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] \ast \rar{}\& \ast \end{tikzcd}}
 \doubleLine
@@ -6342,8 +6356,9 @@ written as
 \noLine
 \TIC{}
 \end{prooftree}
-Exponentials are characterized by the *evaluation morphism* $\varepsilon \colon B^A \times A \to B$
-which is the counit of the adjunction
+In particular, exponentials are characterized by the family of
+*evaluation morphisms* $\varepsilon \colon B^A \times A \to B$, which form the counit of
+the adjunction.
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
 C \times A \ar[bend left=45]{rr}{f} \rar{\widetilde{f} \times \id}\& 
@@ -6359,44 +6374,57 @@ B^A
 \end{prooftree}
 
 **** Presheaves and sets are cartesian closed                                            :ignore:
-#+ATTR_LATEX: :options [Presheaf categories are cartesian closed]
-#+BEGIN_exampleth
+#+BEGIN_proposition
 <<example-presheaves-ccc>>
-$\Set$ is cartesian closed, with exponentials given by function sets. In
-general, any presheaf category $\Set^{{\cal C}^{op}}$ from a small ${\cal C}$ is cartesian closed.
-Given any two presheaves $Q,P$, if the exponential exists, its component
-in any $A$ should be
+Presheaf categories are cartesian closed.
+#+END_proposition
+#+BEGIN_proof
+The category $\Set$ is cartesian closed, with exponentials given by function sets. That
+is, the exponential set $B^A$ is the set of functions $A \to B$, and evaluation
+is given by function application. In general, any presheaf category $\Set^{{\cal C}^{op}}$ from a
+small ${\cal C}$ is cartesian closed. Given any two presheaves $Q,P \colon {\cal C}^{op} \to \Set$,
+the image of the exponential presheaf $Q^P \colon {\cal C}^{op}\to \Set$ over any given $A \in {\cal C}$
+is determined by the Yoneda Lemma (Lemma [[lemma-yoneda-natural]]) and by the
+definition of exponential. The composition of both isomorphisms on the
+functor category allows us to write this exponential in terms of $P$ and $Q$.
 \[
 Q^PA \cong \Nat(\hom(-,A), Q^P) \cong \Nat(\hom(-,A) \times P, Q)
 \]
-by the Yoneda lemma, which is a set when ${\cal C}$ is small.
-A family of evaluation functions $\varepsilon_A \colon \Nat(\hom(-,A) \times P,Q) \times PA \to QA$ can be defined as
-$\varepsilon_A(\eta, p) = \eta(\id_A,p)$. We show that each is a universal arrow: given any $n \colon R\times P \tonat Q$,
-we can show that there exists a unique $\phi$ making the diagram
+When ${\cal C}$ is small, this is in fact a set of natural transformations. We will
+show that this choice in fact creates an adjunction by proving the
+existence of a family of universal evaluations and then applying
+Proposition [[prop-characterize-adjunctions]], that characterizes adjunctions
+in terms of their universal counit morphisms.
+A family of evaluation functions $\varepsilon_A \colon \Nat(\hom(-,A) \times P,Q) \times PA \to QA$ can be
+defined as $\varepsilon_A(\eta, p) = \eta(\id_A,p)$, where $p \in PA$ and $\eta \colon \hom(-,A) \times P \tonat Q$ is a natural
+transformation that can be particularized into a morphism $\eta_A \colon \hom(A,A) \times PA \to QA$.
+We now show that each one of these is a universal arrow: given any other
+presheaf $R \colon {\cal C}^{op} \to \Set$ endowed with a morphism $n \colon R\times P \tonat Q$,
+we will prove that there exists a unique $\phi \colon R \tonat \Nat(\hom(-,A)\times P, Q)$ making
+the following diagram commute.
 \[\begin{tikzcd}
 R \times P \dar[dashed,swap]{\phi \times \Id}\drar{n} & \\
 \Nat(\hom(-,A)\times P, Q) \times P \rar[swap]{\varepsilon} & Q
 \end{tikzcd}\]
-commute. In fact, we know that, by commutativity $\phi_r(\id,p) = \varepsilon_A(\phi_r,p) = n(r,p)$
-must hold; and then by naturality, for every $f \colon B \to A$,
+In fact, we know that $\phi_r(\id,p) = \varepsilon_A(\phi_r,p) = n(r,p)$ holds by commutativity;
+therefore, the following diagram commutes for any $f \colon B \to A$ by
+naturality.
 \[\begin{tikzcd}
 RA\rar{\phi_A} \dar[swap]{Rf} & 
 \Nat(\hom(-,A)\times P,Q)\dar{-\circ ((f \circ -) \times \id)} \\
 RB\rar{\phi_B} &
 \Nat(\hom(-,B)\times P,Q)
 \end{tikzcd}\]
-Thus, the complete natural transformation is completely determined
-for any $r \in RA$, $p \in PA$ as 
-\[
-\phi(r)(f,p) = \phi(Rf(r))(\id,p) = n(Rfr,p).
-\]
-The existence of a universal family of evaluations characterizes
-the adjunction by Proposition [[prop-characterize-adjunctions]].
+Thus, the complete natural transformation $\phi$ is completely determined
+for any given $r \in RA$ and $p \in PA$ as
+$\phi(r)(f,p) = \phi(Rf(r))(\id,p) = n(Rfr,p)$.\qedhere
+#+END_proof
+
 In general, cartesian-closed categories with functors preserving
 products and exponentials form a category called $\mathsf{Ccc}$ that
-we show equivalent to a category containing lambda theories in
-Theorem [[th-equivalence-ccctl]].
-#+END_exampleth
+we show equivalent to a category containing lambda theories in Theorem
+[[th-equivalence-ccctl]].
+
 
 # Example 2.2.10 from Bauer, Awodey
 # This is Proposition I.6.1 in "Sheaves in geometry and logic."
@@ -6406,7 +6434,7 @@ Theorem [[th-equivalence-ccctl]].
 **** Cartesian category                                                                  :ignore:
 If we read $\Gamma \vdash a : A$ as a morphism from the context $\Gamma$ to the output
 type $A$, the rules of simply-typed lambda calculus with product and
-unit types match the adjoints that determine a cartesian closed category
+unit types match the adjoints that determine a cartesian closed category.
 \begin{prooftree}
 \AXC{}
 \UIC{$\Gamma \vdash \ast : 1$}
