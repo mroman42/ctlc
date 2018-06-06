@@ -6773,7 +6773,8 @@ every $\varphi : A \to 2$. We say that /truth/ is definable if there exists a
 map $\mathrm{truth} : A \times A \to 2$ such that for every predicate $\varphi \colon A \to 2$, there exists
 a /Gödel number/ $c : A$ such that $\mathrm{truth}(c,a) = \varphi(a)$. By Theorem [[th-diagonal]]
 we know that if truth is definable in a theory then
-it must be inconsistent (see cite:yanofsky03).
+it must be inconsistent (in cite:yanofsky03, many other examples of this
+proof technique are shown).
 #+END_proof
 
 We want to note here how abstracting a seemingly banal theorem
@@ -7823,6 +7824,7 @@ mathematics from category theory.
 
 * Type theory
 ** Martin-Löf type theory
+<<sec-mltt>>
 In this chapter, we will exclusively work internally in dependent type
 theory and use it as a constructive foundation of mathematics.  This
 will have the added benefit that every formal proof in the system will
@@ -7831,7 +7833,8 @@ typechecking the term.  Explicitly, the type theory we have been
 describing in the previous sections corresponds to *Martin-Löf type theory*
 cite:nordstrom90. Two libraries of formalized mathematics, correspoding
 to two different foundational theories, have been built, containing a
-verfied version of all the theorems on this chapter.
+verfied version of all the theorems on this chapter. See Section [[sec-verified]]
+for links to the formalized proofs.
 
 *** Programming in Martin-Löf type theory
 Martin-Löf type theory and the internal language we have been
@@ -8012,21 +8015,22 @@ to, we are working in constructive mathematics with a programming
 language as it was first proposed by Errett Bishop cite:bishop67.
 
 *** Extensionality and Diaconescu's theorem
+<<sec-diaconescuth>>
 If we want to recover classical mathematics, we should try to model
 the axioms of the Elementary Theory of Sets into our locally closed
 cartesian categories.  We already have natural numbers in Martin-Löf
 type theory, and /well-pointedness/, for instance, is called /function/
 /extensionality/ in type theory literature.
 
-#+ATTR_LATEX: :options [Function extensionality]
-#+BEGIN_definition
+#+BEGIN_axiom
+<<axiom-funext>>
 *Function extensionality* states that, if any two functions $f,g \colon A \to B$
 have the same images under the same arguments, they are, in fact, equal.
 That is,
 \[
 \prod_{x:A}\left(f(x) = g(x)\right) \to (f = g).
 \]
-#+END_definition
+#+END_axiom
 
 We postulate this in Agda as follows.
 
@@ -8043,6 +8047,7 @@ natural proof and a computer-verified proof.
 
 #+ATTR_LATEX: :options [R. Diaconescu, 1975]
 #+BEGIN_theorem
+<<th-diaconescu>>
 The Axiom of Choice implies the Law of Excluded Middle.
 #+END_theorem
 #+BEGIN_proof
@@ -8068,6 +8073,7 @@ numbers and extracting algorithms from proofs.
 #+latex: \normalsize\noindent\rule[0.5ex]{\linewidth}{0.1pt}
 
 *** Dedekind reals
+<<sec-dedekindreals>>
 In =Reals.agda=, we provide a formalized construction of the Dedekind
 positive reals in intensional Martin-Löf type theory, implemented in
 Agda. This implementation constructs reals as Dedekind cuts over the
@@ -8154,6 +8160,7 @@ number is recovered. A detailed discussion can be found in the last
 chapters of cite:hottbook.
 
 ** Homotopy type theory
+<<sec-hott>>
 #+begin_quote
 /And it soon became clear that the only long-term solution was somehow/
 /to make it possible for me to use computers to verify my abstract,/
@@ -8165,7 +8172,6 @@ chapters of cite:hottbook.
 
   -- *Vladimir Voevodsky*, cite:voevodsky14.
 #+end_quote
-
 
 *** Homotopy type theory I: Equality
 We have already discussed how, given any $x,y:A$, we can interpret
@@ -8186,10 +8192,22 @@ induction that every path is equal to the reflexivity path, that is,
 \[
 \prod_{(x : A)}\prod_{(p : x = x)} (p = \refl),
 \]
-is not derivable from the induction principle. This is called the
-principle of *uniqueness of identity proofs*, it is equivalent to
+is not derivable from the induction principle. This is equivalent to the
+principle of *uniqueness of identity proofs*, it is also equivalent to
 Streicher's Axiom K cite:streicher93 and it is independent
 from Martin-Löf type theory.
+
+#+ATTR_LATEX: :options [Uniqueness of identity proofs]
+#+BEGIN_axiom
+<<axiom-uip>>
+Given any type $A$, two elements of the type $x,y : A$ and two
+proofs of equality between them $p,q \colon (x = y)$, the two proofs
+must be equal, $p = q$. In other words, there exists an element
+of type
+\[
+\prod_{x,y:A}\prod_{p,q:(x=y)} p=q.
+\]
+#+END_axiom
 
 If we do not assume this axiom, we open the possibility to the
 existence of multiple different proofs of the same equality.
@@ -8264,6 +8282,7 @@ equivalence.
 
 #+ATTR_LATEX: :options [Univalence]
 #+BEGIN_axiom
+<<axiom-univalence>>
 For any pair of types $A,B : {\cal U}$, $\mathrm{idtoeqv} : (A = B) \to (A \simeq B)$ is
 an equivalence. In particular, $(A = B) \simeq (A \simeq B)$.
 #+END_axiom
@@ -8295,7 +8314,56 @@ only visible from outside. When we prove this we need univalence
 to internalize the structure of groupoid inside the theory,
 using Z as a bridge.
 
-** TODO Verified formal proofs
+** Verified formal proofs
+<<sec-verified>>
+All definitions and theorems from Sections [[sec-mltt]] and [[sec-hott]] have
+been formalized in two Agda libraries whose complete code is presented
+in the following links in navigable HTML format. Note that each
+function name is a link to its definition.
+
+ * https://mroman42.github.io/ctlc/agda-mltt/Total.html
+ * https://mroman42.github.io/ctlc/agda-hott/Total.html
+
+On the *Agda-mltt* library, we define the basic types for Martin-Löf
+type theory. We have chosen to add propositions and propositional
+truncations, as described in [[sec-subobject-propositions]], because of
+its expressive power, even if they are not part of usual presentations
+of Martin-Löf type theory. In particular, they allow us to build the
+type of Dedekind positive reals (see Section [[sec-dedekindreals]]). We
+also prove Diaconescu's theorem and show how a classical setting could
+be recovered (see Section [[sec-diaconescuth]]). More than a hundred
+propositions about the natural numbers and the dyadic rationals have
+been formalized in order to construct the real numbers, each one being
+a function in dependently typed lambda calculus.
+
+This first library assumes uniqueness of identity proofs (Axiom
+[[axiom-uip]]), which eases some proofs but which is incompatible with
+Univalence (Axiom [[axiom-univalence]]). This is why we will need a second
+library in order to work with the Univalence axiom; this second
+library will not assume uniqueness of identity proofs.  We also assume
+well-pointedness in the form of function extensionality (Axiom
+[[axiom-funext]]) and, only when working with Diaconescu's theorem
+(Theorem [[th-diaconescu]]), we assume the Axiom of Choice.
+
+On the *Agda-hott* library, we define again basic types for Martin-Löf
+type theory, we again assume function extensionality (Axiom [[axiom-funext]]),
+but this time we also assume Univalence Axiom. A more detailed study
+of the notion of equality and equivalence follows, defining multiple
+/equivalent/ notions of equivalence. We again define truncations and
+relations, the natural numbers, the integers and some algebraic structures.
+All this machinery is used after constructing the higher-inductive type
+of the circle to prove that its fundamental group is $\mathbb{Z}$.
+
+These two libraries are original developments. They both follow
+ideas mainly from the Homotopy Theory book cite:hottbook, but also
+from the Univalent Foundations library written with the Coq proof
+assistant cite:unimath and the Coq homotopy theory library
+cite:bauer17. The definition of the type of propositions follows
+cite:escardoagda. Our second library compares to the highly more
+complete and more technical cite:hott-in:agda by presenting only the
+small subset of type theory necessary to compute the fundamental group
+of the circle and thus simplifying the whole structure of the library.
+
 * Conclusions
 ** Conclusions
 ** Further work
