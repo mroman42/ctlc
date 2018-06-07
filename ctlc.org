@@ -238,7 +238,7 @@ statements of intuitionistic propositional logic with it.
 
 *Chapter 3*: Categories will be the framework we will use to study the
 fundamental notion of function composition inside mathematics. They
-provide a useful language to talk about theories, mathematic and
+provide a useful language to talk about theories, mathematics and
 logic. In particular, adjoint functors will be one of the key insights
 we will use to understand and expand the connection between
 computation and logic we have described so far.  This section is based
@@ -368,9 +368,7 @@ A function from a domain to a codomain, $f \colon X \to Y$, is seen as a subset
 of the product space: $f \subset X \times Y$.
 Any two functions are identical if they map equal inputs to equal outputs;
 and a function is completely determined by what its outputs are under
-different inputs.
-This vision is called */extensional/* (see cite:selinger13, where this
-difference is detailed).
+different inputs. This vision is called */extensional/*.
 
 From a computational point of view, this perspective could seem
 incomplete in some cases; we usually care not only about the result
@@ -380,7 +378,8 @@ equal inputs to equal outputs need not to be equal. For instance, two
 sorting algorithms can have different efficiency or different memory
 requisites, even if they output the same sorted list. This vision,
 where two functions are equal if and only if they are given by
-essentially the same formula, is called */intensional/*.
+essentially the same formula, is called */intensional/* (see cite:selinger13,
+where this difference is detailed).
 
 The *\lambda-calculus* is a collection of formal systems, all of them
 based on the lambda notation introduced by Alonzo Church in the 1930s
@@ -7251,7 +7250,6 @@ Any presheaf category $\Set^{{\cal C}^{op}}$ from a small category ${\cal C}$ is
 closed (see cite:awodey10).
 #+END_theorem
 #+BEGIN_proof
-/(Awodey 2010)/
 We will prove that given any $A \in \Set^{{\cal C}^{op}}$, there exists a small category ${\cal D}$
 such that there is an equivalence of categories $\Set^{{\cal D}^{op}} \simeq \Set^{{\cal C}^{op}}/A$. Thus,
 every slice is cartesian closed as shown in Proposition [[proposition-presheaves-ccc]]
@@ -8461,7 +8459,6 @@ interpretation on quantum computing (see cite:schreiber14 or cite:lago12).
 # Automation in Agda
 # Linear logic, monoidal categories 
 # https://arxiv.org/abs/quant-ph/0312174
-
 
 * Appendices
 ** Code
