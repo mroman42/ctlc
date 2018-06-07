@@ -160,7 +160,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\sSets{\mathsf{sSets}}
 #+latex_header: \newcommand\Nat{\operatorname{Nat}}
 #+latex_header: \newcommand\Limit{\varprojlim}
-#+latex_header: \newcommand\Colimit{\varinjlim}
+#+latex_header: \newcommand\Colimit{\operatorname{colim}}
 
 #+latex_header: \newcommand\Mod{\mathrm{Mod}}
 #+latex_header: \newcommand\Top{\mathsf{Top}}
@@ -1208,7 +1208,7 @@ within it (see cite:dallago08). It is however beyond the scope of this text.
 **** Motivation                                                                          :ignore:
 */Types/* were introduced in mathematics as a response to the
 Russell's paradox found in the first naive axiomatizations of set
-theory (see Corollary ?). An attempt to use untyped \lambda-calculus
+theory (see Corollary [[cor-russellparadox]]). An attempt to use untyped \lambda-calculus
 as a foundational logical system by Church suffered from a variant called the 
 /Rosser-Kleene paradox/ and types were a method to avoid it, as
 detailed in cite:kleene35 and cite:curry46.
@@ -3640,10 +3640,10 @@ eq  = \m.\n.(and (leq m n) (leq n m))
 #+END_SRC
 
 *** Lists and trees
-We would need two constructors to represent a list: a =nil= signaling
-the end of the list and a =cons=, joining an element to the head of
+We would need two constructors to represent a list: a $\mathsf{nil}$ signaling
+the end of the list and a $\mathsf{cons}$, appending an element to the head of
 the list. For instance, a list would be
-$\mathtt{cons}\ 1\ (\mathtt{cons}\ 2\ (\mathtt{cons}\ 3\ \mathtt{nil}))$. Our definition takes those two
+$\mathsf{cons}\ 1\ (\mathsf{cons}\ 2\ (\mathsf{cons}\ 3\ \mathsf{nil}))$. Our definition takes those two
 constructors into account.
 
 #+BEGIN_SRC haskell
@@ -3652,15 +3652,15 @@ cons = \h.\t.\c.\n.(c h (t c n))
 #+END_SRC
 
 The interpretation of a list as a higher-order function is its
-=fold= function, a function taking a binary operation and an initial
+$\mathsf{fold}$ function, a function taking a binary operation and an initial
 element and appliying the operation repeteadly to every element on
 the list.
-\[\mathtt{cons}\ 1\ (\mathtt{cons}\ 2\ (\mathtt{cons}\ 3\ \mathtt{nil}))
-\overset{fold\ plus\ 0}\longrightarrow 
-\mathtt{plus}\ 1\ (\mathtt{plus}\ 2\ (\mathtt{plus}\ 3\ 0)) = 6\]
+\[\mathsf{cons}\ 1\ (\mathsf{cons}\ 2\ (\mathsf{cons}\ 3\ \mathsf{nil}))
+\overset{\mathsf{fold}\ \mathsf{plus}\ 0}\longrightarrow 
+\mathsf{plus}\ 1\ (\mathsf{plus}\ 2\ (\mathsf{plus}\ 3\ 0)) = 6\]
 
-The =fold= operation and some operations on lists can be defined
-explicitly as
+The $\mathsf{fold}$ operation can be defined as follows. Many
+operations on lists are particular instances of it.
 
 #+BEGIN_SRC haskell
 fold = \c.\n.\l.(l c n)
@@ -3668,17 +3668,17 @@ sum  = fold plus 0
 prod = fold mult 1
 all  = fold and true
 any  = fold or false
-length = foldr (\h.\t.succ t) 0
+length = fold (\h.\t.succ t) 0
 
 sum (cons 1 (cons 2 (cons 3 nil)))                              --- [1]: 6   
 all (cons true (cons true (cons true nil)))                     --- [2]: true
 #+END_SRC
 
-**** Map and filter                                               :ignore:
+**** Map and filter                                                                      :ignore:
 The two most commonly used particular cases of fold and frequent examples
-of the functional programming paradigm are =map= and =filter=.
+of the functional programming paradigm are $\mathsf{map}$ and $\mathsf{filter}$.
 
-  - The *map* function applies a function =f= to every element on a
+  - The *map* function applies a function $f$ to every element on a
     list.
   - The *filter* function removes the elements of the list that do not
     satisfy a given predicate. It /filters/ the list, leaving only
@@ -3688,13 +3688,14 @@ They can be defined as follows.
 
 #+BEGIN_SRC haskell
 map = \f.(fold (\h.\t.cons (f h) t) nil)
-filter = \p.(foldr (\h.\t.((p h) (cons h t) t)) nil)
+filter = \p.(fold (\h.\t.((p h) (cons h t) t)) nil)
 #+END_SRC
 
-On =map=, given a =cons h t=, we return a =cons (f h) t=; and given a
-=nil=, we return a =nil=. On =filter=, we use a boolean to decide at
-each step whether to return a list with a head or return the tail
-ignoring the head.
+The $\mathsf{map}$ function, given a list of the form $\mathsf{cons}\ h\ t$, returns a new
+list $\mathsf{cons}\ (f\ h)\ t$;
+and given an empty list $\mathsf{nil}$, returns $\mathsf{nil}$. On the $\mathsf{filter}$ fuction, we use a
+boolean to decide at each step whether to return a list with a head or
+return the tail ignoring the head.
 
 #+BEGIN_SRC haskell
 mylist = cons 1 (cons 2 (cons 3 nil))
@@ -3702,7 +3703,7 @@ sum (map succ mylist)                                           --- [1]: 9
 length (filter (leq 2) mylist)                                  --- [2]: 2
 #+END_SRC
 
-**** Binary trees                                                 :ignore:
+**** Binary trees                                                                        :ignore:
 Lists have been defined using two constructors and *binary trees* will
 be defined using the same technique. The only difference with lists is
 that the =cons= constructor is replaced by a =node= constructor, which
@@ -3729,14 +3730,14 @@ mytree triplesum 0                                              --- [1]: 9
 *** Fixed points
 <<sec-fixed-points>>
 A fixpoint combinator is a term representing a higher-order function
-that, given any function =f=, solves the equation ~(x = f x)~
-for =x=, meaning that, if =(fix f)= is the fixpoint of =f=, the following
+that, given any function $f$, solves the equation $x = f\ x$
+for $x$, meaning that, if $(\mathsf{fix}\ f)$ is the fixpoint of $f$, the following
 sequence of equations holds
 \[
-\mathtt{fix}\ f =
-f (\mathtt{fix}\ f) =
-f ( f (\mathtt{fix}\ f)) =
-f ( f ( f (\mathtt{fix}\ f))) =
+\mathsf{fix}\ f =
+f (\mathsf{fix}\ f) =
+f ( f (\mathsf{fix}\ f)) =
+f ( f ( f (\mathsf{fix}\ f))) =
 \dots
 \]
 
@@ -3758,9 +3759,9 @@ fib  := fix (\f.\n.iszero n 1 (plus (f (pred n)) (f (pred (pred n)))))
 fact 3                                                         --- [1]: 6
 fib 3                                                          --- [2]: 5
 #+END_SRC
-Note the use of =iszero= to stop the recursion.
+Note the use of $\mathsf{iszero}$ to stop the recursion.
 
-The =fix= function cannot be evaluated without arguments into a closed
+The $\mathsf{fix}$ function cannot be evaluated without arguments into a closed
 form, so we have to delay the evaluation of the expression when we
 bind it using =!==. Our evaluation strategy, however, will always find
 a way to reduce the term if it is possible, as we saw in Corollary
@@ -3789,8 +3790,8 @@ leq infinity 6                                               --- [2]: false
 
 These definitions unfold as
 
- * $\mathtt{fix\ (cons\ 0) = cons\ 0\ (cons\ 0\ (cons\ 0\ \dots))}$, an infinite list of zeroes;
- * $\mathtt{fix\ succ\ \ \ \ \ \ = succ\ (succ\ (succ\ \dots))}$, an infinite natural number.
+ * $\mathsf{fix\ (cons\ 0) = cons\ 0\ (cons\ 0\ (cons\ 0\ \dots))}$, an infinite list of zeroes;
+ * $\mathsf{fix\ succ = succ\ (succ\ (succ\ \dots))}$, an infinite natural number.
 
 As a final example, we define a minimisation operator that finds the
 first natural causing a given predicate to return true.  This, with all the
@@ -5167,7 +5168,7 @@ functors.
 #+BEGIN_definition
 The *limit* of a functor $F \colon {\cal J} \to {\cal C}$ is an object $r \in {\cal C}$ such that
 there exists a universal arrow $v \colon \Delta r \tonat F$ from $\Delta$ to $F$. It is
-usually written as $r = \Limit F$.
+usually written as $r = \lim F$.
 #+END_definition
 
 That is, for every natural transformation $w \colon \Delta d \tonat F$, there is a unique
@@ -5183,7 +5184,7 @@ By choosing different index categories, we will be able to define multiple
 different constructions on categories as limits.
 
 *** Examples of limits
-**** Equalizers                                                   :ignore:
+**** Equalizers                                                                          :ignore:
 For our first example, we will take the following category,
 called $\downarrow\downarrow$ as index category,
 \[\begin{tikzcd}
@@ -5229,8 +5230,8 @@ D
 \ar[dashed]{u}{\exists!} &&&
 \end{tikzcd}\]
 
-**** Equalizers in Sets                                           :ignore:
-#+ATTR_LATEX: :options [Equalizers in Sets]
+**** Equalizers in Sets                                                                  :ignore:
+#+ATTR_LATEX: :options [Equalizers in the category of sets]
 #+BEGIN_exampleth
 The equalizer of two parallel functions $f,g \colon A \to B$ in $\Sets$ 
 is $\left\{ x \in A \mid f(a) = g(a) \right\}$
@@ -5250,16 +5251,17 @@ D
 \end{tikzcd}\]
 #+END_exampleth
 
-**** Kernels                                                      :ignore:
+**** Kernels                                                                             :ignore:
 #+ATTR_LATEX: :options [Kernels]
 #+BEGIN_exampleth
-In the category of abelian groups, the kernel of a function $f$,
-$\mathrm{ker}(f)$, is the equalizer of $f \colon G \to H$ and a function sending
-each element to the zero element of $H$. The same notion of kernel
-can be defined in the category of $R\text{-Modules}$, for any ring $R$.
+In the category of abelian groups, $\mathrm{ker}(f)$, the kernel of a function $f$,
+is the equalizer of the functions $f \colon G \to H$ and $z \colon G \to H$, where
+$z$ is the function that sends each element to the zero element of $H$.
+The same notion of kernel can be defined in the category of $R\text{-Modules}$,
+for an arbitrary ring $R$.
 #+END_exampleth
 
-**** Pullbacks                                                    :ignore:
+**** Pullbacks                                                                           :ignore:
 *Pullbacks* are defined as limits whose index category is $\cdot \to \cdot \gets \cdot$.
 Any functor from that category is a pair of arrows with a common
 codomain; and the pullback is the universal cone over them.
@@ -5305,8 +5307,19 @@ dependent types in Section [[sec-locallydependent]].
 # TODO: Example of pullback
 # TODO: Equalizers are a particular example of pullbacks
 
-**** TODO Arbitrary products                                      :ignore:
-**** TODO Powers                                                  :ignore:
+**** Pullbacks in Sets                                                                   :ignore:
+#+ATTR_LATEX: :options [Pullbacks in the category of sets]
+#+BEGIN_exampleth
+Given two functions $f \colon A \to C$ and $g \colon B \to C$ in the category $\Set$,
+their pullback is given by the subset of the catesian product $A \times B$
+determined by those pairs of elements whose two images under $f$ and $g$
+coincide. That is, $A \times_C B = \left\{ (a,b) \in A \times B \mid f(a) = g(b) \right\}$ with
+the usual projections. Note that any function making the pullback
+square commute factorizes uniquely though this set.
+#+END_exampleth
+
+**** TODO Arbitrary products                                                             :ignore:
+**** TODO Powers                                                                         :ignore:
 **** TODO Posets
 *** Colimits
 # TODO: Ahorrarse los colimits por dualidad
@@ -6126,7 +6139,7 @@ and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
 # TODO: Pullbacks (in particular, products) always exist on presheaf cats
 # TODO: Terminal and pullbacks imply all finite limits
 
-*Presheaves* can be thought as sets parametrized by a category or as
+/Presheaves/ can be thought as sets parametrized by a category or as
 /generalized sets/. As we will study in the following chapters,
 categories of presheaves share a lot of categorical structure with the
 category of Sets and can be used as non-standard models of lambda
@@ -6137,15 +6150,53 @@ $S \colon {\cal C}^{op} \to \Sets$ from the opposite category to the category of
 The category of presheaves on ${\cal C}$ is a functor category of the
 form $\Set^{{\cal C}^{op}}$. In particular, the examples we gave when
 talking about functor catgeories (Examples [[example-functor-graphs]] and
-[[example-dynamical]]) are presheaf categories.
+[[example-dynamical]]) are presheaf categories. We see that they all 
+share some structure with the category of sets;
+in the following sections, we will prove stronger results based on these.
 
+*** All small limits exist in Sets                                                        :ignore:
+#+BEGIN_proposition
+<<prop-alllimitsset>>
+All limits given by a functor from a small category exist on $\Set$.
+#+END_proposition
+#+BEGIN_proof
+Let ${\cal J}$ be any small diagram on the category $\Set$, with objects $A_i$
+indexed by some $i \in I$ and morphisms $f_j \colon A_{i} \to A_{i'}$ between these,
+indexed by some $j \in J$. We can take $\lim {\cal J}$ to be the subset of the
+cartesian product $\prod A_i$ of elements $(a_i)_{i \in I}$ such that $f_j(a_{i}) = a_{i'}$
+for each $j \in J$. Note that any other cone factorizes through this one
+by taking the componentwise image of each element.
+#+END_proof
+
+*** Pullbacks, in particular products always exists, thus all finite limits               :ignore:
+#+BEGIN_proposition
+<<prop-alllimitpresheaf>>
+All limits given by a functor from a small category exist on any
+presheaf category.
+#+END_proposition
+#+BEGIN_proof
+Let ${\cal J}$ be any small diagram on the category $\Set^{{\cal C}^{op}}$, whose objects
+are functors $P_i \colon {\cal C}^{op}\to\Set$ indexed by some $i \in I$ and whose
+morphisms are natural transformations $\eta_j \colon P_{i} \to P_{i'}$ indexed by
+some $j \in J$. For each $c \in C$, the objects $P_i(c)$ for $i \in I$ with
+the morphisms $\eta_j_{(c)} \colon P_i(c) \to P_{i'}(c)$ determine a diagram on the
+category $\Set$.  By proposition [[prop-alllimitsset]], a limit for
+this diagram exists, which we call $R(c)$.  By definition of
+limit, any morphism $g \colon d \to c$ in the category ${\cal C}$ induces a
+unique $R(c) \to R(d)$ making each component of the transformation
+given by $\left\{ P_i(g) \right\}_{i \in I}$ commute and making the family of projections
+from each limit form a natural transformation. Thus, we have created
+a functor $R \colon {\cal C}^{op}\to \Set$ with natural transformations to each $P_i$
+and such that any other functor factorizes through it componentwise.
+#+END_proof
+
+# The product of two functors is the product functor
 *** TODO Presheaves
 **** TODO Pointed Sets (?)
-*** TODO Pullbacks, in particular products always exists, thus all finite limits
-# The product of two functors is the product functor
 
 *** TODO Has \omega-colimits
-# Proposition 10.12 in Awodey gives initial algebras for presheaves.
+# Proposition 10.12 in Awodey gives initial algebras for polynomial
+# endofunctors in Set.
 
 # Yoneda embedding preserves colimits and limits (?), that is why
 # presheaves have colimits. <- This is proved later.
@@ -6375,14 +6426,18 @@ B^A
 
 **** Presheaves and sets are cartesian closed                                            :ignore:
 #+BEGIN_proposition
-<<example-presheaves-ccc>>
+<<proposition-presheaves-ccc>>
 Presheaf categories are cartesian closed.
 #+END_proposition
 #+BEGIN_proof
 The category $\Set$ is cartesian closed, with exponentials given by function sets. That
 is, the exponential set $B^A$ is the set of functions $A \to B$, and evaluation
 is given by function application. In general, any presheaf category $\Set^{{\cal C}^{op}}$ from a
-small ${\cal C}$ is cartesian closed. Given any two presheaves $Q,P \colon {\cal C}^{op} \to \Set$,
+small ${\cal C}$ is cartesian closed. First note that products and terminal objects
+exist in any presheaf category (Proposition [[prop-alllimitpresheaf]]), we only
+have to show that exponentials exist.
+
+Given any two presheaves $Q,P \colon {\cal C}^{op} \to \Set$,
 the image of the exponential presheaf $Q^P \colon {\cal C}^{op}\to \Set$ over any given $A \in {\cal C}$
 is determined by the Yoneda Lemma (Lemma [[lemma-yoneda-natural]]) and by the
 definition of exponential. The composition of both isomorphisms on the
@@ -6424,7 +6479,6 @@ In general, cartesian-closed categories with functors preserving
 products and exponentials form a category called $\mathsf{Ccc}$ that
 we show equivalent to a category containing lambda theories in Theorem
 [[th-equivalence-ccctl]].
-
 
 # Example 2.2.10 from Bauer, Awodey
 # This is Proposition I.6.1 in "Sheaves in geometry and logic."
@@ -6491,7 +6545,7 @@ where $C$ is any type; and the axioms
 #+END_exampleth
 
 **** Untyped lambda calculus as a theory                                                 :ignore:
-#+ATTR_LATEX: :options [Untyped \lambda-calculus]
+#+ATTR_LATEX: :options [Untyped lambda calculus]
 #+BEGIN_exampleth
 <<example-untypedlambda-theory>>
 Untyped \lambda calculus can be recovered as a \lambda theory with a single
@@ -6734,6 +6788,7 @@ of Theorem [[th-diagonal]].
 
 #+ATTR_LATEX: :options [Russell, 1901]
 #+BEGIN_corollary
+<<cor-russellparadox>>
 In a naive formulation of set theory, every collection is a set. This
 leads to inconsistency.
 #+END_corollary
@@ -7012,8 +7067,8 @@ as the object $f^{\ast}y \colon (f^{\ast}Y) \to A$ such that
 A\rar{f} & B
 \end{tikzcd}\]
 is a pullback square. The functor is defined on any morphism
-$\alpha \colon y \to y'$ between two objects $y \colon Y \to B$, $y' \colon Y' \to B$ as
-the only morphism making the following diagram commute.
+$\alpha \colon y \to y'$ between any two objects given by $y \colon Y \to B$ and $y' \colon Y' \to B$
+as the only morphism making the following diagram commute.
 \[\begin{tikzcd}
 f^{\ast}Y \ar{rrr}\ar[dashed]{dr}{\exists! f^{\ast}\alpha} \ar[bend right,swap]{ddr}{f^{\ast}y} &&&
 Y \ar{dl}{\alpha}\ar[bend left=60]{ddl}{y} \\
@@ -7069,13 +7124,14 @@ slice category. A generalization of this idea to other categories
 will extend our categorical logic with quantifiers.
 
 *** Locally cartesian closed categories
-**** Left adjoint                                                 :ignore:
+**** Left adjoint                                                                        :ignore:
 #+ATTR_LATEX: :options [Left adjoint of the pullback functor]
 #+BEGIN_proposition
 <<prop-leftadjointweak>>
-Given any category ${\cal C}$ with all finite limits and $f \colon A \to B$, the pullback
-functor $f^{\ast} \colon {\cal C}/A \to {\cal C}/B$ has a left adjoint $\Sigma_{f} \colon {\cal C}/B \to {\cal C}/A$ defined
-as $\Sigma_f x = f \circ x$ in objects and trivially in morphisms.
+Given any category ${\cal C}$ with all finite limits and a morphism $f \colon A \to B$ between
+two objects $A,B \in {\cal C}$, the pullback
+functor $f^{\ast} \colon {\cal C}/B \to {\cal C}/A$ has a left adjoint $\Sigma_{f} \colon {\cal C}/A \to {\cal C}/B$ defined
+as $\Sigma_f x = f \circ x$ for any object $x \in {\cal C}/A$ and acting trivially on morphisms.
 #+END_proposition
 #+BEGIN_proof
 We must find a natural bijection $\hom(f \circ x, y) \cong \hom(x, f^{\ast}y)$; but,
@@ -7089,13 +7145,13 @@ X \ar[bend right,swap]{ddr}{x} \ar[dashed]{dr}\ar[dashed, bend left]{drr} & & \\
 \end{tikzcd}\]
 #+END_proof
 
-**** Locally cartesian closed category                            :ignore:
+**** Locally cartesian closed category                                                   :ignore:
 We define a *locally cartesian closed category* as a category with a
 terminal object and pullbacks ${\cal C}$ such that the pullback functor also
 has a right adjoint $\Pi_f \colon {\cal C}/A \to {\cal C}/B$. The rationale for this name
 becomes apparent in the following characterization.
 
-**** Characterization by slices                                   :ignore:
+**** Characterization by slices                                                          :ignore:
 # Newstead
 #+ATTR_LATEX: :options [Characterization]
 #+BEGIN_theorem
@@ -7106,7 +7162,7 @@ if ${\cal C}/A$ is cartesian closed for any object $A$ (see cite:newstead17).
 #+BEGIN_proof
 $(\Rightarrow)$ Suppose ${\cal C}$ be locally cartesian closed. The terminal object of ${\cal C}/A$ is
 trivially $\mathrm{id}_A \colon A\to A$, and the product of $x \colon X \to A$ and $y \colon Y \to A$
-is given by universal property of the pullback
+is given by universal property of the pullback as in the following diagram.
 \[\begin{tikzcd}
 Z \ar[bend right,swap]{ddr}{} \ar[dashed]{dr}{\exists!} \ar[bend left]{drr} & & \\
 & X \times_A Y \drar{x \times y}\rar\dar[swap]{} & X \dar{x} \\
@@ -7114,7 +7170,7 @@ Z \ar[bend right,swap]{ddr}{} \ar[dashed]{dr}{\exists!} \ar[bend left]{drr} & & 
 \end{tikzcd}\]
 We can notice that multiplying by $- \times y$ is the same as composing
 $\Sigma_y \circ y^{\ast} \colon {\cal C}/A \to {\cal C}/A$; and, as we have $\Sigma_y \dashv y^{\ast} \dashv \Pi_y$, for any
-$a,b \colon Z \to A$,
+$a,b \colon Z \to A$, as we can compute using adjoints,
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] \Sigma_y (y^{\ast} a) \rar{}\& b \end{tikzcd}}
 \doubleLine
@@ -7182,10 +7238,10 @@ A\drar{f} & \\
 \end{tikzcd}\]
 #+END_proof
 
-**** Presheaf categories are locally cartesian closed             :ignore:
-We proved earlier that "generalized sets", or presheaves, were
-cartesian closed; we will now prove that they are actually locally
-cartesian closed.
+**** Presheaf categories are locally cartesian closed                                    :ignore:
+We proved earlier that /generalized sets/, or presheaves, were
+cartesian closed (Proposition [[proposition-presheaves-ccc]]); we will now prove
+that they are actually locally cartesian closed.
 
 # Proof from [Awodey]
 
@@ -7195,9 +7251,10 @@ Any presheaf category $\Set^{{\cal C}^{op}}$ from a small category ${\cal C}$ is
 closed (see cite:awodey10).
 #+END_theorem
 #+BEGIN_proof
+/(Awodey 2010)/
 We will prove that given any $A \in \Set^{{\cal C}^{op}}$, there exists a small category ${\cal D}$
 such that there is an equivalence of categories $\Set^{{\cal D}^{op}} \simeq \Set^{{\cal C}^{op}}/A$. Thus,
-every slice is cartesian closed as shown in Example [[example-presheaves-ccc]]
+every slice is cartesian closed as shown in Proposition [[proposition-presheaves-ccc]]
 and by the characterization of Theorem [[theorem-characterization-lccc]], the
 whole category is locally cartesian closed.
 
@@ -8317,8 +8374,8 @@ using Z as a bridge.
 ** Verified formal proofs
 <<sec-verified>>
 All definitions and theorems from Sections [[sec-mltt]] and [[sec-hott]] have
-been formalized in two Agda libraries whose complete code is presented
-in the following links in navigable HTML format. Note that each
+been formalized into two Agda libraries whose complete code is presented
+in navigable HTML format at the following links. Note that each
 function name is a link to its definition.
 
  * https://mroman42.github.io/ctlc/agda-mltt/Total.html
@@ -8327,7 +8384,7 @@ function name is a link to its definition.
 On the *Agda-mltt* library, we define the basic types for Martin-Löf
 type theory. We have chosen to add propositions and propositional
 truncations, as described in [[sec-subobject-propositions]], because of
-its expressive power, even if they are not part of usual presentations
+their expressive power, even if they are not part of the usual presentations
 of Martin-Löf type theory. In particular, they allow us to build the
 type of Dedekind positive reals (see Section [[sec-dedekindreals]]). We
 also prove Diaconescu's theorem and show how a classical setting could
@@ -8351,7 +8408,7 @@ but this time we also assume Univalence Axiom. A more detailed study
 of the notion of equality and equivalence follows, defining multiple
 /equivalent/ notions of equivalence. We again define truncations and
 relations, the natural numbers, the integers and some algebraic structures.
-All this machinery is used after constructing the higher-inductive type
+All this machinery is used while constructing the higher-inductive type
 of the circle to prove that its fundamental group is $\mathbb{Z}$.
 
 These two libraries are original developments. They both follow
@@ -8365,21 +8422,46 @@ small subset of type theory necessary to compute the fundamental group
 of the circle and thus simplifying the whole structure of the library.
 
 * Conclusions
-** Conclusions
-** Further work
+While proving on the order of a hundred lemmas about the natural
+numbers only with the help of the Agda type checker, the need for
+automation tools quickly arises.  They are available in the form of
+tactic languages in more specialized proof assistants (see for
+instance, LTac in Coq, cite:delahaye00); but it would be cleaner to
+use the same language both to prove and to automate. Reflection is an
+example of a technique that would help to leverage the power of /Agda
+as a programming language/ to automate /Agda as a proof checker/; an
+example of its usage is described in cite:vanderwalt12.  Maybe, using
+these techniques, proving theorems on real analysis encoding more
+complex theories such as synthetic differential geometry (cite:kock06)
+would be possible in Agda.
 
-$A \multimap B$
+It is conceivable that, in the future, mathematicians will be able
+to write and check their proofs directly into a computer as part of
+their routine. Reaching that stage will require a massive effort into
+the study of foundations and implementation of languages, coupled
+with the creation of tools and software easing the task for the
+working mathematician.
+
+In this text, we have discussed how intuitionistic logic provides
+a useful generalization of classical logic with semantics in
+cartesian closed categories and a computational interpretation
+on simply-typed lambda calculus.  It seems plausible that a
+similar discussion on monoidal categories and linear logic
+could have been made. Linear logic must be interpreted as
+a logic of resources where we can make a distinction
+between, for example, two types of conjunctions: $A \otimes B$ means to
+have both $A$ and $B$, while $A\& B$ means to have one or the other at
+our choice (see cite:lafont95).  Monoidal categories provide
+semantics for this logic (see cite:mellies09), we have many monoidal graphical
+languages that would be worth exploring (see cite:selinger10), constructive
+mathematics can be done with linear logic and it has an
+interpretation on quantum computing (see cite:schreiber14 or cite:lago12).
+
 
 # Automation in Agda
 # Linear logic, monoidal categories 
 # https://arxiv.org/abs/quant-ph/0312174
 
-# It is conceivable that, in the future, mathematicians will be able
-# to write and check their proofs directly into a computer as part of
-# their routine. Reaching that [...] will require a massive effort into
-# the study of foundations and implementation of languages, coupled
-# with the creation of tools and software easing the task for the
-# working mathematician.
 
 * Appendices
 ** Code
