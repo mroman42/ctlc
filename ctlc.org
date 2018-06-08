@@ -677,7 +677,7 @@ Z &\\
 We can show that the diamond relation implies confluence; while the
 quasidiamond does not. In fact, the following figure provides
 a relation satisfying the quasidiamond property but not the
-confluence property (from cite:selinger13). If want to prove confluence for a given
+confluence property (from cite:selinger13). If we want to prove confluence for a given
 relation, we must use the diamond property instead of the quasidiamond
 property.
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
