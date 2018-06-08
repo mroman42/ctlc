@@ -722,10 +722,10 @@ this relation is in fact reflexive.
 #+begin_lemma
 <<lemma-transclosureparallel>>
 The reflexive transitive closure of $\rhd$ is $\tto_{\beta\eta}$. In particular, given
-any \lambda-terms ${P},{P'}$,
+any \lambda-terms ${P}$ and ${P'}$,
 
-  1) if ${P} \to_{\beta\eta} {P'}$, then ${P} \rhd {P'}$.
-  2) if ${P} \rhd {P'}$, then ${P} \tto_{\beta\eta} {P'}$;
+  1) if ${P} \to_{\beta\eta} {P'}$, then ${P} \rhd {P'}$;
+  2) if ${P} \rhd {P'}$, then ${P} \tto_{\beta\eta} {P'}$.
 #+end_lemma
 #+begin_proof
 In both cases, we apply induction on the structure of the derivation.
@@ -7727,7 +7727,7 @@ themselves types (see cite:shulman17).
 1 \dar{\mathrm{true}} \\
 \intr{\Gamma} \rar[dashed]{\chi_P} & \intr{\Omega}
 \end{tikzcd}\]
-A type $P$ is determined by a monomorphism if, equivalently, any
+A type $P$ determined by a monomorphism, by definition, must have any
 two of its elements are equal. Thus, the elements of $\Omega$ are the
 types with at most one element; these types are usually called
 *propositions* in type theory. This can be expressed by the
@@ -7743,6 +7743,7 @@ equal, and thus, propositions allow us to reintroduce the notion of
 proof irrelevance.
 
 *** Propositional truncation
+<<sec-proptrunc>>
 Propositions are types, but not all types are propositions; a type $A$
 may have multiple distinct elements, witnessing different proofs of
 the same fact. We could, however, /truncate/ a type into a proposition
@@ -8011,7 +8012,7 @@ by induction.
 Finally, we can define /propositions/ as those types where any two
 elements are equal and postulate that truncations are propositions.
 The induction principle for truncated types represents the adjunction
-we described in Section [[sec-subobject-propositions]].
+we described in Section [[sec-proptrunc]].
 
 \setlength{\columnseprule}{0.4pt}
 \begin{multicols}{2}
@@ -8445,7 +8446,7 @@ a useful generalization of classical logic with semantics in
 cartesian closed categories and a computational interpretation
 on simply-typed lambda calculus.  It seems plausible that a
 similar discussion on monoidal categories and linear logic
-could have been made. Linear logic must be interpreted as
+could have been made. Linear logic can be interpreted as
 a logic of resources where we can make a distinction
 between, for example, two types of conjunctions: $A \otimes B$ means to
 have both $A$ and $B$, while $A\& B$ means to have one or the other at
