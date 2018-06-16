@@ -718,20 +718,20 @@ $p(x) = x^2 + x$
 is written in \lambda-calculus as
 $\lambda x.\ x^2 + x$; and the particular evaluation $p(2)$ is written as $(\lambda x.\ x^2+x)(2)$.
 In general, $\lambda x.M$ is a function taking $x$ as an argument and returning $M$,
-which is a term where $x$ may appear as a symbolic variable.
+a term in which $x$ may appear as a symbolic variable.
 
 The use of \lambda-notation also eases the writing of
-*higher-order functions*, functions whose arguments or outputs are
+/higher-order functions/, functions whose arguments or outputs are
 functions themselves. For instance, $\lambda f.(\lambda y.f(f(y)))$
 would be a function taking $f$ as an argument and returning $\lambda y.f(f(y))$,
-which is itself a function; most commonly written as $f \circ f$. In particular,
+which is itself a function most commonly written as $f \circ f$. In particular,
 the following expression
 \[
 \Big( \big( \lambda f.(\lambda y.f(f(y))) \big)
 \big( \lambda x.x^2 + x \big) \Big) (1)
 \]
 evaluates to $6$. It can be read as applying the polynomial $x^2+x$ twice to
-the initial argument $1$.
+the initial argument that $1$ represents.
 
 **** Lambda terms                                                                        :ignore:
 #+begin_definition
@@ -757,8 +757,8 @@ where $x$ represents any variable.
 #+end_definition
 
 By convention, we omit outermost parentheses and assume
-left-associativity, for example, $MNP$ will always mean $(MN)P$. Note
-that the application of \lambda-terms is not the same as
+left-associativity. For example, $MNP$ will always mean $(MN)P$. Note
+that application of \lambda-terms is not the same as
 composition of functions, which is associative. We also
 consider \lambda-abstraction as having the lowest precedence. For
 example, $\lambda x. M N$ should be read as $\lambda x.(MN)$ instead
@@ -795,7 +795,7 @@ as in
 &
 2^{2} + 2.
 \end{tikzcd}\]
-This, however, should be done avoiding the unintended binding which happens
+This, however, should be done avoiding the unintended binding that happens
 when a variable is substituted inside the scope of a binder with the
 same name, as in the following example: if we were to evaluate the expression
 $(\lambda x.y x)(\lambda z.xz)$,
@@ -968,12 +968,12 @@ Z &&&
 Z &\\
 \end{tikzcd}\]
 #+latex: \\[-30pt]
-We can show that the diamond relation implies confluence; while the
-quasidiamond does not. In fact, the following figure provides
+We can show that the diamond property implies confluence; while the
+quasidiamond property does not. In fact, the following figure provides
 a relation satisfying the quasidiamond property but not the
-confluence property (from cite:selinger13). If we want to prove confluence for a given
-relation, we must use the diamond property instead of the quasidiamond
-property.
+confluence property (example from cite:selinger13). If we want to prove
+confluence for a given relation, we must use the diamond property instead
+of the quasidiamond property.
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 & & \bullet \drar\dlar & & & \\
 & \bullet \dlar & & \bullet \dlar\drar & & \\
@@ -1200,7 +1200,7 @@ is weakly but not strongly normalizing. It can be reduced to a normal form as
 (\lambda x.\lambda y.y)\ \Omega\ (\lambda x.x) \longrightarrow_{\beta} (\lambda x.x).
 \]
 
-*** Standarization and evaluation strategies
+*** Standardization and evaluation strategies
 # Barendregt, 1985, section 13.2
 
 **** Motivation                                                                          :ignore:
@@ -1222,7 +1222,7 @@ is weakly but not strongly normalizing. It can be reduced to a normal form as
 # Barendregt (1984) Theorem 13.2.2
 We would like to find a \beta-reduction strategy such that, if a term
 has a normal form, it can be found by following that strategy. Our
-basic result will be the *standarization theorem*, which shows that,
+basic result will be the *standardization theorem*, which shows that,
 if a \beta-reduction to a normal form exists, then a sequence of
 \beta-reductions from left to right on the \lambda-expression will be
 able to find it. From this result, we will be able to prove that the
@@ -1252,10 +1252,10 @@ be reduced to it using a standard sequence. This will imply the
 existence of an optimal beta reduction strategy that will always reach
 a normal form if one exists.
 
-**** Standarization theorem                                                              :ignore:
-#+attr_latex: :options [Standarization theorem]
+**** Standardization theorem                                                              :ignore:
+#+attr_latex: :options [Standardization theorem]
 #+begin_theorem
-<<thm-standarization>>
+<<thm-standardization>>
 If $M \tto_{\beta} N$, there exists a standard sequence from $M$ to $N$.
 #+end_theorem
 #+begin_proof
@@ -1297,11 +1297,11 @@ K \tto_h PQ \tto_{h} (\lambda x.W)Q \tto W[Q/x] \tto_s M[N/x];
 which, by the third clause (3.), implies $K \tto_s M[N/x]$.
 
 We finally prove that, if $K \tto_s M \to_{\beta} N$, then $K \tto_s N$. This proves the theorem,
-as every \beta-reduction $M \tto_s M \tto_\beta N$ implies $M \tto_s N$. We analize the possible
+as every \beta-reduction $M \tto_s M \tto_\beta N$ implies $M \tto_s N$. We analyze the possible
 ways in which $M \to_{\beta} N$ can be derived.
 
   1) If $K \tto_{s} (\lambda x.M)N \to_{\beta} M[N/x]$, it has been
-     already showed that $K \tto_s M[N/x]$.
+     already shown that $K \tto_s M[N/x]$.
   2) If $K \tto_s MN \to_{\beta} M'N$ with $M \to_{\beta} M'$, we know that there exist $K \tto_h WQ$ 
      such that $W \tto_s M$ and $Q \tto_s N$; by induction $W \tto_s M'$, and then $WQ \tto_s M'N$.
      The case $K \tto_s MN \to_{\beta} MN'$ is entirely analogous.
@@ -1320,7 +1320,7 @@ to it.
 #+end_corollary
 #+begin_proof
 Note that, if $M \to_n N$, where $N$ is in \beta-normal form; $n$ must be exactly
-$1$. If $M$ has a normal form and $M \tto_{\beta} N$, by Theorem [[thm-standarization]],
+$1$. If $M$ has a normal form and $M \tto_{\beta} N$, by Theorem [[thm-standardization]],
 there must exist a standard sequence from $M$ to $N$ whose last step is of the
 form $\to_{l}$; as the sequence is non-decreasing, every step has to be of the form $\to_{l}$.
 #+end_proof
@@ -1344,7 +1344,7 @@ $I = \lambda x.x = SKK$.
 It is common to also add the $I = \lambda x.x$ as a basic term to this language,
 even if it can be written in terms of $S$ and $K$, as a
 way to ease the writing of long complex terms. Terms written with
-these combinators are called */SKI-terms/*.
+these combinators are called /SKI-terms/.
 
 The language of *SKI-terms* can be defined by the Backus-Naus form
 \[
@@ -1354,7 +1354,7 @@ where $x$ can represent any free variable.
 
 **** Lambda transform                                                                    :ignore:
 #+begin_definition
-The *Lambda-transform* of a SKI-term is a \lambda-term defined
+The *\lambda-transform* of a SKI-term is a \lambda-term defined
 recursively as
 
   * $\lambdatrans(x) = x$, for any variable $x$;
@@ -1450,7 +1450,7 @@ structural induction,
 
 # https://en.wikipedia.org/wiki/Entscheidungsproblem
 
-Three different notions of computability were proposed in the 1930s,
+Three different notions of /computability/ were proposed in the 1930s,
 
  * the *general recursive functions* were defined by Herbrand and Gödel;
    they form a class of functions over the natural numbers closed under
@@ -1490,13 +1490,12 @@ calculus has even a cost model allowing us to develop complexity theory
 within it (see cite:dallago08). It is however beyond the scope of this text.
 
 # Church - An unsolvable problem of elementary number theory
-# Corollary 1 pág 362.
+# Corollary 1 pg. 362.
 # The set of well-formed formulas which have no normal form is not
 # recursively enumerable.
 
 ** Simply typed \lambda-calculus
 <<sec-simplytypedlambda>>
-# TODO: The weak lambda calculus as a reasonable machine
 
 **** Motivation                                                                          :ignore:
 */Types/* were introduced in mathematics as a response to the
@@ -1896,7 +1895,7 @@ The following three properties hold;
      then $t \in \redu_{T}$.
 #+END_proposition
 #+BEGIN_proof
-For basic types, 1. holds definitionally; 2. holds by the definition of
+For basic types, 1. holds by definition; 2. holds by the definition of
 strong normalization; and 3. follows from the fact that if any
 one-step \beta-reduction leads to a strongly normalizing term then the
 term itself must be strongly normalizing.
@@ -1974,7 +1973,7 @@ take $u_i = x_i$.
 **** Turing completeness of STLC                                                         :ignore:
 # [[https://math.stackexchange.com/questions/1319149/what-breaks-the-turing-completeness-of-simply-typed-lambda-calculus][What breaks turing completeness of STLC]] (link)
 Every term normalizes in simply typed \lambda-calculus and every
-computation ends, therefore, simply typed \lambda-calculus must be not
+computation ends, therefore, simply typed \lambda-calculus cannot be 
 Turing complete.
 # !!!! Detail and check this proof
 
@@ -1996,7 +1995,7 @@ cases.
 \\
 
 **** Simple types II                                              :ignore:
-The new set of *simple types* is given by the following BNF
+The new set of *simple types* is given by the following Backus-Naur form,
 \[\mathsf{Type} ::= \iota \mid 
 \mathsf{Type} \to \mathsf{Type} \mid
 \mathsf{Type} \times \mathsf{Type} \mid
@@ -2014,7 +2013,7 @@ or void type $0$ without inhabitants.
 \\
 
 **** Raw typed lambda terms II                                    :ignore:
-The new set of *typed lambda terms* is given by the BNF
+The new set of *typed lambda terms* is given by the following Backus-Naur form.
 \[\begin{aligned} 
 \mathsf{Term} ::=\ &
 x \mid
@@ -2123,10 +2122,10 @@ new terms, each for every new destruction rule.
 On the other hand, new \eta-rules are defined, each for every new
 construction rule.
 
-  1) Function extensionality, $\lambda x.f\ x \to_{\eta} f$ for any $f : A \to B$.
-  2) Definition of product, $\langle \pi_1\ m, \pi_{2}\ m \rangle \to_{\eta} m$ for any $m : A \times B$.
-  3) Uniqueness of unit, $t \to_{\eta} \ast$ for any $t : 1$.
-  4) Case rule, $(\mathrm{case}\ m\ \mathrm{of}\ [a].p[ \mathrm{inl}\ a/c ];\ [b].p[ \mathrm{inr}\ b/c ]) \to_{\eta} p[m/c]$
+  1) Function extensionality: $\lambda x.f\ x \to_{\eta} f$ for any $f : A \to B$.
+  2) Definition of product: $\langle \pi_1\ m, \pi_{2}\ m \rangle \to_{\eta} m$ for any $m : A \times B$.
+  3) Uniqueness of the unit: $t \to_{\eta} \ast$ for any $t : 1$.
+  4) Case rule: $(\mathrm{case}\ m\ \mathrm{of}\ [a].p[ \mathrm{inl}\ a/c ];\ [b].p[ \mathrm{inr}\ b/c ]) \to_{\eta} p[m/c]$
      for any $m : A + B$.
 
 *** Natural deduction
@@ -2141,9 +2140,9 @@ with the simply-typed lambda calculus will be made explicit in Section
 **** Rules of natural deduction                                   :ignore:
 We use the logical binary connectives $\blue{\to},\blue{\land},\blue{\lor}$, and two unary
 connectives, $\blue{\top}$ and $\blue{\bot}$, representing respectively the trivially true and false
-propostions. The rules defining natural deduction come in
-pairs; there are introductors and eliminators for every
-connective. Every introductor uses a set of assumptions to generate a
+propositions. The rules defining natural deduction come in
+pairs; there are introducers and eliminators for every
+connective. Every introducer uses a set of assumptions to generate a
 formula and every eliminator gives a way to extract precisely that set
 of assumptions.
 
@@ -2274,7 +2273,7 @@ of dots represents any given part of the deduction tree.
     \TIC{}
     \end{prooftree}
 
-    and, similarly, on the other side as
+    and, similarly, on the other side as follows.
     \begin{prooftree}
     \AXC{$\vdots^{1}$}\noLine
     \UIC{$\blue{A}$}
@@ -2320,7 +2319,7 @@ of dots represents any given part of the deduction tree.
      \TIC{}
      \end{prooftree}
 
-     and a similar pattern is used on the other side of the disjunction
+     and a similar pattern is used on the other side of the disjunction.
      #+latex: \\[-40pt]
      \begin{prooftree}
      \AXC{$\vdots^{1}$}\noLine
@@ -2353,7 +2352,7 @@ In 1934, Curry observed in cite:curry34 that the type of a function
 $(\blue{A \to B})$ could be read as an implication and that the existence of a
 function of that type was equivalent to the provability of the proposition.
 Previously, the *Brouwer-Heyting-Kolmogorov interpretation* of intuitionistic
-logic had given a definition of what it meant to be a proof of an intuinistic
+logic had given a definition of what it meant to be a proof of an intuitionistic
 formula, where a proof of the implication $(\blue{A \to B})$ was a function converting
 a proof of $\blue{A}$ into a proof of $\blue{B}$. It was not until 1969 that Howard pointed
 a deep correspondence between the simply-typed \lambda-calculus and the
@@ -2386,7 +2385,7 @@ has a correspondence with a typing rule of Section [[Extending the simply typed 
 The only distinction between them is the
 appearance of \lambda-terms on the first set of rules. As every typing rule
 results on the construction of a particular kind of \lambda-term, they can
-be interpreted as encodings of proof in the form of derivation trees. That is,
+be interpreted as encodings of proofs in the form of derivation trees. That is,
 terms are proofs of the propositions represented by their types.
 
 #+ATTR_LATEX: :options [Curry-Howard correspondence example]
@@ -2586,24 +2585,6 @@ in cite:barendregt92 and cite:geuvers93.
 
 # https://cstheory.stackexchange.com/questions/7561/whats-the-relation-and-difference-between-calculus-of-inductive-constructions-a
 
-*** TODO Hindley-Milner
-*** TODO Gödel's System T
-*** TODO System F                                                :noexport:
-**** TODO System F is strongly normalizing
-*** TODO Type algebra
-# Type algebra should be studied, at least, on System F.
-# Properties of type algebra can be proved in Agda.
-
-**** Lists, trees and generating functions
-**** Derivatives and one-hole contexts
-**** Seven trees in one
-*** TODO Pure type systems
-In particular *System F* is equivalent to the single-sorted pure system $\lambda 2$.
-# https://www.ps.uni-saarland.de/extras/fscd17/
-
-*** TODO Subtyping (?)
-
-*** TODO Inductive and coinductive definitions
 * Mikrokosmos
 ** Implementation of \lambda-expressions
 *** The Haskell programming language
@@ -2626,7 +2607,7 @@ In the 1980s, many lazy programming languages were independently being
 written by researchers such as /Miranda/, /Lazy ML/, /Orwell/, /Clean/
 or /Daisy/. All of them were similar in expressive power, but their
 differences were holding back the efforts to communicate ideas on
-functional programming, so the *Haskell 98 Report* was a first standarized
+functional programming, so the *Haskell 98 Report* was a first standardized
 reference of a common lazy functional language. A revised version
 can be read in cite:haskell98. We will use its most standard implementation:
 the *Glasgow Haskell Compiler (GHC)*; an open source compiler written in Haskell
@@ -2652,7 +2633,7 @@ Haskell is
     not explicitly known, it is not possible to perform ordered
     input/output actions or any other side-effects that rely on the
     evaluation order; this helps modularity of our code, testing, and
-    verfication;
+    verification;
 
  4. *referentially transparent*; as a consequence of its purity, every
     term on the code can be replaced by its definition without
@@ -2748,7 +2729,7 @@ instance Monad [] where
 #+END_SRC
 
 Monads are used in I/O, error propagation and stateful
-computations. Another characteristical syntax bit of Haskell is the
+computations. Another characteristic syntax feature of Haskell is the
 =do= notation, which provides a nicer, cleaner way to concatenate
 computations with monads that resembles an imperative language. The
 following example uses the list monad to compute the list of
@@ -2801,7 +2782,7 @@ Nicolaas Govert *De Bruijn* proposed (see cite:debruijn81) a way of defining \la
 indices is to remove all variables from binders and replace every
 variable on the body of an expression with a number, called /index/,
 representing the number of \lambda-abstractions in scope between the
-ocurrence and its binder. Consider the following example where we draw
+occurrence and its binder. Consider the following example where we draw
 arrows between each term and its intermediate \lambda-abstractions: the \lambda-term
 \[ \red{\lambda\tikzmark{2} y}.\ \tikzmark{3}y\ 
   (\blue{\lambda\tikzmark{1} z}.\ \tikzmark{0}y\ 
@@ -2813,7 +2794,7 @@ arrows between each term and its intermediate \lambda-abstractions: the \lambda-
   \draw ([yshift=-1ex]pic cs:4) to ([yshift=-1ex]pic cs:1);
   \end{tikzpicture}
 \]
-can be written with de Bruijn indices as $\red{\lambda}\ (1\ \blue{\lambda}\ (2\ 1))$.
+can be written with De Bruijn indices as $\red{\lambda}\ (1\ \blue{\lambda}\ (2\ 1))$.
 # Se podría explicar esto con colores y diagramas
 
 De Bruijn also proposed a notation for the \lambda-calculus
@@ -2826,7 +2807,7 @@ use only the former one for clarity of exposition.
 
 #+attr_latex: :options [De Bruijn indexed terms]
 #+begin_definition
-We define recursively the set of \lambda-terms using de Bruijn notation
+We define recursively the set of \lambda-terms using De Bruijn notation
 as the terms generated from the following Backus normal form.
 \[\begin{aligned}
 \mathtt{Exp} &::= 
@@ -2856,19 +2837,19 @@ the \alpha-reductions. It will be useful to implement \lambda-calculus without
 having to worry about the specific names of variables.
 
 *** Substitution
-We now implement the substition operation described in Section
+We now implement the substitution operation described in Section
 [[sec-freeboundvars]], as it will be needed for \beta-reducing terms on
-de Bruijn indices. In order to define the substitution of the n-th
+De Bruijn indices. In order to define the substitution of the n-th
 variable by a \lambda-term $P$ on a given term, we must
 
- * find all the ocurrences of the variable. At each level of scope
+ * find all the occurrences of the variable. At each level of scope
    we are looking for the successor of the number we were looking
    for before;
 
  * decrease the higher variables to reflect the disappearance of
    a lambda;
 
- * replace the ocurrences of the variables by the new term, taking
+ * replace the occurrences of the variables by the new term, taking
    into account that free variables must be increased to avoid them
    getting captured by the outermost lambda terms. 
 
@@ -2898,7 +2879,7 @@ betared e = e
 #+END_SRC
 
 *** De Bruijn-terms and \lambda-terms
-The internal language of the interpreter uses de Bruijn expressions,
+The internal language of the interpreter uses De Bruijn expressions,
 while the user interacts with it using lambda expressions with alphanumeric
 variables. Our definition of a lambda expression with variables will be
 used in parsing and output formatting.
@@ -3374,7 +3355,7 @@ sudo -H pip install imikrokosmos
 #+END_SRC
 
 [fn:pipmikro]: The Jupyter-Mikrokosmos package can be found in https://pypi.org/project/imikrokosmos/.
-[fn:hackage]: Hackage can be accesed in http://hackage.haskell.org/
+[fn:hackage]: Hackage can be accessed in http://hackage.haskell.org/
 and the Mikrokosmos package can be found in https://hackage.haskell.org/package/mikrokosmos
 [fn:mikrokosmoslibgit]: The repository can be accessed in: https://github.com/mroman42/mikrokosmos-lib.git
 
@@ -3426,7 +3407,7 @@ on this web application. An example session can be seen on Figure
 The implementation is based on the =pexpect= library for Python.  It
 allows direct interaction with any REPL and collects its results.
 Specifically, the following Python lines represent the central idea of
-this implementation
+this implementation.
 
 #+BEGIN_SRC python
 # Initialization
@@ -3464,7 +3445,7 @@ implemented in Javascript. It is used internally by the Jupyter
 Notebook.
 
 A CodeMirror lexer for Mikrokosmos has been written. It uses
-Javascript regular expressions and signals the ocurrence of any kind
+Javascript regular expressions and signals the occurrence of any kind
 of operator to CodeMirror. It enables syntax highlighting for Mikrokosmos
 code on Jupyter Notebooks. It comes bundled with the kernel specification
 and no additional installation is required.
@@ -3512,7 +3493,7 @@ use it as =root= user, we perform the following steps.
   * Installing the Mikrokosmos Jupyter kernel as usual.
 
 A JupyterHub server was made available at =iemath1.ugr.es=.  Our
-server used a SSL certificate and OAuth autentication via GitHub.
+server used a SSL certificate and OAuth authentication via GitHub.
 Mikrokosmos tutorials and exercises were installed for every student.
 
 *** Calling Mikrokosmos from Javascript
@@ -3603,7 +3584,7 @@ using the following techniques
     independently of the rest of the application;
 
   * *property-based testing*, in which multiple test cases are created
-    automatically in order to verfiy that a specified property always
+    automatically in order to verify that a specified property always
     holds; this has been useful to test our implementation of several
     algorithms on the lambda calculus;
 
@@ -3728,7 +3709,7 @@ discard = const id
 
 is a function that discards one argument and returns the identity, =id=.
 This way of defining multiple argument functions is called the /currying/
-of a function in honor to the american logician Haskell Curry in cite:haskell58.
+of a function in honor to the American logician Haskell Curry in cite:haskell58.
 It is a particular instance of a deeper fact we will detail on Chapter
 [[sec-cartesianclosedlambdacalculus]]: exponentials are defined by the adjunction
 $\hom(A \times B, C) \cong \hom(A, \hom(B,C))$.
@@ -3743,7 +3724,7 @@ the *Church encoding* of data in \lambda-calculus.
 
 We start considering the usual inductive representation of
 a data type with constructors, as we do when representing a
-syntax with a BNF. For example, the naturals can be written
+syntax with a Backus-Naus form. For example, the naturals can be written
 as $\mathtt{Nat} ::= \mathtt{Zero} \mid \mathtt{Succ}\ \mathtt{Nat}$; and, in general a datatype
 $D$ with constructors $C_1,C_2,C_3,\dots$ is written as
 $\mathtt{D} ::= C_1 \mid C_2 \mid C_3 \mid \dots$.
@@ -3759,7 +3740,7 @@ every new data structure.
 Our technique, instead, is to define a data term as a function on
 multiple arguments representing the missing constructors. For instance,
 the number $2$, which would be written as $\mathtt{Succ}(\mathtt{Succ}(\mathtt{Zero}))$ using the
-BFN, is encoded as $2 = \lambda s.\ \lambda z.\ s (s (z))$. In general, any instance of the data
+Backus-Naus form, is encoded as $2 = \lambda s.\ \lambda z.\ s (s (z))$. In general, any instance of the data
 structure $\mathtt{D}$ is encoded as a \lambda-expression depending on
 all of its constructors, as in $\lambda c_{1}.\ \lambda c_{2}.\ \lambda c_{3}.\ \dots\ \lambda c_{n}. (\textit{term})$.
 
@@ -3771,8 +3752,8 @@ sections.
 
 *** Booleans
 Booleans can be defined as the data generated by a pair of zero-ary
-constuctors, each one representing a truth value, as in 
-$\mathtt{Bool} ::= \mathtt{True} \mid \mathtt{False}$.  Consequently, the Church encoding of booleans
+constructors, each one representing a truth value, as in 
+$\mathsf{Bool} ::= \mathsf{True} \mid \mathsf{False}$.  Consequently, the Church encoding of booleans
 takes these constructors as arguments and defines the following
 two elements.
 
@@ -3831,7 +3812,7 @@ We use two constructors
  * zero is a natural number, written as Z;
  * the successor of a natural number is a natural number, written as S;
 
-and the BNF we defined when discussing how to encode inductive data
+and the Backus-Naus form we defined when discussing how to encode inductive data
 in Section [[technique-on-inductive]].
 
 #+BEGIN_SRC haskell
@@ -3884,7 +3865,7 @@ mult 2 4                                                        --- [2]: 8
 *** The predecessor function and predicates on numbers
 **** Predecessor                                                  :ignore:
 The predecessor function is much more complex than the previous ones.
-As we can see, it is not trivial how could we compute the predecessor
+As we can see, it is not trivial how we could compute the predecessor
 using the limited form of induction that Church numerals allow.
 
 Stephen Kleene, one of the students of Alonzo Church only discovered
@@ -3905,8 +3886,8 @@ rcomp = \f.\g.\h.h (g f)
 \f.5 (inc f)                         --- [3]: λa.λb.λc.c (a (a (a (a (b a)))))
 #+END_SRC
 allows us to use the =b= argument to discard the first instance of the
-=a= argument and return the same number wihtout the last constructor.
-Thus, our definition of =pred= is
+=a= argument and return the same number without the last constructor.
+Thus, our definition of =pred= is the following.
 #+BEGIN_SRC haskell
 pred = \n.\s.\z.(n (inc s) (\x.z) (\x.x))
 #+END_SRC
@@ -3915,7 +3896,7 @@ pred = \n.\s.\z.(n (inc s) (\x.z) (\x.x))
 From the definition of =pred=, some predicates on numbers can be
 defined. The first predicate will be a function distinguishing a
 successor from a zero. It will be user later to build more complex
-ones. It is built by appliying a =const false= function =n= times to a
+ones. It is built by applying a =const false= function =n= times to a
 true constant. Only if it is applied =0= times, it will return a true
 value.
 
@@ -3946,7 +3927,7 @@ cons = \h.\t.\c.\n.(c h (t c n))
 
 The interpretation of a list as a higher-order function is its
 $\mathsf{fold}$ function, a function taking a binary operation and an initial
-element and appliying the operation repeteadly to every element on
+element and applying the operation repeatedly to every element on
 the list.
 \[\mathsf{cons}\ 1\ (\mathsf{cons}\ 2\ (\mathsf{cons}\ 3\ \mathsf{nil}))
 \overset{\mathsf{fold}\ \mathsf{plus}\ 0}\longrightarrow 
@@ -4019,7 +4000,6 @@ triplesum = \a.\b.\c.plus (plus a b) c
 mytree triplesum 0                                              --- [1]: 9
 #+END_SRC
 
-**** TODO The universal properties of fold, map and filter
 *** Fixed points
 <<sec-fixed-points>>
 A fixpoint combinator is a term representing a higher-order function
@@ -4034,7 +4014,7 @@ f ( f ( f (\mathsf{fix}\ f))) =
 \dots
 \]
 
-Such a combinator exists; and it can be defined and used as
+Such a combinator exists; and it can be defined and used as follows.
 
 #+BEGIN_SRC haskell
 fix := (\f.(\x.f (x x)) (\x.f (x x)))
@@ -4044,7 +4024,7 @@ fix (const id)                                                 --- [1]: id
 Where =:== defines a function without trying to evaluate it to a
 normal form; this is useful in cases like the previous one, where the
 function has no normal form. Examples of its applications are a
-/factorial/ function or a /fibonacci/ function, as in
+/factorial/ function or a /Fibonacci/ function, as in
 
 #+BEGIN_SRC haskell
 fact := fix (\f.\n.iszero n 1 (mult n (f (pred n))))
@@ -4086,7 +4066,7 @@ These definitions unfold as
  * $\mathsf{fix\ (cons\ 0) = cons\ 0\ (cons\ 0\ (cons\ 0\ \dots))}$, an infinite list of zeroes;
  * $\mathsf{fix\ succ = succ\ (succ\ (succ\ \dots))}$, an infinite natural number.
 
-As a final example, we define a minimisation operator that finds the
+As a final example, we define a minimization operator that finds the
 first natural causing a given predicate to return true.  This, with all the
 previous considerations about how to program with natural numbers, can
 be used to prove that Gödel's \mu-recursive functions can be encoded
@@ -4110,7 +4090,7 @@ tutorial and the previous sections on simply typed \lambda-calculus
 valid Mikrokosmos code.
 
 *** Function types and typeable terms
-Types can be activated with the commmand =:types on=. If types are
+Types can be activated with the command =:types on=. If types are
 activated, the interpreter will infer (see Section [[sec-typeinference]])
 the principal type of every term before its evaluation.  The type will
 then be displayed after the result of the computation.
@@ -4249,7 +4229,7 @@ for an arbitrary proposition $A$.
 #+begin_proof
 Suppose $\neg (A \lor \neg A)$. We are going to prove first that, under this
 specific assumption, $\neg A$ holds. If $A$ were true, $A \lor \neg A$ would be true and we
-would arrive to a contradition, so $\neg A$. But then, if we have $\neg A$ we also have
+would arrive to a contradiction, so $\neg A$. But then, if we have $\neg A$ we also have
 $A \lor \neg A$ and we arrive to a contradiction with the assumption. We must conclude
 that $\neg \neg (A \lor \neg A)$.
 #+end_proof
@@ -4331,10 +4311,6 @@ an *hom-set* and it is written as $\hom(A,B)$. When necessary, we can
 use a subscript, as in $\hom_{{\cal C}}(A,B)$, to explicitly specify the
 category we are working in.
 
-***** OLD Endomorphisms
-The set of *endomorphisms*
-of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
-
 *** Morphisms
 **** Morphisms: introduction                                      :ignore:
 Objects in category theory are an atomic concept and can be only
@@ -4402,15 +4378,6 @@ an epimorphism if, for every $g,h : B \to A$, the equality $g \circ f = h \circ 
 implies $g = h$.
 #+end_definition
 
-***** TODO Bimorphisms
-A morphism that is a monomorphism and an epimorphism at the same time is
-called a *bimorphism*.
-
-#+begin_remark
-A morphism can be a bimorphism without being an isomorphism. We will
-cover [[*Examples of categories][examples]] of this fact later.
-#+end_remark
-
 **** Retractions and sections                                     :ignore:
 Note that we could have chosen a stronger and non-equivalent notion
 to generalize the notions of injective and surjective functions.
@@ -4443,7 +4410,7 @@ for these operations; these are called /initial and final objects/.
 
 We will abstract categorically these notions in terms of /universal/
 /properties/. This point of view, however, is an important shift with
-respect to how these properties are classicallys defined. We will not
+respect to how these properties are classically defined. We will not
 define the product of two objects in terms of their internal structure
 (categorically, objects are atomic and do not have any); but in terms
 of all the other objects, that is, in terms of the complete structure
@@ -4470,7 +4437,7 @@ By uniqueness, $f \circ g = \id$ and $g \circ f = \id$, hence $A \cong B$.
 An analogous proof can be written for terminal objects.
 
 **** Products and sums                                            :ignore:
-# TODO: The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
+# The definition of product was given by MacLane on 1949. (Awodey on CTF2.0)
 
 #+attr_latex: :options [Products and sums]
 #+begin_definition
@@ -4758,7 +4725,7 @@ as in the following diagram,
 \end{tikzcd}\]
 we notice that two different notions of composition arise; we have a 
 /vertical/ composition of natural transformations, which,
-diagramatically, composes the two sequential natural transformations
+diagrammatically, composes the two sequential natural transformations
 on the left side into a single transformation on the right side of the
 following diagram;
 \[\begin{tikzcd}[column sep=large]
@@ -5078,7 +5045,7 @@ from ${\cal C}$ to ${\cal B}$ as objects and natural transformations between the
 If we consider the category of small categories $\Cats$, there is
 a hom-profunctor $-^{-} \colon \Cats^{op} \times \Cats \to \Cats$ sending any two categories
 ${\cal B}$ and ${\cal C}$ to their functor category ${\cal B}^{{\cal C}}$. Many mathematical constructions
-are examples of functor catgeories.
+are examples of functor categories.
 
 **** Category of graphs                                           :ignore:
 In cite:lawvere09, multiple examples of usual mathematical
@@ -5112,7 +5079,7 @@ can be seen as an object in the category $\Sets^{\downarrow\downarrow}$. Note ho
 between two graphs $(E,V)$ and $(E',V')$ is a pair of morphisms $\alpha_E \colon E \to E'$
 and $\alpha_V \colon V \to V'$ such that $s \circ \alpha_E = \alpha_V \circ s$ and $t \circ \alpha_E = \alpha_V \circ t$.
 This provides a convenient notion of graph homomorphism: a pair of morphisms
-preserving the incidence of edges. We can call $\mathtt{Graph}$ to this functor category.
+preserving the incidence of edges. We can call $\mathsf{Graph}$ to this functor category.
 #+END_exampleth
 
 **** Dynamical systems and continuous dynamical systems           :ignore:
@@ -5121,7 +5088,7 @@ preserving the incidence of edges. We can call $\mathtt{Graph}$ to this functor 
 <<example-dynamical>>
 A set endowed with an endomorphism $(S,\alpha)$ can be regarded as a /dynamical/
 /system/ in an informal way. Each state of the system is represented
-by an element of the set and and the transition function is represented
+by an element of the set and the transition function is represented
 by the endomorphism. That is, if we start at an initial state $s \in S$ and
 the transition function is given by $\alpha \colon S \to S$, the evolution of the
 system will be given by
@@ -5154,7 +5121,7 @@ the categorical interpretation of the structure.
 
 A further generalization is now possible: if we want to consider
 continuously-evolving dynamical systems, we can define functors from the
-monoid of real numbers under adition, that is, functors $\mathbb{R} \to \Set$.
+monoid of real numbers under addition, that is, functors $\mathbb{R} \to \Set$.
 Note that these functors are given by a set $S$ and a family
 of morphisms $\{\alpha_r\}_{r \in \mathbb{R}}$ such that $\alpha_r \circ \alpha_s = \alpha_{r+s}$ 
 for all $r,s \in \mathbb{R}$. This example is discussed in cite:lawvere09.
@@ -5411,7 +5378,7 @@ transformation $\Delta g \colon \Delta c \to \Delta c'$ whose components are all
 We could say that $\Delta c$ compresses the whole category ${\cal J}$ into $c$. A
 natural transformation from this functor to some other $F \colon {\cal J} \to {\cal C}$
 should be regarded as a */\red{cone}/* from the object $c$ to a copy
-of ${\cal J}$ inside the category ${\cal C}$; as the following diagram exemplifies
+of ${\cal J}$ inside the category ${\cal C}$; as the following diagram exemplifies.
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &&& &&& & c \ar[color=myred]{dd}\ar[bend left, color=myred]{ddr}\ar[bend right, color=myred]{dddl}\ar[bend left, color=myred]{dddrr} &&\\
 &\phantom{gap}&& &&& & \phantom{gap} &&\\
@@ -5438,7 +5405,7 @@ on that cone must be commutative. Thus, natural transformations are
 a way to recover all the information of an arbitrary /*index category*/ ${\cal J}$ that
 was encoded in $c$ by the constant functor. As we did with products,
 we want to find the cone that best encodes that information; a universal
-cone, such that every other cone factorizes through it. Diagramatically
+cone, such that every other cone factorizes through it. Diagrammatically
 an $r$ such that, for each $d$,
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &d 
@@ -5492,7 +5459,7 @@ With this definition, the *equalizer* of two parallel arrows
 $f,g \colon A \to B$ is an object $\mathrm{eq}(f,g)$ with a morphism
 $e \colon \mathrm{eq}(f,g) \to A$ such that $f \circ e = g \circ e$; and such that
 any other object with a similar morphism factorizes uniquely
-through it
+through it.
 \[\begin{tikzcd}[column sep=tiny]
 &
 D
@@ -5507,7 +5474,7 @@ A
 \arrow[bend right=15, swap]{rr}{g} &&
 B
 \end{tikzcd}\]
-note how the right part of the cone is completely determined
+Note how the right part of the cone is completely determined
 as $f \circ e$. Because of this, equalizers can be written without
 specifying it, and the diagram can be simplified to the
 following one.
@@ -5571,13 +5538,13 @@ codomain; and the pullback is the universal cone over them.
 X\rar[swap]{f} & Z & Y\lar{g} \\
 \end{tikzcd}\]
 Again, the central arrow of the diagram is determined as
-$f \circ q = g \circ p$; so it can be ommited in the diagram. The usual
+$f \circ q = g \circ p$; so it can be omitted in the diagram. The usual
 definition of a pullback for two morphisms $f \colon X \to Z$ and
 $g \colon Y \to Z$ is the universal pair of morphisms $p \colon A \to X$ and $q \colon A \to Y$
 such that $f \circ q = g \circ p$, that is, given any pair of morphisms
 $p' \colon D \to X$ and $q' \colon D \to Y$, there exists a unique $u \colon D \to A$ making
 the diagram commute.  Usually we write the pullback object as $X \times_Z Y$
-and we write this property diagramatically as
+and we write this property diagrammatically as follows.
 \[\begin{tikzcd}
 D
 \ar[dashed]{dr}{\exists! u} 
@@ -5597,31 +5564,27 @@ and the pullback object is sometimes called a /fibered product/.
 Pullbacks will be a central notion when developing semantics for
 dependent types in Section [[sec-locallydependent]].
 
-# TODO: Example of pullback
-# TODO: Equalizers are a particular example of pullbacks
+# Example of pullback
+# Equalizers are a particular example of pullbacks
 
 **** Pullbacks in Sets                                                                   :ignore:
 #+ATTR_LATEX: :options [Pullbacks in the category of sets]
 #+BEGIN_exampleth
 Given two functions $f \colon A \to C$ and $g \colon B \to C$ in the category $\Set$,
-their pullback is given by the subset of the catesian product $A \times B$
+their pullback is given by the subset of the cartesian product $A \times B$
 determined by those pairs of elements whose two images under $f$ and $g$
 coincide. That is, $A \times_C B = \left\{ (a,b) \in A \times B \mid f(a) = g(b) \right\}$ with
 the usual projections. Note that any function making the pullback
 square commute factorizes uniquely though this set.
 #+END_exampleth
 
-**** TODO Arbitrary products                                                             :ignore:
-**** TODO Powers                                                                         :ignore:
-**** TODO Posets
 *** Colimits
-# TODO: Ahorrarse los colimits por dualidad
 **** Cocones                                                      :ignore:
 A colimit is the dual notion of a limit. We could consider 
 cocones to be the dual of cones and pick the universal one.
 Once an index category ${\cal J}$ and a base category ${\cal C}$ are fixed,
 a /cocone/ is a natural transformation from a functor on the
-base category to a constant functor. Diagramatically,
+base category to a constant functor. Diagrammatically,
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &&& &&& & c &&\\
 &\phantom{gap}&& &&& & \phantom{gap} &&\\
@@ -5633,7 +5596,7 @@ base category to a constant functor. Diagramatically,
 \cdot \arrow[color=myblue, bend left]{uuur} \arrow{rrr}[description, yshift=-5mm]{\big{F \cal J}} &&&
 \cdot \arrow[color=myblue, bend right]{uuull}\\
 \end{tikzcd}\]
-is an example of a cocone, and the universal one would be the
+is an example of a cocone. The universal one would be the
 $r$, such that, for each cone $d$,
 \[\begin{tikzcd}[column sep=tiny, row sep=tiny]
 &d  &&\\
@@ -5654,7 +5617,7 @@ $r$, such that, for each cone $d$,
 \ar[bend right, color=myblue]{uuull}
 \ar[bend right, color=myblue]{uuuuull} \\
 \end{tikzcd}\]
-and naturality implies that each triangle of the following form commutes.
+Naturality implies that each triangle of the following form commutes.
 \[\begin{tikzcd}[column sep=tiny,row sep=small]
 &\cdot &\\
 \cdot
@@ -5775,10 +5738,8 @@ The square in this diagram is usually called a
 /pushout square/, and the pullback object is sometimes called a
 /fibered coproduct/.
 
-# TODO Seifert Van-Kampen
-**** TODO Arbitrary coproducts                                    :ignore:
-**** TODO Copowers                                                :ignore:
-**** TODO Posets                                                  :ignore:
+# Seifert Van-Kampen
+
 ** Adjoints, monads and algebras
 *** Adjunctions
 **** Definition of adjunction                                     :ignore:
@@ -5868,7 +5829,7 @@ arrows. Given an adjunction $F \dashv G$, we define
  * the *counit* $\varepsilon$ as the family of morphisms $\varepsilon_Y = \varphi^{-1}(\id_{GY}) \colon FGY \to Y$,
    for each $Y$.
 
-Diagramatically, they can be obtained by taking $Y$ to be $FX$ and $X$ to be $GY$,
+Diagrammatically, they can be obtained by taking $Y$ to be $FX$ and $X$ to be $GY$,
 respectively, in the definition of adjunction.
 #+latex: \\[-20pt]
 \begin{prooftree}
@@ -5904,7 +5865,7 @@ equations we gave in the definition of $\varphi$;
  * $Gf \circ \eta = Gf \circ \varphi(\id) = \varphi(f \circ \id) = \varphi(f)$;
  * $\varepsilon_y \circ Fg = \varphi^{-1}(\id) \circ Fg = \varphi^{-1}(\id \circ g) = \varphi^{-1}(g)$;
 
-diagramatically,
+diagrammatically,
 #+latex: \\[-20pt]
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] 
@@ -5937,7 +5898,7 @@ given any two functions $h \colon X \to X'$ and $k \colon Y \to Y'$,
  * $GFh \circ \eta_X = GFh \circ \varphi(\id_{FX}) = \varphi(Fh) = \varphi(\id_{FX'}) \circ h = \eta_{X'} \circ h$;
  * $\varepsilon_{Y'} \circ FGk = \varphi^{-1}(\id_{GY'}) \circ FGk = \varphi^{-1}(Gk) = k \circ \varphi^{-1}(\id_{GY}) = k \circ \varepsilon_Y$;
 
-diagramatically, we can prove that the adjunct of $Fh$ is $GFh \circ \eta_X$ and $\eta_X' \circ h$
+diagrammatically, we can prove that the adjunct of $Fh$ is $GFh \circ \eta_X$ and $\eta_X' \circ h$
 at the same time; while the adjunct of $Gk$ is $k \circ \varepsilon_Y$ and $\varepsilon_{Y'} \circ FGk$ at the same
 time.
 #+latex: \\[-40pt]
@@ -6222,7 +6183,7 @@ Left adjoints to forgetful functors are called *free functors*. In
 this case, the functor $F \colon \mathsf{Set} \to \mathsf{Mon}$ taking each set to the free
 monoid over it and each function to its unique extension to the free
 monoid. Note how it preserves identities and composition.
-The adjunction can be seen diagramatically as
+The adjunction can be seen diagrammatically as
 \begin{prooftree}
 \AXC{\begin{tikzcd}[fragile,ampersand replacement=\&] FA \rar{\overline{f}}\& M \end{tikzcd}}
 \doubleLine
@@ -8895,7 +8856,7 @@ The *comma category* $(F \downarrow G)$ has
   * and pairs $\pair{k,h} \colon f \to f'$, where $k \colon C \to C'$ and $h \colon D \to D'$ are morphisms
     in ${\cal C}$ and ${\cal D}$ respectively such that $f' \circ Fk = Gh \circ f$.
 
-Diagramatically, a morphism in this category is a commutative diagram
+Diagrammatically, a morphism in this category is a commutative diagram
 \[\begin{tikzcd}
 \color{black!50}{FC} \rar{Fk} \dar[swap,color=black!50]{f} & 
 \color{black!50}{FC'}\dar[,color=black!50]{f'} \\
@@ -9684,7 +9645,7 @@ there exists a unique $u \colon k \to e$ such that $\alpha_c \circ u = \beta_c$ 
 each $c \in {\cal C}$.
 #+END_definition
 
-Diagramatically,
+Diagrammatically,
 
 \[\begin{tikzcd}
 k \ar[dashed]{dr}{\exists! u} \ar[bend left]{drr}{\beta_{c}} \ar[swap,bend right]{ddr}{\beta_{c'}} & &\\
@@ -9777,7 +9738,7 @@ Now, using this fact and the dual Yoneda lemma,
           &= \hom_{M\mhyphen\Sets}((M,\mu),(M,\mu)) = M;
 \end{aligned}\]
 and the components of the natural transformation are simply
-multiplication by $m$ for some fixed $m \in M$. Diagramatically, for
+multiplication by $m$ for some fixed $m \in M$. Diagrammatically, for
 any given $\psi \in \Nat(U,U)$,
 \[\begin{tikzcd}[row sep={4mm,between origins},column sep={8mm,between origins}]
 (M,\mu) \arrow[rrrr, "\psi_{(S,\sigma)}"] \arrow[ddd, "{\sigma(-,s)}", swap] 
@@ -12634,3 +12595,42 @@ to program inside categories with enough structure.
 #+LATEX: \end{center}}
 
 # WONTFIX?: Cite Paul Cohen and the forcing technique.
+** Other type systems
+*** TODO Hindley-Milner
+*** TODO Gödel's System T
+*** TODO System F                                                :noexport:
+**** TODO System F is strongly normalizing
+*** TODO Type algebra
+# Type algebra should be studied, at least, on System F.
+# Properties of type algebra can be proved in Agda.
+
+**** Lists, trees and generating functions
+**** Derivatives and one-hole contexts
+**** Seven trees in one
+*** TODO Pure type systems
+In particular *System F* is equivalent to the single-sorted pure system $\lambda 2$.
+# https://www.ps.uni-saarland.de/extras/fscd17/
+
+*** TODO Subtyping (?)
+
+*** TODO Inductive and coinductive definitions
+**** TODO The universal properties of fold, map and filter
+***** OLD Endomorphisms
+The set of *endomorphisms*
+of an object $A$ is defined as $\mathrm{end}(A) = \hom(A,A)$.
+
+***** TODO Bimorphisms
+A morphism that is a monomorphism and an epimorphism at the same time is
+called a *bimorphism*.
+
+#+begin_remark
+A morphism can be a bimorphism without being an isomorphism. We will
+cover [[*Examples of categories][examples]] of this fact later.
+#+end_remark
+
+**** TODO Arbitrary products                                                             :ignore:
+**** TODO Powers                                                                         :ignore:
+**** TODO Posets
+**** TODO Arbitrary coproducts                                    :ignore:
+**** TODO Copowers                                                :ignore:
+**** TODO Posets                                                  :ignore:
