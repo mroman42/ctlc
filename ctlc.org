@@ -362,7 +362,7 @@ not enough for flattening them.
 ** Untyped \lambda-calculus
 <<sec-untypedlambda>>
 
-**** Introduction                                                 :ignore:
+**** Introduction                                                                        :ignore:
 When are two functions equal? Classically in mathematics, /functions are graphs/.
 A function from a domain to a codomain, $f \colon X \to Y$, is seen as a subset 
 of the product space: $f \subset X \times Y$.
@@ -936,7 +936,7 @@ reduction strategy that always reduces the leftmost \beta-abstraction
 will always find a normal form if it exists.
 This section follows cite:kashima00, cite:barendsen94 and cite:barendregt84.
 
-**** Leftmost one-step reduction                                  :ignore:
+**** Leftmost one-step reduction                                                         :ignore:
 #+begin_definition
 Any two lambda terms $M$ and $N$ are related by $\to_n$, and we write
 this as $M \to_{n} N$, when $N$ can be obtained by \beta-reducing
@@ -945,7 +945,7 @@ We call $\to_{1}$ the *leftmost one-step reduction* and we write it as $\to_{l}$
 accordingly, $\tto_{l}$ is its reflexive transitive closure.
 #+end_definition
 
-**** Standard sequence                                            :ignore:
+**** Standard sequence                                                                   :ignore:
 #+attr_latex: :options [Standard sequence]
 #+begin_definition
 Let $M_0,M_1,\dots,M_k$ be a sequence of lambda terms.
@@ -958,7 +958,7 @@ be reduced to it using a standard sequence. This will imply the
 existence of an optimal beta reduction strategy that will always reach
 a normal form if one exists.
 
-**** Standarization theorem                                       :ignore:
+**** Standarization theorem                                                              :ignore:
 #+attr_latex: :options [Standarization theorem]
 #+begin_theorem
 <<thm-standarization>>
@@ -1032,7 +1032,7 @@ form $\to_{l}$; as the sequence is non-decreasing, every step has to be of the f
 #+end_proof
 
 *** SKI combinators
-**** SKI definition                                               :ignore:
+**** SKI definition                                                                      :ignore:
 As we have seen in previous sections, untyped \lambda-calculus is already
 a very syntactically simple system; but it can be further reduced to
 a few \lambda-terms without losing its expressiveness. In particular, untyped
@@ -1058,7 +1058,7 @@ The language of *SKI-terms* can be defined by the Backus-Naus form
 \]
 where $x$ can represent any free variable.
 
-**** Lambda transform                                             :ignore:
+**** Lambda transform                                                                    :ignore:
 #+begin_definition
 The *Lambda-transform* of a SKI-term is a \lambda-term defined
 recursively as
@@ -1070,7 +1070,7 @@ recursively as
   * $\lambdatrans(XY) = \lambdatrans(X)\lambdatrans(Y)$, where $X$ and $Y$ are any two SKI-terms.
 #+end_definition
 
-**** Bracket abstraction                                          :ignore:
+**** Bracket abstraction                                                                 :ignore:
 #+begin_definition
 Before translating back lambda terms to SKI combinators, we need the
 auxiliary notion of bracket abstraction. The *bracket abstraction* of
@@ -1086,7 +1086,7 @@ where $\freevars$ is the set of free variables as in Definition
 [[def-freevariables]].
 #+end_definition
 
-**** SKI abstraction                                              :ignore:
+**** SKI abstraction                                                                     :ignore:
 #+attr_latex: :options [SKI abstraction]
 #+begin_definition
 The *SKI abstraction* of a \lambda-term $P$, written as $\skiabs(P)$ is
@@ -2313,7 +2313,7 @@ In particular *System F* is equivalent to the single-sorted pure system $\lambda
 * Mikrokosmos
 ** Implementation of \lambda-expressions
 *** The Haskell programming language
-**** Haskell as a programming choice                              :ignore:
+**** Haskell as a programming choice                                                     :ignore:
 *Haskell* is the purely functional programming language of our choice
 to implement our \lambda-calculus interpreter. Its own design is
 heavily influenced by the \lambda-calculus and it is a general-purpose
@@ -2327,7 +2327,7 @@ choice.
 central package archive of the Haskell community:
 https://hackage.haskell.org/packages/
 
-**** History of Haskell                                           :ignore:
+**** History of Haskell                                                                  :ignore:
 In the 1980s, many lazy programming languages were independently being
 written by researchers such as /Miranda/, /Lazy ML/, /Orwell/, /Clean/
 or /Daisy/. All of them were similar in expressive power, but their
