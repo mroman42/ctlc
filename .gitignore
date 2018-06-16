@@ -19,3 +19,9 @@ agda-mltt/html/*
 \#*\#
 .\#*
 docs/output.pdf
+/ctlc.aux
+/ctlc.blg
+/ctlc.log
+/ctlc.out
+/ctlc.pyg
+/ctlc.toc
