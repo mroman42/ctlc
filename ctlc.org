@@ -84,7 +84,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{tikz}
 #+latex_header: \usepackage{tikz-cd}
-#+latex_header: \usetikzlibrary{shapes,fit,graph,tikzmark}
+#+latex_header: \usetikzlibrary{shapes,fit,tikzmark}
 #+latex_header: \usepackage{bussproofs}
 #+latex_header: \EnableBpAbbreviations{}
 #+latex_header: \usepackage{mathtools}
@@ -225,17 +225,17 @@ puntos o usarlo consistentemente.
 
 *** Chapter 1                                                                             :ignore:
 *Chapter 1*: The \lambda-calculus is a collection of systems
-formalizing the notion of functions as formulas, function abstraction
+formalizing the notion of /functions as formulae/, function abstraction
 and function composition. They can be seen as programming languages
 and as formal logics at the same time.  We start by analyzing the
-properties that make untyped lambda calculus a proper programming
+characteristics that make untyped lambda calculus a proper programming
 language; these are the confluence property (known as the
 Church-Rosser theorem), the existence of normal forms for terminating
 computations, and evaluation strategies that allow us to reliably find
 these normal forms in the cases where they exist.  We also relate
 lambda calculus to combinatorial logic with SKI combinators and we
 discuss its historical importance on the definition of
-Turing-completness.
+Turing-completeness.
 
 There also exist typed variants of lambda calculus. Simply typed
 lambda calculus, for instance, can include function types, a unit type,
@@ -247,6 +247,8 @@ and simply typed lambda calculus precisely matches this interpretation,
 making it possible to have a language that is, at the same time,
 a functional programming language and a formal system.
 
+\\
+
 *** Chapter 2                                                                             :ignore:
 *Chapter 2*: We have developed *Mikrokosmos*, an untyped and simply
 typed \lambda-calculus interpreter written in the purely functional
@@ -257,19 +259,19 @@ statements of intuitionistic propositional logic with it.
 
 We discuss why Haskell and the use of monadic parser libraries are an
 adequate choice for this project. Our implementation relies on
-DeBruijn indexes to represent variable scope and bindings
+De Bruijn indexes to represent variable scope and bindings
 internally. We need to implement substitutions, evaluation and type
 inference; but all these algorithms can be directly derived from the
 theoretical discussion we had on Chapter 1. Our programming
 environment makes use of version control using Git, test suites using
 the Tasty testing framework and continuous integration using
 TravisCI. We also rely on packaging tools that allow us to distribute
-the software as a library and as an executable on the appropiate
+the software as a library and as an executable on the appropriate
 channels. A Jupyter Notebook integration is provided; it has been used
 to provide students with interactive tutorials of lambda
 calculus. Along with the command-line interpreter, we also include a
 mechanism allowing us to call the interpreter from Javascript and
-embed it into a webpage.
+embed it into a web page.
 
 At the end of this chapter, we describe how to program on the untyped
 lambda calculus, encoding complex data structures with a technique due
@@ -280,6 +282,8 @@ intuitionistic logic with a proof assistant. We show how each program
 is, itself, a proof of a proposition in intuitionistic logic; types can
 sometimes be seen as proposition and evaluation and $\beta\mathrm{-reduction}$ are
 related to proof simplification.
+
+\\
 
 *** Chapter 3                                                                             :ignore:
 *Chapter 3*: Categories will be the framework we will use to study the
@@ -308,6 +312,8 @@ functors, on the other hand, will be one of the key insights we will
 use to understand and expand the connection between computation and
 logic we have described so far.  This section is primarily based on
 cite:maclane78.
+
+\\
 
 *** Chapter 4                                                                             :ignore:
 *Chapter 4*: The internal logic of categories is studied. We start by
@@ -360,6 +366,8 @@ particular, we study Lawvere's Elementary Theory of the Category of
 Sets and how it recovers classical set-based mathematics. This section
 is primarily based on the work by cite:martinlof75 and cite:seely84.
 
+\\
+
 *** Chapter 5                                                                             :ignore:
 *Chapter 5*: As we have been discussing on previous chapters, the
 internal logic of categories with enough structure is expressive
@@ -387,6 +395,8 @@ computer verified lemmas and propositions about natural numbers and
 dyadic rationals have been needed for this construction. The second
 one accepts Voevodsky's Univalence Axiom and proves the fact that the
 fundamental group of the circle is given by the integers.
+
+\\
 
 *** Keywords                                                                              :ignore:
 Keywords: /category theory/, /lambda calculus/, /type theory/,
@@ -1921,7 +1931,7 @@ For arrow types,
 #+ATTR_LATEX: :options [Abstraction lemma]
 #+BEGIN_lemma
 <<lemma-reductionabstraction>>
-If $v[u/x] \in \redu_{V}$ for all $u \in \redu_{U}$, then $\lambda x.v \in \redu_{U \to V}_{}_{}$.
+If $v[u/x] \in \redu_{V}$ for all $u \in \redu_{U}$, then $\lambda x.v \in \redu_{U \to V}$.
 #+END_lemma
 #+BEGIN_proof
 We apply induction over the sum of the lengths of the longest
@@ -8764,7 +8774,7 @@ found at
 # Agda-mltt
 # Agda-hott
 
-** Acknowlegments
+** Acknowledgments
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
@@ -8790,12 +8800,12 @@ ideas.
 Finally, I would like to express my gratitude to Benedikt Ahrens and
 the organizers of the School and Workshop on Univalent Mathematics at
 the University of Birmingham, whose effort has given me the
-opportunity to learn the fundaments of type theory and the Univalent
+opportunity to learn the rudiments of type theory and the Univalent
 Foundations program.
 
 This document has been written with Emacs26 and org-mode 9, using the
 =org= file format and LaTeX as intermediate format. The document takes
-some configurations forom the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede
+some configurations from the =classicthesis= [[http://www.latextemplates.com/templates/theses/2/thesis_2.pdf][template]] by André Miede
 and modifications by Adrián Ranea, Alejandro García and David
 Charte. The =minted= package has been used for code listings and the
 =tikzcd= package has been used for commutative diagrams. The document
