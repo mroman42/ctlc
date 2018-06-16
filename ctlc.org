@@ -212,7 +212,7 @@ puntos o usarlo consistentemente.
 #+latex_header: \newcommand\J{\mathsf{J}}
 #+latex_header: \usepackage{scalefnt}\DeclareMathOperator*\bigexists{\vphantom{\sum}\mathchoice{\vcenter{\hbox{\scalefont{2}$\exists$}}}{\vcenter{\hbox{\scalefont{1.4}$\exists$}}}{\vcenter{\hbox{\scalefont{1}$\exists$}}}{\vcenter{\hbox{\scalefont{0.75}$\exists$}}}}
 
-** Abstract
+** Overview
 :PROPERTIES:
 :UNNUMBERED: t
 :END:
@@ -223,12 +223,31 @@ puntos o usarlo consistentemente.
 
 # There is no claim of originality (?)
 
+*** Chapter 1                                                                             :ignore:
 *Chapter 1*: The \lambda-calculus is a collection of systems
-formalizing the notion of functions. They can be seen as programming
-languages and formal logics at the same time. We focus on the
-properties of the untyped \lambda-calculus and simply typed
-\lambda-calculus, and we study their logical interpretation.
+formalizing the notion of functions as formulas, function abstraction
+and function composition. They can be seen as programming languages
+and as formal logics at the same time.  We start by analyzing the
+properties that make untyped lambda calculus a proper programming
+language; these are the confluence property (known as the
+Church-Rosser theorem), the existence of normal forms for terminating
+computations, and evaluation strategies that allow us to reliably find
+these normal forms in the cases where they exist.  We also relate
+lambda calculus to combinatorial logic with SKI combinators and we
+discuss its historical importance on the definition of
+Turing-completness.
 
+There also exist typed variants of lambda calculus. Simply typed
+lambda calculus, for instance, can include function types, a unit type,
+a void type, pairs and unions. We focus on the logical interpretation
+of this system, called the /Curry-Howard isomorphism/. Brouwer, Heyting and
+Kolmogorov proposed in the 30s a computational interpretation of /intuitionistic/
+/logic/, a logic that does not assume the law of excluded middle, $A \vee\neg A$;
+and simply typed lambda calculus precisely matches this interpretation,
+making it possible to have a language that is, at the same time,
+a functional programming language and a formal system.
+
+*** Chapter 2                                                                             :ignore:
 *Chapter 2*: We have developed *Mikrokosmos*, an untyped and simply
 typed \lambda-calculus interpreter written in the purely functional
 programming language Haskell cite:hudak07_haskell.  It aims to provide
@@ -236,27 +255,142 @@ students with a tool to learn and understand \lambda-calculus and the
 relation between logic and types. We show how to program and prove
 statements of intuitionistic propositional logic with it.
 
+We discuss why Haskell and the use of monadic parser libraries are an
+adequate choice for this project. Our implementation relies on
+DeBruijn indexes to represent variable scope and bindings
+internally. We need to implement substitutions, evaluation and type
+inference; but all these algorithms can be directly derived from the
+theoretical discussion we had on Chapter 1. Our programming
+environment makes use of version control using Git, test suites using
+the Tasty testing framework and continuous integration using
+TravisCI. We also rely on packaging tools that allow us to distribute
+the software as a library and as an executable on the appropiate
+channels. A Jupyter Notebook integration is provided; it has been used
+to provide students with interactive tutorials of lambda
+calculus. Along with the command-line interpreter, we also include a
+mechanism allowing us to call the interpreter from Javascript and
+embed it into a webpage.
+
+At the end of this chapter, we describe how to program on the untyped
+lambda calculus, encoding complex data structures with a technique due
+to Church and learning how to use fixpoint operators to achieve
+unbounded recursion. On the other hand, programming in the
+simply-typed lambda calculus more resembles proving statements on
+intuitionistic logic with a proof assistant. We show how each program
+is, itself, a proof of a proposition in intuitionistic logic; types can
+sometimes be seen as proposition and evaluation and $\beta\mathrm{-reduction}$ are
+related to proof simplification.
+
+*** Chapter 3                                                                             :ignore:
 *Chapter 3*: Categories will be the framework we will use to study the
 fundamental notion of function composition inside mathematics. They
-provide a useful language to talk about theories, mathematics and
-logic. In particular, adjoint functors will be one of the key insights
-we will use to understand and expand the connection between
-computation and logic we have described so far.  This section is based
-on cite:maclane78.
+provide a fruitful language to talk about theories, mathematics and
+logic.  Notions such as /naturality/, /universality/ or /duality/
+can be given a explicit formal meaning with categories. We have examples
+of them all around mathematics. /Functors/ can be seen as homomorphisms that
+preserve the structure of a category, and we can base many different
+useful mathematical constructions on them, with the added benefit that
+they can be formulated in a very abstract setting.
 
-*Chapter 4*: The internal logic of categories is studied. In
-particular, cartesian closed categories can be used to model lambda
-calculus, and their structure serves as a basis for locally cartesian
-closed categories and topoi, which provide a framework for
-higher-order logics. Dependent type theory arises as the natural
-language for these richer categories. This section is based on
-the work by cite:maclane94 and cite:martinlof75.
+Yoneda Lemma is one of the foundational results in category theory;
+intuitively, it says that every object in a category is determined by
+how it relates to any object of the category. This is a tool that will
+be necessary when constructing categorical models of algebraic
+theories in Chapter 4.  We also define limits and colimits, which
+allow us more expressive constructions inside categories; in
+particular, fibered products and coproducts can be expressed this way
+(/pullbacks/ and /pushouts/), and they will be also useful when
+interpreting syntactic substitution inside categories.
 
-*Chapter 5*: Type theory provides both a programming language and a
-foundation of mathematics. The embedding of a category of sets and
-some classical principles inside constructive logic are studied.  We
-also present and formalize inside a programming language a first
-result of Homotopy Type Theory. This section is based on cite:hottbook.
+Finally, we present monads, algebras and adjoint functors. Algebras
+are useful to encode induction in a purely categorical way.  Adjoint
+functors, on the other hand, will be one of the key insights we will
+use to understand and expand the connection between computation and
+logic we have described so far.  This section is primarily based on
+cite:maclane78.
+
+*** Chapter 4                                                                             :ignore:
+*Chapter 4*: The internal logic of categories is studied. We start by
+defining presheaf categories. Presheaves can be thought as some kind
+of /generalized sets/. Pair of sets, graphs, or sets depending on a
+real variable can be seen as presheaves. As we will see in this
+same chapter, presheaf categories are examples of categories
+having all the structure we are interested in.  Lawvere's /algebraic/
+/theories/ show that it is possible to give a description of algebraic
+structures in terms of categories. Moreover, this description is
+independent of the particular axiomatization for the structure we are
+using.  Models for these theories in any mathematical structure can
+be seen as functors from the category representing the theory.
+
+In particular, cartesian closed categories can be used to model simply
+typed lambda calculus. Each lambda calculus theory is the internal
+logical language of a cartesian closed category. Bicartesian
+categories correspond to intuitionistic logic and we can model
+inductive types as algebras over certain functors. Using this
+correspondence, we can encode theorems and proofs about cartesian
+closed categories using lambda calculus.  As an example, we prove a
+theorem by Lawvere on fixed points and diagonal arguments. We can then
+interpret this theorem in many categories to get many known results by
+Cantor, Russel, Tarski and Gödel as corollaries.
+
+We extend this structure asking the same structure to exist in each
+slice of the category and thus defining /locally cartesian closed categories/.
+Existential and universal quantifier can be interpreted with this new
+structure, which also provides a framework for higher-order logics.
+Dependent type theory arises as the natural language for these richer
+categories, and it carries a natural computational interpretation.  In
+particular, equality can be encoded using the /J-eliminator/, a rule,
+directly derived from a categorical construction that says that, if
+$P(x,x)$ is true for any element $x$ and $a = b$, then $P(a,b)$ is
+true.  We also discuss a categorical encoding of the notion of
+propositions with /proof irrelevance/ and /propositional truncation/;
+this is a tool that allows us to write proofs that do not depend on a
+specific proof being constructed despite the fact that we remain in a
+constructive setting. The /theorem of choice/ is shown as an example;
+it is a variant of the Axiom of Choice that is actually provable
+within the theory we obtain this way.
+
+Under this interpretation, categories, logic and computation can be
+seen as multiple aspects of a unique central notion. All the
+constructions and definitions we have been discussing until this
+moment nudge us towards considering /topoi/, a particular kind of
+category that is itself a model of constructive mathematics. In other
+words, each topos is a different universe of mathematics.  In
+particular, we study Lawvere's Elementary Theory of the Category of
+Sets and how it recovers classical set-based mathematics. This section
+is primarily based on the work by cite:martinlof75 and cite:seely84.
+
+*** Chapter 5                                                                             :ignore:
+*Chapter 5*: As we have been discussing on previous chapters, the
+internal logic of categories with enough structure is expressive
+enough to allow us to develop mathematical theories inside them.
+Moreover, these theories can be expressed in a programming language
+with a strong dependent type system. Thus, type theory provides both a
+foundation of programming language theory and a foundation of
+mathematics. It is now interesting to consider how to embed Lawvere's
+axioms for the category of sets and some classical principles inside
+this constructive logic, thereby showing that a set theoretical
+foundation can be seen as a particular case. The proof we present of
+Diaconescu's theorem is an example of the use of this embedding.  In
+particular, we discover that the law of excluded middle and classical
+mathematics follow from accepting the Axiom of Choice. We also study a
+first result on Homotopy Type Theory, which is the theory we obtain
+when we consider the higher dimensional structure of the type of
+equality and we relate it to Grothendieck's homotopy hypothesis using
+Voevodsky's Univalence Axiom. This section is mainly based on
+cite:hottbook.
+
+Two libraries of computer verified mathematics have been
+developed. The first one implements positive real numbers as Dedekind
+cuts and provides a proof of Diaconescu's theorem. More than a hundred
+computer verified lemmas and propositions about natural numbers and
+dyadic rationals have been needed for this construction. The second
+one accepts Voevodsky's Univalence Axiom and proves the fact that the
+fundamental group of the circle is given by the integers.
+
+*** Keywords                                                                              :ignore:
+Keywords: /category theory/, /lambda calculus/, /type theory/,
+/categorical semantics/, /dependent functional programming/.
 
 ** Sinopsis
 :PROPERTIES:
@@ -266,39 +400,199 @@ result of Homotopy Type Theory. This section is based on cite:hottbook.
 # Deberá estar escrito completamente en inglés y tener una longitud
 # mínima de 1500 palabras. Igualmente aparecerán las palabras clave en inglés.
 
-# TODO: Actualmente tiene 300 palabras
+*** Capítulo 1                                                                            :ignore:
+*Capítulo 1*: Empezamos estudiando el cálculo lambda de Church como
+lenguaje de programación. Detallamos una definición formal de sus
+aspectos sintácticos y exponiendo demostraciones de las propiedades
+que lo hacen implementable como lenguaje de programación; ejemplos son
+la propiedad de confluencia (Teorema de Church-Rosser) o la existencia
+de estrategias de reducción /óptimas/ desde la perspectiva de
+encontrar una forma normal. Tenemos la intención de usar en la
+práctica estos resultados para posteriormente diseñar el intérprete de
+un lenguaje basado en cálculo lambda.  Brevemente hacemos mención a la
+equivalencia con la lógica de combinadores SKI y cómo, cuando discutamos
+la implementación del operador de minimización de las funciones
+$\mu\mathrm{-recursivas}$ de Gödel, estaremos comprobando su Turing-complitud.
 
-Empezamos exponiendo el cálculo lambda de Church como modelo de
-computación, prestando especial interés a la relación de sus variantes
-tipadas con la lógica proposicional intuicionista. Desarrollamos un
-intérprete basado en estas ideas y utilidades para combinarlo con
-Jupyter Notebook y con Javascript que lo hacen apto para la docencia.
+Existen variantes tipadas del cálculo lambda, más orientadas a la
+lógica, que resuelven los problemas de normalización de las versiones
+sin tipos. Discutimos la diferencia entre tipado de Curry y tipado de
+Church y cómo el primero nos servirá para proveer de una forma de
+polimorfismo implícito a un lenguaje de tipos simples; esto es,
+podremos tener expresiones cuyo tipo sea lo más general posible hasta el
+mismo momento de instanciarlas.  Seguidamente, prestamos particular
+interés a la relación de estas variantes tipadas del cálculo lambda
+con la lógica proposicional intuicionista representada en la deducción
+natural de Gentzen. La lógica intuicionista es base de la matemática
+de Brouwer o Bishop y se caracteriza por no asumir la ley del tercio
+excluso, $A \vee\neg A$, y tener una interpretación computacional natural. Esta
+relación nos permite dar un uso más del cálculo lambda, en este caso
+para usarlo como asistente de demostraciones. Esto constituye la
+interpretación de Brouwer-Heyting-Kolmogorov y correspondencia de Curry-Howard.
 
-La perspectiva de la teoría de categorías y en especial la noción de
-Lawvere de las adjunciones como elemento fundacional nos permiten
-primero formalizar la estructura lógica del cálculo lambda como el
-lenguaje interno de las categorías cartesianas cerradas e,
-inmediatamente después, enriquecer esta estructura en categorías
-localmente cartesianas cerradas hacia la noción de tipos dependientes.
-Los tipos dependientes nos proveen un marco lógico de orden superior
-con una interpretación computacional natural. Categorías, lógica y
-computación aparecen como tres manifestaciones de una misma noción.
+Terminamos revisando la literatura de posibles extensiones a los
+sistemas de tipos del cálculo lambda con el $\lambda\mathrm{-cubo}$ de Barendregt.
 
-La lógica interna de estas categorías es suficientemente rica como
-para permitirnos desarrollar teorías matemáticas que además pueden
-expresarse en un lenguaje de programación con un sistema de tipos
-suficientemente fuerte que sirve como asistente de demostraciones.
-Para demostrar el potencial de esta perspectiva, usamos el lenguaje de
-programación Agda para formalizar los reales positivos con cortes de
-Dedekind en teoría de tipos de Martin-Löf y proponemos un ejemplo de
-topología sintética usando el axioma de Univalencia de Voevodsky.
+\\
 
+*** Capítulo 2                                                                            :ignore:
+*Capítulo 2*: Diseñamos un intérprete de dos lenguajes de programación
+que basamos respectivamente en el cálculo lambda sin tipos y en el
+cálculo lambda simplemente tipado.  La implementación deberá usar
+internamente índices de DeBruijn, una notación formal para representar
+variables, y aplicar algoritmos de evaluación e inferencia de tipos
+directamente derivados de nuestro estudio en el capítulo anterior.
+Elegimos el lenguaje funcional puro Haskell como lenguaje de
+desarrollo y analizamos esta elección.  Utilizaremos librerías de
+parseado monádico y un entorno de herramientas de integración y control
+orientadas a garantizar corrección y finalmente a distribuir el
+paquete de software en los canales propios del lenguaje.  Este
+intérprete nos permitirá explorar técnicas de programación en el
+cálculo lambda y aplicarlas a la verificación formal de demostraciones
+en la lógica intuicionista. Se incluyen además utilidades para
+integrarlo en el entorno de computación interactiva Jupyter Notebook;
+así como una transpilación y adaptación a Javascript que lo hace apto
+para la docencia y para ser embebido en páginas web.  Siguiendo esta
+idea, se proporcionan enlaces a tutoriales interactivos sobre cálculo
+lambda.
+
+En la sección sobre programación en cálculo lambda destacamos la
+posibilidad de codificar estructuras complejas de datos con la
+codificación de Church y la potencia del operador de punto fijo, que
+es el que nos permitirá escribir definiciones recursivas no acotadas a
+priori.  En la sección sobre cálculo lambda tipado escribimos
+expresiones que son al mismo tiempo demostraciones de teoremas de la
+lógica intuicionista y programas tipados.
+
+\\
+
+*** Capítulo 3                                                                            :ignore:
+*Capítulo 3*: La teoría de categorías proporciona una abstracción del
+concepto de composición en matemáticas y una formalización de nociones
+como /naturalidad/, /dualidad/ o /universalidad/.  Esencialmente, una
+categoría viene dada por objetos y flechas o /morfismos/ componibles
+entre ellos, siendo una generalización de la idea de grupoide.  Tenemos
+ejemplos de categorías dentro de una gran variedad de áreas de las
+matemáticas y podemos estudiar los /funtores/ como los homomorfismos
+que respetan su estructura; a su vez, estos funtores sirven como
+traducciones entre esas teorías.  Realizaremos varias construcciones que
+justifican el hablar de naturalidad y universalidad de las estructuras
+matemáticas. El lema de Yoneda es un resultado
+fundacional de categorías que afirma, intuitivamente, que los objetos
+quedan determinados por sus morfismos; sobre él se basarán varios
+desarrollos en los siguientes capítulos.  Definimos asimismo límites y
+colímites desde la noción de universalidad, que nos permitirán la
+construcción de generalizaciones del producto y el coproducto; tenemos
+especial interés en el caso de productos fibrados, que corresponderán
+después a la sustitución sintática.
+
+Terminamos trabajando con adjunciones, usando ideas de Lawvere en
+cuanto a su relación con las inferencias lógicas.  Todos estos
+desarrollos sirven de fundamento teórico a los próximos capítulos.
+Por ejemplo, las álgebras sobre funtores modelarán la recursión en los
+lenguajes de programación, las mónadas nos han servido ya para modelar
+el parseado en Haskell, y las adjunciones son la base de la lógica
+categórica.
+
+\\
+
+*** Capítulo 4                                                                            :ignore:
+*Capítulo 4*: Empezamos definiendo las categorías de prehaces, que
+serán modelos naturales de toda la discusión posterior; esta es una
+clase de categorías que generaliza la categoría de conjuntos y
+proporciona modelos no estándar de las mismas construcciones que estudiaríamos
+en conjuntos.  La perspectiva de la teoría de
+categorías y en especial la noción de las /adjunciones como elemento
+fundacional/ nos permiten primero dar una formalización de la
+estructura de las teorías algebraicas, que muestra las ideas que
+usaremos para dotar de semántica a otras estructuras sintáticas. En
+esta teoría, podremos dar varias axiomatizaciones de una teoría, como
+la teoría de grupos, y obtener con todas ellas una sola categoría cuyos
+funtores representarán cada uno un modelo de la teoría.
+
+Usamos esta misma idea para formalizar la estructura lógica del
+cálculo lambda como el lenguaje interno de las categorías cartesianas
+cerradas.  Usando esta correspondencia, podemos recrear demostraciones
+sobre categorías cartesianas usando expresiones del cálculo lambda. En
+particular, aplicamos esta técnica a un teorema de William Lawvere
+(1969) sobre puntos fijos en categorías cartesianas. Su
+particularización nos da como corolario demostraciones de resultados
+de Cantor, Russell, Tarski y Gödel, y sintetiza la idea común a todas
+las /demostraciones por diagonalización/.  Las categorías
+bicartesianas suponen una primera extensión que nos proporciona una
+estructura de lógica intuicionista interna a la categoría, y comprobamos
+cómo la existencia de álgebras iniciales en una categoría nos permite usarla
+como modelo de las variantes del cálculo lambda que contienen tipos
+inductivos (como los números naturales).
+
+Una vez comprobada esta correspondencia, buscamos ampliarla hacia una
+lógica con cuantificadores y de orden superior que nos permita
+expresar nociones matemáticas más complejas.  Enriquecemos la
+estructura tomando categorías localmente cartesianas cerradas como
+modelos e inspirando en ellas la noción de tipos dependientes.  La
+estructura de categoría localmente cartesiana cerrada permite
+sustituciones dentro de los tipos y la expresión de tipos que actúan
+como /proposiciones/ sobre elementos y otros tipos.  Estos tipos
+dependientes nos proveen un marco lógico que además conserva una
+interpretación computacional natural.  Tenemos así un lenguaje de
+programación cuyos tipos pueden ser proposiciones y cuyos elementos
+pueden ser demostraciones en un sistema formal.  Los cuantificadores
+existencial y universal aparecen como casos particulares de
+adjunciones.  La igualdad puede ser codificada usando el /eliminador
+J/, que permite demostrar una proposición en dos elementos, $P(a,b)$,
+probando $P(x,x)$ para todo $x$ y probando $a = b$; esta codificación
+se extrae directamente de una construcción categórica. Discutimos
+también la noción de truncamiento proposicional, que nos permite ganar
+expresividad matemática, ya que nos permite demostrar proposiciones
+sin establecer explícitamente qué elemento las cumple en una teoría
+que sería, a priori, constructivista. El /teorema de elección/, una
+variante del axioma de elección, es un ejemplo de este
+fenómeno. 
+
+Categorías, lógica y computación aparecen bajo esta interpretación
+como tres manifestaciones de una misma noción. Terminamos intuyendo
+cómo todas las construcciones hasta el momento nos dirigen
+naturalmente a la estructura algebraica de /topos/, una categoría que
+puede contener en su lógica interna formulaciones completas de teorías
+matemáticas. La teoría de conjuntos de Lawvere es el ejemplo que
+proponemos para esta correspondencia.
+
+\\
+
+*** Capítulo 5                                                                            :ignore:
+*Capítulo 5*: Como hemos detallado hasta aquí, la lógica interna de
+ciertas categorías es suficientemente rica como para permitirnos
+desarrollar teorías matemáticas que además pueden expresarse en un
+lenguaje de programación con un sistema de tipos suficientemente
+fuerte, sirviendo su compilación como comprobación de corrección de la
+demostración.  Para demostrar el potencial de esta perspectiva, usamos
+el lenguaje de programación Agda y detallamos las correspondencias
+explícitas entre tipos y categorías.  La teoría de conjuntos de
+Lawvere, unida al teorema de Diaconescu, nos permite recuperar la
+matemática clásica como caso particular; sin embargo, permanecemos en
+el caso más general posible para desarrollar una definición de los
+reales positivos por cortes de Dedekind en la teoría de tipos de
+Martin-Löf. Como resultado colateral, algunas demostraciones sobre
+ciertas instancias del tercio excluso se convierten en programas que
+calculan raíces cuadradas con precisión arbitraria. Proponemos
+asimismo un ejemplo de topología sintética usando una correspondencia
+recientemente descubierta entre la estructura de los tipos, los
+$\infty\mathrm{-grupoides}$ y la homotopía, que se hace patente una
+vez incluimos el axioma de Univalencia de Voevodsky.
+
+\\
+
+*** Referencias principales, palabras clave                                               :ignore:
 Nuestras referencias principales son la exposición del cálculo lambda
 de Selinger cite:selinger13 en la primera parte, los textos de teoría
 de categorías de MacLane cite:maclane78 y Awodey cite:awodey10 en la
 segunda, y el libro fundacional de la teoría homotópica de tipos
-cite:hottbook en la parte final. El proyecto nLab cite:nlab ha sido útil para
-encontrar la bibliografía relevante.
+cite:hottbook en la parte final. Es destacable la utilidad de proyecto
+nLab cite:nlab para localizar la bibliografía relevante entre temas a
+priori dispares.
+
+Palabras clave: /categorías/, /cálculo lambda/, /lógica categórica/,
+/tipos/, /constructivismo/.
 
 ** TODO Declaración
 ** TODO Original
@@ -401,8 +695,8 @@ f \ni \{f,f(f)\} \ni f \ni \{f,f(f)\} \ni \dots,
 \]
 would exist, thus contradicting the *regularity axiom* of Zermelo-Fraenkel
 set theory (see, for example, cite:kunen11).
-In constrast, untyped \lambda-calculus presents some problems that
-would never appear in our usual foundations such as non-terminating
+In contrast, untyped \lambda-calculus presents some problems that
+would never appear in the usual foundations, such as non-terminating
 functions. An approach to solving these is presented in Section [[sec-simplytypedlambda]].
 
 This presentation of the untyped lambda calculus will follow
@@ -411,14 +705,14 @@ cite:Hindley08 and cite:selinger13.
 *** Untyped \lambda-calculus
 **** As a formal language                                                                :ignore:
 As a formal language, the untyped \lambda-calculus is given by a set of
-equations between expressions called /\lambda-terms/, and equivalences
+equations between expressions called /\lambda-terms/; equivalences
 between them can be computed using some manipulation rules.
 These \lambda-terms can stand for functions or arguments indistinctly:
 they all use the same \lambda-notation in order to define function
 abstractions and applications.
 
-The *\lambda-notation* allows a function to be written and inlined as any other element
-of the language, identifying it with the formula it represents and 
+This *\lambda-notation* allows a function to be written and inlined as any other element
+of the language, identifying it with the formula it determines and 
 admitting a more succinct representation. For example, the polynomial function
 $p(x) = x^2 + x$
 is written in \lambda-calculus as
@@ -8049,9 +8343,21 @@ However, during all this process, we have not accepted the Law of
 Excluded Middle; we do not assume that $P \vee \neg P$ for an arbitrary
 proposition $P$. Note, however, that we do not negate it, neither: that would
 cause a contradiction, as we actually proved $\neg\neg(P \vee \neg P)$ in
-general in Section [[section-proof-lem]]. We are /agnostic/ regarding it.
+general in Section [[section-proof-lem]]. We are /agnostic/ regarding it. This
+was the subject of a philosophical dispute between Hilbert and Brouwer on
+whether nonconstructive methods were justified in foundations of mathematics
+cite:martinlof08.
 
-Why are we not simply accepting it, as is common practice? The
+This has deep effects on the mathematics we are working with. We are
+working at a great level of generality, where many results are just
+independent of our theory. Independence of statements like the following
+may be shocking to a classical mathematician: we cannot prove that the
+subset of a finite set is finite, we cannot prove that every real is
+equal or distinct from zero, we cannot prove that every ideal is contained
+in a maximal ideal, we cannot prove that every vector space has a
+base (see cite:bauer2017five for more examples).
+
+Why are we not simply accepting the excluded middle, as is common practice? The
 Law of Excluded middle would affect the computational properties
 of the theory. For instance, whenever we create a natural number
 in our theory, we expect it to be a numeral of the form $\mathsf{succ}(\mathsf{succ}(\dots \mathsf{zero} \dots))$
