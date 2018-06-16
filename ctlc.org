@@ -6389,11 +6389,11 @@ and $\mathrm{sum}(\mathrm{cons}(m,l)) = m + \mathrm{sum}(l)$.
 ** Presheaves
 <<section-presheaves>>
 # [Moerdijk]
-# TODO: Comma category is equivalent to a presheaf category
-# TODO: Pullbacks (in particular, products) always exist on presheaf cats
-# TODO: Terminal and pullbacks imply all finite limits
+# Comma category is equivalent to a presheaf category
+# Pullbacks (in particular, products) always exist on presheaf cats
+# Terminal and pullbacks imply all finite limits
 
-/Presheaves/ can be thought as sets parametrized by a category or as
+/Presheaves/ can be thought as sets parameterized by a category or as
 /generalized sets/. As we will study in the following chapters,
 categories of presheaves share a lot of categorical structure with the
 category of Sets and can be used as non-standard models of lambda
@@ -6401,9 +6401,9 @@ calculus.
 
 Specifically, a /presheaf/ on the category ${\cal C}$ is a functor
 $S \colon {\cal C}^{op} \to \Sets$ from the opposite category to the category of sets.
-The category of presheaves on ${\cal C}$ is a functor category of the
+The category of presheaves on ${\cal C}$ is the functor category of the
 form $\Set^{{\cal C}^{op}}$. In particular, the examples we gave when
-talking about functor catgeories (Examples [[example-functor-graphs]] and
+talking about functor categories (Examples [[example-functor-graphs]] and
 [[example-dynamical]]) are presheaf categories. We see that they all 
 share some structure with the category of sets;
 in the following sections, we will prove stronger results based on these.
@@ -6445,9 +6445,6 @@ and such that any other functor factorizes through it componentwise.
 #+END_proof
 
 # The product of two functors is the product functor
-*** TODO Presheaves
-**** TODO Pointed Sets (?)
-
 *** TODO Has \omega-colimits
 # Proposition 10.12 in Awodey gives initial algebras for polynomial
 # endofunctors in Set.
@@ -6468,7 +6465,7 @@ and such that any other functor factorizes through it componentwise.
 **** Signature to category                                        :ignore:
 The usual notion of /algebraic theory/ is given by a set of /k-ary operations/
 for each $k \in \mathbb{N}$ and certain axioms between the terms that can be constructed
-inductively using free veriables and these operations. For instance, the theory
+inductively using free variables and these operations. For instance, the theory
 of groups is given by a binary operation $(\cdot)$, a unary operation $(^{-1})$, and a 
 constant or 0-ary operation $e$; satisfying the following axioms
 \[
@@ -6595,8 +6592,6 @@ A category with this property is called a *universal model*.
 Indeed, taking ${\cal A} = \mathbb{A}$ as a model of itself with the identity functor
 $U = \Id$, the equation $u = v$ is trivially satisfied under the identity
 functor if and only if it is satisfied in the original category.
-# TODO: Is this category really a representation of the equations?
-# Yes by construction (x,y \vdash x.y) is a representation
 #+END_proof
 
 This proof feels rather disappointing because this trivial model is
@@ -6626,10 +6621,10 @@ equation proved in the model is an equation proved by the theory.
 #+BEGIN_exampleth
 For instance, a universal model of the group would be the Yoneda embedding
 of $\mathbb{G}$ in $\Set^{\mathbb{G}^{op}}$. The group object would be the functor $U = \hom_{\mathbb{G}}(-,A^1)$;
-which can be thought as a family of sets parametrized over the naturals:
+which can be thought as a family of sets parameterized over the naturals:
 for each $n$ we have $U_n = \hom_{\mathbb{G}}(A^n,A^1)$, which is the set of terms on
 $n$ variables under the axioms of a group. In other words, the universal model
-for the theory of groups would be the free group on $n$ generators, parametrized
+for the theory of groups would be the free group on $n$ generators, parameterized
 over $n$.
 #+END_exampleth
 
@@ -6856,14 +6851,14 @@ $A$ and $B$.
 Given a \lambda-theory $\mathbb{T}$, its *syntactic category* ${\cal S}(\mathbb{T})$, has an object
 for each type of the theory and a morphism $A \to B$ for each term
 $a : A \vdash b : B$. The composition of two morphisms $a : A \vdash b : B$ and
-$b' : B \vdash c : C$ is given by $a {:} A \vdash c[b/b'] {:} C$; and any two morphisms
+$b' : B \vdash c : C$ is given by $a : A \vdash c[b/b'] : C$; and any two morphisms
 $\Gamma \vdash b : B$ and $\Gamma \vdash b' : A$ are equal if $b \equiv b'$.
 
 The syntactic category is cartesian closed and this induces a functor
 ${\cal S} \colon \lambda\mathsf{Thr} \to \mathsf{Ccc}$.
 #+END_proposition
 #+BEGIN_proof
-The type $1$ is terminal because every morphism $\Gamma \vdash t {:} 1$ is $t \equiv\, \ast$.
+The type $1$ is terminal because every morphism $\Gamma \vdash t : 1$ is $t \equiv\, \ast$.
 The type $A \times B$ is the product of $A$ and $B$; projections from
 a pair morphism are given by $\fst\ \pair{a,b} \equiv a$ and $\snd\ \pair{a,b} \equiv b$.
 Any other morphism under the same conditions must be again the
@@ -6874,13 +6869,13 @@ the evaluation morphism
 \[
 m : (A \to B) \times A \vdash (\fst\ m)\ (\snd\ m) : B.
 \]
-It is universal: for any $p {:} C \times A \vdash q {:} B$, there exists a morphism
-$z {:} C \vdash \lambda x. q[\pair{z,x}/p] : A \to B$ such that
+It is universal: for any $p : C \times A \vdash q : B$, there exists a morphism
+$z : C \vdash \lambda x. q[\pair{z,x}/p] : A \to B$ such that
 \[
 (\lambda x.q[\pair{\fst\ p,x}/p]) (\snd\ p) \equiv
 q[\pair{\fst\ p, \snd\ p}/p] \equiv q[p/p] \equiv q;
 \]
-and if any other morphism $z {:} C \vdash d {:} A \to B$ satisfies
+and if any other morphism $z : C \vdash d : A \to B$ satisfies
 $(d[ \fst\ p /z] (\snd\ p)) \equiv q$ then
 \[
 \lambda x. q[\pair{z,x}/p] \equiv 
@@ -6949,7 +6944,7 @@ isomorphism $\eta\theta \tonat \Id$, using the isomorphisms induced by the const
 \eta(\theta (A \to B)) = \intl{\theta(A) \to \theta(B)} = \intl{\theta B}^{\intl{\theta A}} = (\eta\theta B)^{(\eta \theta A)} = B^A;
 \end{array}\end{center}
 and a natural isomorphism $\Id \tonat \theta\eta$ which is in fact an identity, $A = \theta\intl{A} = \theta\eta(A)$.
-# TODO: Check that \eta is natural
+# Check that \eta is natural
 
 On the other hand, we define a translation $\tau \colon \mathbb{T} \to \mathbb{L}({\cal S}(\mathbb{T}))$ as $\tau A = \intl{A}$ in types
 and $\tau(a) = \intl{(\vdash a : \tau A)}$ in constants. We define $\sigma \colon \mathbb{L}({\cal S}(\mathbb{T})) \to \mathbb{T}$ as $\sigma\intl{A} = A$
@@ -6988,8 +6983,8 @@ on the constructors of the type:
 
 **** Semantics                                                                           :ignore:
 Thus, we can say that the simply-typed lambda calculus is the internal
-language of cartesian closed categories; each lambda theories are
-cartesian closed categories.
+language of cartesian closed categories; each lambda theory represents a
+cartesian closed category.
 
 ** Working in cartesian closed categories
 *** Diagonal arguments
@@ -7008,7 +7003,7 @@ We can now talk internally about cartesian closed categories using
 lambda calculus. Note each closed \lambda term
 $\vdash a : A$ can also be seen as a morphism from the terminal object
 $1 \to A$. We use this language to provide a simple proof to a
-known theorem for catesian closed categories by W. Lawvere
+known theorem for cartesian closed categories by W. Lawvere
 (see cite:lawvere06 for details). The theorem will imply many known
 corollaries as particular cases when interpreted in different contexts.
 
@@ -7092,8 +7087,7 @@ original theorem can be replicated without exponentials in any
 category with all products, taking adjoints in $d : A \times A \to
 B$.
 The condition of $d$ being point-surjective can also be weakened;
-we only need, for every $g \colon A \to B$, the existence of some $x :
-A$
+we only need, for every $g \colon A \to B$, the existence of some $x : A$
 such that $d\ x\ a \equiv g\ a$ for all $a : A$.
 
 # Turing halting problem from yanofsky follows in a category of computations
@@ -7250,21 +7244,6 @@ endofunctors (as seen in Examples [[example-naturalnumbersobj]]
 and [[example-listalgebra]]). Binary trees, as described in Example [[example-bintree]],
 are the initial algebra for the functor $T \mapsto(1 + \mathbb{N} \times T \times T)$.
 #+END_exampleth
-
-**** TODO Initial algebras in presheaves                          :ignore:
-# TODO: Not all endofunctors exist (powerset in Sets), but all
-# polynomial endofunctors exist in Set and in all presheaves.
-#  1. Yoneda embedding preserves colimits.
-#  2. Sheaves have all w-colimits
-#  3. Polynomial functors preserving w-colimits
-
-*** TODO Heyting algebras
-# Heyting algebras are bicartesian closed categories. This explains
-# the Curry-Howard correspondence we saw earlier.
-
-# Heyting algebras as bicartesian closed posets
-
-# Open subsets of a topological space.
 
 ** Locally cartesian closed categories and dependent types
 <<sec-locallydependent>>
@@ -7539,7 +7518,7 @@ In the same way that cartesian closed categories model the types of
 the simply typed lambda calculus, locally cartesian closed categories
 model *dependent types* that can depend on elements of another type.
 Each dependent type $B$ depending on values of type $A$ can be also
-seen as a family of types parametrized over the other type $\{B(a)\}_{a : A}$.
+seen as a family of types parameterized over the other type $\{B(a)\}_{a : A}$.
 This extension of type theory forces us to revisit the notion of
 typing context.
 
@@ -7602,7 +7581,7 @@ functions. Their meaning under the Curry-Howard interpretation is that
 of the existential and universal quantifiers, respectively.
 
 *Dependent pair types*, or *\Sigma-types*, can be seen as a
-generalized version of product types. Given a family of types parametrized
+generalized version of product types. Given a family of types parameterized
 by another type, $\{B(a)\}_{a : A}$, the elements of $\sum_{a:A}B(a)$
 are pairs $\pair{a,b}$ with a first element $a : A$ and a
 second element $b : B(a)$; that is, the type of the second
@@ -7687,7 +7666,7 @@ rule $m \equiv \pair{\fst(m), \snd(m)}$.
 
 *** Dependent functions
 *Dependent function types*, or *\Pi-types*, can be seen as a generalized
-version of function types. Given a family of types parametrized by another
+version of function types. Given a family of types parameterized by another
 type, $\{B(a)\}_{a : A}$, the elements of $\prod_{x:A} B(x)$ are functions
 with the type $A$ as domain and a changing codomain $B(x)$, depending on
 the specific element $x$ to which the function is applied. This type is often
@@ -7824,7 +7803,7 @@ $(\lambda m. (a_0,\overset{m}{\dots},a_0))$ sending each $m$ to a vector of repe
 #+ATTR_LATEX: :options [The theorem of choice]
 #+BEGIN_exampleth
 <<theorem-choice>>
-A proposition $P$ could be given as a family of types parametrized
+A proposition $P$ could be given as a family of types parameterized
 over another type $A$, where $P(a)$ is inhabited if and only if
 the proposition holds for $a : A$.
 
@@ -7834,7 +7813,7 @@ would be the proof that the proposition holds for $a$. A proof of
 the universal quantifier $\prod_{a:A}P(a)$ would be a function sending
 each $a:A$ to a proof $p : P(a)$.
 
-As an example, suppose a relation $R$, a family of types parametrized
+As an example, suppose a relation $R$, a family of types parameterized
 over two types $A,B$. We will prove the following theorem
 \[
 \left(\prod_{(a:A)} \sum_{(b : B)} R(a,b)\right) \to 
@@ -7851,7 +7830,7 @@ the function $\lambda a.\snd(f(a))$ is exactly of this type.
 #+end_proof
 # TODO: Annotate each term with its type
 
-Surprisingly, the theorem we have just proved reads clasically as
+Surprisingly, the theorem we have just proved reads classically as
 #+begin_quote
 "If for all $a:A$ there exists a $b:B$ such that $R(a,b)$, then
 there exists a function $g : A \to B$ such that for each $a:A$,
@@ -7875,12 +7854,13 @@ has a fundamentally different meaning. Later, we will see a
 technique that will allow us to recreate the classical existential
 quantifier.
 #+END_exampleth
+
 *** Equality types
 <<sec-equalitytypes>>
 *Equality* in our theory comes from an adjunction, as was first proposed
 in cite:lawvere70. The equality type
 between elements of type $A$ will be represented by the diagonal morphism
-$\vartriangle \colon A \to A \times A$ as an object of ${\cal C}/(A \times A)$. It is thus a type parametrized
+$\vartriangle \colon A \to A \times A$ as an object of ${\cal C}/(A \times A)$. It is thus a type parameterized
 over two elements $x,y:A$, written as $(x = y)$. An element of an equality
 type, $p : x = y$ must be read as a proof that $x$ and $y$ are equal.
 
@@ -7899,7 +7879,7 @@ universal property of the pullback; conversely, the fact that
 $\widetilde k$ is a section gives us a $k$ by composition with $f^{\ast}C \to C$.
 
 In particular, let $\pi_C \colon C \to A \times A$ or be a family
-of types $C(x,y)$ parametrized by two elements $x,y:A$. We have that any morphism
+of types $C(x,y)$ parameterized by two elements $x,y:A$. We have that any morphism
 from the equality type to $C$ corresponds to a section to $\vartriangle^{\ast}\!\! C$, which
 is, by substitution, the family of types $C(x,x)$.
 \[\begin{array}{lll}\begin{tikzcd}
@@ -7943,7 +7923,7 @@ Introduction and elimination rules are related by $\J_C(c,\refl_a) \equiv c[x/a]
 that is, the J-eliminator can return $c$ in the reflexivity case.
 
 We can still generalize the rule to allow $C$ to be a family of types also
-parametrized over $p$, of the form $C(x,y,p)$.
+parameterized over $p$, of the form $C(x,y,p)$.
 \begin{prooftree}
 \AXC{$\Gamma \vdash a : A$}
 \noLine
@@ -8019,7 +7999,7 @@ In contrast, there is a unique element of
 that simply witnesses the existence of some pair of naturals that add
 up to $3$, without explicitly pointing to it. In this sense, the truncated
 version resembles more the existential quantifier of classical logic; while
-the untrucated version demands the explicit construction of an example.
+the untruncated version demands the explicit construction of an example.
 
 # Because of this, we write the combination $\| \sum \dots \|$ as $\exists \dots$, like in 
 # \[
@@ -8059,6 +8039,7 @@ having a proof of existence can be used to assume that we have explicitly
 constructed the element and to prove a different proposition using it, with
 the condition that we cannot refer later to the explicit element we used during
 the proof.
+
 ** Topoi
 *** Motivation
 *Topoi* (singular /topos/) are category-theoretic models of
@@ -8142,9 +8123,9 @@ will have the added benefit that every formal proof in the system will
 be a closed lambda term and checking that a proof is correct will amount to
 typechecking the term.  Explicitly, the type theory we have been
 describing in the previous sections corresponds to *Martin-Löf type theory*
-cite:nordstrom90. Two libraries of formalized mathematics, correspoding
+cite:nordstrom90. Two libraries of formalized mathematics, corresponding
 to two different foundational theories, have been built, containing a
-verfied version of all the theorems on this chapter. See Section [[sec-verified]]
+verified version of all the theorems on this chapter. See Section [[sec-verified]]
 for links to the formalized proofs.
 
 *** Programming in Martin-Löf type theory
@@ -8313,9 +8294,9 @@ This has deep effects on the mathematics we are working with. We are
 working at a great level of generality, where many results are just
 independent of our theory. Independence of statements like the following
 may be shocking to a classical mathematician: we cannot prove that the
-subset of a finite set is finite, we cannot prove that every real is
-equal or distinct from zero, we cannot prove that every ideal is contained
-in a maximal ideal, we cannot prove that every vector space has a
+subset of a finite set is finite; we cannot prove that every real is
+equal or distinct from zero; we cannot prove that every ideal is contained
+in a maximal ideal; we cannot prove that every vector space has a
 base (see cite:bauer2017five for more examples).
 
 Why are we not simply accepting the excluded middle, as is common practice? The
@@ -8376,7 +8357,7 @@ The Axiom of Choice implies the Law of Excluded Middle.
 #+BEGIN_proof
 The proof we present is based in cite:altenkirch17 and cite:bauer2017five. 
 Given any proposition $P$, we define $U = \left\{ x \in \left\{ 0,1 \right\} \mid (x = 0) \vee P\right\}$ and
-$V = \left\{ x \in \{0,1\} \mid (x = 1) \vee P \right\}$, and we kwow that each one is inhabited.
+$V = \left\{ x \in \{0,1\} \mid (x = 1) \vee P \right\}$, and we know that each one is inhabited.
 By the axiom of choice, there exists a function $f \colon \left\{ U,V \right\} \to U \cup V$
 such that $f(U) \in U$ and $f(V) \in V$.  We decide if $f(U)$ and
 $f(V)$ are equal to $0$ or not by the induction principle. If $f(U) = 1$ or $f(V) = 0$, we
@@ -8415,7 +8396,7 @@ This technique ensures that each dyadic rational will be uniquely
 represented by a term of type $D$. Finally, a real number $r : \mathbb{R}^+$ is 
 constructed as the sum of the following data.
 
- * A *Dedekind cut*, $\mathrm{cut}_r : D \to \Omega$, representing a proposition parametrized over
+ * A *Dedekind cut*, $\mathrm{cut}_r : D \to \Omega$, representing a proposition parameterized over
    the positive dyadic rationals. Given $q : D$, the proposition $\mathrm{cut}_r(q)$ 
    is true if and only if $r < q$.
 
@@ -8510,7 +8491,7 @@ the type.
 \]
 This induction principle allows us to prove symmetry, transitivity
 and other properties of equality (we explicitly do so in =Base.agda=
-and =Equality.agda=). However, it is not posible to prove by path
+and =Equality.agda=). However, it is not possible to prove by path
 induction that every path is equal to the reflexivity path, that is,
 \[
 \prod_{(x : A)}\prod_{(p : x = x)} (p = \refl),
@@ -8570,7 +8551,7 @@ In this setting, results such as the Van Kampen theorem or the
 construction of Eilenberg-MacLane spaces have been formalized (see
 cite:hottbook).
 
-**** Note on the circle                                         :noexport:
+**** TODO Note on the circle                                                           :noexport:
 Why isn't the circle a counterexample to Hedberg's theorem? When
 we build a function
 
@@ -8687,7 +8668,7 @@ complete and more technical cite:hott-in:agda by presenting only the
 small subset of type theory necessary to compute the fundamental group
 of the circle and thus simplifying the whole structure of the library.
 
-* Conclusions
+* Conclusions and further work
 While proving on the order of a hundred lemmas about the natural
 numbers only with the help of the Agda type checker, the need for
 automation tools quickly arises.  They are available in the form of
@@ -12634,3 +12615,20 @@ cover [[*Examples of categories][examples]] of this fact later.
 **** TODO Arbitrary coproducts                                    :ignore:
 **** TODO Copowers                                                :ignore:
 **** TODO Posets                                                  :ignore:
+*** TODO Presheaves
+**** TODO Pointed Sets (?)
+
+**** TODO Initial algebras in presheaves                          :ignore:
+# TODO: Not all endofunctors exist (powerset in Sets), but all
+# polynomial endofunctors exist in Set and in all presheaves.
+#  1. Yoneda embedding preserves colimits.
+#  2. Sheaves have all w-colimits
+#  3. Polynomial functors preserving w-colimits
+
+*** TODO Heyting algebras
+# Heyting algebras are bicartesian closed categories. This explains
+# the Curry-Howard correspondence we saw earlier.
+
+# Heyting algebras as bicartesian closed posets
+
+# Open subsets of a topological space.
