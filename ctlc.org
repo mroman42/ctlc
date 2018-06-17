@@ -393,13 +393,14 @@ equality and we relate it to Grothendieck's homotopy hypothesis using
 Voevodsky's Univalence Axiom. This section is mainly based on
 cite:hottbook.
 
-Two libraries of computer verified mathematics have been
-developed (\S [[sec-verified]]). The first one implements positive real numbers as Dedekind
-cuts and provides a proof of Diaconescu's theorem. More than a hundred
-computer verified lemmas and propositions about natural numbers and
-dyadic rationals have been needed for this construction. The second
-one accepts Voevodsky's Univalence Axiom and proves the fact that the
-fundamental group of the circle is given by the integers.
+Two libraries of computer verified mathematics have been developed (\S
+[[sec-verified]]). The first one implements positive real numbers as
+Dedekind cuts and provides a proof of Diaconescu's theorem. More than
+a hundred computer verified lemmas and propositions about natural
+numbers and dyadic rationals have been needed for this
+construction. The second one accepts Voevodsky's Univalence Axiom and
+proves the fact that the fundamental group of the circle is given by
+the integers.
 
 \\
 
@@ -685,7 +686,7 @@ subject of much debate during the beginning of 20th century cite:martinlof08.
 /Constructive mathematics/ is mathematics done without assuming excluded
 middle: Brouwer's intuitionism cite:brouwer07 and Bishop's constructive
 analysis cite:bishop67foundations are examples of this school of thought
-(see cite:troelstra2014). However, constructivism did never attracted the
+(see cite:troelstra2014). However, constructivism did never attract the
 interest of the majority of mathematicians during the /foundational crisis/.
 
 Some years after, in 1945, the notion of categories originated with
