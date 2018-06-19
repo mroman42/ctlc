@@ -141,6 +141,24 @@ module numbers.Integers where
   +ᶻ-comm (neg zero) m = +ᶻ-unit-zpred m
   +ᶻ-comm (neg (succ x)) m = ap zpred (+ᶻ-comm (neg x) m) · +ᶻ-neg-zpred m x
 
+  +-minus : (n : ℤ) → n +ᶻ (- n) == zer
+  +-minus zer = refl zer
+  +-minus (pos zero) = refl zer
+  +-minus (pos (succ x)) =
+    begin
+      zsucc (pos x +ᶻ neg (succ x)) ==⟨ ap zsucc (inv (+ᶻ-neg-zpred (pos x) x)) ⟩
+      zsucc (zpred (pos x +ᶻ neg x)) ==⟨ zsuccpred-id (pos x +ᶻ neg x) ⟩
+      pos x +ᶻ neg x ==⟨ +-minus (pos x) ⟩      
+      zer
+    ∎
+  +-minus (neg zero) = refl zer
+  +-minus (neg (succ x)) =
+    begin
+      zpred (neg x +ᶻ pos (succ x)) ==⟨ ap zpred (inv (+ᶻ-pos-zsucc (neg x) x)) ⟩
+      zpred (zsucc (neg x +ᶻ pos x)) ==⟨ zpredsucc-id _ ⟩
+      neg x +ᶻ pos x ==⟨ +-minus (neg x) ⟩      
+      zer
+    ∎
   
 
   -- Decidable equality

@@ -105,3 +105,17 @@ module algebra.IntegerAction {ℓ} {M : Type ℓ} (grpst : GroupStructure M) whe
       (ginv a * z-act (neg x) a) * z-act m a  ==⟨ inv (ap (λ s → s * (z-act m a)) (act-zpred (neg x) a)) ⟩
       z-act (neg (succ x)) a * z-act m a
     ∎
+
+  z-actm : ∀ n a → z-act (- n) a == ginv (z-act n a)
+  z-actm n a =
+    begin
+      z-act (- n) a ==⟨ inv (runit (z-act (- n) a)) ⟩
+      z-act (- n) a * e ==⟨ ap (z-act (- n) a *_) (inv (glinv (z-act n a))) ⟩
+      z-act (- n) a * ((z-act n a) * ginv (z-act n a)) ==⟨ assoc (z-act (- n) a) (z-act n a) _ ⟩
+      (z-act (- n) a * (z-act n a)) * ginv (z-act n a) ==⟨ ap (_* ginv (z-act n a)) (inv (z-act+ (- n) n a)) ⟩
+      z-act ((- n) +ᶻ n) a * ginv (z-act n a) ==⟨ ap (λ u → z-act u a * ginv (z-act n a)) (+ᶻ-comm (- n) n) ⟩      
+      z-act (n +ᶻ (- n)) a * ginv (z-act n a) ==⟨ ap (λ u → z-act u a * ginv (z-act n a)) (+-minus n) ⟩      
+      z-act zer a * ginv (z-act n a) ==⟨ refl _ ⟩
+      e * ginv (z-act n a) ==⟨ lunit (ginv (z-act n a)) ⟩            
+      ginv (z-act n a)
+    ∎

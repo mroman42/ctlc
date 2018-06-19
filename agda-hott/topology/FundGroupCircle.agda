@@ -126,3 +126,6 @@ module topology.FundGroupCircle where
 
   preserves-composition : ∀ n m → loops (n +ᶻ m) == loops n · loops m
   preserves-composition n m = z-act+ (Ω-st S¹ base) n m loop
+
+  preserves-inverses : ∀ n → loops (- n) == inv (loops n)
+  preserves-inverses n = z-actm (Ω-st S¹ base) n loop
