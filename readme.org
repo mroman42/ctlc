@@ -5,6 +5,8 @@
 /June, 2018. I thank Pedro A. García Sánchez and Manuel Bullejos/
 /Lorenzo for being my advisors./
 
+ * https://mroman42.github.io/ctlc/ctlc.pdf
+
 ** Table of contents
 
  *1. Lambda calculus.*
