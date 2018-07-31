@@ -1,9 +1,9 @@
 * Category Theory and Lambda Calculus
 
-This repository contains the text and source code for my Bachelor's
-thesis for the double degree on Mathematics and Computer Science. It
-was presented at the University of Granada in June 2018. I thank Pedro
-A. García Sánchez and Manuel Bullejos Lorenzo for being my advisors.
+/This repository contains the text and source code for my Bachelor's/
+/thesis, presented at the University of Granada in June 2018. I thank/
+/Pedro A. García Sánchez and Manuel Bullejos Lorenzo for being my/
+/advisors./
 
 ** Table of contents
 
