@@ -2,8 +2,7 @@
 
 /This repository contains the text and source code for my Bachelor's/
 /thesis, presented at the University of Granada on the 21st of/
-/June, 2018. I thank Pedro A. García Sánchez and Manuel Bullejos/
-/Lorenzo for being my advisors./
+/June, 2018. I would like to thank my advisors for this project, [[https://github.com/pedritomelenas][Pedro A. García Sánchez]] and [[https://wpd.ugr.es/~bullejos/wordpress/][Manuel Bullejos Lorenzo]]./
 
  * https://mroman42.github.io/ctlc/ctlc.pdf
 
